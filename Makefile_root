@@ -1,38 +1,21 @@
 VERSION=5.18.00
 TARFILE=root_v$(VERSION).source.tar.gz
-TARFILE_TAG=.tarfile_tag_$(VERSION)
-UNTAR_TAG=.untar_tag_$(VERSION)
 ROOTDIR=root_$(VERSION)
 ROOTSYS=$(CWD)/$(ROOTDIR)
-MAKE_TAG=.make_tag_$(VERSION)
-MAKE_INSTALL_TAG=.make_tag_install_$(VERSION)
-ROOTDIR_TAG=.rootdir_tag_$(VERSION)
 
-all: $(MAKE_INSTALL_TAG)
-
-$(TARFILE_TAG): $(TARFILE)
-	date > $(TARFILE_TAG)
+all: main_make
 
 $(TARFILE):
-	$(RM) $(TARFILE)
 	wget ftp://root.cern.ch/root/$@
 
-$(UNTAR_TAG): $(TARFILE_TAG)
-	tar zxf $(TARFILE)
-	date > $(UNTAR_TAG)
-
-$(ROOTDIR_TAG): $(UNTAR_TAG)
+$(ROOTDIR)/configure: $(TARFILE)
 	$(RM) -r $(ROOTDIR)
+	tar zxf $(TARFILE)
 	mv root $(ROOTDIR)
-	date > $(ROOTDIR_TAG)
+	touch $(ROOTDIR)/configure
 
-$(ROOTDIR)/config.log: $(ROOTDIR_TAG)
+$(ROOTDIR)/config.log: $(ROOTDIR)/configure
 	cd $(ROOTDIR); ./configure linux
 
-$(MAKE_TAG): $(ROOTDIR)/config.log
+main_make: $(ROOTDIR)/config.log
 	make -C $(ROOTDIR)
-	date > $(MAKE_TAG)
-
-$(MAKE_INSTALL_TAG): $(MAKE_TAG)
-	make -C $(ROOTDIR) install
-	date > $(MAKE_INSTALL_TAG)
