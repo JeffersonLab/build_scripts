@@ -21,3 +21,8 @@ cd scripts
 gmake install.bin
 cd $CERN_ROOT/build
 gmake FC=gfortran
+cd $CERN_ROOT/lib
+ln -s /usr/lib/libblas.a libblas.a
+ln -s /usr/lib/liblapack.a liblapack3.a
+exit
+# end of shell script
