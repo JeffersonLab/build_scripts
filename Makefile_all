@@ -1,0 +1,24 @@
+ifndef ROOT_OF_ALL
+  export ROOT_OF_ALL=$(shell pwd)
+endif
+
+ifndef BUILD_SCRIPTS
+  export BUILD_SCRIPTS=$(shell pwd)/build_scripts
+endif
+
+HALLD = ${ROOT_OF_ALL}/halld
+
+all: env halld_build
+
+halld_build: halld_dir halld_build_execute
+
+halld_dir:
+	test -d ${HALLD} || mkdir -pv ${HALLD}
+
+halld_build_execute:
+	cd ${HALLD}; ${BUILD_SCRIPTS}/halld_build.csh
+
+env:
+	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
+	@echo HALLD = ${HALLD}
+	@echo ROOT_OF_ALL = ${ROOT_OF_ALL}
