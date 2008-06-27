@@ -9,9 +9,9 @@ export CERN_LEVEL=2006
 export CERN_ROOT=$CERN/$CERN_LEVEL
 export CVSCOSRC=$CERN_ROOT/src
 export PATH=$CERN_ROOT/bin:$PATH
-cp cernlib_patches/linux.cf $CERN_LEVEL/src/config/
-cp cernlib_patches/iconwidget.c $CERN_LEVEL/src/packlib/kuip/code_motif/
 cd $CERN_ROOT
+test -f .patch_done || \
+    patch -p1 < $(BUILD_SCRIPTS)/patches/cernlib/cernlib_2006_f9.txt > .patch_done
 mkdir -p build bin lib
 cd $CERN_ROOT/build
 $CVSCOSRC/config/imake_boot
