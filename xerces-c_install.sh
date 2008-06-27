@@ -3,8 +3,8 @@
 # script to install Xerces-C++ from scratch
 #
 VERSION=2_8_0 # version to use
-TARDIR=$HOME # download distribution to this directory
-BUILDDIR=/usr/local/xerces-c # directory where distribution is untar'ed and built
+TARDIR=`pwd` # download distribution to this directory
+BUILDDIR=`pwd` # directory where distribution is untar'ed and built
 #
 # get the tar file
 #
