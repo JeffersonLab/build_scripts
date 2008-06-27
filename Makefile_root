@@ -17,5 +17,9 @@ $(ROOTDIR)/configure: $(TARFILE)
 $(ROOTDIR)/config.log: $(ROOTDIR)/configure
 	cd $(ROOTDIR); ./configure linux
 
-main_make: $(ROOTDIR)/config.log
+main_make: $(ROOTDIR)/config.log $(ROOTDIR)/.patch_done
 	make -C $(ROOTDIR)
+
+$(ROOTDIR)/.patch_done:
+	cd $(ROOTDIR); patch -p1 < $(BUILD_SCRIPTS)/patches/root/patch_stropts.txt
+	touch $@
