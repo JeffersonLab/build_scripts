@@ -6,11 +6,29 @@ ifndef BUILD_SCRIPTS
   export BUILD_SCRIPTS=$(shell pwd)/build_scripts
 endif
 
+CERNLIB = ${ROOT_OF_ALL}/cernlib
+XERCES = ${ROOT_OF_ALL}/xerces-c
 ROOT = ${ROOT_OF_ALL}/root
 JANA = ${ROOT_OF_ALL}/jana
 HALLD = ${ROOT_OF_ALL}/halld
 
-all: env root_build jana_build halld_build
+all: env xerces_build cernlib_build root_build jana_build halld_build
+
+cernlib_build: cernlib_dir cernlib_build_execute
+
+cernlib_dir:
+	test -d $CERNLIB} || mkdir -pv ${CERNLIB}
+
+cernlib_build_execute:
+	cd ${CERNLIB}; ${BUILD_SCRIPTS}/cernlib_build.sh
+
+xerces_build: xerces_dir xerces_install_execute
+
+xerces_dir:
+	test -d ${XERCES} || mkdir -pv ${XERCES}
+
+xerces_install_execute:
+	cd ${XERCES}; ${BUILD_SCRIPTS}/xerces-c_install.sh
 
 root_build: root_dir
 	    $(MAKE) -C${ROOT} -f${BUILD_SCRIPTS}/Makefile_root
