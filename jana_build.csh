@@ -1,9 +1,13 @@
 #!/bin/csh
+if (! $?BUILD_SCRIPTS) then
+    echo set environment variable BUILD_SCRIPTS to location of build scripts
+    exit 1
+endif
 # assume build will be in the local directory
 svn co https://phys12svn.jlab.org/repos/tags/JANA_marki_freeze
 cd JANA_marki_freeze
 setenv JANA_HOME `pwd`
-source ~/halld/build_scripts/gluex_env.csh
+source $BUILD_SCRIPTS/gluex_env.csh
 cd src
 ./configure --with-xerces=$XERCESCROOT
 make
