@@ -1,14 +1,19 @@
 VERSION=2_8_0
 TARFILE=xerces-c-src_$(VERSION).tar.gz
-XERCESCROOT=xerces-c-src_$(VERSION)
+export XERCESCROOT=$(shell pwd)/xerces-c-src_$(VERSION)
 
-all: execute_script
+all: make_xerces
 
-execute_script: $(XERCESCROOT)/.untar_done
-	$(BUILD_SCRIPTS)/xerces-c_install.sh
+make_xerces: $(XERCESCROOT)/.configure_done 
+	$(MAKE) -C$(XERCESCROOT)/src/xercesc
 
 $(XERCESCROOT)/.untar_done: $(TARFILE)
-	tar zxvf $(TARFILE) > $@
+	tar zxf $(TARFILE)
+	date > $@
+
+$(XERCESCROOT)/.configure_done: $(XERCESCROOT)/.untar_done
+	cd $(XERCESCROOT)/src/xercesc; ./runConfigure -plinux -cgcc -xg++ -minmem -nsocket -tnative -rpthread
+	date > $@
 
 $(TARFILE):
 	wget http://www.apache.org/dist/xerces/c/sources/$(TARFILE)
