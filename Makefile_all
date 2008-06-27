@@ -14,13 +14,13 @@ HALLD = ${ROOT_OF_ALL}/halld
 
 all: env xerces_build cernlib_build root_build jana_build halld_build
 
-cernlib_build: cernlib_dir cernlib_build_execute
+cernlib_build: cernlib_dir cernlib_make
 
 cernlib_dir:
-	test -d $CERNLIB} || mkdir -pv ${CERNLIB}
+	test -d ${CERNLIB} || mkdir -pv ${CERNLIB}
 
-cernlib_build_execute:
-	cd ${CERNLIB}; ${BUILD_SCRIPTS}/cernlib_build.sh
+cernlib_make:
+	$(MAKE) -C${CERNLIB} -f${BUILD_SCRIPTS}/Makefile_cernlib
 
 xerces_build: xerces_dir xerces_make
 

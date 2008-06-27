@@ -1,0 +1,17 @@
+export CERN=$(shell pwd)
+export CERN_LEVEL=2006
+export CERN_ROOT=$(CERN)/$(CERN_LEVEL)
+export CVSCOSRC=$(CERN_ROOT)/src
+#export PATH=$(CERN_ROOT)/bin:$(PATH)
+
+all: make_cernlib make_links
+
+make_cernlib: $(CERN_ROOT)/build/scripts/Makefile
+	$(MAKE) -C$(CERN_ROOT)/build FC=gfortran
+
+$(CERN_ROOT)/build/scripts/Makefile:
+	$(MAKE) -C$(CERN_ROOT)/build scripts/Makefile
+
+make_links:
+	cd $CERN_ROOT/lib ; ln -s /usr/lib/libblas.a libblas.a
+	cd $CERN_ROOT/lib ; ln -s /usr/lib/liblapack.a liblapack3.a
