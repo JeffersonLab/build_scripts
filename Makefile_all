@@ -22,13 +22,13 @@ cernlib_dir:
 cernlib_build_execute:
 	cd ${CERNLIB}; ${BUILD_SCRIPTS}/cernlib_build.sh
 
-xerces_build: xerces_dir xerces_install_execute
+xerces_build: xerces_dir xerces_make
 
 xerces_dir:
 	test -d ${XERCES} || mkdir -pv ${XERCES}
 
-xerces_install_execute:
-	cd ${XERCES}; ${BUILD_SCRIPTS}/xerces-c_install.sh
+xerces_make:
+	$(MAKE) -C${XERCES} -f${BUILD_SCRIPTS}/Makefile_xerces
 
 root_build: root_dir
 	    $(MAKE) -C${ROOT} -f${BUILD_SCRIPTS}/Makefile_root

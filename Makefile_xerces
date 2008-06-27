@@ -1,0 +1,14 @@
+VERSION=2_8_0
+TARFILE=xerces-c-src_$(VERSION).tar.gz
+XERCESCROOT=xerces-c-src_$(VERSION)
+
+all: execute_script
+
+execute_script: $(XERCESCROOT)/.untar_done
+	$(BUILD_SCRIPTS)/xerces-c_install.sh
+
+$(XERCESCROOT)/.untar_done: $(TARFILE)
+	tar zxvf $(TARFILE) > $@
+
+$(TARFILE):
+	wget http://www.apache.org/dist/xerces/c/sources/$(TARFILE)
