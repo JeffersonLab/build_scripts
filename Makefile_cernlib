@@ -4,9 +4,17 @@ export CERN_ROOT=$(CERN)/$(CERN_LEVEL)
 export CVSCOSRC=$(CERN_ROOT)/src
 #export PATH=$(CERN_ROOT)/bin:$(PATH)
 
-all: make_cernlib make_links
+all: make_cernlib
 
-make_cernlib: $(CERN_ROOT)/build/scripts/Makefile
+$(CERN_ROOT)/.untar_src_done: $(CERN_LEVEL)_src.tar.gz
+	tar zxf $<
+	date > $@
+
+$(CERN_ROOT)/.untar_include_done: include.tar.gz
+	tar zxf $<
+	date > $@
+
+make_cernlib: $(CERN_ROOT)/build/scripts/install.bin
 	$(MAKE) -C$(CERN_ROOT)/build FC=gfortran
 
 $(CERN_ROOT)/build/scripts/Makefile:
@@ -15,3 +23,27 @@ $(CERN_ROOT)/build/scripts/Makefile:
 make_links:
 	cd $CERN_ROOT/lib ; ln -s /usr/lib/libblas.a libblas.a
 	cd $CERN_ROOT/lib ; ln -s /usr/lib/liblapack.a liblapack3.a
+
+%.tar.gz:
+	wget http://cernlib.web.cern.ch/cernlib/download/${CERN_LEVEL}_source/tar/$@
+
+$(CERN_ROOT)/.patch_done: $(CERN_ROOT)/.untar_src_done $(CERN_ROOT)/.untar_include_done
+	cd $(CERN_ROOT); patch -p1 < $(BUILD_SCRIPTS)/patches/cernlib/cernlib_2006_f9.txt
+	date > $@
+
+$(CERN_ROOT)/.dirs_done:
+	cd $(CERN_ROOT); mkdir build bin lib
+	date > $@
+
+$(CERN_ROOT)/.imake_boot_done: $(CERN_ROOT)/.patch_done $(CERN_ROOT)/.dirs_done
+	cd $(CERN_ROOT)/build; $(CVSCOSRC)/config/imake_boot
+	date > $@
+
+$(CERN_ROOT)/bin/kuipc: $(CERN_ROOT)/.imake_boot_done
+	$(MAKE) -C$(CERN_ROOT)/build bin/kuipc
+
+$(CERN_ROOT)/scripts/Makefile: $(CERN_ROOT)/bin/kuipc
+	$(MAKE) -C$(CERN_ROOT)/build scripts/Makefile
+
+$(CERN_ROOT)/build/scripts/install.bin: $(CERN_ROOT)/scripts/Makefile
+	$(MAKE) -C$(CERN_ROOT)/build/scripts install.bin
