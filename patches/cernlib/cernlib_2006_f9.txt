@@ -30,3 +30,14 @@
  
  /* Motif1.1 ( except apollo, hpux has _XmPrimitive... with two args only
   * Gunter 30-jan-95
+--- ./src/geant321/Imakefile	1998-03-05 06:20:07.000000000 -0500
++++ /scratch/gluex4/cernlib/2006/src/geant321/Imakefile	2008-06-30 10:19:58.000000000 -0400
+@@ -37,7 +37,7 @@
+ install.lib:: $(CERN_LIBDIR)/xsneut95.dat
+ 
+ $(CERN_LIBDIR)/xsneut95.dat:
+-	cd $(@D);$(LN) ../share/lib/$(@F) $(@F)
++	cd $(@D); test -L $(@F) || $(LN) ../share/lib/$(@F) $(@F)
+ 
+ #endif
+ #if defined(CERNLIB_VAXVMS)
