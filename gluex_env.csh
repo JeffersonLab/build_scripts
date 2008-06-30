@@ -1,5 +1,5 @@
 # general stuff
-if (! $?GLUEX_TOP) setenv GLUEX_TOP /usr/local
+if (! $?GLUEX_TOP) setenv GLUEX_TOP `pwd`
 setenv OS `/bin/uname -s`
 setenv ARCH `/bin/uname -p`
 setenv OSNAME ${OS}-${ARCH}
