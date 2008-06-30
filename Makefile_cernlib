@@ -2,7 +2,7 @@ export CERN=$(shell pwd)
 export CERN_LEVEL=2006
 export CERN_ROOT=$(CERN)/$(CERN_LEVEL)
 export CVSCOSRC=$(CERN_ROOT)/src
-#export PATH=$(CERN_ROOT)/bin:$(PATH)
+export PATH:=$(CERN_ROOT)/bin:$(PATH)
 
 all: make_cernlib
 
