@@ -12,4 +12,3 @@ source $BUILD_SCRIPTS/gluex_env.csh
 cp -pv $BUILD_SCRIPTS/patches/getarg_fix/* $HALLD_HOME/src/programs/Simulation/HDGeant
 cd src
 make FC=gfortran DFC=gfortran
-make FC=gfortran DFC=gfortran DEBUG=1
