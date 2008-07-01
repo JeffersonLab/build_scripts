@@ -49,3 +49,5 @@ echo JANA_GEOMETRY_URL = $JANA_GEOMETRY_URL
 echo HALLD_MY = $HALLD_MY
 echo PATH = $PATH
 echo LD_LIBRARY_PATH = $LD_LIBRARY_PATH
+echo paw = `which paw`
+echo root = `which root`
