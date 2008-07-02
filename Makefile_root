@@ -1,9 +1,13 @@
 VERSION=5.19.04
 TARFILE=root_v$(VERSION).source.tar.gz
 ROOTDIR=root_$(VERSION)
-ROOTSYS=$(CWD)/$(ROOTDIR)
+PWD := $(shell pwd)
+ROOTSYS=$(PWD)/$(ROOTDIR)
 
-all: main_make
+all: prod_link
+
+prod_link: main_make
+	   test -L prod || ln -s $(ROOTDIR) prod # will not overwrite existing link 
 
 $(TARFILE):
 	wget ftp://root.cern.ch/root/$@
