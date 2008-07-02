@@ -1,6 +1,21 @@
-all:
-	svn co https://phys12svn.jlab.org/repos/tags/JANA_marki_freeze; \
-    cd JANA_marki_freeze; \
-    export JANA_HOME=`pwd`; \
-    csh -c "source $(BUILD_SCRIPTS)/gluex_env.csh; cd src; ./configure --with-xerces=$(XERCESCROOT); make; make install"
+PWD = $(shell pwd)
+JANA_DIR = JANA_marki_freeze
+export JANA_HOME = $(PWD)/$(JANA_DIR)
 
+all: prod_link
+
+prod_link: make_install_jana
+	test -L prod || ln -s $(JANA_DIR) prod # will not overwrite existing link
+
+make_install_jana: make_jana
+	$(MAKE) -C$(JANA_HOME)/src install
+
+make_jana: $(JANA_HOME)/src/config.log
+	$(MAKE) -C$(JANA_HOME)/src
+
+$(JANA_HOME)/src/config.log: $(JANA_HOME)/.checkout_done
+	cd $(JANA_HOME)/src; ./configure --with-xerces=$(XERCESCROOT) 
+
+$(JANA_HOME)/.checkout_done:
+	svn co https://phys12svn.jlab.org/repos/tags/JANA_marki_freeze
+	date > $@

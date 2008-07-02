@@ -36,16 +36,13 @@ root_build: root_dir
 root_dir:
 	test -d ${ROOT} || mkdir -pv ${ROOT}
 
-jana_build: jana_dir jana_build_execute jana_prod_link
+jana_build: jana_dir jana_make
 
 jana_dir:
 	test -d ${JANA} || mkdir -pv ${JANA}
 
-jana_build_execute:
-	cd ${JANA}; ${BUILD_SCRIPTS}/jana_build.csh
-
-jana_prod_link:
-	cd ${JANA}; $(RM) prod; ln -s * prod
+jana_make:
+	$(MAKE) -C${JANA} -f${BUILD_SCRIPTS}/Makefile_jana
 
 halld_build: halld_dir halld_build_execute
 
