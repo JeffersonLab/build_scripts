@@ -44,13 +44,13 @@ jana_dir:
 jana_make:
 	$(MAKE) -C${JANA} -f${BUILD_SCRIPTS}/Makefile_jana
 
-halld_build: halld_dir halld_build_execute
+halld_build: halld_dir halld_make
 
 halld_dir:
 	test -d ${HALLD} || mkdir -pv ${HALLD}
 
-halld_build_execute:
-	cd ${HALLD}; ${BUILD_SCRIPTS}/halld_build.csh
+halld_make:
+	$(MAKE) -C${HALLD} -f${BUILD_SCRIPTS}/Makefile_halld
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}

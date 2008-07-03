@@ -1,0 +1,19 @@
+PWD = $(shell pwd)
+HALLD_SRC = src-gcc-4.3
+export HALLD_HOME = $(PWD)
+export HALLD_MY = $(HALLD_HOME)
+
+all: make_halld
+
+make_halld: $(HALLD_HOME)/.getarg_patches_done
+	$(MAKE) -C$(HALLD_HOME)/src
+
+$(HALLD_HOME)/.getarg_patches_done: create_src_link
+	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* $(HALLD_HOME)/src/programs/Simulation/HDGeant
+
+create_src_link: $(HALLD_HOME)/.checkout_done
+	cd $(HALLD_HOME); test -L src || ln -s $(HALLD_SRC) src
+
+$(HALLD_HOME)/.checkout_done:
+	svn co https://halldsvn.jlab.org/repos/branches/src-gcc-4.3
+	date > $@
