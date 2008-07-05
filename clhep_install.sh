@@ -3,7 +3,7 @@
 # script to install clhep from scratch
 #
 VERSION=1.9.3.1
-TARDIR=/home/install
+TARDIR=`pwd`
 # get the tar file
 cd $TARDIR
 pwd
@@ -14,8 +14,7 @@ then
   wget http://proj-clhep.web.cern.ch/proj-clhep/DISTRIBUTION/distributions/$TARFILE
 fi
 # untar the distribution
-CLHEPDIR=/usr/local/clhep/$VERSION
-cd /usr/local/clhep
+CLHEPDIR=`pwd`/$VERSION
 if [ ! -d $CLHEPDIR ]
 then
     tar zxvf $TARDIR/$TARFILE

@@ -7,12 +7,13 @@ ifndef BUILD_SCRIPTS
 endif
 
 CERNLIB = ${ROOT_OF_ALL}/cernlib
-XERCES = ${ROOT_OF_ALL}/xerces-c
-ROOT = ${ROOT_OF_ALL}/root
-JANA = ${ROOT_OF_ALL}/jana
+CLHEP = ${ROOT_OF_ALL}/clhep
 HALLD = ${ROOT_OF_ALL}/halld
+JANA = ${ROOT_OF_ALL}/jana
+ROOT = ${ROOT_OF_ALL}/root
+XERCES = ${ROOT_OF_ALL}/xerces-c
 
-all: env xerces_build cernlib_build root_build jana_build halld_build
+all: env xerces_build cernlib_build root_build clhep_build jana_build halld_build
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -51,6 +52,14 @@ halld_dir:
 
 halld_make:
 	$(MAKE) -C${HALLD} -f${BUILD_SCRIPTS}/Makefile_halld
+
+clhep_build: clhep_dir clhep_make
+
+clhep_dir:
+	test -d ${CLHEP} || mkdir -pv ${CLHEP}
+
+clhep_make:
+	$(MAKE) -C${CLHEP} -f${BUILD_SCRIPTS}/Makefile_clhep
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}

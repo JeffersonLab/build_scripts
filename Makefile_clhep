@@ -1,0 +1,4 @@
+all: execute_build_script
+
+execute_build_script:
+	$(BUILD_SCRIPTS)/clhep_install.sh
