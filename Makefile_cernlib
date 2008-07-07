@@ -32,7 +32,7 @@ $(CERN_ROOT)/.patch_done: $(CERN_ROOT)/.untar_src_done $(CERN_ROOT)/.untar_inclu
 	date > $@
 
 $(CERN_ROOT)/.dirs_done:
-	cd $(CERN_ROOT); mkdir build bin lib
+	cd $(CERN_ROOT); mkdir -p build bin lib
 	date > $@
 
 $(CERN_ROOT)/.imake_boot_done: $(CERN_ROOT)/.patch_done $(CERN_ROOT)/.dirs_done
