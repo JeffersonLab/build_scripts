@@ -1,7 +1,8 @@
 PWD = $(shell pwd)
-HALLD_TAG = gcc-4.3
-HALLD_SRC = src-$(HALLD_TAG)
-export HALLD_HOME = $(PWD)/halld_$(HALLD_TAG)
+VERSION_LABEL = current
+HALLD_SRC = src
+REPOSITORY_LOCATION = trunk/$(HALLD_SRC)
+export HALLD_HOME = $(PWD)/halld_$(VERSION_LABEL)
 export HALLD_MY = $(HALLD_HOME)
 
 all: make_halld
@@ -14,10 +15,10 @@ $(HALLD_HOME)/.getarg_patches_done: create_src_link
 	date > $@
 
 create_src_link: $(HALLD_HOME)/.checkout_done
-	cd $(HALLD_HOME); test -L src || ln -s $(HALLD_SRC) src
+	if [ $(HALLD_SRC) != src ] ; then cd $(HALLD_HOME) ; test -L src || ln -s $(HALLD_SRC) src ; fi
 
 $(HALLD_HOME)/.checkout_done: make_halld_dir
-	cd $(HALLD_HOME); svn -q co https://halldsvn.jlab.org/repos/branches/$(HALLD_SRC)
+	cd $(HALLD_HOME); svn -q co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION)
 	date > $@
 
 make_halld_dir:
