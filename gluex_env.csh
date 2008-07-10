@@ -24,8 +24,9 @@ if ($status) setenv LD_LIBRARY_PATH  $ROOTSYS/lib:$LD_LIBRARY_PATH
 # cernlib
 if (! $?CERN ) setenv CERN $GLUEX_TOP/cernlib
 if (! $?CERN_LEVEL) setenv CERN_LEVEL 2006
-echo $PATH | grep $CERN/$CERN_LEVEL/bin > /dev/null
-if ($status) setenv PATH $CERN/$CERN_LEVEL/bin:$PATH
+setenv CERN_ROOT $CERN/$CERN_LEVEL
+echo $PATH | grep $CERN_ROOT/bin > /dev/null
+if ($status) setenv PATH $CERN_ROOT/bin:$PATH
 # jana
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod
 setenv JANA_CALIB_URL file://$GLUEX_TOP/gluex/calib
@@ -42,8 +43,7 @@ echo OSNAME =  $OSNAME
 echo HALLD_HOME =  $HALLD_HOME
 echo ROOTSYS =  $ROOTSYS
 echo XERCESCROOT =  $XERCESCROOT
-echo CERN =  $CERN
-echo CERN_LEVEL =  $CERN_LEVEL
+echo CERN_ROOT =  $CERN_ROOT
 echo JANA_CALIB_URL = $JANA_CALIB_URL
 echo JANA_GEOMETRY_URL = $JANA_GEOMETRY_URL
 echo HALLD_MY = $HALLD_MY
