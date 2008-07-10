@@ -1,4 +1,26 @@
-all: execute_build_script
+VERSION=1.9.3.1
+TARFILE=clhep-$(VERSION).tgz
+PWD = $(shell pwd)
+CLHEPDIR=$(PWD)/$(VERSION)
 
-execute_build_script:
-	$(BUILD_SCRIPTS)/clhep_install.sh
+all: prod_link
+
+$(TARFILE):
+	wget http://proj-clhep.web.cern.ch/proj-clhep/DISTRIBUTION/distributions/$(TARFILE)
+
+$(CLHEPDIR)/.untar_done: $(TARFILE)
+	tar zxvf $(TARFILE)
+	date > $@
+
+$(CLHEPDIR)/.configure_done: $(CLHEPDIR)/.untar_done
+	cd $(CLHEPDIR)/CLHEP ; ./configure --prefix=$(CLHEPDIR)
+	date > $@
+
+do_make: $(CLHEPDIR)/.configure_done
+	$(MAKE) -C$(CLHEPDIR)/CLHEP
+
+do_make_install: do_make
+	$(MAKE) -C$(CLHEPDIR)/CLHEP install
+
+prod_link: do_make_install
+	test -L prod || ln -s $(VERSION) prod # will not overwrite existing link
