@@ -16,6 +16,9 @@ $(HALLD_HOME)/.getarg_patches_done: create_src_link
 
 create_src_link: $(HALLD_HOME)/.checkout_done
 	if [ $(HALLD_SRC) != src ] ; then cd $(HALLD_HOME) ; test -L src || ln -s $(HALLD_SRC) src ; fi
+# following statements necessary to prevent remake of event.xml!
+	touch $(HALLD_HOME)/src-gcc-4.3/libraries/HDDM/hddm_s.h
+	touch $(HALLD_HOME)/src-gcc-4.3/libraries/HDDM/hddm_s.c
 
 $(HALLD_HOME)/.checkout_done: make_halld_dir
 	cd $(HALLD_HOME); svn -q co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION)
