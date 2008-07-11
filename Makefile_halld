@@ -1,8 +1,8 @@
 PWD = $(shell pwd)
-VERSION_LABEL = current
+VERSION_LABEL = 2008-06-20
 HALLD_SRC = src
-REPOSITORY_LOCATION = trunk/$(HALLD_SRC)
-export HALLD_HOME = $(PWD)/halld_$(VERSION_LABEL)
+REPOSITORY_LOCATION = tags/release-$(VERSION_LABEL)
+export HALLD_HOME = $(PWD)/release-$(VERSION_LABEL)
 export HALLD_MY = $(HALLD_HOME)
 
 all: make_halld
@@ -11,7 +11,7 @@ make_halld: $(HALLD_HOME)/.getarg_patches_done
 	$(MAKE) -C$(HALLD_HOME)/src
 
 $(HALLD_HOME)/.getarg_patches_done: create_src_link
-	cd $(HALLD_HOME); cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* $(HALLD_HOME)/src/programs/Simulation/HDGeant
+	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* $(HALLD_HOME)/src/programs/Simulation/HDGeant
 	date > $@
 
 create_src_link: $(HALLD_HOME)/.checkout_done
@@ -20,9 +20,6 @@ create_src_link: $(HALLD_HOME)/.checkout_done
 	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.h
 	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.c
 
-$(HALLD_HOME)/.checkout_done: make_halld_dir
-	cd $(HALLD_HOME); svn -q co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION)
+$(HALLD_HOME)/.checkout_done:
+	svn -q co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION)
 	date > $@
-
-make_halld_dir:
-	test -d $(HALLD_HOME) || mkdir -p $(HALLD_HOME)
