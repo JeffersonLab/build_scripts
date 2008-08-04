@@ -1,3 +1,4 @@
+WHICH_G77 = $(shell which g77)
 PWD = $(shell pwd)
 VERSION_LABEL = 2008-06-20
 HALLD_SRC = src
@@ -11,12 +12,16 @@ make_halld: $(HALLD_HOME)/.getarg_patches_done
 	$(MAKE) -C$(HALLD_HOME)/src
 
 $(HALLD_HOME)/.getarg_patches_done: create_src_link
-	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* $(HALLD_HOME)/src/programs/Simulation/HDGeant
+ifeq (,$(findstring g77,$(WHICH_G77)))
+	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
+		$(HALLD_HOME)/src/programs/Simulation/HDGeant
+endif
 	date > $@
 
 create_src_link: $(HALLD_HOME)/.checkout_done
-	if [ $(HALLD_SRC) != src ] ; then cd $(HALLD_HOME) ; test -L src || ln -s $(HALLD_SRC) src ; fi
-# following statements necessary to prevent remake of event.xml!
+	if [ $(HALLD_SRC) != src ] ; then cd $(HALLD_HOME) ; \
+		test -L src || ln -s $(HALLD_SRC) src ; fi
+	# following statements necessary to prevent remake of event.xml!
 	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.h
 	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.c
 
