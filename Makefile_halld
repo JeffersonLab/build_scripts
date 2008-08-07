@@ -11,19 +11,20 @@ all: make_halld
 make_halld: $(HALLD_HOME)/.getarg_patches_done
 	$(MAKE) -C$(HALLD_HOME)/src
 
-$(HALLD_HOME)/.getarg_patches_done: create_src_link
+$(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.create_src_link
 ifeq (,$(findstring g77,$(WHICH_G77)))
 	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
 		$(HALLD_HOME)/src/programs/Simulation/HDGeant
 endif
 	date > $@
 
-create_src_link: $(HALLD_HOME)/.checkout_done
+$(HALLD_HOME)/.create_src_link: $(HALLD_HOME)/.checkout_done
 	if [ $(HALLD_SRC) != src ] ; then cd $(HALLD_HOME) ; \
 		test -L src || ln -s $(HALLD_SRC) src ; fi
 	# following statements necessary to prevent remake of event.xml!
 	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.h
 	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.c
+	date > $@
 
 $(HALLD_HOME)/.checkout_done:
 	svn -q co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION)
