@@ -6,14 +6,15 @@ export PATH:=$(CERN_ROOT)/bin:$(PATH)
 
 WHICH_G77 = $(shell which g77)
 ifneq (,$(findstring g77,$(WHICH_G77)))
-	FC = g77
+	export FC=g77
 else
-	FC = gfortran
+	export FC=gfortran
 endif
 
 all: info make_cernlib make_links
 
 info:
+	@echo FC = $(FC)
 	@echo WHICH_G77 = $(WHICH_G77)
 
 $(CERN_ROOT)/.untar_src_done: $(CERN_LEVEL)_src.tar.gz
@@ -25,7 +26,7 @@ $(CERN_ROOT)/.untar_include_done: include.tar.gz
 	date > $@
 
 make_cernlib: $(CERN_ROOT)/build/scripts/install.bin
-	$(MAKE) -C$(CERN_ROOT)/build
+	$(MAKE) -C$(CERN_ROOT)/build FC=$(FC)
 
 $(CERN_ROOT)/build/scripts/Makefile:
 	$(MAKE) -C$(CERN_ROOT)/build scripts/Makefile
