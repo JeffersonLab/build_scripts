@@ -37,8 +37,11 @@ make_links:
 %.tar.gz:
 	wget http://cernlib.web.cern.ch/cernlib/download/${CERN_LEVEL}_source/tar/$@
 
-$(CERN_ROOT)/.patch_done: $(CERN_ROOT)/.untar_src_done $(CERN_ROOT)/.untar_include_done
-	cd $(CERN_ROOT); patch -p1 < $(BUILD_SCRIPTS)/patches/cernlib/cernlib_2006_f9.txt
+$(CERN_ROOT)/cernlib_patch_file.txt:
+	cat $(BUILD_SCRIPTS)/patches/cernlib/*.txt > $@
+
+$(CERN_ROOT)/.patch_done: $(CERN_ROOT)/.untar_src_done $(CERN_ROOT)/.untar_include_done $(CERN_ROOT)/cernlib_patch_file.txt
+	cd $(CERN_ROOT); patch -p1 < $(CERN_ROOT)/cernlib_patch_file.txt
 	date > $@
 
 $(CERN_ROOT)/.dirs_done:
