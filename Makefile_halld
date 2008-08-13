@@ -2,14 +2,18 @@ WHICH_GFORTRAN = $(shell which gfortran)
 PWD = $(shell pwd)
 VERSION_LABEL = 2008-06-20
 HALLD_SRC = src
-REPOSITORY_LOCATION = tags/release-$(VERSION_LABEL)
-export HALLD_HOME = $(PWD)/release-$(VERSION_LABEL)
+HALLD_DIR = release-$(VERSION_LABEL)
+REPOSITORY_LOCATION = tags/$(HALLD_DIR)
+export HALLD_HOME = $(PWD)/$(HALLD_DIR)
 export HALLD_MY = $(HALLD_HOME)
 
-all: env make_halld
+all: env prod_link
 
 env:
 	@echo WHICH_GFORTRAN = $(WHICH_GFORTRAN)
+
+prod_link: make_halld
+	test -L prod || ln -s $(HALLD_DIR) prod # will not overwrite existing link
 
 make_halld: $(HALLD_HOME)/.getarg_patches_done
 	$(MAKE) -C$(HALLD_HOME)/src
