@@ -1,5 +1,5 @@
 PWD = $(shell pwd)
-JANA_VERSION = 0.4.6
+JANA_VERSION = 0.4.7
 JANA_DIR = jana_$(JANA_VERSION)
 export JANA_HOME = $(PWD)/$(JANA_DIR)
 TARFILE = jana_$(JANA_VERSION).tgz
@@ -32,4 +32,4 @@ $(JANA_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(TARFILE):
-	wget http://www.jlab.org/JANA/releases/jana_0.4.6.tgz
+	wget http://www.jlab.org/JANA/releases/$(TARFILE)
