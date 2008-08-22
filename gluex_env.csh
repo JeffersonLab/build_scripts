@@ -1,6 +1,22 @@
 # clean target
 if ($1 == 'clean') then
-    unsetenv GLUEX_TOP OSNAME XERCESCROOT JANA_CALIB_URL JANA_GEOMETERY_URL ROOTSYS CERN CERN_LEVEL JANA_HOME HALLD_HOME HALLD_MY
+    unsetenv \
+    GLUEX_TOP \
+    OS \
+    ARCH \
+    OSNAME \
+    LD_LIBRARY_PATH \
+    XERCESCROOT \
+    XERCES_INCLUDE \
+    ROOTSYS \
+    CERN \
+    CERN_LEVEL \
+    CERN_ROOT \
+    JANA_HOME \
+    JANA_CALIB_URL \
+    JANA_GEOMETRY_URL \
+    HALLD_HOME \
+    HALLD_MY
     exit
 endif
 # general stuff
