@@ -1,0 +1,19 @@
+eval `$BUILD_SCRIPTS/delpath.pl $ROOTSYS/bin $CERN_ROOT/bin $HALLD_HOME/bin/$OSNAME $HALLD_MY/bin/$OSNAME`
+unsetenv \
+    GLUEX_TOP \
+    BUILD_SCRIPTS \
+    OS \
+    ARCH \
+    OSNAME \
+    LD_LIBRARY_PATH \
+    XERCESCROOT \
+    XERCES_INCLUDE \
+    ROOTSYS \
+    CERN \
+    CERN_LEVEL \
+    CERN_ROOT \
+    JANA_HOME \
+    JANA_CALIB_URL \
+    JANA_GEOMETRY_URL \
+    HALLD_HOME \
+    HALLD_MY

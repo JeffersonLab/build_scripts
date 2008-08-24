@@ -1,27 +1,7 @@
-# clean target
-if ($1 == 'clean') then
-    unsetenv \
-    GLUEX_TOP \
-    OS \
-    ARCH \
-    OSNAME \
-    LD_LIBRARY_PATH \
-    XERCESCROOT \
-    XERCES_INCLUDE \
-    ROOTSYS \
-    CERN \
-    CERN_LEVEL \
-    CERN_ROOT \
-    JANA_HOME \
-    JANA_CALIB_URL \
-    JANA_GEOMETRY_URL \
-    HALLD_HOME \
-    HALLD_MY
-    exit
-endif
 # general stuff
 if ($1 != '') setenv GLUEX_TOP $1
 if (! $?GLUEX_TOP) setenv GLUEX_TOP `pwd`
+if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
 setenv OS `/bin/uname -s`
 setenv ARCH `/bin/uname -p`
 setenv OSNAME ${OS}-${ARCH}
