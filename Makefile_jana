@@ -1,5 +1,6 @@
 PWD = $(shell pwd)
-JANA_VERSION = 0.4.7
+#JANA_VERSION = 0.4.7
+JANA_VERSION = 0.4.8
 JANA_DIR = jana_$(JANA_VERSION)
 export JANA_HOME = $(PWD)/$(JANA_DIR)
 TARFILE = jana_$(JANA_VERSION).tgz

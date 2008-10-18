@@ -2,8 +2,10 @@ WHICH_GFORTRAN = $(shell which gfortran)
 PWD = $(shell pwd)
 VERSION_LABEL = 2008-08-18
 HALLD_SRC = src
-HALLD_DIR = release-$(VERSION_LABEL)
-REPOSITORY_LOCATION = tags/$(HALLD_DIR)
+#HALLD_DIR = release-$(VERSION_LABEL)
+#REPOSITORY_LOCATION = tags/$(HALLD_DIR)
+HALLD_DIR = .
+REPOSITORY_LOCATION = trunk/src
 export HALLD_HOME = $(PWD)/$(HALLD_DIR)
 export HALLD_MY = $(HALLD_HOME)
 
