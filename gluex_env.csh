@@ -2,9 +2,6 @@
 if ($1 != '') setenv GLUEX_TOP $1
 if (! $?GLUEX_TOP) setenv GLUEX_TOP `pwd`
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
-setenv OS `/bin/uname -s`
-setenv ARCH `/bin/uname -p`
-setenv OSNAME ${OS}-${ARCH}
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
 # xerces-c++
 if (! $?XERCESCROOT) setenv XERCESCROOT $GLUEX_TOP/xerces-c/prod
@@ -31,17 +28,18 @@ setenv JANA_GEOMETRY_URL \
 # halld
 if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/halld/prod
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
-echo $PATH | grep $HALLD_HOME/bin/$OSNAME > /dev/null
-if ($status) setenv PATH $HALLD_HOME/bin/${OSNAME}:$PATH
-echo $PATH | grep $HALLD_MY/bin/$OSNAME > /dev/null
-if ($status) setenv PATH $HALLD_MY/bin/${OSNAME}:$PATH
+setenv BMS_OSNAME `$HALLD_HOME/src/BMS/osrelease.pl`
+echo $PATH | grep $HALLD_HOME/bin/$BMS_OSNAME > /dev/null
+if ($status) setenv PATH $HALLD_HOME/bin/${BMS_OSNAME}:$PATH
+echo $PATH | grep $HALLD_MY/bin/$BMS_OSNAME > /dev/null
+if ($status) setenv PATH $HALLD_MY/bin/${BMS_OSNAME}:$PATH
 # refresh the list of items in the path
 rehash
 # report environment
 echo ===gluex_env.csh report===
 echo GLUEX_TOP = $GLUEX_TOP
 echo JANA_HOME =  $JANA_HOME
-echo OSNAME =  $OSNAME
+echo BMS_OSNAME =  $BMS_OSNAME
 echo HALLD_HOME =  $HALLD_HOME
 echo ROOTSYS =  $ROOTSYS
 echo XERCESCROOT =  $XERCESCROOT
