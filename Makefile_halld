@@ -4,8 +4,10 @@ VERSION_LABEL = 2008-08-18
 HALLD_SRC = src
 #HALLD_DIR = release-$(VERSION_LABEL)
 #REPOSITORY_LOCATION = tags/$(HALLD_DIR)
-HALLD_DIR = .
+#CD_COMMAND = cd .
+HALLD_DIR = latest
 REPOSITORY_LOCATION = trunk/src
+CD_COMMAND = cd $(HALLD_HOME)
 export HALLD_HOME = $(PWD)/$(HALLD_DIR)
 export HALLD_MY = $(HALLD_HOME)
 
@@ -20,21 +22,19 @@ prod_link: make_halld
 make_halld: $(HALLD_HOME)/.getarg_patches_done
 	$(MAKE) -C$(HALLD_HOME)/src
 
-$(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.create_src_link
+$(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.checkout_done
 ifneq (,$(findstring gfortran,$(WHICH_GFORTRAN)))
 	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
 		$(HALLD_HOME)/src/programs/Simulation/HDGeant
 endif
 	date > $@
 
-$(HALLD_HOME)/.create_src_link: $(HALLD_HOME)/.checkout_done
-	if [ $(HALLD_SRC) != src ] ; then cd $(HALLD_HOME) ; \
-		test -L src || ln -s $(HALLD_SRC) src ; fi
+$(HALLD_HOME)/.checkout_done: $(HALLD_HOME)/.halld_home_made
+	$(CD_COMMAND); svn -q co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION)
 	# following statements necessary to prevent remake of event.xml!
 	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.h
 	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.c
 	date > $@
 
-$(HALLD_HOME)/.checkout_done:
-	svn -q co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION)
-	date > $@
+$(HALLD_HOME)/.halld_home_made:
+	test -d $(HALLD_HOME) || mkdir -p $(HALLD_HOME)
