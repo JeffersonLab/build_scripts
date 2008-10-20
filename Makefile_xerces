@@ -1,3 +1,4 @@
+XERCES_SERIES = 2
 VERSION=2_8_0
 TARFILE=xerces-c-src_$(VERSION).tar.gz
 PWD := $(shell pwd)
@@ -20,4 +21,4 @@ $(XERCESCROOT)/.configure_done: $(XERCESCROOT)/.untar_done
 	date > $@
 
 $(TARFILE):
-	wget http://www.apache.org/dist/xerces/c/sources/$(TARFILE)
+	wget http://apache.inetbridge.net/xerces/c/$(XERCES_SERIES)/sources/$(TARFILE)
