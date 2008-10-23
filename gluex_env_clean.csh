@@ -4,7 +4,7 @@ unsetenv \
     BUILD_SCRIPTS \
     OS \
     ARCH \
-    OSNAME \
+    BMS_OSNAME \
     LD_LIBRARY_PATH \
     XERCESCROOT \
     XERCES_INCLUDE \
