@@ -1,5 +1,4 @@
 # general stuff
-if ($1 != '') setenv GLUEX_TOP $1
 if (! $?GLUEX_TOP) setenv GLUEX_TOP /usr/local
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
