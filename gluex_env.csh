@@ -38,17 +38,16 @@ if ($status) setenv PATH  $HALLD_HOME/src/programs/Utilities/hddm:$PATH
 rehash
 # report environment
 echo ===gluex_env.csh report===
-echo GLUEX_TOP = $GLUEX_TOP
-echo JANA_HOME =  $JANA_HOME
 echo BMS_OSNAME =  $BMS_OSNAME
-echo HALLD_HOME =  $HALLD_HOME
-echo ROOTSYS =  $ROOTSYS
-echo XERCESCROOT =  $XERCESCROOT
+echo BUILD_SCRIPTS = $BUILD_SCRIPTS
 echo CERN_ROOT =  $CERN_ROOT
+echo GLUEX_TOP = $GLUEX_TOP
+echo HALLD_HOME =  $HALLD_HOME
+echo HALLD_MY = $HALLD_MY
 echo JANA_CALIB_URL = $JANA_CALIB_URL
 echo JANA_GEOMETRY_URL = $JANA_GEOMETRY_URL
-echo HALLD_MY = $HALLD_MY
-echo PATH = $PATH
+echo JANA_HOME =  $JANA_HOME
 echo LD_LIBRARY_PATH = $LD_LIBRARY_PATH
-echo paw = `which paw`
-echo root = `which root`
+echo PATH = $PATH
+echo ROOTSYS =  $ROOTSYS
+echo XERCESCROOT =  $XERCESCROOT
