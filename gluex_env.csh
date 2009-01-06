@@ -27,7 +27,7 @@ setenv JANA_GEOMETRY_URL \
 # halld
 if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/halld/prod
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
-setenv BMS_OSNAME `$HALLD_HOME/src/BMS/osrelease.pl`
+setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 echo $PATH | grep $HALLD_HOME/bin/$BMS_OSNAME > /dev/null
 if ($status) setenv PATH $HALLD_HOME/bin/${BMS_OSNAME}:$PATH
 echo $PATH | grep $HALLD_MY/bin/$BMS_OSNAME > /dev/null
