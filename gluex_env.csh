@@ -23,7 +23,7 @@ if ($status) setenv PATH $CERN_ROOT/bin:$PATH
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod
 setenv JANA_CALIB_URL file://$GLUEX_TOP/gluex/calib
 setenv JANA_GEOMETRY_URL \
-    xmlfile://$GLUEX_TOP/halld/prod/src/programs/Simulation/hdds/main_HDDS.xml
+    xmlfile://$HALLD_HOME/src/programs/Simulation/hdds/main_HDDS.xml
 # halld
 if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/halld/prod
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
