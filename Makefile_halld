@@ -1,6 +1,6 @@
 WHICH_GFORTRAN = $(shell which gfortran)
 PWD = $(shell pwd)
-VERSION_LABEL = 2008-10-21
+VERSION_LABEL = 2009-02-24
 HALLD_SRC = src
 HALLD_DIR = release-$(VERSION_LABEL)
 REPOSITORY_LOCATION = tags/$(HALLD_DIR)
