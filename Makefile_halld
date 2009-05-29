@@ -1,6 +1,6 @@
 WHICH_GFORTRAN = $(shell which gfortran)
 PWD = $(shell pwd)
-VERSION_LABEL = 2009-02-24
+VERSION_LABEL = 2009-04-27
 HALLD_SRC = src
 HALLD_DIR = release-$(VERSION_LABEL)
 REPOSITORY_LOCATION = tags/$(HALLD_DIR)
@@ -30,7 +30,7 @@ endif
 	date > $@
 
 $(HALLD_HOME)/.checkout_done: $(HALLD_HOME)/.halld_home_made
-	$(CD_COMMAND); svn -q co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION)
+	$(CD_COMMAND); svn co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION)
 	# following statements necessary to prevent remake of event.xml!
 	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.h
 	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.c
