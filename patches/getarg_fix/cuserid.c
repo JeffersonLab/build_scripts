@@ -72,7 +72,7 @@ cuserid(s)
 		return (s);
 	}
 	if (s) {
-		(void)strncpy(s, pwd->pw_name, L_cuserid);
+		(void)strncpy(s, pwd->pw_name, 9);
 		return (s);
 	}
 	return (pwd->pw_name);
