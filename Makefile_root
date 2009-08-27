@@ -1,4 +1,5 @@
-VERSION=5.19.04
+#VERSION=5.19.04
+VERSION=5.24.00
 TARFILE=root_v$(VERSION).source.tar.gz
 ROOTDIR=root_$(VERSION)
 PWD := $(shell pwd)
@@ -25,5 +26,5 @@ main_make: $(ROOTDIR)/config.log $(ROOTDIR)/.patch_done
 	make -C $(ROOTDIR)
 
 $(ROOTDIR)/.patch_done:
-	cd $(ROOTDIR); patch -p1 < $(BUILD_SCRIPTS)/patches/root/patch_stropts.txt
+	#cd $(ROOTDIR); patch -p1 < $(BUILD_SCRIPTS)/patches/root/patch_stropts.txt
 	touch $@
