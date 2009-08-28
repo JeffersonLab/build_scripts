@@ -26,5 +26,6 @@ main_make: $(ROOTDIR)/config.log $(ROOTDIR)/.patch_done
 	make -C $(ROOTDIR)
 
 $(ROOTDIR)/.patch_done:
+	#needed for 5.19.04
 	#cd $(ROOTDIR); patch -p1 < $(BUILD_SCRIPTS)/patches/root/patch_stropts.txt
 	touch $@
