@@ -1,5 +1,5 @@
 #VERSION=5.19.04
-VERSION=5.24.00
+VERSION=5.25.02
 TARFILE=root_v$(VERSION).source.tar.gz
 ROOTDIR=root_$(VERSION)
 PWD := $(shell pwd)
@@ -23,7 +23,7 @@ $(ROOTDIR)/config.log: $(ROOTDIR)/configure
 	cd $(ROOTDIR); ./configure linux
 
 main_make: $(ROOTDIR)/config.log $(ROOTDIR)/.patch_done
-	make -C $(ROOTDIR)
+	cd $(ROOTDIR) ; make
 
 $(ROOTDIR)/.patch_done:
 	#needed for 5.19.04
