@@ -1,5 +1,5 @@
 # general stuff
-if (! $?GLUEX_TOP) setenv GLUEX_TOP /usr/local
+if (! $?GLUEX_TOP) setenv GLUEX_TOP /usr/local/gluex
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
 # xerces-c++
@@ -31,7 +31,7 @@ echo $PATH | grep $HALLD_HOME/src/programs/Utilities/hddm > /dev/null
 if ($status) setenv PATH  $HALLD_HOME/src/programs/Utilities/hddm:$PATH
 # jana (JAMA_GEOMETRY_URL depends on HALLD_HOME)
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod
-setenv JANA_CALIB_URL file://$GLUEX_TOP/gluex/calib
+if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL file://$GLUEX_TOP/calib
 setenv JANA_GEOMETRY_URL \
     xmlfile://$HALLD_HOME/src/programs/Simulation/hdds/main_HDDS.xml
 # refresh the list of items in the path
