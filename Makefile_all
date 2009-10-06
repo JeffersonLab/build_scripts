@@ -13,7 +13,7 @@ JANA = ${ROOT_OF_ALL}/jana
 ROOT = ${ROOT_OF_ALL}/root
 XERCES = ${ROOT_OF_ALL}/xerces-c
 
-all: env xerces_build cernlib_build root_build clhep_build jana_build halld_build
+all: env xerces_build cernlib_build root_build clhep_build jana_build halld_build calib_make
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -60,6 +60,9 @@ clhep_dir:
 
 clhep_make:
 	$(MAKE) -C${CLHEP} -f${BUILD_SCRIPTS}/Makefile_clhep
+
+calib_make:
+	test -d calib || svn checkout https://halldsvn.jlab.org/repos/trunk/calib
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
