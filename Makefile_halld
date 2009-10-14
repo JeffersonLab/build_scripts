@@ -1,15 +1,17 @@
 WHICH_GFORTRAN = $(shell which gfortran)
 PWD = $(shell pwd)
-VERSION_LABEL = 2009-04-27
 HALLD_SRC = src
-HALLD_DIR = release-$(VERSION_LABEL)
+# for example VERSION_LABEL = release-2009-04-27
+ifdef $(VERSION_LABEL)
+HALLD_DIR = $(VERSION_LABEL)
 REPOSITORY_LOCATION = tags/$(HALLD_DIR)
-CD_COMMAND = cd .
-#HALLD_DIR = latest
-#REPOSITORY_LOCATION = trunk/src
-#CD_COMMAND = cd $(HALLD_HOME)
+else
+HALLD_DIR = latest
+REPOSITORY_LOCATION = trunk/src
+endif
 export HALLD_HOME = $(PWD)/$(HALLD_DIR)
 export HALLD_MY = $(HALLD_HOME)
+CD_COMMAND = cd $(HALLD_HOME)
 
 all: env prod_link
 
@@ -32,9 +34,10 @@ endif
 $(HALLD_HOME)/.checkout_done: $(HALLD_HOME)/.halld_home_made
 	$(CD_COMMAND); svn co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION)
 	# following statements necessary to prevent remake of event.xml!
-	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.h
-	touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.c
+	#touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.h
+	#touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.c
 	date > $@
 
 $(HALLD_HOME)/.halld_home_made:
 	test -d $(HALLD_HOME) || mkdir -p $(HALLD_HOME)
+	date > $@
