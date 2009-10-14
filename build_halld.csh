@@ -11,8 +11,10 @@ setenv JANA_CALIB_URL file:///group/halld/calib
 # ROOT
 setenv ROOTSYS /apps/root/5.18-00/root
 # CERNLIB
-setenv CERN /apps/cernlib/i386_fc8
+setenv CERN_CUE `$BUILD_SCRIPTS/cue_arch.pl`
+setenv CERN /apps/cernlib/$CERN_CUE
 setenv CERN_LEVEL 2005
+echo debug: CERN = $CERN
 # Hall D
 setenv HALLD_HOME $TARGET_DIR/latest
 setenv HALLD_MY $HALLD_HOME
