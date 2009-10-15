@@ -1,28 +1,29 @@
 WHICH_GFORTRAN = $(shell which gfortran)
 PWD = $(shell pwd)
-HALLD_SRC = src
-# for example VERSION_LABEL = release-2009-04-27
-ifdef $(VERSION_LABEL)
-HALLD_DIR = $(VERSION_LABEL)
-REPOSITORY_LOCATION = tags/$(HALLD_DIR)
+# for example RELEASE_TAG = release-2009-04-27
+ifdef RELEASE_TAG
+HALLD_DIR = $(RELEASE_TAG)
+REPOSITORY_LOCATION = tags/$(HALLD_DIR)/src
 else
 HALLD_DIR = latest
 REPOSITORY_LOCATION = trunk/src
 endif
 export HALLD_HOME = $(PWD)/$(HALLD_DIR)
-export HALLD_MY = $(HALLD_HOME)
 CD_COMMAND = cd $(HALLD_HOME)
 
 all: env prod_link
 
 env:
 	@echo WHICH_GFORTRAN = $(WHICH_GFORTRAN)
+	@echo RELEASE_TAG = $(RELEASE_TAG)
+	@echo HALLD_DIR = $(HALLD_DIR)
+	@echo REPOSITORY_LOCATION = $(REPOSITORY_LOCATION)
 
 prod_link: make_halld
 	test -L prod || ln -s $(HALLD_DIR) prod # will not overwrite existing link
 
 make_halld: $(HALLD_HOME)/.getarg_patches_done
-	$(MAKE) -C$(HALLD_HOME)/src
+	$(MAKE) -C$(HALLD_HOME)/src LOCAL_HALLD_HOME=1
 
 $(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.checkout_done
 ifneq (,$(findstring gfortran,$(WHICH_GFORTRAN)))
