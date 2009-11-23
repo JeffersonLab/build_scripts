@@ -26,4 +26,5 @@ cd $TARGET_DIR
 echo debug: PATH = $PATH
 echo debug: which root-config = `which root-config`
 make -f $BUILD_SCRIPTS/Makefile_halld
+make -f $BUILD_SCRIPTS/Makefile_halld DEBUG=1
 exit
