@@ -9,9 +9,9 @@ setenv XERCESCROOT /group/halld/Software/ExternalPackages/xerces-c-src_2_7_0.$BM
 setenv JANA_HOME /group/12gev_phys/builds/jana_0.5.2/$BMS_OSNAME
 setenv JANA_CALIB_URL file:///group/halld/calib
 # ROOT
-setenv ROOTSYS /apps/root/PRO/root
+setenv ROOTSYS `$BUILD_SCRIPTS/cue_rootsys.pl`
 # CERNLIB
-setenv CERN_CUE `$BUILD_SCRIPTS/cue_arch.pl`
+setenv CERN_CUE `$BUILD_SCRIPTS/cue_cernlib.pl`
 setenv CERN /apps/cernlib/$CERN_CUE
 setenv CERN_LEVEL 2005
 echo debug: CERN = $CERN
