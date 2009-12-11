@@ -9,11 +9,12 @@ endif
 CERNLIB = ${ROOT_OF_ALL}/cernlib
 CLHEP = ${ROOT_OF_ALL}/clhep
 HALLD = ${ROOT_OF_ALL}/halld
+HDDS = ${ROOT_OF_ALL}/hdds
 JANA = ${ROOT_OF_ALL}/jana
 ROOT = ${ROOT_OF_ALL}/root
 XERCES = ${ROOT_OF_ALL}/xerces-c
 
-all: env xerces_build cernlib_build root_build clhep_build jana_build halld_build calib_make
+all: env xerces_build cernlib_build root_build clhep_build jana_build hdds_build halld_build calib_make
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -44,6 +45,14 @@ jana_dir:
 
 jana_make:
 	$(MAKE) -C${JANA} -f${BUILD_SCRIPTS}/Makefile_jana
+
+hdds_build: hdds_dir hdds_make
+
+hdds_dir:
+	test -d ${HDDS} || mkdir -pv ${HDDS}
+
+hdds_make:
+	$(MAKE) -C${HDDS} -f${BUILD_SCRIPTS}/Makefile_hdds
 
 halld_build: halld_dir halld_make
 
