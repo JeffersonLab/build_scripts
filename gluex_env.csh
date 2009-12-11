@@ -19,6 +19,8 @@ if (! $?CERN_LEVEL) setenv CERN_LEVEL 2006
 setenv CERN_ROOT $CERN/$CERN_LEVEL
 echo $PATH | grep $CERN_ROOT/bin > /dev/null
 if ($status) setenv PATH $CERN_ROOT/bin:$PATH
+# hdds
+if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
 # halld
 if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/halld/prod
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
