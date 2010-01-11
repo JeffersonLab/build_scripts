@@ -13,6 +13,7 @@ HDDS = ${ROOT_OF_ALL}/hdds
 JANA = ${ROOT_OF_ALL}/jana
 ROOT = ${ROOT_OF_ALL}/root
 XERCES = ${ROOT_OF_ALL}/xerces-c
+GEANT4 = ${ROOT_OF_ALL}/geant4
 
 all: env xerces_build cernlib_build root_build clhep_build jana_build hdds_build halld_build calib_make
 
@@ -72,6 +73,14 @@ clhep_make:
 
 calib_make:
 	test -d calib || svn checkout https://halldsvn.jlab.org/repos/trunk/calib
+
+geant4_build: geant4_dir geant4_make
+
+geant4_dir:
+	test -d ${GEANT4} || mkdir -pv ${GEANT4}
+
+geant4_make:
+	$(MAKE) -C$(GEANT4) -f$(BUILD_SCRIPTS)/Makefile_geant4
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}

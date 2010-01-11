@@ -1,0 +1,4 @@
+all: run_install_script
+
+run_install_script:
+	$(BUILD_SCRIPTS)/geant4_install.sh

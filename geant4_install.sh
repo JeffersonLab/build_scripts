@@ -3,8 +3,8 @@
 # script to install GEANT4 from scratch
 #
 VERSION=9.0
-TARDIR=/home/install
-SCRIPTDIR=/home/install
+TARDIR=`pwd`
+SCRIPTDIR=$BUILD_SCRIPTS
 # extend the path
 export PATH=$SCRIPTDIR:$PATH
 # get the tar file
@@ -16,8 +16,7 @@ then
   wget http://geant4.web.cern.ch/geant4/support/source/$TARFILE
 fi
 # untar the distribution
-G4DIR=/usr/local/geant4/geant4.$VERSION
-cd /usr/local/geant4
+G4DIR=`pwd`/geant4.$VERSION
 if [ ! -d $G4DIR ]
 then
     tar zxvf $TARDIR/$TARFILE

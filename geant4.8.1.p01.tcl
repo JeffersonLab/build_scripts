@@ -39,7 +39,7 @@ sleep 2
 send "\r"
 expect "Could not find CLHEP installed on this system"
 sleep 2
-send "/usr/local/clhep/1.9.3.1\r"
+send "$env(CLHEP_HOME)\r"
 expect "You can customize paths and library name of you CLHEP installation"
 expect "for default settings"
 sleep 2
