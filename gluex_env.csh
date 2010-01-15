@@ -35,7 +35,7 @@ if ($status) setenv PATH  $HALLD_HOME/src/programs/Utilities/hddm:$PATH
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod
 if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL file://$GLUEX_TOP/calib
 setenv JANA_GEOMETRY_URL \
-    xmlfile://$HALLD_HOME/src/programs/Simulation/hdds/main_HDDS.xml
+    xmlfile://$HDDS_HOME/main_HDDS.xml
 # refresh the list of items in the path
 rehash
 # report environment
