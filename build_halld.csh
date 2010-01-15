@@ -15,7 +15,7 @@ setenv CERN_CUE `$BUILD_SCRIPTS/cue_cernlib.pl`
 setenv CERN /apps/cernlib/$CERN_CUE
 setenv CERN_LEVEL 2005
 # Hall D
-setenv HALLD_HOME $TARGET_DIR/latest
+setenv HALLD_HOME $TARGET_DIR/halld/latest
 setenv HALLD_MY $HALLD_HOME
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env.csh
