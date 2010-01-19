@@ -1,3 +1,9 @@
+# process arguments
+if ($1 == '-v') then
+    set gluex_env_verbose=1
+else
+    set gluex_env_verbose=0
+endif
 # general stuff
 if (! $?GLUEX_TOP) setenv GLUEX_TOP /usr/local/gluex
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
@@ -31,25 +37,28 @@ echo $PATH | grep $HALLD_MY/bin/$BMS_OSNAME > /dev/null
 if ($status) setenv PATH $HALLD_MY/bin/${BMS_OSNAME}:$PATH
 echo $PATH | grep $HALLD_HOME/src/programs/Utilities/hddm > /dev/null
 if ($status) setenv PATH  $HALLD_HOME/src/programs/Utilities/hddm:$PATH
-# jana (JAMA_GEOMETRY_URL depends on HALLD_HOME)
+# jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod
 if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL file://$GLUEX_TOP/calib
-setenv JANA_GEOMETRY_URL \
+if (! $?JANA_GEOMETRY_URL) setenv JANA_GEOMETRY_URL \
     xmlfile://$HDDS_HOME/main_HDDS.xml
 # refresh the list of items in the path
 rehash
 # report environment
-echo ===gluex_env.csh report===
-echo BMS_OSNAME =  $BMS_OSNAME
-echo BUILD_SCRIPTS = $BUILD_SCRIPTS
-echo CERN_ROOT =  $CERN_ROOT
-echo GLUEX_TOP = $GLUEX_TOP
-echo HALLD_HOME =  $HALLD_HOME
-echo HALLD_MY = $HALLD_MY
-echo JANA_CALIB_URL = $JANA_CALIB_URL
-echo JANA_GEOMETRY_URL = $JANA_GEOMETRY_URL
-echo JANA_HOME =  $JANA_HOME
-echo LD_LIBRARY_PATH = $LD_LIBRARY_PATH
-echo PATH = $PATH
-echo ROOTSYS =  $ROOTSYS
-echo XERCESCROOT =  $XERCESCROOT
+if ($gluex_env_verbose) then
+    echo ===gluex_env.csh report===
+    echo BMS_OSNAME =  $BMS_OSNAME
+    echo BUILD_SCRIPTS = $BUILD_SCRIPTS
+    echo CERN_ROOT =  $CERN_ROOT
+    echo GLUEX_TOP = $GLUEX_TOP
+    echo HALLD_HOME =  $HALLD_HOME
+    echo HALLD_MY = $HALLD_MY
+    echo HDDS_HOME = $HDDS_HOME
+    echo JANA_CALIB_URL = $JANA_CALIB_URL
+    echo JANA_GEOMETRY_URL = $JANA_GEOMETRY_URL
+    echo JANA_HOME =  $JANA_HOME
+    echo LD_LIBRARY_PATH = $LD_LIBRARY_PATH
+    echo PATH = $PATH
+    echo ROOTSYS =  $ROOTSYS
+    echo XERCESCROOT =  $XERCESCROOT
+endif
