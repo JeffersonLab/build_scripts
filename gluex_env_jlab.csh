@@ -13,9 +13,9 @@ setenv CERN_CUE `$BUILD_SCRIPTS/cue_cernlib.pl`
 setenv CERN /apps/cernlib/$CERN_CUE
 setenv CERN_LEVEL 2005
 # HDDS
-setenv HDDS_HOME /group/halld/Software/builds/hdds/hdds_latest
+setenv HDDS_HOME /group/halld/Software/builds/hdds/hdds-1.0
 # Hall D
-setenv HALLD_HOME /group/halld/Software/builds/release-2009-12-01
+setenv HALLD_HOME /group/halld/Software/builds/release-2010-01-21
 setenv HALLD_MY $HOME/halld_my
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env.csh
