@@ -6,7 +6,7 @@ setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 # xerces-c
 setenv XERCESCROOT /group/halld/Software/ExternalPackages/xerces-c-src_2_7_0.$BMS_OSNAME
 # Jana
-setenv JANA_HOME /group/12gev_phys/builds/jana_0.5.2/$BMS_OSNAME
+setenv JANA_HOME /group/12gev_phys/builds/jana_0.6.0/$BMS_OSNAME
 setenv JANA_CALIB_URL file:///group/halld/calib
 # ROOT
 setenv ROOTSYS `$BUILD_SCRIPTS/cue_root.pl`
