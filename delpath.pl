@@ -1,15 +1,14 @@
 #!/usr/bin/env perl
 #
-# Written so that:
+# deleted element from path
 #
-# o it can be put in .cshrc
-# o repeated invocations do not add paths that already exist
-# o an invocation will not eliminate paths that already exist
-# 
-# This results in a consistent path, regardless of how far down you are
-# in the process stack.
-#
-$line=$ENV{'PATH'};
+if ($ARGV[0] eq '-l') {
+    $pathtype = "LD_LIBRARY_PATH";
+    shift @ARGV;
+} else {
+    $pathtype = "PATH";
+}
+$line=$ENV{$pathtype};
 #print "$line\n";
 @field = split(/:/,$line);
 #print "number of fields $#field\n";
@@ -31,5 +30,5 @@ for ($j = 0; $j <= $#field ; $j++) {
     $newpath = $newpath . $path;
   }
 }
-print "setenv PATH $newpath\n";
+print "setenv $pathtype $newpath\n";
 exit
