@@ -35,8 +35,6 @@ echo $PATH | grep $HALLD_HOME/bin/$BMS_OSNAME > /dev/null
 if ($status) setenv PATH $HALLD_HOME/bin/${BMS_OSNAME}:$PATH
 echo $PATH | grep $HALLD_MY/bin/$BMS_OSNAME > /dev/null
 if ($status) setenv PATH $HALLD_MY/bin/${BMS_OSNAME}:$PATH
-echo $PATH | grep $HALLD_HOME/src/programs/Utilities/hddm > /dev/null
-if ($status) setenv PATH  $HALLD_HOME/src/programs/Utilities/hddm:$PATH
 # jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod
 if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL file://$GLUEX_TOP/calib
