@@ -2,7 +2,8 @@ eval `$BUILD_SCRIPTS/delpath.pl $HALLD_MY/bin/$BMS_OSNAME`
 eval `$BUILD_SCRIPTS/delpath.pl $HALLD_HOME/bin/$BMS_OSNAME`
 eval `$BUILD_SCRIPTS/delpath.pl $CERN_ROOT/bin`
 eval `$BUILD_SCRIPTS/delpath.pl $ROOTSYS/bin`
-unsetenv LD_LIBRARY_PATH
+eval `$BUILD_SCRIPTS/delpath.pl -l $ROOTSYS/lib`
+eval `$BUILD_SCRIPTS/delpath.pl -l $XERCESCROOT/lib`
 unsetenv GLUEX_TOP
 unsetenv BUILD_SCRIPTS
 unsetenv XERCESCROOT
