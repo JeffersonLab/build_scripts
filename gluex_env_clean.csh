@@ -1,19 +1,20 @@
-eval `$BUILD_SCRIPTS/delpath.pl $ROOTSYS/bin $CERN_ROOT/bin $HALLD_HOME/bin/$OSNAME $HALLD_MY/bin/$OSNAME`
-unsetenv \
-    GLUEX_TOP \
-    BUILD_SCRIPTS \
-    OS \
-    ARCH \
-    BMS_OSNAME \
-    LD_LIBRARY_PATH \
-    XERCESCROOT \
-    XERCES_INCLUDE \
-    ROOTSYS \
-    CERN \
-    CERN_LEVEL \
-    CERN_ROOT \
-    JANA_HOME \
-    JANA_CALIB_URL \
-    JANA_GEOMETRY_URL \
-    HALLD_HOME \
-    HALLD_MY
+eval `$BUILD_SCRIPTS/delpath.pl $HALLD_MY/bin/$BMS_OSNAME`
+eval `$BUILD_SCRIPTS/delpath.pl $HALLD_HOME/bin/$BMS_OSNAME`
+eval `$BUILD_SCRIPTS/delpath.pl $CERN_ROOT/bin`
+eval `$BUILD_SCRIPTS/delpath.pl $ROOTSYS/bin`
+unsetenv LD_LIBRARY_PATH
+unsetenv GLUEX_TOP
+unsetenv BUILD_SCRIPTS
+unsetenv XERCESCROOT
+unsetenv XERCES_INCLUDE
+unsetenv ROOTSYS
+unsetenv CERN
+unsetenv CERN_LEVEL
+unsetenv CERN_ROOT
+unsetenv HDDS_HOME
+unsetenv HALLD_HOME
+unsetenv HALLD_MY
+unsetenv BMS_OSNAME
+unsetenv JANA_HOME
+unsetenv JANA_CALIB_URL
+unsetenv JANA_GEOMETRY_URL
