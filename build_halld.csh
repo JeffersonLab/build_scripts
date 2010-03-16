@@ -15,19 +15,17 @@ setenv CERN_CUE `$BUILD_SCRIPTS/cue_cernlib.pl`
 setenv CERN /apps/cernlib/$CERN_CUE
 setenv CERN_LEVEL 2005
 # Hall D
-setenv HALLD_HOME $TARGET_DIR/halld/latest
+setenv HALLD_HOME $TARGET_DIR/sim-recon
 setenv HALLD_MY $HALLD_HOME
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env.csh
 # hdds, do it here for now
-setenv HDDS_HOME $TARGET_DIR/hdds/hdds_latest
+setenv HDDS_HOME $TARGET_DIR/hdds
 # do the build
-mkdir -p $TARGET_DIR/hdds
-mkdir -p $TARGET_DIR/halld
-cd $TARGET_DIR/hdds
+mkdir -p $TARGET_DIR
+cd $TARGET_DIR
 make -f $BUILD_SCRIPTS/Makefile_hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds DEBUG=1
-cd $TARGET_DIR/halld
-make -f $BUILD_SCRIPTS/Makefile_halld
-make -f $BUILD_SCRIPTS/Makefile_halld DEBUG=1
+make -f $BUILD_SCRIPTS/Makefile_sim-recon
+make -f $BUILD_SCRIPTS/Makefile_sim-recon DEBUG=1
 exit
