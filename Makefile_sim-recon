@@ -1,0 +1,43 @@
+WHICH_GFORTRAN = $(shell which gfortran)
+PWD = $(shell pwd)
+# for example RELEASE_TAG = release-2009-04-27
+ifdef RELEASE_TAG
+HALLD_DIR = $(RELEASE_TAG)
+REPOSITORY_LOCATION = tags/$(HALLD_DIR)
+else
+HALLD_DIR = sim-recon-test
+REPOSITORY_LOCATION = branches/sim-recon-test
+endif
+export HALLD_HOME = $(PWD)/$(HALLD_DIR)
+
+all: env prod_link
+
+env:
+	@echo WHICH_GFORTRAN = $(WHICH_GFORTRAN)
+	@echo RELEASE_TAG = $(RELEASE_TAG)
+	@echo HALLD_DIR = $(HALLD_DIR)
+	@echo REPOSITORY_LOCATION = $(REPOSITORY_LOCATION)
+
+prod_link: make_halld
+	test -L prod || ln -s $(HALLD_DIR) prod # will not overwrite existing link
+
+make_halld: $(HALLD_HOME)/.getarg_patches_done
+	$(MAKE) -C$(HALLD_HOME)/src LOCAL_HALLD_HOME=1
+
+$(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.checkout_done
+ifneq (,$(findstring gfortran,$(WHICH_GFORTRAN)))
+	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
+		$(HALLD_HOME)/src/programs/Simulation/HDGeant
+endif
+	date > $@
+
+$(HALLD_HOME)/.checkout_done: $(HALLD_HOME)/.halld_home_made
+	svn co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION)
+	# following statements necessary to prevent remake of event.xml!
+	#touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.h
+	#touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.c
+	date > $@
+
+$(HALLD_HOME)/.halld_home_made:
+	test -d $(HALLD_HOME) || mkdir -p $(HALLD_HOME)
+	date > $@
