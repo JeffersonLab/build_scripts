@@ -8,7 +8,7 @@ setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 setenv XERCESCROOT /group/halld/Software/ExternalPackages/xerces-c-src_2_7_0.$BMS_OSNAME
 # Jana
 if (! $?JANA_HOME) setenv JANA_HOME /group/12gev_phys/builds/jana_0.6.0/$BMS_OSNAME
-setenv JANA_CALIB_URL file:///group/halld/calib
+setenv JANA_CALIB_URL file:///group/halld/Software/calib/latest
 # ROOT
 setenv ROOTSYS `$BUILD_SCRIPTS/cue_root.pl`
 # CERNLIB
