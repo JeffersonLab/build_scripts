@@ -8,14 +8,14 @@ endif
 
 CERNLIB = ${ROOT_OF_ALL}/cernlib
 CLHEP = ${ROOT_OF_ALL}/clhep
-HALLD = ${ROOT_OF_ALL}/halld
+SIM-RECON = ${ROOT_OF_ALL}/sim-recon
 HDDS = ${ROOT_OF_ALL}/hdds
 JANA = ${ROOT_OF_ALL}/jana
 ROOT = ${ROOT_OF_ALL}/root
 XERCES = ${ROOT_OF_ALL}/xerces-c
 GEANT4 = ${ROOT_OF_ALL}/geant4
 
-all: env xerces_build cernlib_build root_build clhep_build jana_build hdds_build halld_build calib_make
+all: env xerces_build cernlib_build root_build clhep_build jana_build hdds_build sim-recon_build calib_make
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -55,13 +55,13 @@ hdds_dir:
 hdds_make:
 	$(MAKE) -C${HDDS} -f${BUILD_SCRIPTS}/Makefile_hdds
 
-halld_build: halld_dir halld_make
+sim-recon_build: sim-recon_dir sim-recon_make
 
-halld_dir:
-	test -d ${HALLD} || mkdir -pv ${HALLD}
+sim-recon_dir:
+	test -d ${SIM-RECON} || mkdir -pv ${SIM-RECON}
 
-halld_make:
-	$(MAKE) -C${HALLD} -f${BUILD_SCRIPTS}/Makefile_halld
+sim-recon_make:
+	$(MAKE) -C${SIM-RECON} -f${BUILD_SCRIPTS}/Makefile_sim-recon
 
 clhep_build: clhep_dir clhep_make
 
