@@ -1,15 +1,14 @@
 PWD = $(shell pwd)
-RELEASE_TAG = latest
-HDDS_HOME = $(PWD)/hdds_$(RELEASE_TAG)
+HDDS_HOME = $(PWD)/hdds
 
 all: prod_link
 
 $(HDDS_HOME)/.checkout_done:
-	svn co https://halldsvn.jlab.org/repos/trunk/hdds hdds_$(RELEASE_TAG)
+	svn co https://halldsvn.jlab.org/repos/trunk/hdds
 	date > $@
 
 make_hdds: $(HDDS_HOME)/.checkout_done
 	$(MAKE) -C $(HDDS_HOME)
 
 prod_link: make_hdds
-	test -L prod || ln -s hdds_$(RELEASE_TAG) prod # will not overwrite existing link
+	test -L prod || ln -s hdds prod # will not overwrite existing link
