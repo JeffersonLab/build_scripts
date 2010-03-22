@@ -5,8 +5,8 @@ ifdef RELEASE_TAG
 HALLD_DIR = $(RELEASE_TAG)
 REPOSITORY_LOCATION = tags/$(HALLD_DIR)
 else
-HALLD_DIR = sim-recon-test
-REPOSITORY_LOCATION = branches/sim-recon-test
+HALLD_DIR = sim-recon
+REPOSITORY_LOCATION = trunk/sim-recon
 endif
 export HALLD_HOME = $(PWD)/$(HALLD_DIR)
 
