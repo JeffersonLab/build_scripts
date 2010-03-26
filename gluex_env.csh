@@ -28,7 +28,7 @@ if ($status) setenv PATH $CERN_ROOT/bin:$PATH
 # hdds
 if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
 # halld
-if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/halld/prod
+if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/sim-recon/prod
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 echo $PATH | grep $HALLD_HOME/bin/$BMS_OSNAME > /dev/null
