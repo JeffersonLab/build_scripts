@@ -18,7 +18,7 @@ setenv CERN_LEVEL 2005
 # HDDS
 if (! $?HDDS_HOME) setenv HDDS_HOME /group/halld/Software/builds/hdds/hdds-1.0
 # Hall D
-if (! $?HALLD_HOME) setenv HALLD_HOME /group/halld/Software/builds/release-2010-03-10
+if (! $?HALLD_HOME) setenv HALLD_HOME /group/halld/Software/builds/release-2010-03-29
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env.csh
