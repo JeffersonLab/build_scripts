@@ -24,8 +24,8 @@ setenv HDDS_HOME $TARGET_DIR/hdds
 # do the build
 mkdir -p $TARGET_DIR
 cd $TARGET_DIR
-make -f $BUILD_SCRIPTS/Makefile_hdds
-make -f $BUILD_SCRIPTS/Makefile_hdds DEBUG=1
-make -f $BUILD_SCRIPTS/Makefile_sim-recon
-make -f $BUILD_SCRIPTS/Makefile_sim-recon DEBUG=1
+make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds
+make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds DEBUG=1
+make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld
+make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld DEBUG=1
 exit
