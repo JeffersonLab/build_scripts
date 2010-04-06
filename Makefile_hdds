@@ -1,18 +1,29 @@
+# Makefile_hdds
+
+# Builds HDDS under a new directory (DIR_NAME) rooted in the current
+# working directory. The new directory has a name that depends on the
+# version being built.
+
+# HDDS_VERSION defines which tagged version to build. It should
+# correspond to the name of the desired directory in the repos/tags
+# directory of the repository. If left undefined, the latest version
+# will be checked out from the repos/trunk.
+
 PWD = $(shell pwd)
-ifndef VERSION
+
+ifndef HDDS_VERSION
 SVN_URL = https://halldsvn.jlab.org/repos/trunk/hdds
-DIR_NAME = hdds-latest
-HDDS_HOME = $(PWD)/$(DIR_NAME)
+DIR_NAME = hdds
 else
-SVN_URL = https://halldsvn.jlab.org/repos/tags/hdds-$(VERSION)
-DIR_NAME = hdds-$(VERSION)
-HDDS_HOME = $(PWD)/$(DIR_NAME)
+SVN_URL = https://halldsvn.jlab.org/repos/tags/$(HDDS_VERSION)
+DIR_NAME = $(HDDS_VERSION)
 endif
+HDDS_HOME = $(PWD)/$(DIR_NAME)
 
 all: prod_link
 
 $(HDDS_HOME)/.checkout_done:
-	svn co $(SVN_URL) $(DIR_NAME)
+	svn co $(SVN_URL)
 	date > $@
 
 make_hdds: $(HDDS_HOME)/.checkout_done
