@@ -1,25 +1,35 @@
+# Makefile_sim-recon
+
+# Builds sim-recon under a new directory (SIM-RECON_DIR) rooted in the current
+# working directory. The new directory has a name that depends on the
+# version being built.
+
+# SIM-RECON_VERSION defines which tagged version to build. It should
+# correspond to the name of the desired directory in the repos/tags
+# directory of the repository. If left undefined, the latest version
+# will be checked out from the repos/trunk.
+
 WHICH_GFORTRAN = $(shell which gfortran)
 PWD = $(shell pwd)
-# for example RELEASE_TAG = release-2009-04-27
-ifdef RELEASE_TAG
-HALLD_DIR = $(RELEASE_TAG)
-REPOSITORY_LOCATION = tags/$(HALLD_DIR)
+ifdef SIM-RECON_VERSION
+SIM-RECON_DIR = $(SIM-RECON_VERSION)
+REPOSITORY_LOCATION = repos/tags/$(SIM-RECON_DIR)
 else
-HALLD_DIR = sim-recon-latest
-REPOSITORY_LOCATION = trunk/sim-recon
+SIM-RECON_DIR = sim-recon
+REPOSITORY_LOCATION = repos/trunk/sim-recon
 endif
-export HALLD_HOME = $(PWD)/$(HALLD_DIR)
+export HALLD_HOME = $(PWD)/$(SIM-RECON_DIR)
 
 all: env prod_link
 
 env:
 	@echo WHICH_GFORTRAN = $(WHICH_GFORTRAN)
-	@echo RELEASE_TAG = $(RELEASE_TAG)
-	@echo HALLD_DIR = $(HALLD_DIR)
+	@echo SIM-RECON_VERSION = $(SIM-RECON_VERSION)
+	@echo SIM-RECON_DIR = $(SIM-RECON_DIR)
 	@echo REPOSITORY_LOCATION = $(REPOSITORY_LOCATION)
 
 prod_link: make_halld
-	test -L prod || ln -s $(HALLD_DIR) prod # will not overwrite existing link
+	test -L prod || ln -s $(SIM-RECON_DIR) prod # will not overwrite existing link
 
 make_halld: $(HALLD_HOME)/.getarg_patches_done
 	$(MAKE) -C$(HALLD_HOME)/src LOCAL_HALLD_HOME=1
@@ -31,13 +41,6 @@ ifneq (,$(findstring gfortran,$(WHICH_GFORTRAN)))
 endif
 	date > $@
 
-$(HALLD_HOME)/.checkout_done: $(HALLD_HOME)/.halld_home_made
-	svn co https://halldsvn.jlab.org/repos/$(REPOSITORY_LOCATION) $(HALLD_DIR)
-	# following statements necessary to prevent remake of event.xml!
-	#touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.h
-	#touch $(HALLD_HOME)/src/libraries/HDDM/hddm_s.c
-	date > $@
-
-$(HALLD_HOME)/.halld_home_made:
-	test -d $(HALLD_HOME) || mkdir -p $(HALLD_HOME)
+$(HALLD_HOME)/.checkout_done:
+	svn co https://halldsvn.jlab.org/$(REPOSITORY_LOCATION)
 	date > $@
