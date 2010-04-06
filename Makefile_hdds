@@ -1,10 +1,18 @@
 PWD = $(shell pwd)
-HDDS_HOME = $(PWD)/hdds
+ifndef VERSION
+SVN_URL = https://halldsvn.jlab.org/repos/trunk/hdds
+DIR_NAME = hdds-latest
+HDDS_HOME = $(PWD)/$(DIR_NAME)
+else
+SVN_URL = https://halldsvn.jlab.org/repos/tags/hdds-$(VERSION)
+DIR_NAME = hdds-$(VERSION)
+HDDS_HOME = $(PWD)/$(DIR_NAME)
+endif
 
 all: prod_link
 
 $(HDDS_HOME)/.checkout_done:
-	svn co https://halldsvn.jlab.org/repos/trunk/hdds
+	svn co $(SVN_URL) $(DIR_NAME)
 	date > $@
 
 make_hdds: $(HDDS_HOME)/.checkout_done
