@@ -57,7 +57,10 @@ if ($uname eq 'Linux') {
 	    $release = '_RHEL5';
 	} elsif ($release_string =~ /^CentOS release 5.*/) {
 	    $release = '_CentOS5';
-	} else {
+	} elsif ($release_string =~ /^Scientific Linux SL release 5.*/ ) {
+	    $release = '_SL5';
+	  }
+	else {
 	    print STDERR "unrecognized Red Hat release\n";
 	    $release = '_RH';
 	}
