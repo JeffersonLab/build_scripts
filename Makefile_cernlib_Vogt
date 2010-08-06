@@ -1,0 +1,25 @@
+# build in the current working directory
+
+CORR_FILE = cernlib.2005.corr.2010.08.01.tgz
+INSTALL_FILE = cernlib.2005.install.2010.08.01.tgz
+ALL_FILE = cernlib-2005-all-new.tgz
+DIST_FILES = $(ALL_FILE) $(CORR_FILE) $(INSTALL_FILE)
+
+all: .build_done
+
+mkdir:
+	mkdir -p cern
+
+$(DIST_FILES):
+	wget http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
+
+.unpack_done: mkdir $(DIST_FILES)
+	cd cern ; rm -rf *
+	cd cern ; tar zxvf ../$(ALL_FILE)
+	cd cern ; cp -v ../$(CORR_FILE) cernlib.2005.corr.tgz
+	cd cern ; tar zxvf ../$(INSTALL_FILE)
+	echo unpacking done > .unpack_done
+
+.build_done: .unpack_done
+	cd cern ; ./Install_cernlib
+	echo build done > .build_done
