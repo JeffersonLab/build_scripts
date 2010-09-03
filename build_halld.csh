@@ -28,4 +28,11 @@ make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds DEBUG=1
 make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld
 make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld DEBUG=1
+
+# Create environment setup script based on what was just used for building
+# (added 2010-09-03 DL)
+cd $HALLD_HOME
+unsetenv HALLD_MY
+source $BUILD_SCRIPTS/../mk_setenv.csh
+
 exit
