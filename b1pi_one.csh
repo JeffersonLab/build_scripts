@@ -26,8 +26,10 @@ source $BUILD_SCRIPTS/gluex_env.csh
 mkdir -p $RUN_DIR
 cd $RUN_DIR
 $BUILD_SCRIPTS/b1pi.csh
-root -q -b $BUILD_SCRIPTS/momentum.C
-root -q -b $BUILD_SCRIPTS/theta.C
+cp $BUILD_SCRIPTS/../b1pi_macros/* .
+root -q -b momentum.C
+root -q -b theta.C
+root -q -b mass_X.C
 setenv PLOTDIR /group/halld/www/halldweb1/html/b1pi/$TODAYS_DATE/$BMS_OSNAME
 mkdir -p $PLOTDIR
 cp -v *.pdf *.png $PLOTDIR
