@@ -1,7 +1,9 @@
-VERSION=1.9.3.1
-TARFILE=clhep-$(VERSION).tgz
+ifndef CLHEP_VERSION
+  CLHEP_VERSION=2.0.4.5
+endif
+TARFILE=clhep-$(CLHEP_VERSION).tgz
 PWD = $(shell pwd)
-CLHEPDIR=$(PWD)/$(VERSION)
+CLHEPDIR=$(PWD)/$(CLHEP_VERSION)
 
 all: prod_link
 
@@ -23,4 +25,4 @@ do_make_install: do_make
 	$(MAKE) -C$(CLHEPDIR)/CLHEP install
 
 prod_link: do_make_install
-	test -L prod || ln -s $(VERSION) prod # will not overwrite existing link
+	test -L prod || ln -s $(CLHEP_VERSION) prod # will not overwrite existing link
