@@ -1,4 +1,20 @@
-all: run_install_script
+VERSION = 9.3.p01
+TARFILE = geant4.$(VERSION).tar.gz
+G4DIR = ./geant4.$(VERSION)
 
-run_install_script:
-	$(BUILD_SCRIPTS)/geant4_install.sh
+all: build
+
+$(TARFILE):
+	wget http://geant4.web.cern.ch/geant4/support/source/$(TARFILE)
+
+untar_done: $(TARFILE)
+	tar zxvf $(TARFILE)
+	date > $@
+
+$(G4DIR)/g4_build.tcl: untar_done $(BUILD_SCRIPTS)/g4_responses.txt
+	 $(BUILD_SCRIPTS)/make_g4_build_tcl.pl < $(BUILD_SCRIPTS)/g4_responses.txt > $@
+	 chmod a+x $@
+
+build: $(G4DIR)/g4_build.tcl
+	cd $(G4DIR) ; $(RM) -rv .config
+	cd $(G4DIR) ; ./g4_build.tcl
