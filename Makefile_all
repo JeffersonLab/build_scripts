@@ -15,7 +15,7 @@ ROOT = ${ROOT_OF_ALL}/root
 XERCES = ${ROOT_OF_ALL}/xerces-c
 GEANT4 = ${ROOT_OF_ALL}/geant4
 
-all: env xerces_build cernlib_build root_build clhep_build jana_build hdds_build sim-recon_build calib_make
+all: env xerces_build cernlib_build root_build clhep_build geant4_build jana_build hdds_build sim-recon_build calib_make
 
 cernlib_build: cernlib_dir cernlib_make
 
