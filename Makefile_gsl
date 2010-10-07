@@ -25,4 +25,4 @@ do_make_install: do_make
 	$(MAKE) -C$(GSLDIR) install
 
 prod_link: do_make_install
-	test -L prod || ln -s $(GSL_VERSION) prod # will not overwrite existing link
+	test -L prod || ln -s gsl-$(GSL_VERSION) prod # will not overwrite existing link
