@@ -1,0 +1,28 @@
+ifndef GSL_VERSION
+  GSL_VERSION=1.14
+endif
+TARFILE=gsl-$(GSL_VERSION).tar.gz
+PWD = $(shell pwd)
+GSLDIR=$(PWD)/gsl-$(GSL_VERSION)
+
+all: prod_link
+
+$(TARFILE):
+	wget ftp://ftp.gnu.org/gnu/gsl/$(TARFILE)
+
+$(GSLDIR)/.untar_done: $(TARFILE)
+	tar zxvf $(TARFILE)
+	date > $@
+
+$(GSLDIR)/.configure_done: $(GSLDIR)/.untar_done
+	cd $(GSLDIR) ; ./configure --prefix=$(GSLDIR) CFLAGS="-fexceptions"
+	date > $@
+
+do_make: $(GSLDIR)/.configure_done
+	$(MAKE) -C$(GSLDIR)
+
+do_make_install: do_make
+	$(MAKE) -C$(GSLDIR) install
+
+prod_link: do_make_install
+	test -L prod || ln -s $(GSL_VERSION) prod # will not overwrite existing link
