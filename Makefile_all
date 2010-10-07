@@ -14,8 +14,9 @@ JANA = ${ROOT_OF_ALL}/jana
 ROOT = ${ROOT_OF_ALL}/root
 XERCES = ${ROOT_OF_ALL}/xerces-c
 GEANT4 = ${ROOT_OF_ALL}/geant4
+GSL = ${ROOT_OF_ALL}/gsl
 
-all: env xerces_build cernlib_build root_build clhep_build geant4_build jana_build hdds_build sim-recon_build calib_make
+all: env xerces_build cernlib_build root_build clhep_build geant4_build gsl_build jana_build hdds_build sim-recon_build calib_make
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -81,6 +82,14 @@ geant4_dir:
 
 geant4_make:
 	$(MAKE) -C$(GEANT4) -f$(BUILD_SCRIPTS)/Makefile_geant4
+
+gsl_build: gsl_dir gsl_make
+
+gsl_dir:
+	test -d ${GSL} || mkdir -pv ${GSL}
+
+gsl_make:
+	$(MAKE) -C$(GSL) -f$(BUILD_SCRIPTS)/Makefile_gsl
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
