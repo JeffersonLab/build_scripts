@@ -1,4 +1,4 @@
-VERSION = 9.3.p01
+VERSION = 9.4
 TARFILE = geant4.$(VERSION).tar.gz
 G4DIR = ./geant4.$(VERSION)
 
