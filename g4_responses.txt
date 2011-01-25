@@ -28,8 +28,10 @@ Specify the path where the Geant4 data libraries are installed:
 >
 Failed to locate one or more of the Geant4 data libraries in
 >
+How many parallel jobs should make launch?
+>
 Please, specify where CLHEP is installed
->/scratch/gluex/clhep/prod
+>/usr/local/gluex/clhep/prod
 You can customize paths and library name of you CLHEP installation:
 >
 Enable building of User Interface (UI) modules?
