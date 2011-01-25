@@ -7,8 +7,8 @@ EOM
 while (<>) {
     chomp;
     if (/^>/) {
-	split />/;
-	print "send \"$_[1]\\r\"\n";
+	@token = split />/;
+	print "send \"$token[1]\\r\"\n";
     } else {
 	s/\[/\\\[/g;
 	s/\]/\\\]/g;
