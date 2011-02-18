@@ -21,7 +21,7 @@ $(ROOTDIR)/configure: $(TARFILE)
 	touch $(ROOTDIR)/configure
 
 $(ROOTDIR)/config.log: $(ROOTDIR)/configure
-	cd $(ROOTDIR); ./configure linux
+	cd $(ROOTDIR); ./configure 
 
 main_make: $(ROOTDIR)/config.log $(ROOTDIR)/.patch_done
 	cd $(ROOTDIR) ; make
