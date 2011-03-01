@@ -6,6 +6,8 @@ ifndef BUILD_SCRIPTS
   export BUILD_SCRIPTS=$(shell pwd)/build_scripts
 endif
 
+MACHINE_NAME = $(shell uname -m)
+
 CERNLIB = ${ROOT_OF_ALL}/cernlib
 CLHEP = ${ROOT_OF_ALL}/clhep
 SIM-RECON = ${ROOT_OF_ALL}/sim-recon
@@ -24,7 +26,12 @@ cernlib_dir:
 	test -d ${CERNLIB} || mkdir -pv ${CERNLIB}
 
 cernlib_make:
+ifneq ($(MACHINE_NAME),x86_64)
 	$(MAKE) -C${CERNLIB} -f${BUILD_SCRIPTS}/Makefile_cernlib
+else
+	$(MAKE) -f${BUILD_SCRIPTS}/Makefile_cernlib_Vogt
+	cp -pr cern/2005 $(CERNLIB)
+endif
 
 xerces_build: xerces_dir xerces_make
 
