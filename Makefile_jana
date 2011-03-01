@@ -17,7 +17,7 @@ make_install_jana: make_jana
 	$(MAKE) -C$(JANA_HOME)/src install
 
 make_jana: $(JANA_HOME)/.configure_done
-	$(MAKE) -C$(JANA_HOME)/src
+	$(MAKE) -C$(JANA_HOME)
 
 # uncomment one of the following two lines to choose checkout of
 # source code or retrieval of a tar file
@@ -26,7 +26,7 @@ $(JANA_HOME)/.configure_done: $(JANA_HOME)/.untar_done # tar file
 else
 $(JANA_HOME)/.configure_done: $(JANA_HOME)/.checkout_done # checkout
 endif
-	cd $(JANA_HOME)/src; ./configure --with-xerces=$(XERCESCROOT)
+	cd $(JANA_HOME); ./configure --with-xerces=$(XERCESCROOT)
 	date > $@
 
 $(JANA_HOME)/.checkout_done:
