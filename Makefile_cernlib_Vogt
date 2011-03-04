@@ -5,7 +5,7 @@ INSTALL_FILE = cernlib.2005.install.2010.08.01.tgz
 ALL_FILE = cernlib-2005-all-new.tgz
 DIST_FILES = $(ALL_FILE) $(CORR_FILE) $(INSTALL_FILE)
 
-all: .build_done
+all: mkdir .build_done
 
 mkdir:
 	mkdir -p cern
@@ -13,7 +13,7 @@ mkdir:
 $(DIST_FILES):
 	wget http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
 
-.unpack_done: mkdir $(DIST_FILES)
+.unpack_done: $(DIST_FILES)
 	cd cern ; rm -rf *
 	cd cern ; tar zxvf ../$(ALL_FILE)
 	cd cern ; cp -v ../$(CORR_FILE) cernlib.2005.corr.tgz
