@@ -1,6 +1,6 @@
 PWD = $(shell pwd)
 #JANA_VERSION = 0.6.1
-ifdef $(JANA_VERSION)
+ifdef JANA_VERSION
 JANA_DIR = jana_$(JANA_VERSION)
 TARFILE = jana_$(JANA_VERSION).tgz
 else
@@ -21,7 +21,7 @@ make_jana: $(JANA_HOME)/.configure_done
 
 # uncomment one of the following two lines to choose checkout of
 # source code or retrieval of a tar file
-ifdef $(JANA_VERSION)
+ifdef JANA_VERSION
 $(JANA_HOME)/.configure_done: $(JANA_HOME)/.untar_done # tar file
 else
 $(JANA_HOME)/.configure_done: $(JANA_HOME)/.checkout_done # checkout
@@ -38,4 +38,5 @@ $(JANA_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(TARFILE):
+	@echo making $@
 	wget http://www.jlab.org/JANA/releases/$(TARFILE)
