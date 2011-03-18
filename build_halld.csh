@@ -33,6 +33,6 @@ make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld DEBUG=1
 # (added 2010-09-03 DL)
 cd $HALLD_HOME
 unsetenv HALLD_MY
-source $BUILD_SCRIPTS/../mk_setenv.csh
+$BUILD_SCRIPTS/../mk_setenv.csh
 
 exit
