@@ -1,35 +1,35 @@
 # Makefile_sim-recon
 
-# Builds sim-recon under a new directory (SIM-RECON_DIR) rooted in the current
+# Builds sim-recon under a new directory (SIM_RECON_DIR) rooted in the current
 # working directory. The new directory has a name that depends on the
 # version being built.
 
-# SIM-RECON_VERSION defines which tagged version to build. It should
+# SIM_RECON_VERSION defines which tagged version to build. It should
 # correspond to the name of the desired directory in the repos/tags
 # directory of the repository. If left undefined, the latest version
 # will be checked out from the repos/trunk.
 
 WHICH_GFORTRAN = $(shell which gfortran)
 PWD = $(shell pwd)
-ifdef SIM-RECON_VERSION
-SIM-RECON_DIR = $(SIM-RECON_VERSION)
-REPOSITORY_LOCATION = repos/tags/$(SIM-RECON_DIR)
+ifdef SIM_RECON_VERSION
+SIM_RECON_DIR = $(SIM_RECON_VERSION)
+REPOSITORY_LOCATION = repos/tags/$(SIM_RECON_DIR)
 else
-SIM-RECON_DIR = sim-recon
+SIM_RECON_DIR = sim-recon
 REPOSITORY_LOCATION = repos/trunk/sim-recon
 endif
-export HALLD_HOME = $(PWD)/$(SIM-RECON_DIR)
+export HALLD_HOME = $(PWD)/$(SIM_RECON_DIR)
 
 all: env prod_link
 
 env:
 	@echo WHICH_GFORTRAN = $(WHICH_GFORTRAN)
-	@echo SIM-RECON_VERSION = $(SIM-RECON_VERSION)
-	@echo SIM-RECON_DIR = $(SIM-RECON_DIR)
+	@echo SIM_RECON_VERSION = $(SIM_RECON_VERSION)
+	@echo SIM_RECON_DIR = $(SIM_RECON_DIR)
 	@echo REPOSITORY_LOCATION = $(REPOSITORY_LOCATION)
 
 prod_link: make_halld
-	test -L prod || ln -s $(SIM-RECON_DIR) prod # will not overwrite existing link
+	test -L prod || ln -s $(SIM_RECON_DIR) prod # will not overwrite existing link
 
 make_halld: $(HALLD_HOME)/.getarg_patches_done
 	$(MAKE) -C$(HALLD_HOME)/src LOCAL_HALLD_HOME=1
