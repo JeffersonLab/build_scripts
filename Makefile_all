@@ -29,8 +29,8 @@ cernlib_make:
 ifneq ($(MACHINE_NAME),x86_64)
 	$(MAKE) -C${CERNLIB} -f${BUILD_SCRIPTS}/Makefile_cernlib
 else
-	$(MAKE) -f${BUILD_SCRIPTS}/Makefile_cernlib_Vogt
-	cp -pr cern/2005 $(CERNLIB)
+	$(MAKE) -C${CERNLIB} -f${BUILD_SCRIPTS}/Makefile_cernlib_Vogt
+	cp -pr ${CERNLIB}/cern/2005 $(CERNLIB)
 endif
 
 xerces_build: xerces_dir xerces_make
