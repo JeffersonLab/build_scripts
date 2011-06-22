@@ -41,6 +41,6 @@ echo "Running mcsmear ..."
 mcsmear hdgeant.hddm
 
 echo "Running hd_root ..."
-hd_root -PNTHREADS=${NTHREADS} -PPLUGINS=phys_tree hdgeant_smeared.hddm
+hd_root -PNTHREADS=${NTHREADS} -PPLUGINS=phys_tree,janadot hdgeant_smeared.hddm
  
 
