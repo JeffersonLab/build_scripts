@@ -21,4 +21,4 @@ $(XERCESCROOT)/.configure_done: $(XERCESCROOT)/.untar_done
 	date > $@
 
 $(TARFILE):
-	wget http://apache.inetbridge.net/xerces/c/$(XERCES_SERIES)/sources/$(TARFILE)
+	wget http://www.apache.org/dist/xerces/c/$(XERCES_SERIES)/sources/$(TARFILE)
