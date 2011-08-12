@@ -20,7 +20,7 @@ echo "Running genr8 ..."
 genr8 -M${NEVENTS} -Ab1_pi.ascii < b1_pi.input >& /dev/null
 
 echo "Converting generated events to HDDM ..."
-genr8_2_hddm -V${VERTEX} b1_pi.ascii  >& /dev/null
+genr8_2_hddm -V"${VERTEX}" b1_pi.ascii  >& /dev/null
 mv output.hddm b1_pi.hddm
 
 echo "Creating control.in file ..."
