@@ -1,6 +1,6 @@
 #!/bin/tcsh
 setenv TODAYS_DATE `date +%F`
-setenv TARGET_DIR /scratch/gluex/halld_builds/$TODAYS_DATE
+setenv TARGET_DIR /u/scratch/gluex/halld_builds/$TODAYS_DATE
 setenv BUILD_SCRIPTS /group/halld/Software/scripts/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 # xerces-c
