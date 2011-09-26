@@ -1,9 +1,9 @@
 #!/bin/tcsh
 setenv TODAYS_DATE `date +%F`
-setenv BUILD_DIR /scratch/gluex/halld_builds/$TODAYS_DATE
+setenv BUILD_DIR /u/scratch/gluex/halld_builds/$TODAYS_DATE
 setenv BUILD_SCRIPTS /group/halld/Software/scripts/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
-setenv RUN_DIR /scratch/gluex/b1pi/$TODAYS_DATE/$BMS_OSNAME
+setenv RUN_DIR /u/scratch/gluex/b1pi/$TODAYS_DATE/$BMS_OSNAME
 # xerces-c
 setenv XERCESCROOT /group/halld/Software/ExternalPackages/xerces-c-src_2_7_0.$BMS_OSNAME
 # Jana
