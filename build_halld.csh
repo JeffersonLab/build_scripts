@@ -1,6 +1,6 @@
 #!/bin/tcsh
 setenv TODAYS_DATE `date +%F`
-setenv TARGET_DIR /u/scratch/gluex/halld_builds/$TODAYS_DATE
+setenv TARGET_DIR /group/halld/Software/builds/sim-recon/nightly/$TODAYS_DATE
 setenv BUILD_SCRIPTS /group/halld/Software/scripts/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 # xerces-c
@@ -26,6 +26,7 @@ mkdir -p $TARGET_DIR
 cd $TARGET_DIR
 make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds DEBUG=1
+#svn_kludge.sh
 make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld
 make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld DEBUG=1
 
