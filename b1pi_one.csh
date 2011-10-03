@@ -1,6 +1,6 @@
 #!/bin/tcsh
 setenv TODAYS_DATE `date +%F`
-setenv BUILD_DIR /u/scratch/gluex/halld_builds/$TODAYS_DATE
+setenv BUILD_DIR /group/halld/Software/builds/sim-recon/nightly/$TODAYS_DATE
 setenv BUILD_SCRIPTS /group/halld/Software/scripts/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 setenv RUN_DIR /u/scratch/gluex/b1pi/$TODAYS_DATE/$BMS_OSNAME
@@ -25,12 +25,10 @@ source $BUILD_SCRIPTS/gluex_env.csh
 # do the build
 mkdir -p $RUN_DIR
 cd $RUN_DIR
-$BUILD_SCRIPTS/b1pi.csh
 cp $BUILD_SCRIPTS/../b1pi_macros/* .
-root -q -b momentum.C
-root -q -b theta.C
-root -q -b mass_X.C
+./mkevents.sh
 setenv PLOTDIR /group/halld/www/halldweb1/html/b1pi/$TODAYS_DATE/$BMS_OSNAME
 mkdir -p $PLOTDIR
-cp -v *.pdf *.png $PLOTDIR
+cp -v *.pdf *.gif *.html $PLOTDIR
+cp -v ../../../b1pi*.log $PLOTDIR/../
 exit
