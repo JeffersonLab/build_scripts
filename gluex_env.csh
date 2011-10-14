@@ -25,6 +25,12 @@ if (! $?CERN_LEVEL) setenv CERN_LEVEL 2006
 setenv CERN_ROOT $CERN/$CERN_LEVEL
 echo $PATH | grep $CERN_ROOT/bin > /dev/null
 if ($status) setenv PATH $CERN_ROOT/bin:$PATH
+# clhep
+if (! $?CLHEP_HOME) setenv CLHEP_HOME $GLUEX_TOP/clhep/prod
+setenv CLHEP_INCLUDE $CLHEP_HOME/include
+setenv CLHEP_LIB $CLHEP_HOME/lib
+echo $LD_LIBRARY_PATH | grep $CLHEP_LIB > /dev/null
+if ($status) setenv LD_LIBRARY_PATH ${CLHEP_LIB}:${LD_LIBRARY_PATH}
 # hdds
 if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
 # halld
