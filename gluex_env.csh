@@ -37,13 +37,6 @@ if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
 if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/sim-recon/prod
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
-
-#some verbose printing
-if ($gluex_env_verbose) then
-    echo BMS_OSNAME:
-    echo $BMS_OSNAME
-endif 
-
 echo $PATH | grep $HALLD_HOME/bin/$BMS_OSNAME > /dev/null
 if ($status) setenv PATH $HALLD_HOME/bin/${BMS_OSNAME}:$PATH
 echo $PATH | grep $HALLD_MY/bin/$BMS_OSNAME > /dev/null
@@ -61,6 +54,7 @@ if ($gluex_env_verbose) then
     echo BMS_OSNAME =  $BMS_OSNAME
     echo BUILD_SCRIPTS = $BUILD_SCRIPTS
     echo CERN_ROOT =  $CERN_ROOT
+    echo CLHEP_HOME = $CLHEP_HOME
     echo GLUEX_TOP = $GLUEX_TOP
     echo HALLD_HOME =  $HALLD_HOME
     echo HALLD_MY = $HALLD_MY
