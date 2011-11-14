@@ -11,17 +11,17 @@ untar_done: $(TARFILE)
 	tar zxvf $(TARFILE)
 	date > $@
 
-$(G4DIR)/g4_build.tcl: untar_done $(BUILD_SCRIPTS)/g4_responses.txt
-	 $(BUILD_SCRIPTS)/make_g4_build_tcl.pl < $(BUILD_SCRIPTS)/g4_responses.txt > $@
+$(G4DIR)/g4_config.tcl: untar_done $(BUILD_SCRIPTS)/g4_responses.txt
+	 $(BUILD_SCRIPTS)/make_g4_config_tcl.pl < $(BUILD_SCRIPTS)/g4_responses.txt > $@
 	 chmod a+x $@
 
-$(G4DIR)/.config/bin/Linux-g++/install.sh: $(G4DIR)/g4_build.tcl
+$(G4DIR)/.config/bin/Linux-g++/config.sh: $(G4DIR)/g4_config.tcl
 	cd $(G4DIR) ; $(RM) -rv .config
-	cd $(G4DIR) ; ./g4_build.tcl
+	cd $(G4DIR) ; ./g4_config.tcl
 
 # NOTE: making install.sh currently does a build, the build done after
 # that will be redundant. Interim system to avoid rebuilding when
 # config files are made from scratch.
 
-build: $(G4DIR)/.config/bin/Linux-g++/install.sh
-	cd $(G4DIR) ; . .config/bin/Linux-g++/env.sh ; .config/bin/Linux-g++/install.sh
+build: $(G4DIR)/.config/bin/Linux-g++/config.sh
+	cd $(G4DIR) ; $(BUILD_SCRIPTS)/g4_build.tcl

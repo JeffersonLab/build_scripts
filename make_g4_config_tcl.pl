@@ -2,7 +2,7 @@
 print <<EOM;
 #!/usr/bin/expect --
 set timeout 60
-spawn ./Configure -build
+spawn ./Configure -E -build
 EOM
 while (<>) {
     chomp;

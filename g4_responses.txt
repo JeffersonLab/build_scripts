@@ -64,5 +64,3 @@ Enable build of the g3tog4 utility module?
 >
 Enable internal zlib compression for HepRep visualization?
 >
-You can introduce any change to the configuration file
->
