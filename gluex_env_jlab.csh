@@ -1,6 +1,6 @@
 #!/bin/tcsh
 #
-# only allow user variation in JANA, HDDS, HALLD, and HALLD_MY
+# only allow user variation in JANA, HDDS, HALLD, HALLD_MY, and CCDB
 #
 setenv BUILD_SCRIPTS /group/halld/Software/scripts/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
@@ -20,6 +20,8 @@ if (! $?HDDS_HOME) setenv HDDS_HOME /group/halld/Software/builds/hdds/hdds-1.2
 # Hall D
 if (! $?HALLD_HOME) setenv HALLD_HOME /group/halld/Software/builds/sim-recon/sim-recon-2011-09-23
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
+# CCDB
+if (! $?CCDB_HOME) setenv CCDB_HOME /group/halld/Software/builds/ccdb/prod
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env.csh
 exit

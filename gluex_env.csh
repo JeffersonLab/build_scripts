@@ -46,6 +46,9 @@ if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod
 if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL file://$GLUEX_TOP/calib
 if (! $?JANA_GEOMETRY_URL) setenv JANA_GEOMETRY_URL \
     xmlfile://$HDDS_HOME/main_HDDS.xml
+# ccdb
+if (! $?CCDB_HOME) setenv CCDB_HOME $GLUEX_TOP/ccdb/prod
+source $CCDB_HOME/environment.csh
 # refresh the list of items in the path
 rehash
 # report environment
@@ -66,4 +69,5 @@ if ($gluex_env_verbose) then
     echo PATH = $PATH
     echo ROOTSYS =  $ROOTSYS
     echo XERCESCROOT =  $XERCESCROOT
+    echo CCDB_HOME = $CCDB_HOME
 endif
