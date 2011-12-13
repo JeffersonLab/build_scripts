@@ -17,6 +17,8 @@ setenv CERN_LEVEL 2005
 # Hall D
 setenv HALLD_HOME $TARGET_DIR/sim-recon
 setenv HALLD_MY $HALLD_HOME
+# CCDB
+setenv CCDB_HOME /group/halld/Software/builds/ccdb/prod
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env.csh
 # hdds, do it here for now
