@@ -20,6 +20,8 @@ setenv HALLD_HOME $BUILD_DIR/sim-recon
 setenv HALLD_MY $HALLD_HOME
 # HDDS
 setenv HDDS_HOME $BUILD_DIR/hdds
+# CCDB
+setenv CCDB_HOME /group/halld/Software/builds/ccdb/prod
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env.csh
 # do the build
