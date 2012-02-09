@@ -48,7 +48,7 @@ if (! $?JANA_GEOMETRY_URL) setenv JANA_GEOMETRY_URL \
     xmlfile://$HDDS_HOME/main_HDDS.xml
 # ccdb
 if (! $?CCDB_HOME) setenv CCDB_HOME $GLUEX_TOP/ccdb/prod
-source $CCDB_HOME/environment.csh
+if (-f $CCDB_HOME/environment.csh) source $CCDB_HOME/environment.csh
 # refresh the list of items in the path
 rehash
 # report environment
