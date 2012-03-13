@@ -3,7 +3,8 @@
 	 'Linux_Fedora8-i686-gcc4.1.2' => 'i386_fc8',
 	 'Linux_CentOS5-x86_64-gcc4.1.2' => 'x86_64_rhel5',
 	 'Linux_RHEL5-x86_64-gcc4.1.2' => 'x86_64_rhel5',
-	 'Linux_RHEL6-x86_64-gcc4.4.5' => 'x86_64_rhel6'
+	 'Linux_RHEL6-x86_64-gcc4.4.5' => 'x86_64_rhel6',
+	 'Linux_RHEL6-x86_64-gcc4.4.6' => 'x86_64_rhel6'
 	 );
 $osrelease = `$ENV{BUILD_SCRIPTS}/osrelease.pl`;
 chomp $osrelease;
