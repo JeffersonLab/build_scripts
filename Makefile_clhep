@@ -4,6 +4,11 @@ endif
 TARFILE=clhep-$(CLHEP_VERSION).tgz
 PWD = $(shell pwd)
 CLHEPDIR=$(PWD)/$(CLHEP_VERSION)
+ifndef MULTI_PLATFORM
+  INSTALLDIR=$(CLHEPDIR)
+else
+  INSTALLDIR=$(CLHEPDIR)/$(BMS_OSNAME)
+endif
 
 all: prod_link
 
@@ -15,7 +20,7 @@ $(CLHEPDIR)/.untar_done: $(TARFILE)
 	date > $@
 
 $(CLHEPDIR)/.configure_done: $(CLHEPDIR)/.untar_done
-	cd $(CLHEPDIR)/CLHEP ; ./configure --prefix=$(CLHEPDIR)
+	cd $(CLHEPDIR)/CLHEP ; ./configure --prefix=$(INSTALLDIR)
 	date > $@
 
 do_make: $(CLHEPDIR)/.configure_done
