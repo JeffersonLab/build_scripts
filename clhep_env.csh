@@ -1,4 +1,4 @@
-if (! $?CLHEP_HOME) setenv CLHEP_HOME $GLUEX_TOP/clhep/prod
+if (! $?CLHEP) setenv CLHEP $GLUEX_TOP/clhep/prod
 setenv CLHEP_INCLUDE $CLHEP_HOME/include
 setenv CLHEP_LIB $CLHEP_HOME/lib
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
