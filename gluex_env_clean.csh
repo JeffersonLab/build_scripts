@@ -18,7 +18,7 @@ unsetenv ROOTSYS
 unsetenv CERN
 unsetenv CERN_LEVEL
 unsetenv CERN_ROOT
-unsetenv CLHEP_HOME
+unsetenv CLHEP
 unsetenv CLHEP_LIB
 unsetenv CLHEP_INCLUDE
 unsetenv HDDS_HOME

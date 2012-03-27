@@ -9,7 +9,7 @@ endif
 MACHINE_NAME = $(shell uname -m)
 
 CERNLIB = ${ROOT_OF_ALL}/cernlib
-CLHEP = ${ROOT_OF_ALL}/clhep
+CLHEP_TOP = ${ROOT_OF_ALL}/clhep
 SIM-RECON = ${ROOT_OF_ALL}/sim-recon
 HDDS = ${ROOT_OF_ALL}/hdds
 JANA = ${ROOT_OF_ALL}/jana
@@ -74,10 +74,10 @@ sim-recon_make:
 clhep_build: clhep_dir clhep_make
 
 clhep_dir:
-	test -d ${CLHEP} || mkdir -pv ${CLHEP}
+	test -d ${CLHEP_TOP} || mkdir -pv ${CLHEP_TOP}
 
 clhep_make:
-	$(MAKE) -C${CLHEP} -f${BUILD_SCRIPTS}/Makefile_clhep
+	$(MAKE) -C${CLHEP_TOP} -f${BUILD_SCRIPTS}/Makefile_clhep
 
 calib_make:
 	test -d calib || svn checkout https://halldsvn.jlab.org/repos/trunk/calib
