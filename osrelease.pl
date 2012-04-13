@@ -29,7 +29,9 @@ chomp $uname;
 if ($uname eq 'Linux') {
     if (-e '/etc/fedora-release') {
 	$release_string = `cat /etc/fedora-release`;
-	if ($release_string =~ /^Fedora release 15.*/) {
+	if ($release_string =~ /^Fedora release 16.*/) {
+	    $release = '_Fedora16';
+	} elsif ($release_string =~ /^Fedora release 15.*/) {
 	    $release = '_Fedora15';
 	} elsif ($release_string =~ /^Fedora release 14.*/) {
 	    $release = '_Fedora14';
