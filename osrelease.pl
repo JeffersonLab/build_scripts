@@ -29,26 +29,9 @@ chomp $uname;
 if ($uname eq 'Linux') {
     if (-e '/etc/fedora-release') {
 	$release_string = `cat /etc/fedora-release`;
-	if ($release_string =~ /^Fedora release 16.*/) {
-	    $release = '_Fedora16';
-	} elsif ($release_string =~ /^Fedora release 15.*/) {
-	    $release = '_Fedora15';
-	} elsif ($release_string =~ /^Fedora release 14.*/) {
-	    $release = '_Fedora14';
-	} elsif ($release_string =~ /^Fedora release 13.*/) {
-	    $release = '_Fedora13';
-	} elsif ($release_string =~ /^Fedora release 12.*/) {
-	    $release = '_Fedora12';
-	} elsif ($release_string =~ /^Fedora release 11.*/) {
-	    $release = '_Fedora11';
-	} elsif ($release_string =~ /^Fedora release 10.*/) {
-	    $release = '_Fedora10';
-	} elsif ($release_string =~ /^Fedora release 9.*/) {
-	    $release = '_Fedora9';
-	} elsif ($release_string =~ /^Fedora release 8.*/) {
-	    $release = '_Fedora8';
-	} elsif ($release_string =~ /^Fedora release 7.*/) {
-	    $release = '_Fedora7';
+	if ($release_string =~ /^Fedora release/) {
+	    @token = split(/\s+/, $release_string);
+	    $release = "_Fedora$token[2]";
 	} elsif ($release_string =~ /^Fedora Core release 6.*/) {
 	    $release = '_FC6';
 	} else {
