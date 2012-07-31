@@ -39,7 +39,7 @@ xerces_dir:
 	test -d ${XERCES} || mkdir -pv ${XERCES}
 
 xerces_make:
-	$(MAKE) -C${XERCES} -f${BUILD_SCRIPTS}/Makefile_xerces
+	$(MAKE) -C${XERCES} -f${BUILD_SCRIPTS}/Makefile_xercesc_2
 
 root_build: root_dir
 	    $(MAKE) -C${ROOT} -f${BUILD_SCRIPTS}/Makefile_root
