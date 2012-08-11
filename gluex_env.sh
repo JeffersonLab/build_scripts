@@ -17,3 +17,71 @@ export XERCES_INCLUDE=$XERCESCROOT/include
 if [ `echo $LD_LIBRARY_PATH | grep -c $XERCESCROOT/lib` -eq 0 ]
     then export LD_LIBRARY_PATH=$XERCESCROOT/lib:$LD_LIBRARY_PATH
 fi
+# root
+if [ -z "$ROOTSYS" ]; then export ROOTSYS=$GLUEX_TOP/root/prod; fi
+if [ `echo $PATH | grep -c $ROOTSYS/bin` -eq 0 ]
+    then export PATH=$ROOTSYS/bin:$PATH
+fi
+if [ `echo $LD_LIBRARY_PATH | grep -c $ROOTSYS/lib` -eq 0 ]
+    then export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
+fi
+# cernlib
+if [ -z "$CERN" ]; then export CERN=$GLUEX_TOP/cernlib; fi
+if [ -z "$CERN_LEVEL" ]; then export CERN_LEVEL=2006; fi
+export CERN_ROOT=$CERN/$CERN_LEVEL
+if [ `echo $PATH | grep -c $CERN_ROOT/bin` -eq 0 ]
+    then export PATH=$CERN_ROOT/bin:$PATH
+fi
+# clhep
+if [ -z "$CLHEP" ]; then export CLHEP=$GLUEX_TOP/clhep/prod; fi
+export CLHEP_INCLUDE=$CLHEP/include
+export CLHEP_LIB=$CLHEP/lib
+if [ `echo $LD_LIBRARY_PATH | grep -c $CLHEP_LIB` -eq 0 ]
+    then export LD_LIBRARY_PATH=${CLHEP_LIB}:${LD_LIBRARY_PATH}
+fi
+# hdds
+if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=$GLUEX_TOP/hdds/prod; fi
+# sim-recon
+if [ -z "$HALLD_HOME" ]; then export HALLD_HOME=$GLUEX_TOP/sim-recon/prod; fi
+if [ -z "$HALLD_MY" ]; then export HALLD_MY=$HOME/halld_my; fi
+export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
+if [ `echo $PATH | grep -c $HALLD_HOME/bin/$BMS_OSNAME` -eq 0 ]
+    then export PATH=$HALLD_HOME/bin/${BMS_OSNAME}:$PATH
+fi
+if [ `echo $PATH | grep -c $HALLD_MY/bin/$BMS_OSNAME` -eq 0 ]
+    then export PATH=$HALLD_MY/bin/${BMS_OSNAME}:$PATH
+fi
+# jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
+if [ -z "$JANA_HOME" ]; then export JANA_HOME=$GLUEX_TOP/jana/prod; fi
+if [ -z "$JANA_CALIB_URL" ]
+    then export JANA_CALIB_URL=file://$GLUEX_TOP/calib
+fi
+if [ -z "$JANA_GEOMETRY_URL" ]
+    then export JANA_GEOMETRY_URL=xmlfile://$HDDS_HOME/main_HDDS.xml
+fi
+# ccdb
+if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=$GLUEX_TOP/ccdb/prod; fi
+if [ -f "$CCDB_HOME/environment.sh" ]; then . $CCDB_HOME/environment.csh; fi
+# refresh the list of items in the path
+hash -r
+# report environment
+if [ $gluex_env_verbose -eq 1 ]
+    then
+    echo ===gluex_env.sh report===
+    echo BMS_OSNAME =  $BMS_OSNAME
+    echo BUILD_SCRIPTS = $BUILD_SCRIPTS
+    echo CERN_ROOT =  $CERN_ROOT
+    echo CLHEP = $CLHEP
+    echo GLUEX_TOP = $GLUEX_TOP
+    echo HALLD_HOME =  $HALLD_HOME
+    echo HALLD_MY = $HALLD_MY
+    echo HDDS_HOME = $HDDS_HOME
+    echo JANA_CALIB_URL = $JANA_CALIB_URL
+    echo JANA_GEOMETRY_URL = $JANA_GEOMETRY_URL
+    echo JANA_HOME =  $JANA_HOME
+    echo LD_LIBRARY_PATH = $LD_LIBRARY_PATH
+    echo PATH = $PATH
+    echo ROOTSYS =  $ROOTSYS
+    echo XERCESCROOT =  $XERCESCROOT
+    echo CCDB_HOME = $CCDB_HOME
+fi
