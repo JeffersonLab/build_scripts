@@ -7,7 +7,7 @@ export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
 # xerces-c
 export XERCESCROOT=/group/halld/Software/ExternalPackages/xerces-c-src_2_7_0.$BMS_OSNAME
 # Jana
-if [ -z "$JANA_HOME" ]; export JANA_HOME=/group/12gev_phys/builds/jana_0.6.3/$BMS_OSNAME; fi
+if [ -z "$JANA_HOME" ]; then export JANA_HOME=/group/12gev_phys/builds/jana_0.6.3/$BMS_OSNAME; fi
 export JANA_CALIB_URL=file:///group/halld/Software/calib/latest
 # ROOT
 export ROOTSYS=`$BUILD_SCRIPTS/cue_root.pl`
@@ -26,4 +26,3 @@ if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=/group/halld/Software/builds/ccdb/
 export CLHEP=/group/halld/Software/builds/clhep/2.0.4.5/$BMS_OSNAME
 # finish the rest of the environment
 . $BUILD_SCRIPTS/gluex_env.sh
-exit
