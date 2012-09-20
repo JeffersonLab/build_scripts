@@ -5,8 +5,26 @@ if [ "$1" = "-v" ]; then
 else
     gluex_env_verbose=0
 fi
+
+#Next lines just finds the path of the file
+#Works for all versions,including
+#when called via multple depth soft link,
+#when script called by command "source" aka . (dot) operator.
+#when arg $0 is modified from caller.
+#"./script" "/full/path/to/script" "/some/path/../../another/path/script" "./some/folder/script"
+#SCRIPT_PATH is given in full path, no matter how it is called.
+#Just make sure you locate this at start of the script.
+SCRIPT_PATH="${BASH_SOURCE[0]}";
+if([ -h "${SCRIPT_PATH}" ]) then
+  while([ -h "${SCRIPT_PATH}" ]) do SCRIPT_PATH=`readlink "${SCRIPT_PATH}"`; done
+fi
+pushd . > /dev/null
+cd `dirname ${SCRIPT_PATH}` > /dev/null
+SCRIPT_PATH=`pwd`;
+popd  > /dev/null
+
 # general stuff
-if [ -z "$GLUEX_TOP" ]; then export GLUEX_TOP=/usr/local/gluex; fi
+if [ -z "$GLUEX_TOP" ]; then export GLUEX_TOP=$(readlink -m $SCRIPT_PATH/..); fi
 if [ -z "$BUILD_SCRIPTS" ]
     then export BUILD_SCRIPTS=$GLUEX_TOP/build_scripts
 fi
@@ -68,6 +86,7 @@ hash -r
 if [ $gluex_env_verbose -eq 1 ]
     then
     echo ===gluex_env.sh report===
+    echo this script path $SCRIPT_PATH
     echo BMS_OSNAME =  $BMS_OSNAME
     echo BUILD_SCRIPTS = $BUILD_SCRIPTS
     echo CERN_ROOT =  $CERN_ROOT
