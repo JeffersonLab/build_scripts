@@ -23,6 +23,8 @@ cd `dirname ${SCRIPT_PATH}` > /dev/null
 SCRIPT_PATH=`pwd`;
 popd  > /dev/null
 
+MACHINE_TYPE=`uname -m`
+
 # general stuff
 if [ -z "$GLUEX_TOP" ]; then export GLUEX_TOP=$(readlink -m $SCRIPT_PATH/..); fi
 if [ -z "$BUILD_SCRIPTS" ]
@@ -45,7 +47,16 @@ if [ `echo $LD_LIBRARY_PATH | grep -c $ROOTSYS/lib` -eq 0 ]
 fi
 # cernlib
 if [ -z "$CERN" ]; then export CERN=$GLUEX_TOP/cernlib; fi
-if [ -z "$CERN_LEVEL" ]; then export CERN_LEVEL=2006; fi
+if [ -z "$CERN_LEVEL" ]; then 					#We don't have CERN_LEVEL
+	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+		#on 64 bits 2005 cernlib is provided
+		export CERN_LEVEL=2005; 
+	else
+		#on 32-bit 2006 cernlib is provided
+		export CERN_LEVEL=2006;
+	fi
+fi
+
 export CERN_ROOT=$CERN/$CERN_LEVEL
 if [ `echo $PATH | grep -c $CERN_ROOT/bin` -eq 0 ]
     then export PATH=$CERN_ROOT/bin:$PATH
