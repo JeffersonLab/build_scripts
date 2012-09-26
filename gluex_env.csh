@@ -8,6 +8,7 @@ endif
 if (! $?GLUEX_TOP) setenv GLUEX_TOP /usr/local/gluex
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
+set machine_type=`uname -m`
 # xerces-c++
 if (! $?XERCESCROOT) setenv XERCESCROOT $GLUEX_TOP/xerces-c/prod
 setenv XERCES_INCLUDE $XERCESCROOT/include
@@ -21,7 +22,13 @@ echo $LD_LIBRARY_PATH | grep $ROOTSYS/lib > /dev/null
 if ($status) setenv LD_LIBRARY_PATH  $ROOTSYS/lib:$LD_LIBRARY_PATH
 # cernlib
 if (! $?CERN ) setenv CERN $GLUEX_TOP/cernlib
-if (! $?CERN_LEVEL) setenv CERN_LEVEL 2006
+if (! $?CERN_LEVEL) then
+    if ($machine_type == 'x86_64') then
+        setenv CERN_LEVEL 2005
+    else
+	setenv CERN_LEVEL 2006
+    endif
+endif
 setenv CERN_ROOT $CERN/$CERN_LEVEL
 echo $PATH | grep $CERN_ROOT/bin > /dev/null
 if ($status) setenv PATH $CERN_ROOT/bin:$PATH
