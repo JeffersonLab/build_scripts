@@ -4,15 +4,15 @@ setenv TARGET_DIR /group/halld/Software/builds/sim-recon/nightly/$TODAYS_DATE
 setenv BUILD_SCRIPTS /group/halld/Software/scripts/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 # xerces-c
-setenv XERCESCROOT /group/halld/Software/ExternalPackages/xerces-c-src_2_7_0.$BMS_OSNAME
-# Jana
-setenv JANA_HOME /group/12gev_phys/builds/jana_0.6.3/$BMS_OSNAME
+setenv XERCESCROOT /group/halld/Software/ExternalPackages/XERCES/xerces-c-3.1.1.$BMS_OSNAME
+# JANA
+setenv JANA_HOME /group/12gev_phys/builds/jana_0.6.5/$BMS_OSNAME
 setenv JANA_CALIB_URL file:///group/halld/calib
 # ROOT
 setenv ROOTSYS `$BUILD_SCRIPTS/cue_root.pl`
 # CERNLIB
 setenv CERN_CUE `$BUILD_SCRIPTS/cue_cernlib.pl`
-setenv CERN /apps/cernlib/$CERN_CUE
+setenv CERN $CERN_CUE
 setenv CERN_LEVEL 2005
 # Hall D
 setenv HALLD_HOME $TARGET_DIR/sim-recon

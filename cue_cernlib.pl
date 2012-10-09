@@ -1,11 +1,17 @@
 #!/usr/bin/env perl
-%cern = ('Linux_RHEL5-i686-gcc4.1.2' => 'i386_rhel5',
-	 'Linux_Fedora8-i686-gcc4.1.2' => 'i386_fc8',
-	 'Linux_CentOS5-x86_64-gcc4.1.2' => 'x86_64_rhel5',
-	 'Linux_RHEL5-x86_64-gcc4.1.2' => 'x86_64_rhel5',
-	 'Linux_RHEL6-x86_64-gcc4.4.5' => 'x86_64_rhel6',
-	 'Linux_RHEL6-x86_64-gcc4.4.6' => 'x86_64_rhel6'
-	 );
+%cern = (
+  'Linux_Fedora8-i686-gcc4.1.2'   => '/apps/cernlib/i386_fc8',
+  
+  'Linux_RHEL5-i686-gcc4.1.2'     => '/group/halld/Software/ExternalPackages/cernlib/Linux_RHEL5-i686-gcc4.1.2',
+  'Linux_CentOS5-i686-gcc4.1.2'   => '/group/halld/Software/ExternalPackages/cernlib/Linux_RHEL5-i686-gcc4.1.2',
+
+  'Linux_RHEL5-x86_64-gcc4.1.2'   => '/group/halld/Software/ExternalPackages/cernlib/Linux_CentOS5-x86_64-gcc4.1.2',
+  'Linux_CentOS5-x86_64-gcc4.1.2' => '/group/halld/Software/ExternalPackages/cernlib/Linux_CentOS5-x86_64-gcc4.1.2',
+ 
+  'Linux_RHEL6-x86_64-gcc4.4.6'   => '/group/halld/Software/ExternalPackages/cernlib/Linux_CentOS6-x86_64-gcc4.4.6',
+  'Linux_CentOS6-x86_64-gcc4.4.6' => '/group/halld/Software/ExternalPackages/cernlib/Linux_CentOS6-x86_64-gcc4.4.6',
+  'Linux_CentOS6-x86_64-clang3.2' => '/group/halld/Software/ExternalPackages/cernlib/Linux_CentOS6-x86_64-gcc4.4.6'
+ 	 );
 $osrelease = `$ENV{BUILD_SCRIPTS}/osrelease.pl`;
 chomp $osrelease;
 #print "debug: osrelease = $osrelease\n";

@@ -50,6 +50,8 @@ if ($uname eq 'Linux') {
 	    $release = '_RHEL6';
 	} elsif ($release_string =~ /^CentOS release 5.*/) {
 	    $release = '_CentOS5';
+	} elsif ($release_string =~ /^CentOS release 6.*/) {
+	    $release = '_CentOS6';
 	} elsif ($release_string =~ /^Scientific Linux SL release 5.*/ ) {
 	    $release = '_SL5';
 	  }
@@ -88,6 +90,8 @@ if ($uname eq 'Linux') {
 	    $release = '_macosx10.6';
  	} elsif ($release_string =~ /^11.*/) {
 	    $release = '_macosx10.7';
+ 	} elsif ($release_string =~ /^12.*/) {
+	    $release = '_macosx10.8';
 	} else {
 	    print STDERR "unrecognized Mac OS X (Darwin) release\n";
 	    $release = '_macosx';
@@ -96,15 +100,43 @@ if ($uname eq 'Linux') {
     $release = '';
 }
 
-# This part sets the processor type and GCC version number
+
+# Set the processor type
 $processor = `uname -p`;
-$gccversion = `gcc -dumpversion`;
 chomp $processor;
-chomp $gccversion;
+
+# Set the default compiler version number (may be overridden below)
+$ccversion = `cc -dumpversion`;
+chomp $ccversion;
+
+# Decide if we are using gcc or clang or an "other" compiler type
+$compiler_type = "cc";
+$compiler_version_str = `cc -v 2>&1`;
+if ($compiler_version_str =~ /\sgcc version\s/) {
+	$compiler_type = "gcc";
+} elsif ($compiler_version_str =~ /clang version\s+/) {
+	$compiler_type = "clang";
+	
+	# clang seems to report different numbers for the version
+	# if you use "clang -dumpversion" or "clang -v". The former
+	# seems to correspond to the installed gcc version number
+	# while the later the actual clang version number. Extract
+	# the clang version number here, replacing the one obtained
+	# via "cc -dumpversion" from above.
+	$' =~ /\s/;
+	$ccversion = $`;
+}
 
 # If the compiler_version variable is not set, use the gcc version
 if ($compiler_version eq '') {
-	$compiler_version = "gcc${gccversion}";
+	$compiler_version = "gcc${ccversion}";
+}
+
+# If the processor variable is set to "unknown" (Ubuntu systems)
+# then use the machine name.
+if ($processor eq 'unknown') {
+	$processor = `uname -m`;
+	chomp $processor;
 }
 
 # Finally, form and print the complete string to stdout
