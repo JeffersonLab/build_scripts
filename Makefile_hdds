@@ -1,8 +1,8 @@
 # Makefile_hdds
 
-# Builds HDDS under a new directory (DIR_NAME) rooted in the current
-# working directory. The new directory has a name that depends on the
-# version being built.
+# Builds HDDS under a new directory rooted in the current working
+# directory. The new directory (DIR_NAME) has a name that depends on
+# the version being built.
 
 # HDDS_VERSION defines which tagged version to build. It should
 # correspond to the name of the desired directory in the repos/tags
