@@ -6,18 +6,23 @@ export XERCESCROOT=$(PWD)/xerces-c-$(VERSION)
 
 all: prod_link
 
-prod_link: make_xerces
-	   test -L prod || ln -s xerces-c-$(VERSION) prod # will not overwrite existing link 
+prod_link: $(XERCESCROOT)/.make_install_done
+	   test -L prod || ln -s xerces-c-$(VERSION) prod # will not overwrite existing link
 
-make_xerces: $(XERCESCROOT)/.configure_done 
+$(XERCESCROOT)/.make_install_done: $(XERCESCROOT)/.make_done 
+	$(MAKE) -C$(XERCESCROOT) install
+	date > $@
+
+$(XERCESCROOT)/.make_done: $(XERCESCROOT)/.configure_done 
 	$(MAKE) -C$(XERCESCROOT)
+	date > $@
 
 $(XERCESCROOT)/.untar_done: $(TARFILE)
 	tar zxf $(TARFILE)
 	date > $@
 
 $(XERCESCROOT)/.configure_done: $(XERCESCROOT)/.untar_done
-	cd $(XERCESCROOT); ./configure
+	cd $(XERCESCROOT); ./configure --prefix=$(XERCESCROOT)
 	date > $@
 
 $(TARFILE):
