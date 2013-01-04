@@ -112,6 +112,8 @@ $compiler_type = "cc";
 $compiler_version_str = `cc -v 2>&1`;
 if ($compiler_version_str =~ /\sgcc version\s/) {
 	$compiler_type = "gcc";
+	$ccversion = `gcc -dumpversion`;
+	chomp $ccversion;
 } elsif ($compiler_version_str =~ /clang version\s+/) {
 	$compiler_type = "clang";
 	
