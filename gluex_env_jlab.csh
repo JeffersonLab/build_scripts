@@ -21,7 +21,7 @@ if (! $?HDDS_HOME) setenv HDDS_HOME /group/halld/Software/builds/hdds/hdds-1.4
 if (! $?HALLD_HOME) setenv HALLD_HOME /group/halld/Software/builds/sim-recon/sim-recon-2012-11-16
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
 # CCDB
-if (! $?CCDB_HOME) setenv CCDB_HOME /group/halld/Software/builds/ccdb/prod
+if (! $?CCDB_HOME) setenv CCDB_HOME /group/halld/Software/builds/ccdb/$BMS_OSNAME/ccdb_0.06
 # CLHEP
 setenv CLHEP /group/halld/Software/builds/clhep/2.0.4.5/$BMS_OSNAME
 # finish the rest of the environment

@@ -90,7 +90,7 @@ if [ -z "$JANA_GEOMETRY_URL" ]
 fi
 # ccdb
 if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=$GLUEX_TOP/ccdb/prod; fi
-if [ -f "$CCDB_HOME/environment.sh" ]; then . $CCDB_HOME/environment.csh; fi
+. $BUILD_SCRIPTS/ccdb_env.sh
 # refresh the list of items in the path
 hash -r
 # report environment
