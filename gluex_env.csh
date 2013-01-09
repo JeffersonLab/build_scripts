@@ -56,6 +56,7 @@ if (! $?JANA_GEOMETRY_URL) setenv JANA_GEOMETRY_URL \
 # ccdb
 if (! $?CCDB_HOME) setenv CCDB_HOME $GLUEX_TOP/ccdb/prod
 source $BUILD_SCRIPTS/ccdb_env.csh
+if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb/ccdb
 # refresh the list of items in the path
 rehash
 # report environment
