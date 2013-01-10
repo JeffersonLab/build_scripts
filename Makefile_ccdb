@@ -1,0 +1,25 @@
+ifdef CCDB_VERSION
+  CCDB_DIR = ccdb_$(CCDB_VERSION)
+  REPOSITORY_LOCATION = tags/$(CCDB_DIR)
+else
+  CCDB_DIR = ccdb
+  REPOSITORY_LOCATION = trunk/ccdb
+endif
+
+all: prod_link
+
+$(CCDB_DIR)/.checkout_done:
+	if [ -d $(CCDB_DIR) ] ; then svn cleanup $(CCDB_DIR) ; fi
+	svn checkout https://phys12svn.jlab.org/repos/$(REPOSITORY_LOCATION)
+	date > $@
+
+$(CCDB_DIR)/.scons_done: $(CCDB_DIR)/.checkout_done
+	source $(CCDB_DIR)/environment.bash ; \
+	cd $(CCDB_DIR) ; \
+	scons
+	date > $@
+
+prod_link: $(CCDB_DIR)/.scons_done
+	test -L prod || ln -s $(CCDB_DIR) prod
+
+# end of makefile
