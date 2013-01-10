@@ -17,8 +17,9 @@ ROOT = ${ROOT_OF_ALL}/root
 XERCES = ${ROOT_OF_ALL}/xerces-c
 GEANT4 = ${ROOT_OF_ALL}/geant4
 GSL = ${ROOT_OF_ALL}/gsl
+CCDB = ${ROOT_OF_ALL}/ccdb
 
-all: env xerces_build cernlib_build root_build clhep_build geant4_build gsl_build jana_build hdds_build sim-recon_build calib_make
+all: env xerces_build cernlib_build root_build clhep_build geant4_build gsl_build ccdb_build jana_build hdds_build sim-recon_build calib_make
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -97,6 +98,14 @@ gsl_dir:
 
 gsl_make:
 	$(MAKE) -C$(GSL) -f$(BUILD_SCRIPTS)/Makefile_gsl
+
+ccdb_build: ccdb_dir ccdb_make
+
+ccdb_dir:
+	test -d ${CCDB} || mkdir -pv ${CCDB}
+
+ccdb_make:
+	$(MAKE) -C$(CCDB) -f$(BUILD_SCRIPTS)/Makefile_ccdb
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
