@@ -2,6 +2,7 @@
 setenv TODAYS_DATE `date +%F`
 setenv BUILD_DIR /group/halld/Software/builds/sim-recon/nightly/$TODAYS_DATE
 setenv BUILD_SCRIPTS /group/halld/Software/scripts/build_scripts
+setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 setenv RUN_DIR /u/scratch/gluex/b1pi/$TODAYS_DATE/$BMS_OSNAME
 
 # Setup environment based on sim-recon build we're using 
