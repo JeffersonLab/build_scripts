@@ -13,7 +13,7 @@ setenv JANA_CALIB_URL file:///group/halld/Software/calib/latest
 setenv ROOTSYS `$BUILD_SCRIPTS/cue_root.pl`
 # CERNLIB
 setenv CERN_CUE `$BUILD_SCRIPTS/cue_cernlib.pl`
-setenv CERN /apps/cernlib/$CERN_CUE
+setenv CERN $CERN_CUE
 setenv CERN_LEVEL 2005
 # HDDS
 if (! $?HDDS_HOME) setenv HDDS_HOME /group/halld/Software/builds/hdds/hdds-1.4
