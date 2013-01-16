@@ -91,7 +91,7 @@ fi
 # ccdb
 if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=$GLUEX_TOP/ccdb/prod; fi
 . $BUILD_SCRIPTS/ccdb_env.sh
-if [ -z "$CCDB_CONNECTION" ]; then export CCDB_CONNECTION=mysql://ccdb_user@hallddb/ccdb; fi
+if [ -z "$CCDB_CONNECTION" ]; then export CCDB_CONNECTION=mysql://ccdb_user@hallddb.jlab.org/ccdb; fi
 # refresh the list of items in the path
 hash -r
 # report environment
