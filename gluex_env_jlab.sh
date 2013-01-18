@@ -16,7 +16,7 @@ export CERN_CUE=`$BUILD_SCRIPTS/cue_cernlib.pl`
 export CERN=$CERN_CUE
 export CERN_LEVEL=2005
 # HDDS
-if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=/group/halld/Software/builds/hdds/hdds-1.3 ; fi
+if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=/group/halld/Software/builds/hdds/hdds-1.5 ; fi
 # Hall D
 if [ -z "$HALLD_HOME" ]; then export HALLD_HOME=/group/halld/Software/builds/sim-recon/sim-recon-2012-09-26 ; fi
 if [ -z "$HALLD_MY" ]; then export HALLD_MY=$HOME/halld_my; fi
