@@ -5,9 +5,9 @@
 export BUILD_SCRIPTS=/group/halld/Software/scripts/build_scripts
 export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
 # xerces-c
-export XERCESCROOT=/group/halld/Software/ExternalPackages/xerces-c-src_2_7_0.$BMS_OSNAME
+export XERCESCROOT=/group/halld/Software/ExternalPackages/xerces-c-3.1.1.$BMS_OSNAME
 # Jana
-if [ -z "$JANA_HOME" ]; then export JANA_HOME=/group/12gev_phys/builds/jana_0.6.3/$BMS_OSNAME; fi
+if [ -z "$JANA_HOME" ]; then export JANA_HOME=/group/12gev_phys/builds/jana_0.6.5/$BMS_OSNAME; fi
 export JANA_CALIB_URL=file:///group/halld/Software/calib/latest
 # ROOT
 export ROOTSYS=`$BUILD_SCRIPTS/cue_root.pl`
