@@ -13,7 +13,7 @@ export JANA_CALIB_URL=file:///group/halld/Software/calib/latest
 export ROOTSYS=`$BUILD_SCRIPTS/cue_root.pl`
 # CERNLIB
 export CERN_CUE=`$BUILD_SCRIPTS/cue_cernlib.pl`
-export CERN=/apps/cernlib/$CERN_CUE
+export CERN=$CERN_CUE
 export CERN_LEVEL=2005
 # HDDS
 if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=/group/halld/Software/builds/hdds/hdds-1.3 ; fi
