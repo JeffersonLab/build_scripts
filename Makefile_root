@@ -1,7 +1,4 @@
-#VERSION=5.19.04
-#VERSION=5.25.02
-#VERSION=5.30.02
-VERSION=5.34.01
+VERSION=5.34.04
 TARFILE=root_v$(VERSION).source.tar.gz
 ROOTDIR=root_$(VERSION)
 PWD := $(shell pwd)
@@ -15,16 +12,17 @@ prod_link: main_make
 $(TARFILE):
 	wget ftp://root.cern.ch/root/$@
 
-$(ROOTDIR)/configure: $(TARFILE)
+$(ROOTDIR)/.untar_done: $(TARFILE)
 	$(RM) -r $(ROOTDIR)
 	tar zxf $(TARFILE)
 	mv root $(ROOTDIR)
-	touch $(ROOTDIR)/configure
+	date > $@
 
-$(ROOTDIR)/config.log: $(ROOTDIR)/configure
-	cd $(ROOTDIR); ./configure 
+$(ROOTDIR)/.configure_done: $(ROOTDIR)/.untar_done
+	cd $(ROOTDIR); ./configure linux
+	date > $@
 
-main_make: $(ROOTDIR)/config.log $(ROOTDIR)/.patch_done
+main_make: $(ROOTDIR)/.configure_done $(ROOTDIR)/.patch_done
 	cd $(ROOTDIR) ; make
 
 $(ROOTDIR)/.patch_done:
