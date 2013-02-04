@@ -12,7 +12,7 @@ setenv HALLD_MY $HALLD_HOME
 mkdir -p $TARGET_DIR
 cd $TARGET_DIR
 # create build scripts
-svn co file:///group/halld/Resitories/svnroot/trunk/scripts/build_scripts
+svn co file:///group/halld/Repositories/svnroot/trunk/scripts/build_scripts
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env_jlab.csh
 # make hdds
