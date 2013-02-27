@@ -80,18 +80,18 @@ fi
 if [ `echo $PATH | grep -c $HALLD_MY/bin/$BMS_OSNAME` -eq 0 ]
     then export PATH=$HALLD_MY/bin/${BMS_OSNAME}:$PATH
 fi
-# jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
-if [ -z "$JANA_HOME" ]; then export JANA_HOME=$GLUEX_TOP/jana/prod; fi
-if [ -z "$JANA_CALIB_URL" ]
-    then export JANA_CALIB_URL=file://$GLUEX_TOP/calib
-fi
-if [ -z "$JANA_GEOMETRY_URL" ]
-    then export JANA_GEOMETRY_URL=xmlfile://$HDDS_HOME/main_HDDS.xml
-fi
 # ccdb
 if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=$GLUEX_TOP/ccdb/prod; fi
 . $BUILD_SCRIPTS/ccdb_env.sh
 if [ -z "$CCDB_CONNECTION" ]; then export CCDB_CONNECTION=mysql://ccdb_user@hallddb.jlab.org/ccdb; fi
+# jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
+if [ -z "$JANA_HOME" ]; then export JANA_HOME=$GLUEX_TOP/jana/prod; fi
+if [ -z "$JANA_CALIB_URL" ]
+    then export JANA_CALIB_URL=$CCDB_CONNECTION
+fi
+if [ -z "$JANA_GEOMETRY_URL" ]
+    then export JANA_GEOMETRY_URL=xmlfile://$HDDS_HOME/main_HDDS.xml
+fi
 # refresh the list of items in the path
 hash -r
 # report environment

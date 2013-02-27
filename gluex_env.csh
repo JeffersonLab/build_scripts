@@ -48,15 +48,15 @@ echo $PATH | grep $HALLD_HOME/bin/$BMS_OSNAME > /dev/null
 if ($status) setenv PATH $HALLD_HOME/bin/${BMS_OSNAME}:$PATH
 echo $PATH | grep $HALLD_MY/bin/$BMS_OSNAME > /dev/null
 if ($status) setenv PATH $HALLD_MY/bin/${BMS_OSNAME}:$PATH
-# jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
-if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod
-if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL file://$GLUEX_TOP/calib
-if (! $?JANA_GEOMETRY_URL) setenv JANA_GEOMETRY_URL \
-    xmlfile://$HDDS_HOME/main_HDDS.xml
 # ccdb
 if (! $?CCDB_HOME) setenv CCDB_HOME $GLUEX_TOP/ccdb/prod
 source $BUILD_SCRIPTS/ccdb_env.csh
 if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb/ccdb
+# jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
+if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod
+if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL $CCDB_CONNECTION
+if (! $?JANA_GEOMETRY_URL) setenv JANA_GEOMETRY_URL \
+    xmlfile://$HDDS_HOME/main_HDDS.xml
 # refresh the list of items in the path
 rehash
 # report environment
