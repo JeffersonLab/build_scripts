@@ -19,7 +19,7 @@ GEANT4 = ${ROOT_OF_ALL}/geant4
 GSL = ${ROOT_OF_ALL}/gsl
 CCDB = ${ROOT_OF_ALL}/ccdb
 
-all: env xerces_build cernlib_build root_build clhep_build geant4_build gsl_build ccdb_build jana_build hdds_build sim-recon_build calib_make
+all: env xerces_build cernlib_build root_build clhep_build geant4_build gsl_build ccdb_build jana_build hdds_build sim-recon_build
 
 cernlib_build: cernlib_dir cernlib_make
 
