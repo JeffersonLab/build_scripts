@@ -7,7 +7,7 @@ setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 # xerces-c
 setenv XERCESCROOT /group/halld/Software/ExternalPackages/xerces-c-3.1.1.$BMS_OSNAME
 # Jana
-if (! $?JANA_HOME) setenv JANA_HOME /group/12gev_phys/builds/jana_0.6.5/$BMS_OSNAME
+if (! $?JANA_HOME) setenv JANA_HOME /group/12gev_phys/builds/jana_0.6.6/$BMS_OSNAME
 # ROOT
 setenv ROOTSYS `$BUILD_SCRIPTS/cue_root.pl`
 # CERNLIB
