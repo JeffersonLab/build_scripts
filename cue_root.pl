@@ -19,6 +19,7 @@
   'Linux_CentOS5-x86_64-gcc4.1.2' => '/group/halld/Software/ExternalPackages/ROOT/v5.34.01/root_Linux_CentOS5-x86_64-gcc4.1.2',
 
   'Linux_RHEL6-x86_64-gcc4.4.6'   => '/group/halld/Software/ExternalPackages/ROOT/v5.34.01/root_Linux_CentOS6-x86_64-gcc4.4.6',
+  'Linux_RHEL6-x86_64-gcc4.4.7'   => '/group/halld/Software/ExternalPackages/ROOT/v5.34.01/root_Linux_CentOS6-x86_64-gcc4.4.6',
   'Linux_CentOS6-x86_64-gcc4.4.6' => '/group/halld/Software/ExternalPackages/ROOT/v5.34.01/root_Linux_CentOS6-x86_64-gcc4.4.6',
   'Linux_CentOS6-x86_64-clang3.2' => '/group/halld/Software/ExternalPackages/ROOT/v5.34.01/root_Linux_CentOS6-x86_64-clang3.2'
  	    );
