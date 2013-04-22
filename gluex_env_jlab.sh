@@ -17,7 +17,7 @@ export CERN_LEVEL=2005
 # HDDS
 if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=/group/halld/Software/builds/hdds/hdds-1.5 ; fi
 # Hall D
-if [ -z "$HALLD_HOME" ]; then export HALLD_HOME=/group/halld/Software/builds/sim-recon/sim-recon-2013-02-25 ; fi
+if [ -z "$HALLD_HOME" ]; then export HALLD_HOME=/group/halld/Software/builds/sim-recon/sim-recon-2013-04-22 ; fi
 if [ -z "$HALLD_MY" ]; then export HALLD_MY=$HOME/halld_my; fi
 # CCDB
 if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=/group/halld/Software/builds/ccdb/$BMS_OSNAME/ccdb_0.07; fi
