@@ -19,7 +19,7 @@ $(ROOTDIR)/.untar_done: $(TARFILE)
 	date > $@
 
 $(ROOTDIR)/.configure_done: $(ROOTDIR)/.untar_done
-	cd $(ROOTDIR); ./configure linux
+	cd $(ROOTDIR); ./configure
 	date > $@
 
 main_make: $(ROOTDIR)/.configure_done $(ROOTDIR)/.patch_done
