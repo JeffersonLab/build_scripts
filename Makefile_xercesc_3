@@ -1,13 +1,15 @@
 XERCES_SERIES = 3
-VERSION=3.1.1
-TARFILE=xerces-c-$(VERSION).tar.gz
+ifndef XERCESC_VERSION
+XERCESC_VERSION=3.1.1
+endif
+TARFILE=xerces-c-$(XERCESC_VERSION).tar.gz
 PWD := $(shell pwd)
-export XERCESCROOT=$(PWD)/xerces-c-$(VERSION)
+export XERCESCROOT=$(PWD)/xerces-c-$(XERCESC_VERSION)
 
 all: prod_link
 
 prod_link: $(XERCESCROOT)/.make_install_done
-	   test -L prod || ln -s xerces-c-$(VERSION) prod # will not overwrite existing link
+	   test -L prod || ln -s xerces-c-$(XERCESC_VERSION) prod # will not overwrite existing link
 
 $(XERCESCROOT)/.make_install_done: $(XERCESCROOT)/.make_done 
 	$(MAKE) -C$(XERCESCROOT) install

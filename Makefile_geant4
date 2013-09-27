@@ -1,6 +1,8 @@
-VERSION = 9.4
-TARFILE = geant4.$(VERSION).tar.gz
-G4DIR = ./geant4.$(VERSION)
+ifndef GEANT4_VERSION
+GEANT4_VERSION = 9.4
+endif
+TARFILE = geant4.$(GEANT4_VERSION).tar.gz
+G4DIR = ./geant4.$(GEANT4_VERSION)
 
 all: build_done
 

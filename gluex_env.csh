@@ -10,12 +10,22 @@ if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
 set machine_type=`uname -m`
 # xerces-c++
-if (! $?XERCESCROOT) setenv XERCESCROOT $GLUEX_TOP/xerces-c/prod
+if (! $?XERCESC_VERSION) then
+    set xercesc_dir=prod
+else
+    set xercesc_dir=xerces-c-$XERCESC_VERSION
+endif
+if (! $?XERCESCROOT) setenv XERCESCROOT $GLUEX_TOP/xerces-c/$xercesc_dir
 setenv XERCES_INCLUDE $XERCESCROOT/include
 echo $LD_LIBRARY_PATH | grep $XERCESCROOT/lib > /dev/null
 if ($status) setenv LD_LIBRARY_PATH  $XERCESCROOT/lib:$LD_LIBRARY_PATH
 # root
-if (! $?ROOTSYS) setenv ROOTSYS $GLUEX_TOP/root/prod
+if (! $?ROOT_VERSION) then
+    set root_dir=prod
+else
+    set root_dir=root_$ROOT_VERSION
+endif
+if (! $?ROOTSYS) setenv ROOTSYS $GLUEX_TOP/root/$root_dir
 echo $PATH | grep $ROOTSYS/bin > /dev/null
 if ($status) setenv PATH $ROOTSYS/bin:$PATH
 echo $LD_LIBRARY_PATH | grep $ROOTSYS/lib > /dev/null
@@ -33,15 +43,30 @@ setenv CERN_ROOT $CERN/$CERN_LEVEL
 echo $PATH | grep $CERN_ROOT/bin > /dev/null
 if ($status) setenv PATH $CERN_ROOT/bin:$PATH
 # clhep
-if (! $?CLHEP) setenv CLHEP $GLUEX_TOP/clhep/prod
+if (! $?CLHEP_VERSION) then
+    set clhep_dir=prod
+else
+    set clhep_dir=$CLHEP_VERSION
+endif
+if (! $?CLHEP) setenv CLHEP $GLUEX_TOP/clhep/$clhep_dir
 setenv CLHEP_INCLUDE $CLHEP/include
 setenv CLHEP_LIB $CLHEP/lib
 echo $LD_LIBRARY_PATH | grep $CLHEP_LIB > /dev/null
 if ($status) setenv LD_LIBRARY_PATH ${CLHEP_LIB}:${LD_LIBRARY_PATH}
 # hdds
-if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
+if (! $?HDDS_VERSION) then
+    set hdds_dir=prod
+else
+    set hdds_dir=hdds-$HDDS_VERSION
+endif
+if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/$hdds_dir
 # halld
-if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/sim-recon/prod
+if (! $?SIM_RECON_VERSION) then
+    set sim_recon_dir=prod
+else
+    set sim_recon_dir=sim-recon-$SIM_RECON_VERSION
+endif
+if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/sim-recon/$sim_recon_dir
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 echo $PATH | grep $HALLD_HOME/bin/$BMS_OSNAME > /dev/null

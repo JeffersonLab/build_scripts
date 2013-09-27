@@ -5,6 +5,9 @@
 if ($ARGV[0] eq '-l') {
     $pathtype = "LD_LIBRARY_PATH";
     shift @ARGV;
+} elsif ($ARGV[0] eq '-p') {
+    $pathtype = "PYTHONPATH";
+    shift @ARGV;
 } else {
     $pathtype = "PATH";
 }

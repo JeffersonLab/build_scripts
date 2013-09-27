@@ -29,3 +29,4 @@ unsetenv JANA_HOME
 unsetenv JANA_CALIB_URL
 unsetenv JANA_GEOMETRY_URL
 unsetenv CCDB_HOME
+unsetenv CCDB_CONNECTION
