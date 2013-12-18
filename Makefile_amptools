@@ -1,0 +1,20 @@
+AMPTOOLS_VERSION = 0.6.2
+TARFILE = AmpTools_v$(AMPTOOLS_VERSION).tgz
+AMPTOOLS_DIR = AmpTools_v$(AMPTOOLS_VERSION)
+AMPTOOLS_PACKAGES = AmpTools AmpPlotter
+
+all: prod
+
+$(TARFILE):
+	wget http://downloads.sourceforge.net/project/amptools/$(TARFILE)
+
+$(AMPTOOLS_DIR)/.unpack: $(TARFILE)
+	tar zxvf $(TARFILE)
+	mv -v AmpTools $(AMPTOOLS_DIR)
+	date > $@
+
+$(AMPTOOLS_PACKAGES): $(AMPTOOLS_DIR)/.unpack
+	cd $(AMPTOOLS_DIR)/$@ ; make
+
+prod: $(AMPTOOLS_PACKAGES)
+	test -d prod || ln -s $(AMPTOOLS_DIR) prod
