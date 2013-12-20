@@ -68,6 +68,12 @@ export CLHEP_LIB=$CLHEP/lib
 if [ `echo $LD_LIBRARY_PATH | grep -c $CLHEP_LIB` -eq 0 ]
     then export LD_LIBRARY_PATH=${CLHEP_LIB}:${LD_LIBRARY_PATH}
 fi
+# amptools
+if [ -z "$AMPTOOLS_HOME" ]; then export AMPTOOLS_HOME=$GLUEX_TOP/AmpTools/prod; fi
+export AMPTOOLS=$AMPTOOLS_HOME/AmpTools
+export AMPPLOTTER=$AMPTOOLS_HOME/AmpPlotter
+export CLHEP_INCLUDE_DIR=$CLHEP_INCLUDE
+export CLHEP_LIB_DIR=$CLHEP_LIB
 # hdds
 if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=$GLUEX_TOP/hdds/prod; fi
 # sim-recon
