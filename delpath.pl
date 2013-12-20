@@ -2,28 +2,44 @@
 #
 # deleted element from path
 #
-if ($ARGV[0] eq '-l') {
-    $pathtype = "LD_LIBRARY_PATH";
-    shift @ARGV;
-} else {
-    $pathtype = "PATH";
+$pathtype = "PATH";
+$shell = "C";
+@token = ();
+$this = shift;
+while ($this) {
+    if ($this =~ m/^-/) {
+	if ($this eq '-l') {
+	    $pathtype = "LD_LIBRARY_PATH";
+	} elsif ($this eq '-b') {
+	    $shell = "Bourne";
+	} else {
+	    die 'bad command option';
+	}
+    } else {
+	push (@token, ($this));
+    }
+    $this = shift;
 }
 $line=$ENV{$pathtype};
 #print "$line\n";
 @field = split(/:/,$line);
 #print "number of fields $#field\n";
 #print "number of fields to delete $#ARGV\n";
-if ($#field == 0) {
-    print "unsetenv $pathtype\n";
+if ($#field == -1) {
+    if ($shell eq "C") {
+	print "unsetenv $pathtype\n";
+    } else {
+	print "unset $pathtype\n";
+    }
 } else {
     $newpath = "";
     for ($j = 0; $j <= $#field ; $j++) {
 	$path = $field[$j];
 	#print "$j $path\n";
 	$keep = 1;
-	for($i = 0; $i <= $#ARGV; $i++) {
-	    #print "$i $ARGV[$i]\n";
-	    if ($path eq $ARGV[$i]) {
+	for($i = 0; $i <= $#token; $i++) {
+	    #print "$i $token[$i]\n";
+	    if ($path eq $token[$i]) {
 		$keep = 0;
 	    }
 	}
@@ -33,6 +49,10 @@ if ($#field == 0) {
 	    $newpath = $newpath . $path;
 	}
     }
-    print "setenv $pathtype $newpath\n";
+    if ($shell eq "C") {
+	print "setenv $pathtype $newpath\n";
+    } else {
+	print "export $pathtype=$newpath\n";
+    }
 }
 exit
