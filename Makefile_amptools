@@ -1,6 +1,9 @@
 AMPTOOLS_VERSION = 0.6.2
 TARFILE = AmpTools_v$(AMPTOOLS_VERSION).tgz
-AMPTOOLS_DIR = AmpTools_v$(AMPTOOLS_VERSION)
+AMPTOOLS_LOCAL_DIR = AmpTools_v$(AMPTOOLS_VERSION)
+AMPTOOLS_DIR = $(shell pwd)/$(AMPTOOLS_LOCAL_DIR)
+AMPTOOLS = $(AMPTOOLS_DIR)/AmpTools
+AMPPLOTTER = $(AMPTOOLS_DIR)/AmpPlotter
 AMPTOOLS_PACKAGES = AmpTools AmpPlotter
 
 all: prod
@@ -17,4 +20,4 @@ $(AMPTOOLS_PACKAGES): $(AMPTOOLS_DIR)/.unpack
 	cd $(AMPTOOLS_DIR)/$@ ; make
 
 prod: $(AMPTOOLS_PACKAGES)
-	test -d prod || ln -s $(AMPTOOLS_DIR) prod
+	test -d prod || ln -s $(AMPTOOLS_LOCAL_DIR) prod
