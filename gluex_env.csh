@@ -38,6 +38,12 @@ setenv CLHEP_INCLUDE $CLHEP/include
 setenv CLHEP_LIB $CLHEP/lib
 echo $LD_LIBRARY_PATH | grep $CLHEP_LIB > /dev/null
 if ($status) setenv LD_LIBRARY_PATH ${CLHEP_LIB}:${LD_LIBRARY_PATH}
+# amptools
+if (! $?AMPTOOLS_HOME) setenv AMPTOOLS_HOME $GLUEX_TOP/AmpTools/prod
+setenv AMPTOOLS $AMPTOOLS_HOME/AmpTools
+setenv AMPPLOTTER $AMPTOOLS_HOME/AmpPlotter
+setenv CLHEP_INCLUDE_DIR $CLHEP_INCLUDE
+setenv CLHEP_LIB_DIR $CLHEP_LIB
 # hdds
 if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
 # halld
