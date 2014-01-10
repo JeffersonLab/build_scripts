@@ -27,9 +27,6 @@ cd $TARGET_DIR
 # build scripts
 setenv BUILD_SCRIPTS $TARGET_DIR/build_scripts
 svn co file:///group/halld/Repositories/svnroot/trunk/scripts/build_scripts
-# ccdb
-mkdir -p `$BUILD_SCRIPTS/osrelease.pl`
-setenv CCDB_HOME $TARGET_DIR/`$BUILD_SCRIPTS/osrelease.pl`/ccdb
 # hdds
 setenv HDDS_HOME $TARGET_DIR/hdds
 # Hall D
@@ -37,10 +34,6 @@ setenv HALLD_HOME $TARGET_DIR/sim-recon
 setenv HALLD_MY $HALLD_HOME
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env_jlab.csh
-# make ccdb
-pushd $BMS_OSNAME
-make -f $BUILD_SCRIPTS/Makefile_ccdb
-popd
 # make hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds DEBUG=1
