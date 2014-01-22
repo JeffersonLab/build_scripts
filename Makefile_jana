@@ -1,11 +1,9 @@
 PWD = $(shell pwd)
-JANA_VERSION = 0.6.6
-ifdef JANA_VERSION
+ifndef JANA_VERSION
+       JANA_VERSION = 0.7.0
+endif
 JANA_DIR = jana_$(JANA_VERSION)
 TARFILE = jana_$(JANA_VERSION).tgz
-else
-JANA_DIR = JANA
-endif
 export JANA_HOME = $(PWD)/$(JANA_DIR)
 
 all: prod_link
