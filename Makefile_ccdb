@@ -1,19 +1,27 @@
 ifdef CCDB_VERSION
   CCDB_DIR = ccdb_$(CCDB_VERSION)
-  REPOSITORY_LOCATION = tags/$(CCDB_DIR)
+  TARFILE = ccdb_$(CCDB_VERSION)-src.tar.gz
+  GET_SOURCE_TARGET = $(CCDB_DIR)/.untar_done
 else
   CCDB_DIR = ccdb
-  REPOSITORY_LOCATION = trunk/ccdb
+  GET_SOURCE_TARGET = $(CCDB_DIR)/.checkout_done
 endif
 
 all: prod_link
 
-$(CCDB_DIR)/.checkout_done:
-	if [ -d $(CCDB_DIR) ] ; then svn cleanup $(CCDB_DIR) ; fi
-	svn checkout https://phys12svn.jlab.org/repos/$(REPOSITORY_LOCATION)
+$(TARFILE):
+	wget https://halldweb1.jlab.org/dist/$(TARFILE)
+
+$(CCDB_DIR)/.untar_done: $(TARFILE)
+	tar zxvf $(TARFILE)
 	date > $@
 
-$(CCDB_DIR)/.untar_local_scons: $(CCDB_DIR)/.checkout_done
+$(CCDB_DIR)/.checkout_done:
+	if [ -d $(CCDB_DIR) ] ; then svn cleanup $(CCDB_DIR) ; fi
+	svn checkout https://phys12svn.jlab.org/repos/trunk/ccdb
+	date > $@
+
+$(CCDB_DIR)/.untar_local_scons: $(GET_SOURCE_TARGET)
 	cd $(CCDB_DIR)/scripts ; \
 	tar zxf scons-local-2.1.0.tar.gz
 	date > $@
@@ -22,9 +30,10 @@ $(CCDB_DIR)/.scons_done: $(CCDB_DIR)/.untar_local_scons
 	source $(CCDB_DIR)/environment.bash ; \
 	cd $(CCDB_DIR) ; \
 	python scripts/scons.py
-	date > $@
 
 prod_link: $(CCDB_DIR)/.scons_done
 	test -L prod || ln -s $(CCDB_DIR) prod
+
+.PHONY: $(CCDB_DIR)/.scons_done
 
 # end of makefile
