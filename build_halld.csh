@@ -17,7 +17,7 @@ endif
 #
 setenv TODAYS_DATE `date +%F`
 if ($test_mode) then
-    setenv TARGET_DIR /scratch/$USER/nightly/$TODAYS_DATE
+    setenv TARGET_DIR /scratch/$USER/nightly_test/$TODAYS_DATE
 else
     setenv TARGET_DIR /group/halld/Software/builds/nightly/$TODAYS_DATE
 endif
@@ -27,6 +27,11 @@ cd $TARGET_DIR
 # build scripts
 setenv BUILD_SCRIPTS $TARGET_DIR/build_scripts
 svn co file:///group/halld/Repositories/svnroot/trunk/scripts/build_scripts
+setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
+# ccdb
+setenv CCDB_HOME /group/halld/Software/builds/ccdb/$BMS_OSNAME/ccdb_0.09
+# jana
+setenv JANA_HOME /group/12gev_phys/builds/jana_0.7.1/$BMS_OSNAME
 # hdds
 setenv HDDS_HOME $TARGET_DIR/hdds
 # Hall D
