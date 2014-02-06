@@ -31,7 +31,7 @@ setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 # ccdb
 setenv CCDB_HOME /group/halld/Software/builds/ccdb/$BMS_OSNAME/ccdb_0.09
 # jana
-setenv JANA_HOME /group/12gev_phys/builds/jana_0.7.1/$BMS_OSNAME
+setenv JANA_HOME /group/12gev_phys/builds/jana_0.7.1p1/$BMS_OSNAME
 # hdds
 setenv HDDS_HOME $TARGET_DIR/hdds
 # Hall D
