@@ -59,7 +59,7 @@ if (! $?CCDB_HOME) setenv CCDB_HOME $GLUEX_TOP/ccdb/prod
 source $BUILD_SCRIPTS/ccdb_env.csh
 if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb.jlab.org/ccdb
 # jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
-if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod
+if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod/$BMS_OSNAME
 if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL $CCDB_CONNECTION
 if (! $?JANA_GEOMETRY_URL) setenv JANA_GEOMETRY_URL \
     xmlfile://$HDDS_HOME/main_HDDS.xml
