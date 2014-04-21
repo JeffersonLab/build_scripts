@@ -32,7 +32,7 @@ prod_link: make_halld
 	test -L prod || ln -s $(SIM_RECON_DIR) prod # will not overwrite existing link
 
 make_halld: $(HALLD_HOME)/.getarg_patches_done
-	$(MAKE) -C$(HALLD_HOME)/src LOCAL_HALLD_HOME=1
+	cd $(HALLD_HOME)/src ; scons install
 
 $(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.checkout_done
 ifneq (,$(findstring gfortran,$(WHICH_GFORTRAN)))
