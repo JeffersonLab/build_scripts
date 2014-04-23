@@ -80,11 +80,11 @@ if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=$GLUEX_TOP/hdds/prod; fi
 if [ -z "$HALLD_HOME" ]; then export HALLD_HOME=$GLUEX_TOP/sim-recon/prod; fi
 if [ -z "$HALLD_MY" ]; then export HALLD_MY=$HOME/halld_my; fi
 export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
-if [ `echo $PATH | grep -c $HALLD_HOME/bin/$BMS_OSNAME` -eq 0 ]
-    then export PATH=$HALLD_HOME/bin/${BMS_OSNAME}:$PATH
+if [ `echo $PATH | grep -c $HALLD_HOME/$BMS_OSNAME/bin` -eq 0 ]
+    then export PATH=$HALLD_HOME/${BMS_OSNAME}/bin:$PATH
 fi
-if [ `echo $PATH | grep -c $HALLD_MY/bin/$BMS_OSNAME` -eq 0 ]
-    then export PATH=$HALLD_MY/bin/${BMS_OSNAME}:$PATH
+if [ `echo $PATH | grep -c $HALLD_MY/$BMS_OSNAME/bin` -eq 0 ]
+    then export PATH=$HALLD_MY/${BMS_OSNAME}/bin:$PATH
 fi
 # ccdb
 if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=$GLUEX_TOP/ccdb/prod; fi

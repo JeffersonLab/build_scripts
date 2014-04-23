@@ -50,10 +50,10 @@ if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
 if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/sim-recon/prod
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
-echo $PATH | grep $HALLD_HOME/bin/$BMS_OSNAME > /dev/null
-if ($status) setenv PATH $HALLD_HOME/bin/${BMS_OSNAME}:$PATH
-echo $PATH | grep $HALLD_MY/bin/$BMS_OSNAME > /dev/null
-if ($status) setenv PATH $HALLD_MY/bin/${BMS_OSNAME}:$PATH
+echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null
+if ($status) setenv PATH $HALLD_HOME/${BMS_OSNAME}/bin:$PATH
+echo $PATH | grep $HALLD_MY/$BMS_OSNAME/bin > /dev/null
+if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
 # ccdb
 if (! $?CCDB_HOME) setenv CCDB_HOME $GLUEX_TOP/ccdb/prod
 source $BUILD_SCRIPTS/ccdb_env.csh
