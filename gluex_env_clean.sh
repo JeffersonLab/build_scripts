@@ -2,7 +2,7 @@ if [ -n "$BUILD_SCRIPTS" ]; then
     # clean PATH
     if [ -n "$BMS_OSNAME" ]; then
 	if [ -n "$HALLD_MY" ]; then eval `$BUILD_SCRIPTS/delpath.pl $HALLD_MY/bin/$BMS_OSNAME`; fi
-	if [ -n "$HALLD_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl $HALLD_HOME/bin/$BMS_OSNAME`; fi
+	if [ -n "$HALLD_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl $HALLD_HOME/$BMS_OSNAME/bin`; fi
     fi
     if [ -n "$CERN_ROOT" ]; then eval `$BUILD_SCRIPTS/delpath.pl $CERN_ROOT/bin`; fi
     if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl $ROOTSYS/bin`; fi
