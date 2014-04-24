@@ -39,12 +39,13 @@ setenv HALLD_HOME $TARGET_DIR/sim-recon
 setenv HALLD_MY $HALLD_HOME
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env_jlab.csh
-echo DEBUG, build_halld.csh: ROOTSYS = $ROOTSYS
+echo DEBUG, build_halld.csh before: ROOTSYS = $ROOTSYS
 # make hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds DEBUG=1
 # make sim-recon
 make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld
 make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld DEBUG=1
+echo DEBUG, build_halld.csh after: ROOTSYS = $ROOTSYS
 # exit
 exit
