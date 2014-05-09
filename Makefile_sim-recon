@@ -31,7 +31,11 @@ env:
 prod_link: make_halld
 	test -L prod || ln -s $(SIM_RECON_DIR) prod # will not overwrite existing link
 
+ifdef NO_GETARG_PATCH
+make_halld: $(HALLD_HOME)/.checkout_done
+else
 make_halld: $(HALLD_HOME)/.getarg_patches_done
+endif
 	cd $(HALLD_HOME)/src ; scons install
 
 $(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.checkout_done
