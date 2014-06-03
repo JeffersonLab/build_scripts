@@ -10,7 +10,7 @@ endif
 all: prod_link
 
 $(TARFILE):
-	wget https://halldweb1.jlab.org/dist/$(TARFILE)
+	wget --no-check-certificate https://halldweb1.jlab.org/dist/$(TARFILE)
 
 $(CCDB_DIR)/.untar_done: $(TARFILE)
 	tar zxvf $(TARFILE)
