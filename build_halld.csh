@@ -28,10 +28,6 @@ cd $TARGET_DIR
 setenv BUILD_SCRIPTS $TARGET_DIR/build_scripts
 svn co file:///group/halld/Repositories/svnroot/trunk/scripts/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
-# ccdb
-setenv CCDB_HOME /group/halld/Software/builds/ccdb/$BMS_OSNAME/ccdb_0.09
-# jana
-setenv JANA_HOME /group/12gev_phys/builds/jana_0.7.1p1/$BMS_OSNAME
 # hdds
 setenv HDDS_HOME $TARGET_DIR/hdds
 # Hall D
@@ -42,10 +38,8 @@ source $BUILD_SCRIPTS/gluex_env_jlab.csh
 echo DEBUG, build_halld.csh before: ROOTSYS = $ROOTSYS
 # make hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds
-make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds DEBUG=1
 # make sim-recon
 make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld
-make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld DEBUG=1
 echo DEBUG, build_halld.csh after: ROOTSYS = $ROOTSYS
 # exit
 exit
