@@ -1,0 +1,45 @@
+# Makefile_evio
+
+# Builds EVIO under a new directory rooted in the current working
+# directory. The new directory (DIR_NAME) has a name that depends on
+# the version being built.
+
+# EVIO_VERSION defines which tagged version to build. It should
+# correspond to the name of the desired directory in the repos/tags
+# directory of the repository. If left undefined, the latest version
+# will be checked out from the repos/trunk.
+
+PWD = $(shell pwd)
+
+DIR_NAME = evio-$(EVIO_VERSION)
+TARFILE = evio-$(EVIO_VERSION).tgz
+EVIO_HOME = $(PWD)/$(DIR_NAME)
+
+all: env_check prod_link
+
+env_check:
+ifdef EVIO_VERSION
+	@echo Building EVIO version $(EVIO_VERSION)
+else
+	@echo error: EVIO_VERSION must be defined ; exit 1
+endif
+
+$(EVIO_HOME)/.checkout_done:
+	svn co $(SVN_URL)
+	date > $@
+
+$(TARFILE):
+	wget http://coda.jlab.org/wiki/Downloads/evio/evio-$(EVIO_VERSION)/$(TARFILE)
+
+$(EVIO_HOME)/.untar_done: $(TARFILE)
+	tar zxf $(TARFILE)		  
+
+ifndef EVIO_VERSION
+make_evio: $(EVIO_HOME)/.checkout_done
+else
+make_evio: $(EVIO_HOME)/.untar_done
+endif
+	cd $(EVIO_HOME) ; scons --prefix=. install
+
+prod_link: make_evio
+	test -L prod || ln -s $(DIR_NAME) prod # will not overwrite existing link
