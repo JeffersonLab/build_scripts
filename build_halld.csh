@@ -39,7 +39,7 @@ echo DEBUG, build_halld.csh before: ROOTSYS = $ROOTSYS
 # make hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds
 # make sim-recon
-make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld
+make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld NO_GETARG_PATCH=1
 echo DEBUG, build_halld.csh after: ROOTSYS = $ROOTSYS
 # exit
 exit
