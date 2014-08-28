@@ -1,6 +1,9 @@
-VERSION=5.34.04
-TARFILE=root_v$(VERSION).source.tar.gz
-ROOTDIR=root_$(VERSION)
+ifndef ROOT_VERSION
+    ROOT_VERSION=5.34.04
+endif
+
+TARFILE=root_v$(ROOT_VERSION).source.tar.gz
+ROOTDIR=root_$(ROOT_VERSION)
 PWD := $(shell pwd)
 ROOTSYS=$(PWD)/$(ROOTDIR)
 
