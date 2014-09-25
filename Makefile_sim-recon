@@ -13,38 +13,32 @@ WHICH_GFORTRAN = $(shell which gfortran)
 PWD = $(shell pwd)
 ifdef SIM_RECON_VERSION
 SIM_RECON_DIR = sim-recon-$(SIM_RECON_VERSION)
-REPOSITORY_LOCATION = repos/tags/$(SIM_RECON_DIR)
+TARFILE = sim-recon-$(SIM_RECON_VERSION)-src.tar.gz
 else
 SIM_RECON_DIR = sim-recon
 REPOSITORY_LOCATION = repos/trunk/sim-recon
 endif
 export HALLD_HOME = $(PWD)/$(SIM_RECON_DIR)
 
-all: env prod_link
+all: prod_link
 
-env:
-	@echo WHICH_GFORTRAN = $(WHICH_GFORTRAN)
-	@echo SIM_RECON_VERSION = $(SIM_RECON_VERSION)
-	@echo SIM_RECON_DIR = $(SIM_RECON_DIR)
-	@echo REPOSITORY_LOCATION = $(REPOSITORY_LOCATION)
+$(TARFILE):
+	wget --no-check-certificate http://halldweb1.jlab.org/dist/$(TARFILE)
 
-prod_link: make_halld
-	test -L prod || ln -s $(SIM_RECON_DIR) prod # will not overwrite existing link
-
-ifdef NO_GETARG_PATCH
-make_halld: $(HALLD_HOME)/.checkout_done
-else
-make_halld: $(HALLD_HOME)/.getarg_patches_done
-endif
-	cd $(HALLD_HOME)/src ; scons install
-
-$(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.checkout_done
-ifneq (,$(findstring gfortran,$(WHICH_GFORTRAN)))
-	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
-		$(HALLD_HOME)/src/programs/Simulation/HDGeant
-endif
+$(HALLD_HOME)/.untar_done: $(TARFILE)
+	tar zxvf $(TARFILE)
 	date > $@
 
 $(HALLD_HOME)/.checkout_done:
 	svn co https://halldsvn.jlab.org/$(REPOSITORY_LOCATION)
 	date > $@
+
+ifdef SIM_RECON_VERSION
+sconstruct: $(HALLD_HOME)/.untar_done # tar file
+else
+sconstruct: $(HALLD_HOME)/.checkout_done # checkout
+endif
+	cd $(HALLD_HOME)/src ; scons install
+
+prod_link: sconstruct
+	test -L prod || ln -s $(SIM_RECON_DIR) prod # will not overwrite existing link
