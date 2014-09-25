@@ -12,7 +12,7 @@
 WHICH_GFORTRAN = $(shell which gfortran)
 PWD = $(shell pwd)
 ifdef SIM_RECON_VERSION
-SIM_RECON_DIR = $(SIM_RECON_VERSION)
+SIM_RECON_DIR = sim-recon-$(SIM_RECON_VERSION)
 REPOSITORY_LOCATION = repos/tags/$(SIM_RECON_DIR)
 else
 SIM_RECON_DIR = sim-recon
