@@ -1,6 +1,6 @@
 PWD = $(shell pwd)
 ifndef JANA_VERSION
-       JANA_VERSION = 0.7.1p1
+       JANA_VERSION = 0.7.2
 endif
 JANA_DIR = jana_$(JANA_VERSION)
 TARFILE = jana_$(JANA_VERSION).tgz
