@@ -15,19 +15,30 @@ ifndef HDDS_VERSION
 SVN_URL = https://halldsvn.jlab.org/repos/trunk/hdds
 DIR_NAME = hdds
 else
-SVN_URL = https://halldsvn.jlab.org/repos/tags/$(HDDS_VERSION)
-DIR_NAME = $(HDDS_VERSION)
+TARFILE = hdds-$(HDDS_VERSION)-src.tar.gz
+DIR_NAME = hdds-$(HDDS_VERSION)
 endif
 HDDS_HOME = $(PWD)/$(DIR_NAME)
 
 all: prod_link
 
+$(TARFILE):
+	wget --no-check-certificate http://halldweb1.jlab.org/dist/$(TARFILE)
+
+$(HDDS_HOME)/.untar_done: $(TARFILE)
+	tar zxvf $(TARFILE)
+	date > $@
+
 $(HDDS_HOME)/.checkout_done:
 	svn co $(SVN_URL)
 	date > $@
 
-make_hdds: $(HDDS_HOME)/.checkout_done
+ifdef HDDS_VERSION
+sconstruct: $(HDDS_HOME)/.untar_done # tar file
+else
+sconstruct: $(HDDS_HOME)/.checkout_done # checkout
+endif
 	cd $(HDDS_HOME) ; scons install
 
-prod_link: make_hdds
+prod_link: sconstruct
 	test -L prod || ln -s hdds prod # will not overwrite existing link
