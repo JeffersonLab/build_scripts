@@ -36,8 +36,8 @@ setenv HALLD_MY $HALLD_HOME
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env_jlab.csh
 # make hdds
-make -f $BUILD_SCRIPTS/Makefile_hdds make_hdds
+make -f $BUILD_SCRIPTS/Makefile_hdds sconstruct
 # make sim-recon
-make -f $BUILD_SCRIPTS/Makefile_sim-recon make_halld NO_GETARG_PATCH=1
+make -f $BUILD_SCRIPTS/Makefile_sim-recon sconstruct
 # exit
 exit
