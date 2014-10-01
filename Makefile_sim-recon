@@ -38,7 +38,7 @@ sconstruct: $(HALLD_HOME)/.untar_done # tar file
 else
 sconstruct: $(HALLD_HOME)/.checkout_done # checkout
 endif
-	cd $(HALLD_HOME)/src ; scons install
+	cd $(HALLD_HOME)/src ; scons install SHOWBUILD=1
 
 prod_link: sconstruct
 	test -L prod || ln -s $(SIM_RECON_DIR) prod # will not overwrite existing link
