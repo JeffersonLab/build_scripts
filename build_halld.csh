@@ -19,7 +19,7 @@ setenv TODAYS_DATE `date +%F`
 if ($test_mode) then
     setenv TARGET_DIR /scratch/$USER/nightly_test/$TODAYS_DATE
 else
-    setenv TARGET_DIR /group/halld/Software/builds/nightly/$TODAYS_DATE
+    setenv TARGET_DIR /u/scratch/gluex/nightly/$TODAYS_DATE
 endif
 # go to the target directory
 mkdir -p $TARGET_DIR
