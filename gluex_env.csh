@@ -63,6 +63,10 @@ if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod/$BMS_OSNAME
 if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL $CCDB_CONNECTION
 if (! $?JANA_GEOMETRY_URL) setenv JANA_GEOMETRY_URL \
     xmlfile://$HDDS_HOME/main_HDDS.xml
+# EVIO
+if (! $?EVIOROOT) setenv EVIOROOT $GLUEX_TOP/jana/prod/`uname -s`-`uname -m`
+echo $LD_LIBRARY_PATH | grep $EVIOROOT/lib > /dev/null
+if ($status) setenv LD_LIBRARY_PATH  $EVIOROOT/lib:$LD_LIBRARY_PATH
 # refresh the list of items in the path
 rehash
 # report environment

@@ -23,6 +23,8 @@ if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
 if (! $?CCDB_HOME) setenv CCDB_HOME /group/halld/Software/builds/ccdb/$BMS_OSNAME/ccdb_1.03
 # CLHEP
 setenv CLHEP /group/halld/Software/builds/clhep/2.0.4.5/$BMS_OSNAME
+# EVIO
+setenv EVIOROOT /group/halld/Software/builds/evio/evio-4.3.1/`uname -s`-`uname -m`
 # finish the rest of the environment
 source $BUILD_SCRIPTS/gluex_env.csh
 setenv JANA_CALIB_URL $CCDB_CONNECTION

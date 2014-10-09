@@ -23,6 +23,8 @@ if [ -z "$HALLD_MY" ]; then export HALLD_MY=$HOME/halld_my; fi
 if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=/group/halld/Software/builds/ccdb/$BMS_OSNAME/ccdb_1.03; fi
 # CLHEP
 export CLHEP=/group/halld/Software/builds/clhep/2.0.4.5/$BMS_OSNAME
+# EVIO
+export EVIOROOT=/group/halld/Software/builds/evio/evio-4.3.1/`uname -s`-`uname -m`
 # finish the rest of the environment
 . $BUILD_SCRIPTS/gluex_env.sh
 export JANA_CALIB_URL=$CCDB_CONNECTION
