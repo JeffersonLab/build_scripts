@@ -29,7 +29,7 @@ $(EVIO_HOME)/.checkout_done:
 	date > $@
 
 $(TARFILE):
-	wget http://coda.jlab.org/wiki/Downloads/evio/evio-$(EVIO_VERSION)/$(TARFILE)
+	wget --no-check-certificate http://coda.jlab.org/wiki/Downloads/evio/evio-$(EVIO_VERSION)/$(TARFILE)
 
 $(EVIO_HOME)/.untar_done: $(TARFILE)
 	tar zxf $(TARFILE)		  
