@@ -18,8 +18,11 @@ XERCES = ${ROOT_OF_ALL}/xerces-c
 GEANT4 = ${ROOT_OF_ALL}/geant4
 GSL = ${ROOT_OF_ALL}/gsl
 CCDB = ${ROOT_OF_ALL}/ccdb
+EVIO = ${ROOT_OF_ALL}/evio
 
-all: env xerces_build cernlib_build root_build clhep_build geant4_build gsl_build ccdb_build jana_build hdds_build sim-recon_build
+all: env xerces_build cernlib_build root_build clhep_build geant4_build gsl_build evio_build ccdb_build jana_build hdds_build sim-recon_build
+
+gluex: env xerces_build cernlib_build root_build clhep_build evio_build ccdb_build jana_build hdds_build sim-recon_build
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -106,6 +109,14 @@ ccdb_dir:
 
 ccdb_make:
 	$(MAKE) -C$(CCDB) -f$(BUILD_SCRIPTS)/Makefile_ccdb
+
+evio_build: evio_dir evio_make
+
+evio_dir:
+	test -d ${EVIO} || mkdir -pv ${EVIO}
+
+evio_make:
+	$(MAKE) -C$(EVIO) -f$(BUILD_SCRIPTS)/Makefile_evio
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
