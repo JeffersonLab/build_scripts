@@ -11,28 +11,29 @@
 
 PWD = $(shell pwd)
 
+ifndef EVIO_VERSION
+EVIO_VERSION=4.3.1
+endif
+MAJOR_MINOR = $(shell perl -e '$$v = "$(EVIO_VERSION)"; @t = split(/\./, $$v); print "$$t[0].$$t[1]";')
 DIR_NAME = evio-$(EVIO_VERSION)
 TARFILE = evio-$(EVIO_VERSION).tgz
 EVIO_HOME = $(PWD)/$(DIR_NAME)
 
-all: env_check prod_link
-
-env_check:
-ifdef EVIO_VERSION
-	@echo Building EVIO version $(EVIO_VERSION)
-else
-	@echo error: EVIO_VERSION must be defined ; exit 1
-endif
+all: prod_link
 
 $(EVIO_HOME)/.checkout_done:
 	svn co $(SVN_URL)
 	date > $@
 
 $(TARFILE):
-	wget --no-check-certificate http://coda.jlab.org/wiki/Downloads/evio/evio-$(EVIO_VERSION)/$(TARFILE)
+	wget --no-check-certificate http://coda.jlab.org/wiki/Downloads/evio/evio-$(MAJOR_MINOR)/$(TARFILE)
 
 $(EVIO_HOME)/.untar_done: $(TARFILE)
-	tar zxf $(TARFILE)		  
+	mkdir -p temp
+	cd temp ; tar zxf ../$(TARFILE)
+	mv -v temp/evio-$(MAJOR_MINOR) $(DIR_NAME)
+	rmdir -v temp
+	date > $@
 
 ifndef EVIO_VERSION
 make_evio: $(EVIO_HOME)/.checkout_done
