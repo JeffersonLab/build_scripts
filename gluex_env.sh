@@ -99,7 +99,7 @@ if [ -z "$JANA_GEOMETRY_URL" ]
     then export JANA_GEOMETRY_URL=xmlfile://$HDDS_HOME/main_HDDS.xml
 fi
 # EVIO
-if [ -z "$EVIOROOT" ]; then export EVIOROOT=$GLUEX_TOP/evio/prod/`uname -s`-`uname-m`; fi
+if [ -z "$EVIOROOT" ]; then export EVIOROOT=$GLUEX_TOP/evio/prod/`uname -s`-`uname -m`; fi
 if [ `echo $LD_LIBRARY_PATH | grep -c $EVIOROOT/lib` -eq 0 ]
     then export LD_LIBRARY_PATH=$EVIOROOT/lib:$LD_LIBRARY_PATH
 fi
