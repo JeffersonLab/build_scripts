@@ -2,6 +2,9 @@
 
 use XML::Simple;
 use Data::Dumper;
+use Getopt::Std;
+
+$shell_type = define_shell_type();
 
 # define home directory prefix
 $gluex_top_default = "/usr/local/gluex";
@@ -41,7 +44,7 @@ if ($ENV{GLUEX_TOP}) {
     $gluex_top = $ENV{GLUEX_TOP};
 } else {
     $gluex_top = $gluex_top_default;
-    print "setenv GLUEX_TOP $gluex_top\n";
+    print_command('GLUEX_TOP', $gluex_top);
 }
 
 # get the file name
@@ -68,11 +71,11 @@ foreach $href (@b) {
     $name_in_caps = uc($name);
     $name_in_caps =~ s/-/_/g;
     $version = $d{version};
-    print "setenv ${name_in_caps}_VERSION $version\n";
+    print_command("${name_in_caps}_VERSION", $version);
     if ($name eq 'cernlib') {
-	print "setenv CERN $gluex_top/cernlib\n";
-	print "setenv CERN_LEVEL $version\n";
-	print "setenv CERNLIB_WORD_LENGTH $d{word_length}\n";
+	print_command('CERN', "$gluex_top/cernlib");
+	print_command('CERN_LEVEL', $version);
+	print_command('CERNLIB_WORD_LENGTH', $d{word_length});
     } else {
 	if ($version eq 'latest') {
 	    $package_home_dir = "$gluex_top/$name/$name$dir_suffix{$name}";
@@ -80,8 +83,40 @@ foreach $href (@b) {
 	    $package_home_dir = "$gluex_top/$name/$dir_prefix{$name}$version$dir_suffix{$name}";
 	}
 	$package_home_var = $home_variable{$name};
-	print "setenv $package_home_var $package_home_dir\n";
+	print_command($package_home_var, $package_home_dir);
     }
 }
 
 exit;
+
+sub define_shell_type {
+    $opt_s = "";
+    getopts('s:');
+    $shell = $opt_s;
+    my $shell_type = 'undefined';
+    if ($shell eq 'sh') {
+	$shell_type = 'Bourne';
+    } elsif ($shell eq 'bash') {
+	$shell_type = 'Bourne';
+    } elsif ($shell eq 'csh') {
+	$shell_type = 'C';
+    } elsif ($shell eq 'tcsh') {
+	$shell_type = 'C';
+    } elsif ($shell eq '') {
+	$shell_type = 'C';
+    } else {
+	die 'shell not recognized, use bash, sh, csh, or tcsh';
+    }
+    return $shell_type;
+}
+
+sub print_command {
+    my ($variable, $definition) = @_;
+    if ($shell_type eq 'C') {
+	print "setenv $variable $definition;\n";
+    } elsif ($shell_type eq 'Bourne') {
+	print "export ${variable}=${definition};\n";
+    } else {
+	die "unrecognized shell type: $shell_type";
+    }
+}
