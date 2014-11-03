@@ -28,3 +28,6 @@ export EVIOROOT=/group/halld/Software/builds/evio/evio-4.3.1/`uname -s`-`uname -
 # finish the rest of the environment
 . $BUILD_SCRIPTS/gluex_env.sh
 export JANA_CALIB_URL=$CCDB_CONNECTION
+# python on the cue
+export PATH=/apps/python/PRO/bin:$PATH
+export LD_LIBRARY_PATH=/apps/python/PRO/lib:$LD_LIBRARY_PATH
