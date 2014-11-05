@@ -40,5 +40,8 @@ sconstruct: $(HALLD_HOME)/.checkout_done # checkout
 endif
 	cd $(HALLD_HOME)/src ; scons install SHOWBUILD=1
 
-prod_link: sconstruct
+$(HALLD_HOME)/sim-recon_prereqs_version.xml: sconstruct
+	cd $(HALLD_HOME ; $(BUILD_SCRIPTS)/version_prereqs.pl sim-recon
+
+prod_link: $(HALLD_HOME)/sim-recon_prereqs_version.xml
 	test -L prod || ln -s $(SIM_RECON_DIR) prod # will not overwrite existing link
