@@ -27,7 +27,7 @@ $writer->startTag("gversion", "version" => "1.0");
 
 
 %version_prefix = (root => '/root_',
-	       clhep => '',
+	       clhep => '/clhep/',
 	       jana => '/jana_',
 	       'sim-recon' => '/sim-recon-',
 	       hdds => '/hdds-',
@@ -37,7 +37,7 @@ $writer->startTag("gversion", "version" => "1.0");
 	       ccdb => '/ccdb_');
 
 %version_suffix = (root => '',
-		  clhep => '',
+		  clhep => '/',
 		  jana => '/' . $bms_osname,
 		  'sim-recon' => '',
 		  hdds => '',
