@@ -55,7 +55,7 @@ $writer->startTag("gversion", "version" => "1.0");
 	    hdds => ['xerces-c'],
 	    cernlib => [],
 	    'xerces-c' => [],
-	    geant4 => [],
+	    geant4 => ['clhep'],
 	    ccdb => []);
 
 @prepackages = @{$prereqs{$package_in}};
