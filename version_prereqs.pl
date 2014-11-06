@@ -46,6 +46,8 @@ $writer->startTag("gversion", "version" => "1.0");
 		  geant4 => '',
 		  ccdb => '');
 
+
+
 %prereqs = (root => [],
 	    clhep => [],
 	    jana => ['ccdb', 'xerces-c'],
@@ -65,8 +67,16 @@ foreach $prepackage (@prepackages) {
 	$home_var = $home_variable{$prepackage};
 	$home_var_value = $ENV{$home_var};
 	@token0 = split(/$version_prefix{$prepackage}/, $home_var_value);
+	$home_var_value_tail = $token0[1];
+	if ($prepackage eq 'xerces-c') {
+	    if ($home_var_value_tail =~ /.Linux/) {
+		$version_suffix{$prepackage} = '.Linux';
+	    } elsif ($home_var_value_tail =~ /.Darwin/) {
+		$version_suffix{$prepackage} = '.Darwin';
+	    }
+	}
 	if ($version_suffix{$prepackage}) {
-	    @token1 = split(/$version_suffix{$prepackage}/, $token0[1]);
+	    @token1 = split(/$version_suffix{$prepackage}/, $home_var_value_tail);
 	    $version = $token1[0];
 	} else {
 	    $version = $token0[1];
