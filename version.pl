@@ -22,7 +22,8 @@ $bms_osname = `$build_scripts/osrelease.pl`;
 		  cernlib => 'special case',
 		  'xerces-c' => 'XERCESCROOT',
 		  geant4 => 'GEANT4_HOME',
-		  ccdb => 'CCDB_HOME');
+		  ccdb => 'CCDB_HOME',
+		  evio => 'EVIOROOT');
 
 %dir_prefix = (root => 'root_',
 	       clhep => '',
@@ -32,17 +33,23 @@ $bms_osname = `$build_scripts/osrelease.pl`;
 	       cernlib => 'special case',
 	       'xerces-c' => 'xerces-c-',
 	       geant4 => 'geant4.',
-	       ccdb => 'ccdb_');
-
+	       ccdb => 'ccdb_',
+	       evio => 'evio-');
+$unames = `uname -s`;
+chomp $unames;
+$unamem = `uname -m`;
+chomp $unamem;
+$evio_suffix = '/' . $unames . '-' . $unamem;
 %dir_suffix = (root => '',
-		  clhep => '',
-		  jana => '/' . $bms_osname,
-		  'sim-recon' => '',
-		  hdds => '',
-		  cernlib => '',
-		  'xerces-c' => '',
-		  geant4 => '',
-		  ccdb => '');
+	       clhep => '',
+	       jana => '/' . $bms_osname,
+	       'sim-recon' => '',
+	       hdds => '',
+	       cernlib => '',
+	       'xerces-c' => '',
+	       geant4 => '',
+	       ccdb => '',
+	       evio => $evio_suffix);
 
 if ($ENV{GLUEX_TOP}) {
     $gluex_top = $ENV{GLUEX_TOP};
