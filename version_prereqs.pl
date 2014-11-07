@@ -23,35 +23,40 @@ $writer->startTag("gversion", "version" => "1.0");
                   cernlib => 'special case',
                   'xerces-c' => 'XERCESCROOT',
                   geant4 => 'GEANT4_HOME',
-                  ccdb => 'CCDB_HOME');
-
+                  ccdb => 'CCDB_HOME',
+		  evio => 'EVIOROOT');
 
 %version_prefix = (root => '/root_',
-	       clhep => '/clhep/',
-	       jana => '/jana_',
-	       'sim-recon' => '/sim-recon-',
-	       hdds => '/hdds-',
-	       cernlib => '',
-	       'xerces-c' => '/xerces-c-',
-	       geant4 => '/geant4.',
-	       ccdb => '/ccdb_');
+		   clhep => '/clhep/',
+		   jana => '/jana_',
+		   'sim-recon' => '/sim-recon-',
+		   hdds => '/hdds-',
+		   cernlib => '',
+		   'xerces-c' => '/xerces-c-',
+		   geant4 => '/geant4.',
+		   ccdb => '/ccdb_',
+		   evio => '/evio-');
 
+$unames = `uname -s`;
+chomp $unames;
+$unamem = `uname -m`;
+chomp $unamem;
+$evio_suffix = '/' . $unames . '-' . $unamem;
 %version_suffix = (root => '',
-		  clhep => '/',
-		  jana => '/' . $bms_osname,
-		  'sim-recon' => '',
-		  hdds => '',
-		  cernlib => '',
-		  'xerces-c' => '',
-		  geant4 => '',
-		  ccdb => '');
-
-
+		   clhep => '/',
+		   jana => '/' . $bms_osname,
+		   'sim-recon' => '',
+		   hdds => '',
+		   cernlib => '',
+		   'xerces-c' => '',
+		   geant4 => '',
+		   ccdb => '',
+		   evio => $evio_suffix);
 
 %prereqs = (root => [],
 	    clhep => [],
-	    jana => ['ccdb', 'xerces-c'],
-	    'sim-recon' => ['cernlib', 'xerces-c', 'jana', 'hdds', 'ccdb'],
+	    jana => ['evio', 'ccdb', 'xerces-c', 'root'],
+	    'sim-recon' => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb'],
 	    hdds => ['xerces-c'],
 	    cernlib => [],
 	    'xerces-c' => [],
@@ -66,15 +71,9 @@ foreach $prepackage (@prepackages) {
     } else {
 	$home_var = $home_variable{$prepackage};
 	$home_var_value = $ENV{$home_var};
+	if ($home_var_value =~ 'ExternalPackages') {adjust_prefix_suffix()}
 	@token0 = split(/$version_prefix{$prepackage}/, $home_var_value);
 	$home_var_value_tail = $token0[1];
-	if ($prepackage eq 'xerces-c') {
-	    if ($home_var_value_tail =~ /.Linux/) {
-		$version_suffix{$prepackage} = '.Linux';
-	    } elsif ($home_var_value_tail =~ /.Darwin/) {
-		$version_suffix{$prepackage} = '.Darwin';
-	    }
-	}
 	if ($version_suffix{$prepackage}) {
 	    @token1 = split(/$version_suffix{$prepackage}/, $home_var_value_tail);
 	    $version = $token1[0];
@@ -92,3 +91,23 @@ $writer->end();
 $output->close();
 
 exit;
+
+sub adjust_prefix_suffix {
+    my @token0 = ();
+    if ($prepackage eq 'root') {
+	$version_prefix{$prepackage} = '/ROOT/v';
+	$version_suffix{$prepackage} = '/root_';
+    }
+    if ($prepackage eq 'xerces-c') {
+	@token0 = split(/$version_prefix{$prepackage}/, $home_var_value);
+	$home_var_value_tail = $token0[1];
+	if ($home_var_value_tail =~ /.Linux/) {
+	    $version_suffix{$prepackage} = '.Linux';
+	} elsif ($home_var_value_tail =~ /.Darwin/) {
+	    $version_suffix{$prepackage} = '.Darwin';
+	} elsif ($home_var_value_tail =~ /.SunOS/) {
+	    $version_suffix{$prepackage} = '.SunOS';
+	}
+    }
+    return;
+}
