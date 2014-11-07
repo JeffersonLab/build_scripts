@@ -40,5 +40,8 @@ sconstruct: $(HDDS_HOME)/.checkout_done # checkout
 endif
 	cd $(HDDS_HOME) ; scons install SHOWBUILD=1
 
-prod_link: sconstruct
+$(HDDS_HOME)/hdds_prereqs_version.xml: sconstruct
+        cd $(HDDS_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl hdds
+
+prod_link: $(HDDS_HOME)/hdds_prereqs_version.xml
 	test -L prod || ln -s hdds prod # will not overwrite existing link

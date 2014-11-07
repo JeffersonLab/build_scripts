@@ -24,3 +24,6 @@ $(G4DIR)/.config/bin/Linux-g++/config.sh: $(G4DIR)/g4_config.tcl
 build_done: $(G4DIR)/.config/bin/Linux-g++/config.sh
 	cd $(G4DIR) ; $(BUILD_SCRIPTS)/g4_build.tcl
 	date > $@
+
+$(G4DIR)/geant4_prereqs_version.xml: build_done
+        cd $(G4DIR) ; $(BUILD_SCRIPTS)/version_prereqs.pl geant4

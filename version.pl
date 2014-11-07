@@ -1,24 +1,18 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 use XML::Simple;
 use Data::Dumper;
 use Getopt::Std;
+use File::Basename;
+use Cwd 'abs_path';
 
 $shell_type = define_shell_type();
 
-# define home directory prefix
 $gluex_top_default = "/usr/local/gluex";
-$bms_osname = `$ENV{BUILD_SCRIPTS}/osrelease.pl`;
 
-%dir_prefix = (root => 'root_',
-	       clhep => '',
-	       jana => 'jana_',
-	       'sim-recon' => 'sim-recon-',
-	       hdds => 'hdds-',
-	       cernlib => 'special case',
-	       'xerces-c' => 'xerces-c-',
-	       geant4 => 'geant4.',
-	       ccdb => 'ccdb_');
+$this_file_with_full_path = abs_path(__FILE__);
+$build_scripts = dirname($this_file_with_full_path);
+$bms_osname = `$build_scripts/osrelease.pl`;
 
 %home_variable = (root => 'ROOTSYS',
 		  clhep => 'CLHEP',
@@ -28,17 +22,34 @@ $bms_osname = `$ENV{BUILD_SCRIPTS}/osrelease.pl`;
 		  cernlib => 'special case',
 		  'xerces-c' => 'XERCESCROOT',
 		  geant4 => 'GEANT4_HOME',
-		  ccdb => 'CCDB_HOME');
+		  ccdb => 'CCDB_HOME',
+		  evio => 'EVIOROOT');
 
+%dir_prefix = (root => 'root_',
+	       clhep => '',
+	       jana => 'jana_',
+	       'sim-recon' => 'sim-recon-',
+	       hdds => 'hdds-',
+	       cernlib => 'special case',
+	       'xerces-c' => 'xerces-c-',
+	       geant4 => 'geant4.',
+	       ccdb => 'ccdb_',
+	       evio => 'evio-');
+$unames = `uname -s`;
+chomp $unames;
+$unamem = `uname -m`;
+chomp $unamem;
+$evio_suffix = '/' . $unames . '-' . $unamem;
 %dir_suffix = (root => '',
-		  clhep => '',
-		  jana => '/' . $bms_osname,
-		  'sim-recon' => '',
-		  hdds => '',
-		  cernlib => '',
-		  'xerces-c' => '',
-		  geant4 => '',
-		  ccdb => '');
+	       clhep => '',
+	       jana => '/' . $bms_osname,
+	       'sim-recon' => '',
+	       hdds => '',
+	       cernlib => '',
+	       'xerces-c' => '',
+	       geant4 => '',
+	       ccdb => '',
+	       evio => $evio_suffix);
 
 if ($ENV{GLUEX_TOP}) {
     $gluex_top = $ENV{GLUEX_TOP};

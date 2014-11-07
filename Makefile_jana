@@ -8,11 +8,12 @@ export JANA_HOME = $(PWD)/$(JANA_DIR)
 
 all: prod_link
 
-prod_link: sconstruct
+prod_link: $(JANA_HOME)/jana_prereqs_version.xml
 	test -L prod || ln -s $(JANA_DIR) prod # will not overwrite existing link
 
-# uncomment one of the following two lines to choose checkout of
-# source code or retrieval of a tar file
+$(JANA_HOME)/jana_prereqs_version.xml: sconstruct
+	cd $(JANA_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl jana
+
 ifdef JANA_VERSION
 sconstruct: $(JANA_HOME)/.untar_done # tar file
 else
