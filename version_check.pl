@@ -74,7 +74,9 @@ foreach $package (@packages) {
 		    print $message;
 		}
 	    }
-	    if ($consistent) {print "versions are consistent for $package\n";}
+	    if ($consistent) {
+		#print "versions are consistent for $package\n";
+	    }
 	} else {
 	    #print "no prerequisite version file found for $package\n";
 	}
