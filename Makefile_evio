@@ -36,10 +36,13 @@ $(EVIO_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 ifndef EVIO_VERSION
-make_evio: $(EVIO_HOME)/.checkout_done
+$(EVIO_HOME)/patch_evio: $(EVIO_HOME)/.checkout_done
 else
-make_evio: $(EVIO_HOME)/.untar_done
+$(EVIO_HOME)/patch_evio: $(EVIO_HOME)/.untar_done
 endif
+	cd $(EVIO_HOME) ; patch -p1 < $(BUILD_SCRIPTS)/evio/evio-4.3.patch
+
+make_evio: $(EVIO_HOME)/.patch_done
 	cd $(EVIO_HOME) ; scons --prefix=. install
 
 prod_link: make_evio
