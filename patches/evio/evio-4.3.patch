@@ -1,0 +1,36 @@
+diff -rupN evio-4.3.orig/src/examples/SConscript evio-4.3.patched/src/examples/SConscript
+--- evio-4.3.orig/src/examples/SConscript	2014-01-16 13:02:31.000000000 -0500
++++ evio-4.3.patched/src/examples/SConscript	2014-11-11 15:17:53.599167541 -0500
+@@ -18,7 +18,7 @@ for fileName in cfileList:
+ # Compile C++ files and install
+ for fileName in ccfileList:
+     compiledFile = env.Program(source  = fileName,
+-                               LIBS    = ['evio'+debugSuffix, 'evioxx'+debugSuffix] + execLibs,
++                               LIBS    = ['evioxx'+debugSuffix, 'evio'+debugSuffix] + execLibs,
+                                LIBPATH = ['#src/libsrc/'+archDir, '#src/libsrc++/'+archDir],
+                                CPPPATH = ['.', '#src/libsrc', '#src/libsrc++'])
+     
+diff -rupN evio-4.3.orig/src/execsrc/SConscript evio-4.3.patched/src/execsrc/SConscript
+--- evio-4.3.orig/src/execsrc/SConscript	2014-01-16 13:02:30.000000000 -0500
++++ evio-4.3.patched/src/execsrc/SConscript	2014-11-11 15:18:39.974961647 -0500
+@@ -18,7 +18,7 @@ for fileName in cfileList:
+ # Compile C++ files and install
+ for fileName in ccfileList:
+     compiledFile = env.Program(source  = fileName,
+-                               LIBS    = ['evio'+debugSuffix, 'evioxx'+debugSuffix] + execLibs,
++                               LIBS    = ['evioxx'+debugSuffix, 'evio'+debugSuffix] + execLibs,
+                                LIBPATH = ['#src/libsrc/'+archDir, '#src/libsrc++/'+archDir],
+                                CPPPATH = ['.', '#src/libsrc', '#src/libsrc++'])
+ 
+diff -rupN evio-4.3.orig/src/test/SConscript evio-4.3.patched/src/test/SConscript
+--- evio-4.3.orig/src/test/SConscript	2014-01-16 13:02:30.000000000 -0500
++++ evio-4.3.patched/src/test/SConscript	2014-11-11 15:19:11.446822000 -0500
+@@ -18,7 +18,7 @@ for fileName in cfileList:
+ # Compile C++ files and install
+ for fileName in ccfileList:
+     compiledFile = env.Program(source  = fileName,
+-                               LIBS    = ['evio'+debugSuffix, 'evioxx'+debugSuffix] + execLibs,
++                               LIBS    = ['evioxx'+debugSuffix, 'evio'+debugSuffix] + execLibs,
+                                LIBPATH = ['#src/libsrc/'+archDir, '#src/libsrc++/'+archDir],
+                                CPPPATH = ['.', '#src/libsrc', '#src/libsrc++'])
+     
