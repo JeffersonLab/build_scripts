@@ -13,20 +13,20 @@ eval $definitions;
 
 $version_hash = ();
 foreach $package (@packages) {
-    print "== checking $package ==\n";
+    #print "== checking $package ==\n";
     $home_variable = $home_variable{$package};
     $home_value = $ENV{$home_variable};
     $home_value_hash{$package} = $home_value;
     if (-e $home_value) {
-	print "$home_variable = $home_value\n";
+	#print "$home_variable = $home_value\n";
 	if ($package eq 'cernlib') {
 	    $version_hash{$package} = $ENV{CERN_LEVEL}
 	} else {
 	    # extract the version
-	    print "dir_prefix = $dir_prefix{$package}\n";
+	    #print "dir_prefix = $dir_prefix{$package}\n";
 	    @token0 = split(/$dir_prefix{$package}/, $home_value);
 	    $home_value_tail = $token0[1];
-	    print "dir_suffix = $dir_suffix{$package}\n";
+	    #print "dir_suffix = $dir_suffix{$package}\n";
 	    if ($dir_suffix{$package}) {
 		@token1 = split(/$dir_suffix{$package}/, $home_value_tail);
 		$version_hash{$package} = $token1[0];
@@ -34,36 +34,49 @@ foreach $package (@packages) {
 		$version_hash{$package} = $token0[1];
 	    }
 	}
-	print "version = $version_hash{$package}\n";
+	#print "version = $version_hash{$package}\n";
     } else {
-	print "$home_variable not defined\n";
+	#print "$home_variable not defined\n";
     }
 }
 
 foreach $package (@packages) {
     if (-e $home_value_hash{$package}) {
-	print "== look for prereqs file for $package ==\n";
+	#print "== look for prereqs file for $package ==\n";
 	$home_value = $home_value_hash{$package};
 	$filename = $home_value . "/" . $package . "_prereqs_version.xml";
 	if (-e $filename) {
-	    print "found $filename\n";
+	    $consistent = 1;
+	    #print "found $filename\n";
 	    # slurp in the xml file
 	    $ref = XMLin($filename, KeyAttr => [], ForceArray => 1);
 	    $a = $ref->{'package'}; # an array reference;
-	    print "a = $a\n";
+	    #print "a = $a\n";
 	    @b = @{$a}; # an array
-	    print "b = @b\n";
+	    #print "b = @b\n";
 	    foreach $href (@b) {
 		$c = $href; # a hash reference
-		print "c = $c\n";
+		#print "c = $c\n";
 		%d = %{$c}; # a hash
-		print "d{name} = $d{name}\n";
-		print "d{version} = $d{version}\n";
-		print "stored version = $version_hash{$d{name}}\n";
-		if ($version_hash{$d{name}} eq $d{version}) {print "versions match\n";} else {print "version mismatch\n";}
+		#print "d{name} = $d{name}\n";
+		#print "d{version} = $d{version}\n";
+		#print "stored version = $version_hash{$d{name}}\n";
+		if ($version_hash{$d{name}} eq $d{version}) {
+		    #print "versions match\n";
+		} else {
+		    $consistent = 0;
+		    $message .= "======= version mismatch found =======\n";
+		    $message .= "== package checked = $package\n";
+		    $message .= "== prerequisite package = $d{name}\n";
+		    $message .= "== prerequisite's home directory = $home_value_hash{$d{name}}\n";
+		    $message .= "== version xml file = $filename\n";
+		    $message .= "== $d{name} version in xml file = $d{version}\n";
+		    print $message;
+		}
 	    }
+	    if ($consistent) {print "versions are consistent for $package\n";}
 	} else {
-	    print "prerequisite version file $filename not found for $package\n";
+	    #print "no prerequisite version file found for $package\n";
 	}
     }
 }
