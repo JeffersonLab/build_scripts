@@ -127,3 +127,5 @@ if [ $gluex_env_verbose -eq 1 ]
     echo XERCESCROOT =  $XERCESCROOT
     echo CCDB_HOME = $CCDB_HOME
 fi
+# check consistency of environment
+$BUILD_SCRIPTS/version_check.pl
