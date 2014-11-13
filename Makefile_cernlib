@@ -1,6 +1,6 @@
 export CERN=$(shell pwd)
 ifdef CERNLIB_VERSION
-export CERN_LEVEL=$(CERN_LEVEL)
+export CERN_LEVEL=$(CERNLIB_VERSION)
 else
 export CERN_LEVEL=2006
 endif
