@@ -34,10 +34,17 @@ $(HALLD_HOME)/.checkout_done:
 	date > $@
 
 ifdef SIM_RECON_VERSION
-sconstruct: $(HALLD_HOME)/.untar_done # tar file
+$(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.untar_done # tar file
 else
-sconstruct: $(HALLD_HOME)/.checkout_done # checkout
+$(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.checkout_done # checkout
 endif
+ifeq (`uname -m`, i686)
+	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
+		$(HALLD_HOME)/src/programs/Simulation/HDGeant
+endif
+	date > $@
+
+sconstruct: $(HALLD_HOME)/.getarg_patches_done
 	cd $(HALLD_HOME)/src ; scons install SHOWBUILD=1
 
 $(HALLD_HOME)/sim-recon_prereqs_version.xml: sconstruct
