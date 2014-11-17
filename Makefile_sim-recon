@@ -9,7 +9,7 @@
 # directory of the repository. If left undefined, the latest version
 # will be checked out from the repos/trunk.
 
-WHICH_GFORTRAN = $(shell which gfortran)
+UNAMEM = $(shell uname -m)
 PWD = $(shell pwd)
 ifdef SIM_RECON_VERSION
 SIM_RECON_DIR = sim-recon-$(SIM_RECON_VERSION)
@@ -38,7 +38,7 @@ $(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.untar_done # tar file
 else
 $(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.checkout_done # checkout
 endif
-ifeq (`uname -m`, i686)
+ifeq ($(UNAMEM), i686)
 	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
 		$(HALLD_HOME)/src/programs/Simulation/HDGeant
 endif
