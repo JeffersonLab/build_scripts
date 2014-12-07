@@ -1,3 +1,4 @@
+#!/bin/tcsh
 rm -f before_setup.tmp after_setup.tmp after_clean.tmp
 printenv > before_setup.tmp
 echo source gluex_env.csh
