@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 #
-# deleted element from path
+# delete element from path
 #
 $pathtype = "PATH";
 $shell = "C";
@@ -10,10 +10,12 @@ while ($this) {
     if ($this =~ m/^-/) {
 	if ($this eq '-l') {
 	    $pathtype = "LD_LIBRARY_PATH";
+	} elsif ($this eq '-p') {
+	    $pathtype = "PYTHONPATH";
 	} elsif ($this eq '-b') {
 	    $shell = "Bourne";
 	} else {
-	    die 'bad command option';
+	    die "bad command option: $this";
 	}
     } else {
 	push (@token, ($this));

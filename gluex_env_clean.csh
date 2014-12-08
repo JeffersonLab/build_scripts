@@ -1,7 +1,7 @@
 if ($?BUILD_SCRIPTS) then
     # clean PATH
     if ($?BMS_OSNAME) then
-	if ($?HALLD_MY) eval `$BUILD_SCRIPTS/delpath.pl $HALLD_MY/bin/$BMS_OSNAME`
+	if ($?HALLD_MY) eval `$BUILD_SCRIPTS/delpath.pl $HALLD_MY/$BMS_OSNAME/bin`
 	if ($?HALLD_HOME) eval `$BUILD_SCRIPTS/delpath.pl $HALLD_HOME/$BMS_OSNAME/bin`
     endif
     if ($?CERN_ROOT) eval `$BUILD_SCRIPTS/delpath.pl $CERN_ROOT/bin`
@@ -12,6 +12,11 @@ if ($?BUILD_SCRIPTS) then
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl -l $ROOTSYS/lib`
     if ($?XERCESCROOT) eval `$BUILD_SCRIPTS/delpath.pl -l $XERCESCROOT/lib`
     if ($?CCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -l $CCDB_HOME/lib`
+    if ($?EVIOROOT) eval `$BUILD_SCRIPTS/delpath.pl -l $EVIOROOT/lib`
+    eval `$BUILD_SCRIPTS/delpath.pl -l`
+    # clean PYTHONPATH
+    if ($?CCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`
+    eval `$BUILD_SCRIPTS/delpath.pl -p`
 endif
 # clean_environment
 unsetenv GLUEX_TOP
@@ -38,3 +43,5 @@ unsetenv AMPTOOLS
 unsetenv AMPPLOTTER
 unsetenv CLHEP_INCLUDE_DIR
 unsetenv CLHEP_LIB_DIR
+unsetenv CCDB_CONNECTION
+unsetenv EVIOROOT

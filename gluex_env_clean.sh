@@ -1,17 +1,23 @@
 if [ -n "$BUILD_SCRIPTS" ]; then
     # clean PATH
     if [ -n "$BMS_OSNAME" ]; then
-	if [ -n "$HALLD_MY" ]; then eval `$BUILD_SCRIPTS/delpath.pl $HALLD_MY/bin/$BMS_OSNAME`; fi
-	if [ -n "$HALLD_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl $HALLD_HOME/$BMS_OSNAME/bin`; fi
+	if [ -n "$HALLD_MY" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $HALLD_MY/$BMS_OSNAME/bin`; fi
+	if [ -n "$HALLD_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $HALLD_HOME/$BMS_OSNAME/bin`; fi
     fi
-    if [ -n "$CERN_ROOT" ]; then eval `$BUILD_SCRIPTS/delpath.pl $CERN_ROOT/bin`; fi
-    if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl $ROOTSYS/bin`; fi
-    if [ -n "$CCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl $CCDB_HOME/bin`; fi
+    if [ -n "$CERN_ROOT" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $CERN_ROOT/bin`; fi
+    if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $ROOTSYS/bin`; fi
+    if [ -n "$CCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $CCDB_HOME/bin`; fi
     # clean LD_LIBRARY_PATH
-    if [ -n "$CLHEP_LIB" ]; then eval `$BUILD_SCRIPTS/delpath.pl -l $CLHEP_LIB`; fi
-    if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl -l $ROOTSYS/lib`; fi
-    if [ -n "$XERCESCROOT" ]; then eval `$BUILD_SCRIPTS/delpath.pl -l $XERCESCROOT/lib`; fi
-    if [ -n "$CCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -l $CCDB_HOME/lib`; fi
+    if [ -n "$CLHEP_LIB" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $CLHEP_LIB`; fi
+    if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $ROOTSYS/lib`; fi
+    if [ -n "$XERCESCROOT" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $XERCESCROOT/lib`; fi
+    if [ -n "$CCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $CCDB_HOME/lib`; fi
+    if [ -n "$EVIOROOT" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $EVIOROOT/lib`; fi
+    eval `$BUILD_SCRIPTS/delpath.pl -b -l`
+    # clean PYTHONPATH
+    if [ -n "$CCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`; fi
+    eval `$BUILD_SCRIPTS/delpath.pl -b -p`
+
 fi
 # clean_environment
 unset GLUEX_TOP
@@ -38,3 +44,5 @@ unset AMPTOOLS
 unset AMPPLOTTER
 unset CLHEP_INCLUDE_DIR
 unset CLHEP_LIB_DIR
+unset EVIOROOT
+unset CCDB_CONNECTION
