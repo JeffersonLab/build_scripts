@@ -13,7 +13,7 @@ eval $definitions;
 
 $version_hash = ();
 foreach $package (@packages) {
-    #print "== checking $package ==\n";
+    #print "== unpack environment variable for $package ==\n";
     $home_variable = $home_variable{$package};
     $home_value = $ENV{$home_variable};
     $home_value_hash{$package} = $home_value;
@@ -58,19 +58,19 @@ foreach $package (@packages) {
 		$c = $href; # a hash reference
 		#print "c = $c\n";
 		%d = %{$c}; # a hash
-		#print "d{name} = $d{name}\n";
+		#print "prerequisite = $d{name}\n";
 		#print "d{version} = $d{version}\n";
 		#print "stored version = $version_hash{$d{name}}\n";
 		if ($version_hash{$d{name}} eq $d{version}) {
 		    #print "versions match\n";
 		} else {
 		    $consistent = 0;
-		    $message .= "======= version mismatch found =======\n";
-		    $message .= "== package checked = $package\n";
+		    $message = "======= version mismatch found =======\n";
+		    $message .= "== package being checked = $package\n";
 		    $message .= "== prerequisite package = $d{name}\n";
 		    $message .= "== prerequisite's home directory = $home_value_hash{$d{name}}\n";
-		    $message .= "== version xml file = $filename\n";
-		    $message .= "== $d{name} version in xml file = $d{version}\n";
+		    $message .= "== prerequisite xml file = $filename\n";
+		    $message .= "== $d{name} version recorded in xml file = $d{version}\n";
 		    print $message;
 		}
 	    }
