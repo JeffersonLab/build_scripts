@@ -18,6 +18,7 @@ MAJOR_MINOR = $(shell perl -e '$$v = "$(EVIO_VERSION)"; @t = split(/\./, $$v); p
 DIR_NAME = evio-$(EVIO_VERSION)
 TARFILE = evio-$(EVIO_VERSION).tgz
 EVIO_HOME = $(PWD)/$(DIR_NAME)
+EVIO_DOWNLOAD_URL_BASE = https://coda.jlab.org/drupal/system/files/coda/evio
 
 all: prod_link
 
@@ -26,7 +27,7 @@ $(EVIO_HOME)/.checkout_done:
 	date > $@
 
 $(TARFILE):
-	wget --no-check-certificate http://coda.jlab.org/wiki/Downloads/evio/evio-$(MAJOR_MINOR)/$(TARFILE)
+	wget --no-check-certificate $(EVIO_DOWNLOAD_URL_BASE)/evio-$(MAJOR_MINOR)/$(TARFILE)
 
 $(EVIO_HOME)/.untar_done: $(TARFILE)
 	mkdir -p temp
