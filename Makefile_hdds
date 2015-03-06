@@ -23,7 +23,7 @@ HDDS_HOME = $(PWD)/$(DIR_NAME)
 all: prod_link
 
 $(TARFILE):
-	wget --no-check-certificate http://halldweb1.jlab.org/dist/$(TARFILE)
+	wget --no-check-certificate http://halldweb.jlab.org/dist/$(TARFILE)
 
 $(HDDS_HOME)/.untar_done: $(TARFILE)
 	tar zxvf $(TARFILE)

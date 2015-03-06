@@ -22,7 +22,7 @@ export HALLD_HOME = $(PWD)/$(SIM_RECON_DIR)
 all: prod_link
 
 $(TARFILE):
-	wget --no-check-certificate http://halldweb1.jlab.org/dist/$(TARFILE)
+	wget --no-check-certificate http://halldweb.jlab.org/dist/$(TARFILE)
 
 $(HALLD_HOME)/.untar_done: $(TARFILE)
 	tar zxvf $(TARFILE)
