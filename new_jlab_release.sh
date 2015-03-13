@@ -1,7 +1,6 @@
 #!/bin/bash
 export GLUEX_TOP=`pwd`
-export BUILD_SCRIPTS=$GLUEX_TOP/build_scripts
-svn checkout $HDSVN/trunk/scripts/build_scripts
+export BUILD_SCRIPTS=/group/halld/Software/scripts/build_scripts
 if [ ! -f version.xml ]
     then
     echo error: no local version.xml
