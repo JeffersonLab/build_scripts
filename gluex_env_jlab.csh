@@ -5,9 +5,9 @@
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS /group/halld/Software/scripts/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 # xerces-c
-setenv XERCESCROOT /group/halld/Software/ExternalPackages/xerces-c-3.1.1.$BMS_OSNAME
+setenv XERCESCROOT /group/halld/Software/builds/$BMS_OSNAME/xerces-c/xerces-c-3.1.1
 # Jana
-if (! $?JANA_HOME) setenv JANA_HOME /group/halld/Software/builds/jana/jana_0.7.2/$BMS_OSNAME
+if (! $?JANA_HOME) setenv JANA_HOME /group/halld/Software/builds/$BMS_OSNAME/jana/jana_0.7.2/$BMS_OSNAME
 # ROOT
 setenv ROOTSYS `$BUILD_SCRIPTS/cue_root.pl`
 # CERNLIB
@@ -15,16 +15,16 @@ setenv CERN_CUE `$BUILD_SCRIPTS/cue_cernlib.pl`
 setenv CERN $CERN_CUE
 setenv CERN_LEVEL 2005
 # HDDS
-if (! $?HDDS_HOME) setenv HDDS_HOME /group/halld/Software/builds/hdds/hdds-3.0
+if (! $?HDDS_HOME) setenv HDDS_HOME /group/halld/Software/builds/$BMS_OSNAME/hdds/hdds-3.0
 # Hall D
-if (! $?HALLD_HOME) setenv HALLD_HOME /group/halld/Software/builds/sim-recon/sim-recon-2014-09-23
+if (! $?HALLD_HOME) setenv HALLD_HOME /group/halld/Software/builds/$BMS_OSNAME/sim-recon/sim-recon-1.0.0
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
 # CCDB
-if (! $?CCDB_HOME) setenv CCDB_HOME /group/halld/Software/builds/ccdb/$BMS_OSNAME/ccdb_1.03
+if (! $?CCDB_HOME) setenv CCDB_HOME /group/halld/Software/builds/$BMS_OSNAME/ccdb/ccdb_1.03
 # CLHEP
-setenv CLHEP /group/halld/Software/builds/clhep/2.0.4.5/$BMS_OSNAME
+setenv CLHEP /group/halld/Software/builds/$BMS_OSNAME/clhep/2.0.4.5/$BMS_OSNAME
 # EVIO
-setenv EVIOROOT /group/halld/Software/builds/evio/evio-4.3.1/`uname -s`-`uname -m`
+setenv EVIOROOT /group/halld/Software/builds/$BMS_OSNAME/evio/evio-4.3.1/`uname -s`-`uname -m`
 # finish the rest of the gluex environment
 source $BUILD_SCRIPTS/gluex_env.csh
 setenv JANA_CALIB_URL $CCDB_CONNECTION
