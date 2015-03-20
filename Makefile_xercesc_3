@@ -1,21 +1,22 @@
 XERCES_SERIES = 3
-VERSION=3.1.1
-TARFILE=xerces-c-$(VERSION).tar.gz
+ifndef XERCES_C_VERSION
+XERCES_C_VERSION=3.1.1
+endif
+TARFILE=xerces-c-$(XERCES_C_VERSION).tar.gz
 PWD := $(shell pwd)
-export XERCESCROOT=$(PWD)/xerces-c-$(VERSION)
+export XERCESCROOT=$(PWD)/xerces-c-$(XERCES_C_VERSION)
 
 all: prod_link
 
 prod_link: $(XERCESCROOT)/.make_install_done
-	   test -L prod || ln -s xerces-c-$(VERSION) prod # will not overwrite existing link
+	   @echo this will not overwrite existing link
+	   test -L prod || ln -s xerces-c-$(XERCES_C_VERSION) prod
 
 $(XERCESCROOT)/.make_install_done: $(XERCESCROOT)/.make_done 
 	$(MAKE) -C$(XERCESCROOT) install
-	date > $@
 
 $(XERCESCROOT)/.make_done: $(XERCESCROOT)/.configure_done 
 	$(MAKE) -C$(XERCESCROOT)
-	date > $@
 
 $(XERCESCROOT)/.untar_done: $(TARFILE)
 	tar zxf $(TARFILE)
@@ -26,4 +27,4 @@ $(XERCESCROOT)/.configure_done: $(XERCESCROOT)/.untar_done
 	date > $@
 
 $(TARFILE):
-	wget http://www.apache.org/dist/xerces/c/$(XERCES_SERIES)/sources/$(TARFILE)
+	wget http://archive.apache.org/dist/xerces/c/$(XERCES_SERIES)/sources/$(TARFILE)
