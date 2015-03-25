@@ -6,6 +6,9 @@ use Getopt::Std;
 use File::Basename;
 use Cwd 'abs_path';
 
+$ERROR_NO_FILE_ARG = 1;
+$ERROR_FILE_DOES_NOT_EXIST = 2;
+
 $shell_type = define_shell_type();
 
 $gluex_top_default = "/usr/local/gluex";
@@ -61,7 +64,12 @@ if ($ENV{GLUEX_TOP}) {
 # get the file name
 $filename = $ARGV[0];
 if (!$filename) {
-    die 'error: version file name must be supplied as first argument';
+    print "error: version xml file name must be supplied as first argument\n";
+    exit $ERROR_NO_FILE_ARG;
+}
+if (! -e $filename) {
+    print "error: input version file \"$filename\" does not exist\n";
+    exit $ERROR_FILE_DOES_NOT_EXIST;
 }
 # slurp in the xml file
 $ref = XMLin($filename, KeyAttr=>[]);
