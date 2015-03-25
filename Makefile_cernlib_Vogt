@@ -1,7 +1,8 @@
 # build in the current working directory
 
-CORR_FILE = cernlib.2005.corr.2010.08.01.tgz
-INSTALL_FILE = cernlib.2005.install.2010.08.01.tgz
+VERSION_DATE=2014.04.17
+CORR_FILE = cernlib.2005.corr.$(VERSION_DATE).tgz
+INSTALL_FILE = cernlib.2005.install.$(VERSION_DATE).tgz
 ALL_FILE = cernlib-2005-all-new.tgz
 DIST_FILES = $(ALL_FILE) $(CORR_FILE) $(INSTALL_FILE)
 
