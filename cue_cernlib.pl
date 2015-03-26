@@ -12,7 +12,8 @@
   'Linux_CentOS6-x86_64-gcc4.4.6' => '/group/halld/Software/ExternalPackages/cernlib/Linux_CentOS6-x86_64-gcc4.4.6',
   'Linux_CentOS6-x86_64-clang3.2' => '/group/halld/Software/ExternalPackages/cernlib/Linux_CentOS6-x86_64-gcc4.4.6',
   'Linux_CentOS6-x86_64-gcc4.4.7' => '/group/halld/Software/ExternalPackages/cernlib/Linux_CentOS6-x86_64-gcc4.4.6',
-  'Linux_RHEL6-i686-gcc4.4.7' => '/apps/cernlib/i386_rhel6'
+  'Linux_RHEL6-i686-gcc4.4.7' => '/apps/cernlib/i386_rhel6',
+  'Linux_RHEL7-x86_64-gcc4.8.3' => '/group/halld/Software/builds/Linux_RHEL7-x86_64-gcc4.8.3/cernlib'
  	 );
 $osrelease = `$ENV{BUILD_SCRIPTS}/osrelease.pl`;
 chomp $osrelease;
