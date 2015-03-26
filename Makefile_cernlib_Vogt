@@ -19,6 +19,7 @@ $(DIST_FILES):
 	cd cern ; tar zxvf ../$(ALL_FILE)
 	cd cern ; cp -v ../$(CORR_FILE) cernlib.2005.corr.tgz
 	cd cern ; tar zxvf ../$(INSTALL_FILE)
+	cd cern ; patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_cernlib.patch
 	echo unpacking done > .unpack_done
 
 .build_done: .unpack_done
