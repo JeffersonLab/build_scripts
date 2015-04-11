@@ -57,6 +57,7 @@ $(CERN_ROOT)/cernlib_patch_file.txt:
 
 $(CERN_ROOT)/.patch_done: $(CERN_ROOT)/.untar_src_done $(CERN_ROOT)/.untar_include_done $(CERN_ROOT)/cernlib_patch_file.txt
 	cd $(CERN_ROOT); patch -p1 < $(CERN_ROOT)/cernlib_patch_file.txt
+	cd $(CERN_ROOT)/src/packlib/kuip/kuip ; patch < $(BUILD_SCRIPTS)/patches/cernlib/kstring.h.patch	
 	date > $@
 
 $(CERN_ROOT)/.dirs_done:
