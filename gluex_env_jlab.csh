@@ -9,15 +9,15 @@ setenv XERCESCROOT /group/halld/Software/builds/$BMS_OSNAME/xerces-c/xerces-c-3.
 # Jana
 if (! $?JANA_HOME) setenv JANA_HOME /group/halld/Software/builds/$BMS_OSNAME/jana/jana_0.7.2/$BMS_OSNAME
 # ROOT
-setenv ROOTSYS `$BUILD_SCRIPTS/cue_root.pl`
+setenv ROOTSYS /group/halld/Software/builds/$BMS_OSNAME/root/root_5.34.26
 # CERNLIB
 setenv CERN_CUE `$BUILD_SCRIPTS/cue_cernlib.pl`
 setenv CERN $CERN_CUE
 setenv CERN_LEVEL 2005
 # HDDS
-if (! $?HDDS_HOME) setenv HDDS_HOME /group/halld/Software/builds/$BMS_OSNAME/hdds/hdds-3.0
+if (! $?HDDS_HOME) setenv HDDS_HOME /group/halld/Software/builds/$BMS_OSNAME/hdds/hdds-3.1
 # Hall D
-if (! $?HALLD_HOME) setenv HALLD_HOME /group/halld/Software/builds/$BMS_OSNAME/sim-recon/sim-recon-1.0.0
+if (! $?HALLD_HOME) setenv HALLD_HOME /group/halld/Software/builds/$BMS_OSNAME/sim-recon/sim-recon-1.1.0
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
 # CCDB
 if (! $?CCDB_HOME) setenv CCDB_HOME /group/halld/Software/builds/$BMS_OSNAME/ccdb/ccdb_1.05
