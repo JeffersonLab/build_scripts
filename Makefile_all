@@ -24,6 +24,8 @@ all: env xerces_build cernlib_build root_build clhep_build geant4_build gsl_buil
 
 gluex: env xerces_build cernlib_build root_build clhep_build evio_build ccdb_build jana_build hdds_build sim-recon_build
 
+gluex_jlab: env xerces_build root_build clhep_build evio_build ccdb_build jana_build hdds_build sim-recon_build
+
 cernlib_build: cernlib_dir cernlib_make
 
 cernlib_dir:
