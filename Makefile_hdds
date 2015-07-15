@@ -30,7 +30,7 @@ $(HDDS_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(HDDS_HOME)/.checkout_done:
-	svn co $(SVN_URL)
+	cd /group/halld/Repositories/hdds ; git archive --prefix hdds/ master | tar xv -C $(PWD)
 	date > $@
 
 ifdef HDDS_VERSION

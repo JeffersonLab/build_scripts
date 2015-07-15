@@ -1,29 +1,28 @@
-VERSION = 9.4
+VERSION = 10.01.p02
 TARFILE = geant4.$(VERSION).tar.gz
-G4DIR = ./geant4.$(VERSION)
+G4DIR = geant4.$(VERSION)
+G4DIR_ABS = $(shell pwd)/$(G4DIR)
 
-all: build_done
+all: $(G4DIR)/.make_install_done
 
 $(TARFILE):
 	wget http://geant4.web.cern.ch/geant4/support/source/$(TARFILE)
 
-untar_done: $(TARFILE)
+$(G4DIR)/.untar_done: $(TARFILE)
 	tar zxvf $(TARFILE)
 	date > $@
 
-$(G4DIR)/g4_config.tcl: untar_done $(BUILD_SCRIPTS)/g4_responses.txt
-	 $(BUILD_SCRIPTS)/make_g4_config_tcl.pl < $(BUILD_SCRIPTS)/g4_responses.txt > $@
-	 chmod a+x $@
-
-# Note the explicit reference to linux in the next target. Needs to be fixed
-
-$(G4DIR)/.config/bin/Linux-g++/config.sh: $(G4DIR)/g4_config.tcl
-	cd $(G4DIR) ; $(RM) -rv .config
-	cd $(G4DIR) ; ./g4_config.tcl
-
-build_done: $(G4DIR)/.config/bin/Linux-g++/config.sh
-	cd $(G4DIR) ; $(BUILD_SCRIPTS)/g4_build.tcl
+$(G4DIR)/.configure_done: $(G4DIR)/.untar_done
+	mkdir -p $(G4DIR)-build
+	cd $(G4DIR)-build ; cmake -DCMAKE_INSTALL_PREFIX=$(G4DIR_ABS)-install $(G4DIR_ABS)
 	date > $@
 
-$(G4DIR)/geant4_prereqs_version.xml: build_done
-        cd $(G4DIR) ; $(BUILD_SCRIPTS)/version_prereqs.pl geant4
+$(G4DIR)/.create_makefiles: $(G4DIR)/.configure_done
+	cd $(G4DIR)-build ; cmake -DGEANT4_INSTALL_DATA=ON .
+	date > $@
+
+$(G4DIR)/.make_done: $(G4DIR)/.create_makefiles
+	cd $(G4DIR)-build ; make -j4
+
+$(G4DIR)/.make_install_done: $(G4DIR)/.make_done
+	cd $(G4DIR)-build ; make install

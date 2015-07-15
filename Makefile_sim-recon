@@ -29,7 +29,7 @@ $(HALLD_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(HALLD_HOME)/.checkout_done:
-	svn co https://halldsvn.jlab.org/$(REPOSITORY_LOCATION)
+	cd /group/halld/Repositories/sim-recon ; git archive --prefix sim-recon/ master | tar xv -C $(PWD)
 	date > $@
 
 ifdef SIM_RECON_VERSION
