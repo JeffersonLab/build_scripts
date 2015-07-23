@@ -1,3 +1,10 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+
+\begin{document}
+
+\section{Introduction}
 There are three fundamental areas of concern that make up all software systems. They are:
 
 1. a directory structure
@@ -8,7 +15,7 @@ They are all related, aspects of one affects aspects of each of the others.
 
 Having a standard system makes collaborative work more efficient, especially when one needs help from others to solve a problem.
 
-\chapter{The Packages}
+\section{The Packages}
 
 There are several software components that are needed to build and use GlueX software. Most of them are assumed to be provided by the native operating system or distribution, but there are some that have to be built by the GlueX user. They are:
 
@@ -28,8 +35,39 @@ Detailed description of these packages will not be given here; please see the Gl
 
 There are in general multiple versions (releases) of each of these packages and it is often convenient to have access to more that one version of a package built and available for use. In addition some packages depend on one or several others for libraries and include files.
 
-\chapter{The Directory Structure}
+\section{The Directory Structure}
 
-The VMS directory structure supports multiple versions of each package. For an exmple see Fig.~\ref{fig:directory-tree}. In the figure, ``gluex\_top'' is a generic name, each installation may choose a different directory name. VMS looks for the name of this directory in the environment variable {\tt GLUEX\_TOP}.
+The VMS directory structure supports multiple versions of each package. For an example see Fig.~\ref{fig:directory-tree}. In the figure, ``gluex\_top'' is a generic name, each installation may choose a different directory name. VMS looks for the name of this directory in the environment variable {\tt GLUEX\_TOP}.
 
-\includegraphics{tree.png}
+\begin{figure}
+\begin{verbatim}
+gluex_top
+|-- build_scripts
+|-- cernlib
+|   `-- 2005
+|-- evio
+|   |-- evio-4.2
+|   `-- evio-4.3.1
+|-- hdds
+|   |-- hdds-3.1
+|   `-- hdds-3.2
+|-- jana
+|   |-- jana_0.7.2
+|   `-- jana_0.7.3
+|-- root
+|   |-- root_5.34.04
+|   `-- root_5.34.26
+|-- sim-recon
+|   |-- sim-recon-1.2.0
+|   `-- sim-recon-1.3.0
+`-- xerces-c
+    |-- xerces-c-3.1.1
+    `-- xerces-c-3.1.2
+\end{verbatim}
+\caption{The directory structure.}\label{fig:directory-tree}
+\end{figure}
+
+Under gluex\_top, each package has its own directory and for each package directory one or more specific versions of that package are built.
+
+\end{document}
+
