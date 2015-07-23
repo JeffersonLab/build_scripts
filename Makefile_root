@@ -1,5 +1,5 @@
 ifndef ROOT_VERSION
-    ROOT_VERSION=5.34.04
+    ROOT_VERSION=5.34.26
 endif
 
 TARFILE=root_v$(ROOT_VERSION).source.tar.gz
@@ -9,7 +9,11 @@ ROOTSYS=$(PWD)/$(ROOTDIR)
 
 all: prod_link
 
-prod_link: main_make
+ifndef GVMS_TEST
+prod_link: $(ROOTDIR)/.make_done
+else
+prod_link: $(ROOTDIR)/.untar_done
+endif
 	   test -L prod || ln -s $(ROOTDIR) prod # will not overwrite existing link 
 
 $(TARFILE):
@@ -25,10 +29,11 @@ $(ROOTDIR)/.configure_done: $(ROOTDIR)/.untar_done
 	cd $(ROOTDIR); ./configure
 	date > $@
 
-main_make: $(ROOTDIR)/.configure_done $(ROOTDIR)/.patch_done
+$(ROOTDIR)/.make_done: $(ROOTDIR)/.configure_done $(ROOTDIR)/.patch_done
 	cd $(ROOTDIR) ; make
+	date > $@
 
 $(ROOTDIR)/.patch_done:
 	#needed for 5.19.04
 	#cd $(ROOTDIR); patch -p1 < $(BUILD_SCRIPTS)/patches/root/patch_stropts.txt
-	touch $@
+	date > $@

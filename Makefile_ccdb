@@ -31,7 +31,11 @@ $(CCDB_DIR)/.scons_done: $(CCDB_DIR)/.untar_local_scons
 	cd $(CCDB_DIR) ; \
 	python scripts/scons.py
 
+ifndef GVMS_TEST
 prod_link: $(CCDB_DIR)/.scons_done
+else
+prod_link: $(CCDB_DIR)/.untar_local_scons
+endif
 	test -L prod || ln -s $(CCDB_DIR) prod
 
 .PHONY: $(CCDB_DIR)/.scons_done

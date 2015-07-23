@@ -22,10 +22,6 @@ EVIO_DOWNLOAD_URL_BASE = https://coda.jlab.org/drupal/system/files/coda/evio
 
 all: prod_link
 
-$(EVIO_HOME)/.checkout_done:
-	svn co $(SVN_URL)
-	date > $@
-
 $(TARFILE):
 	wget --no-check-certificate $(EVIO_DOWNLOAD_URL_BASE)/evio-$(MAJOR_MINOR)/$(TARFILE)
 
@@ -36,16 +32,18 @@ $(EVIO_HOME)/.untar_done: $(TARFILE)
 	rmdir -v temp
 	date > $@
 
-ifndef EVIO_VERSION
-$(EVIO_HOME)/.patch_done: $(EVIO_HOME)/.checkout_done
-else
 $(EVIO_HOME)/.patch_done: $(EVIO_HOME)/.untar_done
-endif
 	cd $(EVIO_HOME) ; patch -p1 < $(BUILD_SCRIPTS)/patches/evio/evio-4.3.patch
 	date > $@
 
-make_evio: $(EVIO_HOME)/.patch_done
+$(EVIO_HOME)/.scons_done: $(EVIO_HOME)/.patch_done
 	cd $(EVIO_HOME) ; scons --prefix=. install
+	date > $@
 
-prod_link: make_evio
+ifndef GVMS_TEST
+prod_link: $(EVIO_HOME)/.scons_done
+else
+prod_link: $(EVIO_HOME)/.untar_done
+	mkdir -p $(EVIO_HOME)/`uname -s`-`uname -m`
+endif
 	test -L prod || ln -s $(DIR_NAME) prod # will not overwrite existing link

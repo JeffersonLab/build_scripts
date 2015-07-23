@@ -11,36 +11,58 @@
 
 PWD = $(shell pwd)
 
-ifndef HDDS_VERSION
-SVN_URL = https://halldsvn.jlab.org/repos/trunk/hdds
-DIR_NAME = hdds
+ifdef HDDS_VERSION
+ SOURCE_CODE_TARGET = $(HDDS_HOME)/.untar_done
+ ifdef HDDS_DIRTAG
+  HDDS_DIR = hdds-$(HDDS_VERSION)^$(HDDS_DIRTAG)
+ else
+  HDDS_DIR = hdds-$(HDDS_VERSION)
+ endif
+ TARFILE = hdds-$(HDDS_VERSION)-src.tar.gz
 else
-TARFILE = hdds-$(HDDS_VERSION)-src.tar.gz
-DIR_NAME = hdds-$(HDDS_VERSION)
+ SOURCE_CODE_TARGET = $(HDDS_HOME)/.checkout_done
+ ifndef HDDS_URL
+  HDDS_URL=https://halldsvn.jlab.org/repos/trunk/hdds
+ endif
+ ifdef HDDS_DIRTAG
+  HDDS_DIR = $(notdir $(HDDS_URL))^$(HDDS_DIRTAG)
+ else
+  HDDS_DIR = $(notdir $(HDDS_URL))
+ endif
 endif
-HDDS_HOME = $(PWD)/$(DIR_NAME)
+
+HDDS_HOME = $(PWD)/$(HDDS_DIR)
 
 all: prod_link
 
 $(TARFILE):
 	wget --no-check-certificate http://halldweb.jlab.org/dist/$(TARFILE)
 
-$(HDDS_HOME)/.untar_done: $(TARFILE)
-	tar zxvf $(TARFILE)
-	date > $@
-
 $(HDDS_HOME)/.checkout_done:
-	cd /group/halld/Repositories/hdds ; git archive --prefix hdds/ master | tar xv -C $(PWD)
+	rm -rf checkout_temp_dir
+	mkdir checkout_temp_dir
+	cd checkout_temp_dir ; svn co $(HDDS_URL)
+	mv -v checkout_temp_dir/* $(HDDS_DIR)
+	rmdir -v checkout_temp_dir
 	date > $@
 
-ifdef HDDS_VERSION
-sconstruct: $(HDDS_HOME)/.untar_done # tar file
-else
-sconstruct: $(HDDS_HOME)/.checkout_done # checkout
-endif
-	cd $(HDDS_HOME) ; scons install SHOWBUILD=1
+$(HDDS_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(HDDS_DIR)
+	rmdir -v untar_temp_dir
+	date > $@
 
-$(HDDS_HOME)/hdds_prereqs_version.xml: sconstruct
+$(HDDS_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
+	cd $(HDDS_HOME) ; scons install SHOWBUILD=1
+	date > $@
+
+ifndef GVMS_TEST
+$(HDDS_HOME)/hdds_prereqs_version.xml: $(HDDS_HOME)/.sconstruct_done
+else
+$(HDDS_HOME)/hdds_prereqs_version.xml: $(SOURCE_CODE_TARGET)
+endif
 	cd $(HDDS_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl hdds
 
 prod_link: $(HDDS_HOME)/hdds_prereqs_version.xml

@@ -23,11 +23,17 @@ $(CLHEPDIR)/.configure_done: $(CLHEPDIR)/.untar_done
 	cd $(CLHEPDIR)/CLHEP ; ./configure --prefix=$(INSTALLDIR)
 	date > $@
 
-do_make: $(CLHEPDIR)/.configure_done
+$(CLHEPDIR)/.make_done: $(CLHEPDIR)/.configure_done
 	$(MAKE) -C$(CLHEPDIR)/CLHEP
+	date > $@
 
-do_make_install: do_make
+$(CLHEPDIR)/.make_install_done: $(CLHEPDIR)/.make_done
 	$(MAKE) -C$(CLHEPDIR)/CLHEP install
+	date > $@
 
-prod_link: do_make_install
+ifndef GVMS_TEST
+prod_link: $(CLHEPDIR)/.make_install_done
+else
+prod_link: $(CLHEPDIR)/.untar_done
+endif
 	test -L prod || ln -s $(CLHEP_VERSION) prod # will not overwrite existing link

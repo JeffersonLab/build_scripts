@@ -3,56 +3,23 @@
 use XML::Simple;
 use Data::Dumper;
 use Getopt::Std;
+use File::Slurp;
 use File::Basename;
 use Cwd 'abs_path';
-
+use File::Basename;
+ 
 $ERROR_NO_FILE_ARG = 1;
 $ERROR_FILE_DOES_NOT_EXIST = 2;
 
 $shell_type = define_shell_type();
 
-$gluex_top_default = "/usr/local/gluex";
+$gluex_top_default = "/home/" . $ENV{USER} . "/gluex_top";
 
 $this_file_with_full_path = abs_path(__FILE__);
 $build_scripts = dirname($this_file_with_full_path);
 $bms_osname = `$build_scripts/osrelease.pl`;
-
-%home_variable = (root => 'ROOTSYS',
-		  clhep => 'CLHEP',
-		  jana => 'JANA_HOME',
-		  'sim-recon' => 'HALLD_HOME',
-		  hdds => 'HDDS_HOME',
-		  cernlib => 'special case',
-		  'xerces-c' => 'XERCESCROOT',
-		  geant4 => 'GEANT4_HOME',
-		  ccdb => 'CCDB_HOME',
-		  evio => 'EVIOROOT');
-
-%dir_prefix = (root => 'root_',
-	       clhep => '',
-	       jana => 'jana_',
-	       'sim-recon' => 'sim-recon-',
-	       hdds => 'hdds-',
-	       cernlib => 'special case',
-	       'xerces-c' => 'xerces-c-',
-	       geant4 => 'geant4.',
-	       ccdb => 'ccdb_',
-	       evio => 'evio-');
-$unames = `uname -s`;
-chomp $unames;
-$unamem = `uname -m`;
-chomp $unamem;
-$evio_suffix = '/' . $unames . '-' . $unamem;
-%dir_suffix = (root => '',
-	       clhep => '',
-	       jana => '/' . $bms_osname,
-	       'sim-recon' => '',
-	       hdds => '',
-	       cernlib => '',
-	       'xerces-c' => '',
-	       geant4 => '',
-	       ccdb => '',
-	       evio => $evio_suffix);
+$definitions = read_file("$build_scripts/version_defs.pl");
+eval $definitions;
 
 if ($ENV{GLUEX_TOP}) {
     $gluex_top = $ENV{GLUEX_TOP};
@@ -90,19 +57,25 @@ foreach $href (@b) {
     $name_in_caps = uc($name);
     $name_in_caps =~ s/-/_/g;
     $version = $d{version};
-    print_command("${name_in_caps}_VERSION", $version);
+    $dirtag = $d{dirtag};
+    $url = $d{url};
+    if ($version) {print_command("${name_in_caps}_VERSION", $version);}
     if ($name eq 'cernlib') {
 	print_command('CERN', "$gluex_top/cernlib");
 	print_command('CERN_LEVEL', $version);
 	print_command('CERNLIB_WORD_LENGTH', $d{word_length});
     } else {
-	if ($version eq 'latest') {
-	    $package_home_dir = "$gluex_top/$name/$name$dir_suffix{$name}";
+	if ($dirtag) {$sep = '^';} else {$sep = '';}
+	if ($url) {
+	    $basename = basename($url);
+	    $package_home_dir = "$gluex_top/$name/$basename$sep$dirtag$dir_suffix{$name}";
 	} else {
-	    $package_home_dir = "$gluex_top/$name/$dir_prefix{$name}$version$dir_suffix{$name}";
+	    $package_home_dir = "$gluex_top/$name/$dir_prefix{$name}$version$sep$dirtag$dir_suffix{$name}";
 	}
 	$package_home_var = $home_variable{$name};
 	print_command($package_home_var, $package_home_dir);
+	if ($dirtag) {print_command("${name_in_caps}_DIRTAG", $dirtag);}
+	if ($url) {print_command("${name_in_caps}_URL", $url);}
     }
 }
 

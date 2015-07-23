@@ -46,3 +46,30 @@ unset CLHEP_INCLUDE_DIR
 unset CLHEP_LIB_DIR
 unset EVIOROOT
 unset CCDB_CONNECTION
+# versions
+unset JANA_VERSION
+unset HDDS_VERSION
+unset CERNLIB_VERSION
+unset XERCES_C_VERSION
+unset CLHEP_VERSION
+unset ROOT_VERSION
+unset CCDB_VERSION
+unset EVIO_VERSION
+# directory tags
+unset JANA_URL
+unset HDDS_URL
+unset CERNLIB_URL
+unset XERCES_C_URL
+unset CLHEP_URL
+unset ROOT_URL
+unset CCDB_URL
+unset EVIO_URL
+# urls for checkout
+unset JANA_DIRTAG
+unset HDDS_DIRTAG
+unset CERNLIB_DIRTAG
+unset XERCES_C_DIRTAG
+unset CLHEP_DIRTAG
+unset ROOT_DIRTAG
+unset CCDB_DIRTAG
+unset EVIO_DIRTAG

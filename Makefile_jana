@@ -1,9 +1,25 @@
 PWD = $(shell pwd)
-ifndef JANA_VERSION
-       JANA_VERSION = 0.7.2
+
+ifdef JANA_VERSION
+ SOURCE_CODE_TARGET = $(JANA_HOME)/.untar_done
+ ifdef JANA_DIRTAG
+  JANA_DIR = jana-$(JANA_VERSION)^$(JANA_DIRTAG)
+ else
+  JANA_DIR = jana-$(JANA_VERSION)
+ endif
+ TARFILE = jana_$(JANA_VERSION).tgz
+else
+ SOURCE_CODE_TARGET = $(JANA_HOME)/.checkout_done
+ ifndef JANA_URL
+  JANA_URL=https://phys12svn.jlab.org/repos/JANA
+ endif
+ ifdef JANA_DIRTAG
+  JANA_DIR = $(notdir $(JANA_URL))^$(JANA_DIRTAG)
+ else
+  JANA_DIR = $(notdir $(JANA_URL))
+ endif
 endif
-JANA_DIR = jana_$(JANA_VERSION)
-TARFILE = jana_$(JANA_VERSION).tgz
+
 export JANA_HOME = $(PWD)/$(JANA_DIR)
 
 all: prod_link
@@ -11,22 +27,32 @@ all: prod_link
 prod_link: $(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml
 	test -L prod || ln -s $(JANA_DIR) prod # will not overwrite existing link
 
-$(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: sconstruct
+ifndef GVMS_TEST
+$(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: $(JANA_HOME)/.sconstruct_done
+else
+$(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: $(SOURCE_CODE_TARGET)
+	mkdir -p $(JANA_HOME)/$(BMS_OSNAME)
+endif
 	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(BUILD_SCRIPTS)/version_prereqs.pl jana
 
-ifdef JANA_VERSION
-sconstruct: $(JANA_HOME)/.untar_done # tar file
-else
-sconstruct: $(JANA_HOME)/.checkout_done # checkout
-endif
+$(JANA_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
 	cd $(JANA_HOME); scons
+	date > $@
 
 $(JANA_HOME)/.checkout_done:
-	svn co https://phys12svn.jlab.org/repos/JANA
+	rm -rf checkout_temp_dir
+	mkdir checkout_temp_dir
+	cd checkout_temp_dir ; svn co $(JANA_URL)
+	mv -v checkout_temp_dir/* $(JANA_DIR)
+	rmdir -v checkout_temp_dir
 	date > $@
 
 $(JANA_HOME)/.untar_done: $(TARFILE)
-	tar zxvf $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(JANA_DIR)
+	rmdir -v untar_temp_dir
 	date > $@
 
 $(TARFILE):

@@ -33,6 +33,9 @@ unsetenv CLHEP_INCLUDE
 unsetenv HDDS_HOME
 unsetenv HALLD_HOME
 unsetenv HALLD_MY
+unsetenv SIM_RECON_DIRTAG
+unsetenv SIM_RECON_VERSION
+unsetenv SIM_RECON_URL
 unsetenv BMS_OSNAME
 unsetenv JANA_HOME
 unsetenv JANA_CALIB_URL
@@ -45,3 +48,30 @@ unsetenv CLHEP_INCLUDE_DIR
 unsetenv CLHEP_LIB_DIR
 unsetenv CCDB_CONNECTION
 unsetenv EVIOROOT
+# versions
+unsetenv JANA_VERSION
+unsetenv HDDS_VERSION
+unsetenv CERNLIB_VERSION
+unsetenv XERCES_C_VERSION
+unsetenv CLHEP_VERSION
+unsetenv ROOT_VERSION
+unsetenv CCDB_VERSION
+unsetenv EVIO_VERSION
+# directory tags
+unsetenv JANA_URL
+unsetenv HDDS_URL
+unsetenv CERNLIB_URL
+unsetenv XERCES_C_URL
+unsetenv CLHEP_URL
+unsetenv ROOT_URL
+unsetenv CCDB_URL
+unsetenv EVIO_URL
+# urls for checkout
+unsetenv JANA_DIRTAG
+unsetenv HDDS_DIRTAG
+unsetenv CERNLIB_DIRTAG
+unsetenv XERCES_C_DIRTAG
+unsetenv CLHEP_DIRTAG
+unsetenv ROOT_DIRTAG
+unsetenv CCDB_DIRTAG
+unsetenv EVIO_DIRTAG

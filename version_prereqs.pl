@@ -7,6 +7,9 @@ use XML::Simple;
 use Data::Dumper;
 use XML::Writer;
 use IO::File;
+use File::Slurp;
+use File::Basename;
+use Cwd 'abs_path';
 
 $package_in = $ARGV[0];
 if (! $package_in) {die "must name a package";}
@@ -15,45 +18,13 @@ my $output = IO::File->new(">${package_in}_prereqs_version.xml");
 my $writer = XML::Writer->new(OUTPUT => $output, NEWLINES => 1);
 $writer->startTag("gversion", "version" => "1.0");
 
-%home_variable = (root => 'ROOTSYS',
-                  clhep => 'CLHEP',
-                  jana => 'JANA_HOME',
-                  'sim-recon' => 'HALLD_HOME',
-                  hdds => 'HDDS_HOME',
-                  cernlib => 'special case',
-                  'xerces-c' => 'XERCESCROOT',
-                  geant4 => 'GEANT4_HOME',
-                  ccdb => 'CCDB_HOME',
-		  evio => 'EVIOROOT');
+$this_file_with_full_path = abs_path(__FILE__);
+$build_scripts = dirname($this_file_with_full_path);
+$bms_osname = `$build_scripts/osrelease.pl`;
+$definitions = read_file("$build_scripts/version_defs.pl");
+eval $definitions;
 
-%version_prefix = (root => '/root_',
-		   clhep => '/clhep/',
-		   jana => '/jana_',
-		   'sim-recon' => '/sim-recon-',
-		   hdds => '/hdds-',
-		   cernlib => '',
-		   'xerces-c' => '/xerces-c-',
-		   geant4 => '/geant4.',
-		   ccdb => '/ccdb_',
-		   evio => '/evio-');
-
-$unames = `uname -s`;
-chomp $unames;
-$unamem = `uname -m`;
-chomp $unamem;
-$evio_suffix = '/' . $unames . '-' . $unamem;
-%version_suffix = (root => '',
-		   clhep => '/',
-		   jana => '/' . $bms_osname,
-		   'sim-recon' => '',
-		   hdds => '',
-		   cernlib => '',
-		   'xerces-c' => '',
-		   geant4 => '',
-		   ccdb => '',
-		   evio => $evio_suffix);
-
-%prereqs = (root => [],
+%prereqs = (root => ['sim-recon'],
 	    clhep => [],
 	    jana => ['evio', 'ccdb', 'xerces-c', 'root'],
 	    'sim-recon' => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb'],
@@ -66,23 +37,57 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
 @prepackages = @{$prereqs{$package_in}};
 $idebug = 0;
 foreach $prepackage (@prepackages) {
+    $version = '';
+    $url = '';
+    $dirtag = '';
     if ($prepackage eq 'cernlib') {
 	$version = $ENV{CERN_LEVEL};
     } else {
 	$home_var = $home_variable{$prepackage};
 	$home_var_value = $ENV{$home_var};
-	if ($home_var_value =~ 'ExternalPackages') {adjust_prefix_suffix()}
-	@token0 = split(/$version_prefix{$prepackage}/, $home_var_value);
-	$home_var_value_tail = $token0[1];
-	if ($version_suffix{$prepackage}) {
-	    @token1 = split(/$version_suffix{$prepackage}/, $home_var_value_tail);
-	    $version = $token1[0];
+	$svn_hidden_dir = $home_var_value . "/.svn";
+	@token2 = split(/\//, $home_var_value); # split on slash
+	$dirname_home = $token2[$#token2]; # last token is directory name
+	if (-d $svn_hidden_dir) {
+	    $url_raw = `svn info $home_var_value | grep URL: | grep https`;
+	    chomp $url_raw;
+	    #print "for $home_var = $home_var_value, url_raw = $url_raw\n";
+	    @t = split(/URL: /, $url_raw);
+	    $url = $t[1];
+	    @token3 = split(/^/, $dirname_home); # split on colon
+	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} else {
-	    $version = $token0[1];
+	    if ($home_var_value =~ 'ExternalPackages') {adjust_prefix_suffix()}
+	    @token0 = split(/$dir_prefix{$prepackage}/, $home_var_value);
+	    $home_var_value_tail = $token0[1];
+	    if ($dir_suffix{$prepackage}) {
+		@token1 = split(/$dir_suffix{$prepackage}/, $home_var_value_tail);
+		$version = $token1[0];
+	    } else {
+		$version = $token0[1];
+	    }
+	    @token4 = split(/^/, $version);
+	    if ($#token4 > 0) {
+		$dirtag = $token4[$#token4];
+		$dirtag_string = '^' . $dirtag;
+		@token5 = split (/$dirtag_string/, $version);
+		$version = $token5[0];
+	    }
 	}
     }
-#    print "idebug = $idebug, $prepackage, $home_var, $home_var_value, $version_prefix{$prepackage}, $token0[1], $version_suffix{$prepackage}, $version\n";
-    $writer->emptyTag("package", "name" => $prepackage, "version" => $version);
+    #print "idebug = $idebug, $prepackage, $home_var, $home_var_value, $dir_prefix{$prepackage}, $token0[1], $dir_suffix{$prepackage}, $version\n";
+    $write_element_command = "\$writer->emptyTag(\"package\", \"name\" => $prepackage";
+    if ($version) {
+	$write_element_command .= ", \"version\" => \"$version\"";
+    } elsif ($url) {
+	$write_element_command .= ", \"url\" => \"$url\"";
+    } else {
+	print "version_prereqs.pl, warning: for package $prepackage, version or url could not be determined, $home_var = $home_var_value\n";
+    }
+    if ($dirtag) {$write_element_command .= ", \"dirtag\" => \"$dirtag\"";}
+    $write_element_command .= ");";
+    #print "write_element_command = $write_element_command\n";
+    eval $write_element_command;
     $idebug++;
 }
 
@@ -95,18 +100,18 @@ exit;
 sub adjust_prefix_suffix {
     my @token0 = ();
     if ($prepackage eq 'root') {
-	$version_prefix{$prepackage} = '/ROOT/v';
-	$version_suffix{$prepackage} = '/root_';
+	$dir_prefix{$prepackage} = '/ROOT/v';
+	$dir_suffix{$prepackage} = '/root_';
     }
     if ($prepackage eq 'xerces-c') {
-	@token0 = split(/$version_prefix{$prepackage}/, $home_var_value);
+	@token0 = split(/$dir_prefix{$prepackage}/, $home_var_value);
 	$home_var_value_tail = $token0[1];
 	if ($home_var_value_tail =~ /.Linux/) {
-	    $version_suffix{$prepackage} = '.Linux';
+	    $dir_suffix{$prepackage} = '.Linux';
 	} elsif ($home_var_value_tail =~ /.Darwin/) {
-	    $version_suffix{$prepackage} = '.Darwin';
+	    $dir_suffix{$prepackage} = '.Darwin';
 	} elsif ($home_var_value_tail =~ /.SunOS/) {
-	    $version_suffix{$prepackage} = '.SunOS';
+	    $dir_suffix{$prepackage} = '.SunOS';
 	}
     }
     return;

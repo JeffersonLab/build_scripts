@@ -11,11 +11,23 @@
 
 PWD = $(shell pwd)
 ifdef SIM_RECON_VERSION
-SIM_RECON_DIR = sim-recon-$(SIM_RECON_VERSION)
-TARFILE = sim-recon-$(SIM_RECON_VERSION)-src.tar.gz
+ SOURCE_CODE_TARGET = $(HALLD_HOME)/.untar_done
+ ifdef SIM_RECON_DIRTAG
+  SIM_RECON_DIR = sim-recon-$(SIM_RECON_VERSION)^$(SIM_RECON_DIRTAG)
+ else
+  SIM_RECON_DIR = sim-recon-$(SIM_RECON_VERSION)
+ endif
+ TARFILE = sim-recon-$(SIM_RECON_VERSION)-src.tar.gz
 else
-SIM_RECON_DIR = sim-recon
-REPOSITORY_LOCATION = repos/trunk/sim-recon
+ SOURCE_CODE_TARGET = $(HALLD_HOME)/.checkout_done
+ ifndef SIM_RECON_URL
+  SIM_RECON_URL=https://halldsvn.jlab.org/repos/trunk/sim-recon
+ endif
+ ifdef SIM_RECON_DIRTAG
+  SIM_RECON_DIR = $(notdir $(SIM_RECON_URL))^$(SIM_RECON_DIRTAG)
+ else
+  SIM_RECON_DIR = $(notdir $(SIM_RECON_URL))
+ endif
 endif
 export HALLD_HOME = $(PWD)/$(SIM_RECON_DIR)
 
@@ -25,29 +37,41 @@ $(TARFILE):
 	wget --no-check-certificate http://halldweb.jlab.org/dist/$(TARFILE)
 
 $(HALLD_HOME)/.untar_done: $(TARFILE)
-	tar zxvf $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(SIM_RECON_DIR)
+	rmdir -v untar_temp_dir
 	date > $@
 
 $(HALLD_HOME)/.checkout_done:
-	cd /group/halld/Repositories/sim-recon ; git archive --prefix sim-recon/ master | tar xv -C $(PWD)
+	rm -rf checkout_temp_dir
+	mkdir checkout_temp_dir
+	cd checkout_temp_dir ; svn co $(SIM_RECON_URL)
+	mv -v checkout_temp_dir/* $(SIM_RECON_DIR)
+	rmdir -v checkout_temp_dir
 	date > $@
 
-ifdef SIM_RECON_VERSION
-$(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.untar_done # tar file
-else
-$(HALLD_HOME)/.getarg_patches_done: $(HALLD_HOME)/.checkout_done # checkout
-endif
+$(HALLD_HOME)/.getarg_patches_done: $(SOURCE_CODE_TARGET)
 ifdef APPLY_GETARG_PATCH
 	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
 		$(HALLD_HOME)/src/programs/Simulation/HDGeant
 endif
 	date > $@
 
-sconstruct: $(HALLD_HOME)/.getarg_patches_done
+$(HALLD_HOME)/.sconstruct_done: $(HALLD_HOME)/.getarg_patches_done
 	cd $(HALLD_HOME)/src ; scons install SHOWBUILD=1
+	date > $@
 
-$(HALLD_HOME)/sim-recon_prereqs_version.xml: sconstruct
+ifndef GVMS_TEST
+$(HALLD_HOME)/sim-recon_prereqs_version.xml: $(HALLD_HOME)/.sconstruct_done
+else
+$(HALLD_HOME)/sim-recon_prereqs_version.xml: $(SOURCE_CODE_TARGET)
+endif
 	cd $(HALLD_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl sim-recon
 
 prod_link: $(HALLD_HOME)/sim-recon_prereqs_version.xml
 	test -L prod || ln -s $(SIM_RECON_DIR) prod # will not overwrite existing link
+
+env:
+	@echo SIM_RECON_DIR = $(SIM_RECON_DIR)

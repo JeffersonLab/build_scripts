@@ -6,7 +6,11 @@ INSTALL_FILE = cernlib.2005.install.$(VERSION_DATE).tgz
 ALL_FILE = cernlib-2005-all-new.tgz
 DIST_FILES = $(ALL_FILE) $(CORR_FILE) $(INSTALL_FILE)
 
-all: mkdir .error_check_done
+ifndef GVMS_TEST
+all: mkdir .copy_done
+else
+all: mkdir .unpack_done
+endif
 
 mkdir:
 	mkdir -p cern
@@ -20,12 +24,17 @@ $(DIST_FILES):
 	cd cern ; cp -v ../$(CORR_FILE) cernlib.2005.corr.tgz
 	cd cern ; tar zxvf ../$(INSTALL_FILE)
 	cd cern ; patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_cernlib.patch
-	echo unpacking done > .unpack_done
+	date > $@
 
 .build_done: .unpack_done
 	cd cern ; ./Install_cernlib
-	echo build done > .build_done
+	date > $@
 
 .error_check_done: .build_done
 	grep Error cern/2005/build/log/make.???? ; if [ $$? -eq 0 ] ; then exit 1 ; else exit 0 ; fi
-	echo error check done > .error_check_done   
+	date > $@
+
+.copy_done: .error_check_done
+	cp -pr cern/2005 .
+	date > $@
+
