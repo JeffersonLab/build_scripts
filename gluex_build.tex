@@ -5,19 +5,26 @@
 \begin{document}
 
 \section{Introduction}
-There are three fundamental areas of concern that make up all software systems. They are:
+There are three fundamental areas of concern that make up all software
+systems. They are:
 
-1. a directory structure
-2. a build system
-3. a version management system
+\begin{enumerate}
+\item a directory structure
+\item a build system
+\item a version management system
+\end{enumerate}
 
 They are all related, aspects of one affects aspects of each of the others.
 
-Having a standard system makes collaborative work more efficient, especially when one needs help from others to solve a problem.
+Having a standard system makes collaborative work more efficient,
+especially when one needs help from others to solve a problem.
 
 \section{The Packages}
 
-There are several software components that are needed to build and use GlueX software. Most of them are assumed to be provided by the native operating system or distribution, but there are some that have to be built by the GlueX user. They are:
+There are several software components that are needed to build and use
+GlueX software. Most of them are assumed to be provided by the native
+operating system or distribution, but there are some that have to be
+built by the GlueX user. They are:
 
 \begin{enumerate}
 \item build\_scripts: scripts to manage building and the shell environment
@@ -31,43 +38,238 @@ There are several software components that are needed to build and use GlueX sof
 \item sim-recon: simulation and reconstruction for GlueX
 \end{enumerate}
 
-Detailed description of these packages will not be given here; please see the GlueX Offline Software wiki page for more information.
+Detailed description of these packages will not be given here; please
+see the GlueX Offline Software wiki page for more information.
 
-There are in general multiple versions (releases) of each of these packages and it is often convenient to have access to more that one version of a package built and available for use. In addition some packages depend on one or several others for libraries and include files.
+There are in general multiple versions (releases) of each of these
+packages and it is often convenient to have access to more that one
+version of a package built and available for use. In addition some
+packages depend on one or several others for libraries and include
+files.
 
-\section{The Directory Structure}
+\section{The Directory Structure}\label{section:directory}
 
-The VMS directory structure supports multiple versions of each package. For an example see Fig.~\ref{fig:directory-tree}. In the figure, ``gluex\_top'' is a generic name, each installation may choose a different directory name. VMS looks for the name of this directory in the environment variable {\tt GLUEX\_TOP}.
+The VMS directory structure supports multiple versions of each
+package. For an example see Fig.~\ref{fig:directory-tree}. In the
+figure, ``gluex\_top'' is a generic name, each installation may choose
+a different directory name. VMS looks for the name of this directory
+in the environment variable {\tt GLUEX\_TOP}.
 
 \begin{figure}
 \begin{verbatim}
-gluex_top
-|-- build_scripts
-|-- cernlib
-|   `-- 2005
-|-- evio
-|   |-- evio-4.2
-|   `-- evio-4.3.1
-|-- hdds
-|   |-- hdds-3.1
-|   `-- hdds-3.2
-|-- jana
-|   |-- jana_0.7.2
-|   `-- jana_0.7.3
-|-- root
-|   |-- root_5.34.04
-|   `-- root_5.34.26
-|-- sim-recon
-|   |-- sim-recon-1.2.0
-|   `-- sim-recon-1.3.0
-`-- xerces-c
-    |-- xerces-c-3.1.1
-    `-- xerces-c-3.1.2
+                    gluex_top
+                    |-- build_scripts
+                    |-- cernlib
+                    |   `-- 2005
+                    |-- evio
+                    |   |-- evio-4.2
+                    |   `-- evio-4.3.1
+                    |-- hdds
+                    |   |-- hdds-3.1
+                    |   `-- hdds-3.2
+                    |-- jana
+                    |   |-- jana_0.7.2
+                    |   `-- jana_0.7.3
+                    |-- root
+                    |   |-- root_5.34.04
+                    |   `-- root_5.34.26
+                    |-- sim-recon
+                    |   |-- sim-recon-1.2.0
+                    |   `-- sim-recon-1.3.0
+                    `-- xerces-c
+                        |-- xerces-c-3.1.1
+                        `-- xerces-c-3.1.2
 \end{verbatim}
 \caption{The directory structure.}\label{fig:directory-tree}
 \end{figure}
 
-Under gluex\_top, each package has its own directory and for each package directory one or more specific versions of that package are built.
+Under gluex\_top, each package has its own directory and for each
+package directory one or more specific versions of that package are
+built.
+
+\section{Scripts to Support the VMS}
+
+All scripts and makefiles to support VMS are found the in the {\tt
+  build\_scripts} directory. At JLab, the full path is
+$${\tt /group/halld/Software/scripts/build\_scripts}.$$
+The directory can also checked out from the Subversion repository:
+$${\tt https://halldsvn.jlab.org/repos/trunk/scripts/build\_scripts}.$$
+
+\section{The Build System}
+
+Each of the packages have their own native build system and each build
+system has its own set of details that have to be understood. In
+addition, the technology used to do the build varies from system to
+system. It may be make, imake, cmake, Scons, or something else. The
+VMS system makes a choice of build options for each package so that
+the user need not master these details.
+
+\subsection{The Makefiles}
+
+The VMS build system is implemented in GNU Make. These makefiles
+invoke the package-specific build system. There is a ``package
+makefile'' for each package ({\it e.~g.}, Makefile\_jana,
+Makefile\_sim-recon). Invoking make with a package makefile will build
+that package with the home directory placed in the current working
+directory.
+
+Complete builds are orchestrated by Makefile\_all. The highest-level
+targets of Makefile\_all, shown with their depedencies are:
+
+\begin{verbatim}
+all: env xerces_build cernlib_build root_build clhep_build \
+     geant4_build gsl_build evio_build ccdb_build jana_build \
+     hdds_build sim-recon_build
+
+gluex: env xerces_build cernlib_build root_build clhep_build \
+       evio_build ccdb_build jana_build hdds_build sim-recon_build
+
+gluex_jlab: env xerces_build root_build clhep_build evio_build \
+            ccdb_build jana_build hdds_build sim-recon_build
+\end{verbatim}
+
+The {\tt all} target builds all packages that Makefile\_all knows
+about. The {\tt gluex} target builds only the packages necessary for
+GlueX work. The {\tt gluex\_jlab} target is the same as {\tt gluex}
+except that it does not include cernlib\_build (useful for JLab public
+builds).
+
+Each of the individual package targets ({\it e.~g.}, evio\_build and
+hdds\_build) use the corresponding package makefile. Directories are
+created and the package makes are executed in way that gives the
+directory structure described in Section~\ref{section:directory}. Of
+course, each individual package build target can be invoked directly.
+
+\subsection{The Package Makefiles}
+
+Each of the package makefiles is sensitive to environment variables that control which version of the package to build. The makefiles themselves take care of obtaining the source code.
+
+Each packages respects a version-specifying environment variable. Here is an example of how they might be set in the C-shell:
+
+\begin{verbatim}
+setenv JANA_VERSION 0.7.2
+setenv SIM_RECON_VERSION 1.2.0
+setenv HDDS_VERSION 3.2
+setenv CERNLIB_VERSION 2005
+setenv XERCES_C_VERSION 3.1.1
+setenv CLHEP_VERSION 2.0.4.5
+setenv ROOT_VERSION 5.34.26
+setenv CCDB_VERSION 1.05
+setenv EVIO_VERSION 4.3.1
+\end{verbatim}
+
+In each case there is standard system for distributing tarballs marked
+with the version name. Each package has different conventions, but the
+package makefiles have that knowledge of the appropriate convention
+coded in. Also, the name of home directory created depends on the name
+that appears in the tarball (with exceptions as mentioned in
+Section~\ref{section:directory-tags}. Note that the version variable
+can be set on the make command line as well.
+
+Some packages can be checked out from a Subversion repository. In
+these cases, the version variable is ignored. JANA, HDDS, and
+sim-recon have this support. So for example:
+
+\begin{verbatim}
+setenv HDDS_URL https://halldsvn.jlab.org/repos/trunk/hdds
+\end{verbatim}
+
+will cause the HDDS makefile to check out the trunk version. The names
+of the variables for JANA and sim-recon are {\tt JANA\_URL} and {\tt
+  SIM\_RECON\_URL} respectively.
+
+\section{Setting Up the Shell Environment}
+
+Facility is provided for setting environment variables necessary both
+for building the software and for using it. Both Bourne-shell-like and C-shell-like shells are supported, but real testing has only been done with bash and tcsh. In the following all examples will be appropriate for bash. Note that whenever a script like foo.sh is mentioned, there is also a foo.csh in the build-scripts directory. 
+
+\section{The gluex\_install System}
+
+Independent of the build\_scripts directory, the gluex\_install system
+uses build\_scripts to create a complete install of GlueX software
+from scratch. This is especially useful for new machines.
+
+No interaction from the user should be required to get a successful
+build. The only assumption made is that the basic packages that come
+in a minimal install are present. The definition of minimal
+depends on the installation. In all cases, the distribution was tested
+by first installing from a DVD or CD iso image. Typically, the ``live
+DVD'' version was chosen since that installs the smallest number of
+packages.
+
+The scripts have been tested on the following distributions listed in
+Table~\ref{table:tested-distributions}.
+
+\begin{table}
+$$
+\begin{tabular}{|l|l|}
+\hline
+\bf Distribution & \bf Package Type \\
+\hline
+CentOS & RedHat \\
+Scientific Linux & RedHat \\
+Ubuntu & Debian \\
+Fedora & RedHat \\
+LinuxMint & Debian \\
+openSUSE & RedHat \\
+RedHat Enterprise & RedHat \\
+\hline
+\end{tabular}
+$$
+\caption{Gluex\_install tested distributions.}\label{table:tested-distributions}
+\end{table}
+
+\subsection{Installation Steps}
+
+Root access is required for steps (1) and (2).
+
+\begin{enumerate}
+
+\item {\bf System Update}. It is recommended that you update your
+  system to the latest versions of of all system supplied
+  software. For RedHat-like distributions you do a ``yum update''. For
+  Debian-like systems you do a ``apt-get update''.
+
+\item {\bf Get the Scripts}. A tar file with these scripts is
+  available at https://halldweb.jlab.org/dist/gluex\_install.tar . You
+  can also do a subversion check out of the latest version at
+  https://halldsvn.jlab.org/repos/trunk/scripts/gluex\_install . Note
+  that most distributions do not have subversion in their minimal set
+  of packages.
+
+\item {\bf Prerequisites: gluex\_prereq\_<distribution>.sh}. The
+  prerequisites script installs packages from the distribution
+  repository necessary for the GlueX build. As such, it must be
+  executed by root. In addition it makes some symbolic links in system
+  directories that are necessary for the cernlib build. These scripts
+  are specific to particular distributions. You must run this
+  script from inside the ``gluex\_install'' directory created when you
+  get the scripts (see Get the Scripts, step 2).
+
+\item {\bf Subversion test: svn\_touch.sh}. Simply does an ``l'' of the
+  Hall D and 12 GeV subversion repositories at JLab, both as a test
+  and to dispense with interactive prompts asking about certificates
+  from the servers. Respond with ``p'', to permanently accept the
+  certificates. These prompts would otherwise hang the build. If you
+  are not prompted, you already recognize the certificates. The script
+  is distribution independent.
+
+\item {\bf Install: gluex\_install.sh}. Creates a directory,
+  ``gluex\_top'', in the current working directory to house the build,
+  sets up an environment, downloads all source files, and builds all
+  libraries and executables needed to run GlueX software. The install
+  assumes a directory structure that accomodates multiple versions of
+  the GlueX packages if they are needed later. The script is
+  distribution independent.
+
+\end{enumerate}
+
+\subsection{Using the Build}
+
+After the build is complete, there are two files in the gluex
+directory, setup.sh and setup.csh, that can be used to set-up the
+complete GlueX environment under Bourne-like shells or C-like shells
+respectively.
 
 \end{document}
 
