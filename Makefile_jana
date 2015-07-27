@@ -3,9 +3,9 @@ PWD = $(shell pwd)
 ifdef JANA_VERSION
  SOURCE_CODE_TARGET = $(JANA_HOME)/.untar_done
  ifdef JANA_DIRTAG
-  JANA_DIR = jana-$(JANA_VERSION)^$(JANA_DIRTAG)
+  JANA_DIR = jana_$(JANA_VERSION)^$(JANA_DIRTAG)
  else
-  JANA_DIR = jana-$(JANA_VERSION)
+  JANA_DIR = jana_$(JANA_VERSION)
  endif
  TARFILE = jana_$(JANA_VERSION).tgz
 else
