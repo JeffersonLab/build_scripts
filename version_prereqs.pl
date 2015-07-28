@@ -21,6 +21,7 @@ $writer->startTag("gversion", "version" => "1.0");
 $this_file_with_full_path = abs_path(__FILE__);
 $build_scripts = dirname($this_file_with_full_path);
 $bms_osname = `$build_scripts/osrelease.pl`;
+chomp $bms_osname;
 $definitions = read_file("$build_scripts/version_defs.pl");
 eval $definitions;
 
@@ -75,7 +76,7 @@ foreach $prepackage (@prepackages) {
 	    }
 	}
     }
-    #print "idebug = $idebug, $prepackage, $home_var, $home_var_value, $dir_prefix{$prepackage}, $token0[1], $dir_suffix{$prepackage}, $version\n";
+    #print "idebug = $idebug, prepackage = $prepackage, home_var = $home_var, home_var_value = $home_var_value, home_var_value_tail = $home_var_value_tail, dir_prefix{prepackage} = $dir_prefix{$prepackage}, dir_suffix{prepackage} = $dir_suffix{$prepackage}, version = $version\n";
     $write_element_command = "\$writer->emptyTag(\"package\", \"name\" => $prepackage";
     if ($version) {
 	$write_element_command .= ", \"version\" => \"$version\"";
