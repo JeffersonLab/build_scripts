@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ -z "$GLUEX_TOP" ]; then export GLUEX_TOP=/home/$USER/gluex_top; fi
+if [ -z "$BUILD_SCRIPTS" ]
+    then export BUILD_SCRIPTS=$GLUEX_TOP/build_scripts
+fi
+
 error_message="Error in gluex_env_version.sh"
 error_action="environment settings not done"
 

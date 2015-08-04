@@ -1,5 +1,9 @@
 #!/bin/tcsh
 
+# institute defaults for missing environment variables
+if (! $?GLUEX_TOP) setenv GLUEX_TOP /home/$USER/gluex_top
+if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
+
 set error_message="Error in gluex_env_version.csh"
 set error_action="environment settings not done"
 
