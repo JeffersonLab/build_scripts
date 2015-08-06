@@ -2,7 +2,15 @@
 
 \usepackage{graphicx}
 
+\title{A Version Management System for GlueX \\ \medskip \large GlueX Note ????-v?}
+\author{Mark M.\ Ito}
+\date{August 6, 2015}
+
 \begin{document}
+
+\maketitle
+
+\tableofcontents
 
 \section{Introduction}
 There are three fundamental areas of concern that make up all software
@@ -142,9 +150,12 @@ course, each individual package build target can be invoked directly.
 
 \subsection{The Package Makefiles}
 
-Each of the package makefiles is sensitive to environment variables that control which version of the package to build. The makefiles themselves take care of obtaining the source code.
+Each of the package makefiles is sensitive to environment variables
+that control which version of the package to build. The makefiles
+themselves take care of obtaining the source code.
 
-Each packages respects a version-specifying environment variable. Here is an example of how they might be set in the C-shell:
+Each packages respects a version-specifying environment variable. Here
+is an example of how they might be set in the C-shell:
 
 \begin{verbatim}
 setenv JANA_VERSION 0.7.2
@@ -181,7 +192,32 @@ of the variables for JANA and sim-recon are {\tt JANA\_URL} and {\tt
 \section{Setting Up the Shell Environment}
 
 Facility is provided for setting environment variables necessary both
-for building the software and for using it. Both Bourne-shell-like and C-shell-like shells are supported, but real testing has only been done with bash and tcsh. In the following all examples will be appropriate for bash. Note that whenever a script like foo.sh is mentioned, there is also a foo.csh in the build-scripts directory. 
+for building the software and for using it. Both Bourne-shell-like and
+C-shell-like shells are supported, but real testing has only been done
+with bash and tcsh. In the following all examples will be appropriate
+for bash. Note that whenever a script like foo.sh is mentioned, there
+is also a foo.csh in the build-scripts directory.
+
+\section{The Prerequisites System}
+
+Each package may or may not have a build dependency on other packages under the VMS. For example a particular version of sim-recon can be built against any of a number of versions of HDDS, including custom versions provided by the user. To insure that the environment being set-up has a consistent set of package versions, a facility is provided to warn the user if possible inconsistencies are detected.
+
+At build time, a version xml file is created in the home directory of a package if that package has dependencies on others in the system. For example, \$HALLD\_HOME will have the file sim-recon\_prereqs\_version.xml, listing the versions used to build sim-recon. An example is shown in Fig.~\ref{figure:prereqs-xml-file}
+
+\begin{figure}
+\begin{verbatim}
+                <gversion version="1.0"
+                ><package name="evio" version="4.3.1"
+                 /><package name="cernlib" version="2005"
+                 /><package name="root" version="5.34.26"
+                 /><package name="jana" version="0.7.3"
+                 /><package name="hdds" version="3.3"
+                 /><package name="ccdb" version="1.05"
+                 /></gversion
+                >
+\end{verbatim}
+\caption{An example of sim-recon\_prereqs\_version.xml.}\label{figure:prereqs-xml-file}
+\end{figure}
 
 \section{The gluex\_install System}
 
