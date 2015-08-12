@@ -26,7 +26,7 @@ $(ROOTDIR)/.untar_done: $(TARFILE)
 	date > $@
 
 $(ROOTDIR)/.configure_done: $(ROOTDIR)/.untar_done
-	cd $(ROOTDIR); ./configure
+	cd $(ROOTDIR); ./configure --enable-gdml
 	date > $@
 
 $(ROOTDIR)/.make_done: $(ROOTDIR)/.configure_done $(ROOTDIR)/.patch_done
