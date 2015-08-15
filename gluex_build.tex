@@ -38,6 +38,7 @@ built by the GlueX user. They are:
 \item build\_scripts: scripts to manage building and the shell environment
 \item Xerces-C: for reading XML files
 \item CERNLIB: to support GEANT 3 simulations
+\item GEANT4: simulation engine
 \item ROOT: general purpose HENP toolkit
 \item EVIO: CODA format data handling library
 \item CCDB: Calibration Constants Database
@@ -95,13 +96,55 @@ Under gluex\_top, each package has its own container directory ({\it
   e.~g.}, {\tt jana, hdds, sim-recon}) and for each package container
 directory one or more specific versions of that package are built.
 
-\section{Scripts to Support the VMS}
+\section{Scripts to Support the VMS: the {\tt build\_scripts} Directory}
 
 All scripts and makefiles to support VMS are found the in the {\tt
   build\_scripts} directory. At JLab, the full path is
 $${\tt /group/halld/Software/scripts/build\_scripts}.$$
 The directory can also checked out from the Subversion repository:
 $${\tt https://halldsvn.jlab.org/repos/trunk/scripts/build\_scripts}.$$
+
+\section{Setting Up the Shell Environment}
+
+Facility is provided for setting environment variables necessary both
+for building the software and for using it. Both Bourne-shell-like and
+C-shell-like shells are supported, but real testing has only been done
+with bash and tcsh. In the following all examples will be appropriate
+for bash. Note that whenever a script like foo.sh is mentioned, there
+is also a foo.csh in the build-scripts directory.
+
+\subsection{Base-Level Environment Set-Up: {\tt gluex\_env.(c)sh}}
+
+The {\tt gluex\_env.(c)sh} script will define all environment
+variables needed to run and build GlueX software, including extension
+of the {\tt PATH}, {\tt LD\_LIBRARY\_PATH}, and {\tt
+  PYTHONPATH} variables. It takes as input the home directories
+of each package as found in the environment variables listed in
+Table~\ref{table:home-directories}.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\bf Package & \bf Home Directory Variable \\
+\hline Xerces-C & {\tt XERCESCROOT} \\
+CERNLIB & {\tt CERN} \\
+Geant4 & {\tt GEANT4\_HOME} \\
+ROOT & {\tt ROOTSYS} \\
+EVIO & {\tt EVIOROOT} \\
+CCDB & {\tt CCDB\_HOME} \\
+JANA & {\tt JANA\_HOME} \\
+HDDS & {\tt HDDS\_HOME} \\
+sim-recon & {\tt HALLD\_HOME} \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Packages and their home directories.}\label{table:home-directories}
+\end{table}
+
+respects pre-defined variables
+
+version.xml
 
 \section{The Build System}
 
@@ -161,7 +204,7 @@ directory is created if it does not exist and the requested package
 makefile is invoked from within the package container directory.
 
 Of course, each individual package build target can be invoked
-directly. More on this in Section~\ref{section:adding-versions}
+directly. More on this in Section~\ref{section:adding-packages}
 
 \subsection{The Package Makefiles}\label{section:package-makefiles}
 
@@ -204,7 +247,7 @@ will cause the HDDS makefile to check out the trunk version. The names
 of the variables for JANA and sim-recon are {\tt JANA\_URL} and {\tt
   SIM\_RECON\_URL} respectively.
 
-\subsection{Adding New Versions to an Existing Tree}\label{section:adding-versions}
+\subsection{Adding New Package Builds to an Existing Tree}\label{section:adding-packages}
 
 There are two ways:
 
@@ -233,16 +276,13 @@ cd $GLUEX_TOP/sim-recon
 make -f $BUILD_SCRIPTS/Makefile_sim-recon SIM_RECON_VERSION=1.4.0
 \end{verbatim}
 Note that in this example the version is specified on the make command
-line rather than through an environment variable. Also doing the build in the sim-recon container directory is not necessary for the build to succeed; any directory will work. In this example however we are adding to an existing standard directory structure.
-
-\section{Setting Up the Shell Environment}
-
-Facility is provided for setting environment variables necessary both
-for building the software and for using it. Both Bourne-shell-like and
-C-shell-like shells are supported, but real testing has only been done
-with bash and tcsh. In the following all examples will be appropriate
-for bash. Note that whenever a script like foo.sh is mentioned, there
-is also a foo.csh in the build-scripts directory.
+line rather than through an environment variable. That is not
+necessary; it is an option supported by make and defining {\tt
+  SIM\_RECON\_VERSION} in the environment would work as well. Also
+note that doing the build in the sim-recon container directory is not
+necessary for the build to succeed; any directory will work. In this
+example however we are adding to an existing standard directory
+structure so we {\tt cd} to the standard directory.
 
 \section{The Prerequisites System}
 
