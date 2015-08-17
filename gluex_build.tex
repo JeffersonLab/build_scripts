@@ -96,7 +96,7 @@ Under gluex\_top, each package has its own container directory ({\it
   e.~g.}, {\tt jana, hdds, sim-recon}) and for each package container
 directory one or more specific versions of that package are built.
 
-\section{Scripts to Support the VMS: the {\tt build\_scripts} Directory}
+\section{Scripts to Implement the VMS: the {\tt build\_scripts} Directory}
 
 All scripts and makefiles to support VMS are found the in the {\tt
   build\_scripts} directory. At JLab, the full path is
@@ -113,14 +113,12 @@ with bash and tcsh. In the following all examples will be appropriate
 for bash. Note that whenever a script like foo.sh is mentioned, there
 is also a foo.csh in the build-scripts directory.
 
-\subsection{Base-Level Environment Set-Up: {\tt gluex\_env.(c)sh}}
+\subsection{Base-Level Environment Set-Up: {\tt gluex\_env.(c)sh}}\label{section:base-level-environment-setting}
 
 The {\tt gluex\_env.(c)sh} script will define all environment
-variables needed to run and build GlueX software, including extension
-of the {\tt PATH}, {\tt LD\_LIBRARY\_PATH}, and {\tt
-  PYTHONPATH} variables. It takes as input the home directories
-of each package as found in the environment variables listed in
-Table~\ref{table:home-directories}.
+variables needed to run and build GlueX software. It takes as input
+the home directories of each package as found in the environment
+variables listed in Table~\ref{table:home-directories}.
 
 \begin{table}
 \begin{center}
@@ -142,9 +140,46 @@ sim-recon & {\tt HALLD\_HOME} \\
 \caption{Packages and their home directories.}\label{table:home-directories}
 \end{table}
 
-respects pre-defined variables
+Given the home directory of a package there may or may not be other
+environment variables that need to be set, those variables derived
+from the value of home. {\tt gluex\_env.(c)sh} takes care of this. For
+example, {\tt XERCES\_INCLUDE} is used in the build system and must be
+defined as {\tt \$XERCESCROOT/include}. Directories containing
+binaries must be added to the {\tt PATH} variable and similarly for
+{\tt LD\_LIBRARY\_PATH}, and {\tt PYTHONPATH}. For these path
+variables directories are always added at the front with any
+pre-existing directories maintained on the list.
 
-version.xml
+\subsubsection{Pre-Defined Home Variables and Defaults}
+
+If any of the home directories are defined before sourcing {\tt
+  gluex\_env.(c)sh}, those values will be respected. If any are not
+defined, then a default will be provided, usually the {\tt prod}
+directory in the package container directory. Because of this
+behavior, the user can define as many or as few of the home
+directories as desired in advance of sourcing {\tt gluex\_env.(c)sh},
+letting the script finish the environment settings keying off of the
+user definitions (or lack thereof). The user is thus only responsible
+for setting the values of desired home directories. A side effect of
+this behavior is that the environment that results is
+non-determininistic in the sense that the result depend on the values
+of pre-existing home directory variables. Different initial conditions
+will give different environments.
+
+\subsubsection{Consistency Checking}
+
+The final step in {\tt gluex\_env.(c)sh} is to check the resulting
+environment for consistency using the prerequisites system. Each home
+directory is checked for a prerequisites version file. Those files
+list versions of prerequisite packages used at build time. The
+build-time version are checked against the versions used in the
+just-set-up environment and warnings are printed when mismatches are
+detected. See Section~\ref{section:prerequisites-system} for the
+details.
+
+\subsection{Cleaning the Environment: {\tt gluex\_env\_clean\_.(c)sh}}
+
+Since {\tt gluex\_env.(c)sh} is sensitive to definitions hanging around in the environment, there is a script provided that will undo all GlueX-related definitions: {\tt gluex\_env\_clean\_.(c)sh}. For the path variables it will only remove the GlueX-related elements leaving the rest.
 
 \section{The Build System}
 
@@ -193,7 +228,7 @@ builds where we use the community-built versions of CERNLIB).
 {{\tt Makefile\_all}} should always be invoked from the {\tt
   \$GLUEX\_TOP} directory.
 
-\subsubsection{Individual Package Makefiles}
+\subsubsection{Individual Package Targets}
 
 Each of the individual package targets ({\it e.~g.}, {\tt evio\_build}
 and {\tt hdds\_build}) use the corresponding package
@@ -284,7 +319,80 @@ necessary for the build to succeed; any directory will work. In this
 example however we are adding to an existing standard directory
 structure so we {\tt cd} to the standard directory.
 
-\section{The Prerequisites System}
+\section{The Versioning System}
+
+The versioning system uses an XML-formatted version file to specify
+both package version information and package home directory definition
+in the shell environment. An example file is shown in
+Fig.~/ref{figure:version-xml}.
+
+\begin{figure}
+\begin{verbatim}
+  <gversions>
+  <package name="jana" version="0.7.3"/>
+  <package name="sim-recon" version="1.4.0"/>
+  <package name="hdds" version="3.3"/>
+  <package name="cernlib" version="2005" word_length="64-bit"/>
+  <package name="xerces-c" version="3.1.1"/>
+  <package name="clhep" version="2.0.4.5"/>
+  <package name="root" version="5.34.26"/>
+  <package name="ccdb" version="1.05"/>
+  <package name="evio" version="4.3.1"/>
+  </gversions>
+\end{verbatim}
+\caption{An example version file. {\tt version\_1.7.xml} is shown.}\label{figure:version-xml}
+\end{figure}
+
+As we saw in Section~\ref{section:base-level-environment-setting},
+environment setting via {\tt gluex\_env.(c)sh} is sensitive to the
+definition of the package home variables. In
+Section~\ref{section:package-makefiles}, we saw that the package
+makefiles are sensitive to either the version-defining environment
+variables or the URL-defining environment variables to choose the
+version of code to build. The version file can be used to define both
+classes of variables. In this way it can be used to both build a
+consistent set of packages and to set-up the environment to use the
+build. Executing
+\begin{verbatim}
+           $BUILD_SCRIPTS/version.pl version_1.7.xml
+\end{verbatim}
+where for the purposes of this example {\tt version\_1.7.xml} is the
+file shown in Fig.~\ref{figure:version-xml} and {\tt GLUEX\_TOP} is
+{\tt /home/gluex/gluex\_top}, creates the output shown in
+Fig.~\ref{figure:version-pl-output}.
+\begin{figure}
+\small
+\begin{verbatim}
+setenv JANA_VERSION 0.7.3;
+setenv JANA_HOME \
+    /home/gluex/gluex_top/jana/jana_0.7.3/Linux_RHEL7-x86_64-gcc4.8.3;
+setenv SIM_RECON_VERSION 1.4.0;
+setenv HALLD_HOME /home/gluex/gluex_top/sim-recon/sim-recon-1.4.0;
+setenv HDDS_VERSION 3.3;
+setenv HDDS_HOME /home/gluex/gluex_top/hdds/hdds-3.3;
+setenv CERNLIB_VERSION 2005;
+setenv CERN /home/gluex/gluex_top/cernlib;
+setenv CERN_LEVEL 2005;
+setenv CERNLIB_WORD_LENGTH 64-bit;
+setenv XERCES_C_VERSION 3.1.1;
+setenv XERCESCROOT /home/gluex/gluex_top/xerces-c/xerces-c-3.1.1;
+setenv CLHEP_VERSION 2.0.4.5;
+setenv CLHEP /home/gluex/gluex_top/clhep/2.0.4.5;
+setenv ROOT_VERSION 5.34.26;
+setenv ROOTSYS /home/gluex/gluex_top/root/root_5.34.26;
+setenv CCDB_VERSION 1.05;
+setenv CCDB_HOME /home/gluex/gluex_top/ccdb/ccdb_1.05;
+setenv EVIO_VERSION 4.3.1;
+setenv EVIOROOT /home/gluex/gluex_top/evio/evio-4.3.1/Linux-x86_64;
+\end{verbatim}
+\caption{Output of {\tt \$BUILD\_SCRIPTS/version.pl}.}\label{figure:version-pl-output}
+\end{figure}
+Since you would want these commands applied to the current shell level, in practice you use
+\begin{verbatim}
+       eval `$BUILD_SCRIPTS/version.pl version_1.7.xml`
+\end{verbatim}
+
+\section{The Prerequisites System}\label{section:prerequisites-system}
 
 Each package may or may not have a build dependency on other packages
 under the VMS. For example a particular version of sim-recon can be
