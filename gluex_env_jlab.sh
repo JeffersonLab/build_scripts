@@ -1,6 +1,6 @@
 #!/bin/tcsh
 VERSION_XML=/group/halld/www/halldweb/html/dist/version_1.7.xml
-export BUILD_SCRIPTS=/group/halld/Software/scripts/build_scripts
+export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
 export GLUEX_TOP=/group/halld/Software/builds/$BMS_OSNAME
 # finish the rest of the environment
