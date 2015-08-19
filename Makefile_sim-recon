@@ -21,12 +21,15 @@ ifdef SIM_RECON_VERSION
 else
  SOURCE_CODE_TARGET = $(HALLD_HOME)/.checkout_done
  ifndef SIM_RECON_URL
-  SIM_RECON_URL=https://halldsvn.jlab.org/repos/trunk/sim-recon
+  SIM_RECON_URL=https://github.com/jeffersonlab/sim-recon
  endif
  ifdef SIM_RECON_DIRTAG
   SIM_RECON_DIR = $(notdir $(SIM_RECON_URL))^$(SIM_RECON_DIRTAG)
  else
   SIM_RECON_DIR = $(notdir $(SIM_RECON_URL))
+ endif
+ ifndef SIM_RECON_BRANCH
+  SIM_RECON_BRANCH = master
  endif
 endif
 export HALLD_HOME = $(PWD)/$(SIM_RECON_DIR)
@@ -45,11 +48,7 @@ $(HALLD_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(HALLD_HOME)/.checkout_done:
-	rm -rf checkout_temp_dir
-	mkdir checkout_temp_dir
-	cd checkout_temp_dir ; svn co $(SIM_RECON_URL)
-	mv -v checkout_temp_dir/* $(SIM_RECON_DIR)
-	rmdir -v checkout_temp_dir
+	git clone -o $(SIM_RECON_DIR) -b $(SIM_RECON_BRANCH) $(SIM_RECON_URL)
 	date > $@
 
 $(HALLD_HOME)/.getarg_patches_done: $(SOURCE_CODE_TARGET)
