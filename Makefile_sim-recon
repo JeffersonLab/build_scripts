@@ -48,7 +48,7 @@ $(HALLD_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(HALLD_HOME)/.checkout_done:
-	git clone -o $(SIM_RECON_DIR) -b $(SIM_RECON_BRANCH) $(SIM_RECON_URL)
+	git clone -b $(SIM_RECON_BRANCH) $(SIM_RECON_URL) $(SIM_RECON_DIR)
 	date > $@
 
 $(HALLD_HOME)/.getarg_patches_done: $(SOURCE_CODE_TARGET)
