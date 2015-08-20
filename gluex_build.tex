@@ -96,13 +96,14 @@ Under gluex\_top, each package has its own container directory ({\it
   e.~g.}, {\tt jana, hdds, sim-recon}) and for each package container
 directory one or more specific versions of that package are built.
 
-\section{Scripts to Implement the VMS: the {\tt build\_scripts} Directory}
+\section{Scripts to Implement the VMS: the {\tt BUILD\_SCRIPTS} Directory}
 
 All scripts and makefiles to support VMS are found the in the {\tt
   build\_scripts} directory. At JLab, the full path is
 $${\tt /group/halld/Software/scripts/build\_scripts}.$$
 The directory can also checked out from the Subversion repository:
 $${\tt https://halldsvn.jlab.org/repos/trunk/scripts/build\_scripts}.$$
+Many of the scripts and makefiles described in this note require that the environment variable {\tt BUILD\_SCRIPTS} be defined and point to an instance of this directory.
 
 \section{Setting Up the Shell Environment}
 
@@ -152,6 +153,13 @@ pre-existing directories maintained on the list.
 
 \subsubsection{Pre-Defined Home Variables and Defaults}
 
+If {\tt GLUEX\_TOP} is defined in advance, the pre-defined value will
+be used. If not it will be defined as {\tt /usr/local/gluex}.
+
+If {\tt BUILD\_SCRIPTS} is defined in advance, again the pre-defined
+value will be used. If not defined it will be defined as {\tt
+  \$GLUEX\_TOP/build\_scripts}.
+
 If any of the home directories are defined before sourcing {\tt
   gluex\_env.(c)sh}, those values will be respected. If any are not
 defined, then a default will be provided, usually the {\tt prod}
@@ -179,13 +187,61 @@ details.
 
 \subsubsection{Cleaning the Environment: {\tt gluex\_env\_clean.(c)sh}}
 
-Since {\tt gluex\_env.(c)sh} is sensitive to definitions hanging around in the environment, there is a script provided that will undo all GlueX-related definitions: {\tt gluex\_env\_clean.(c)sh}. For the path variables it will only remove the GlueX-related elements leaving the rest.
+Since {\tt gluex\_env.(c)sh} is sensitive to definitions hanging
+around in the environment, there is a script provided that will undo
+all GlueX-related definitions: {\tt gluex\_env\_clean.(c)sh}. Sourcing
+it will eliminate unintended consequences from previously made
+definitions. For the path variables the script only removes the
+GlueX-related elements leaving all others present in the path.
 
 \subsection{High-Level Environment Set-Up}
 
 \subsubsection{Custom Scripts}
 
-The most common reason to have a custom script is when you want to use a package that is outside the standard directory structure. Since {\tt gluex\_env.(c)sh} will respect a pre-defined value of any of the home directories, this can be done without making a private version of {\tt gluex\_env.(c)sh}. Fig.~???
+The most common reason to have a custom script is when you want to use
+a package that is outside the standard directory structure. Since {\tt
+  gluex\_env.(c)sh} will respect a pre-defined value of any of the
+home directories, this can be done without making a private version of
+{\tt gluex\_env.(c)sh}. See Fig.~\ref{figure:custom-script} for an
+example. Here a version of sim-recon built in a non-standard location
+(the user's home directory) will be used in the resulting enviroment.
+
+\begin{figure}
+\begin{verbatim}
+          export GLUEX_TOP=/home/gluex/gluex_top
+          export BUILD_SCRIPTS=$GLUEX_TOP/build_scripts
+          export HALLD_HOME=/home/username/sim-recon
+          source $BUILD_SCRIPTS/gluex_env.sh
+\end{verbatim}
+\caption{Example of a custom set-up script. The build of sim-recon in
+  the user's home directory will be used. All other packages be set up
+  to use with their default builds under {\tt
+    /home/gluex/gluex\_top}. Note that {\tt GLUEX\_TOP} and {\tt
+  BUILD\_SCRIPTS} are defined explicitly rather than letting them
+default.}\label{figure:custom-script}
+\end{figure}
+
+\subsubsection{Using the Versioning System}
+
+Another way to get a non-default environment is to use the versioning
+system to set home directory locations which in turn are respected by
+{\tt gluex\_env.(c)sh}. The versioning system is described in detail
+in Section~\ref{section:versioning}, but an example set-up script is
+shown in Fig.~\ref{figure:version-script}. Here package version
+information is contained in the XML file {\tt my\_versions.xml} in the
+user's home area. An example version file is shown in Fig.~\ref{figure:version-xml}.
+
+\begin{figure}
+\begin{verbatim}
+        export GLUEX_TOP=/home/gluex/gluex_top
+        export BUILD_SCRIPTS=$GLUEX_TOP/build_scripts
+        source $BUILD_SCRIPTS/gluex_env_version.sh \
+            /home/username/my_versions.xml
+\end{verbatim}
+\caption{Example of a set-up script driven by a private version
+  file. See Section~\ref{section:versioning} for the format of the
+  file.}\label{figure:version-script}
+\end{figure}
 
 \section{The Build System}
 
@@ -325,7 +381,9 @@ necessary for the build to succeed; any directory will work. In this
 example however we are adding to an existing standard directory
 structure so we {\tt cd} to the standard directory.
 
-\section{The Versioning System}
+\section{The Versioning System}\label{section:versioning}
+
+\subsection{Version File Format: an XML}
 
 The versioning system uses an XML-formatted version file to specify
 both package version information and package home directory definition
@@ -348,6 +406,30 @@ Fig.~/ref{figure:version-xml}.
 \end{verbatim}
 \caption{An example version file. {\tt version\_1.7.xml} is shown.}\label{figure:version-xml}
 \end{figure}
+
+There is only one type of element, the {\tt package}. Attributes are:
+
+\begin{description}
+\item{\bf name}: The name of the software package.
+\item{\bf version}: The version number of the package.
+\item{\bf url}: A URL to be used to checkout (Subversion) or clone
+  (Git) the code. The URL should point to an appropriate repository.
+\item{\bf branch}: When using a Git repository, the branch to be
+  checked out.\footnote{Not yet implemented; at this writing the
+    master branch will always be checked out.}
+\item{\bf dirtag}: A string (directory tag) to be appended to the
+  standard directory name of the package when it is built. This
+  attribute can be used to distinguish different builds of a package
+  where the only difference between them is the version(s) of one or
+  more prequisite packages. The string used is
+  arbitrary.\footnote{There are a lot possible meanings for the
+    directory tag. It could mark different combinations of multiple
+    prerequisites as well as custom modifications to packages that
+    otherwise would have a standard name. Because of the large number
+    of possibilities, the form of this string is left to the user.}
+\end{description}
+
+\subsection{Setting Up the Environment with a Version File}
 
 As we saw in Section~\ref{section:low-level-environment-setting},
 environment setting via {\tt gluex\_env.(c)sh} is sensitive to the
@@ -397,6 +479,12 @@ Since you would want these commands applied to the current shell level, in pract
 \begin{verbatim}
        eval `$BUILD_SCRIPTS/version.pl version_1.7.xml`
 \end{verbatim}
+
+Finally, the script {\tt gluex\_env\_version.(c)sh} combines use of {\tt version.pl} and {\tt gluex\_env.(c)sh} to more conveniently set up the environment. We have already seen an example of its use in Fig.~\ref{figure:version-script}. The script uses {\tt version.pl} just as shown above to set the stage for an invocation of {\tt gluex\_env.(c)sh}.
+
+\subsection{Specifying Build Parameters with a Version File}
+\subsubsection{Directory Tags}\label{section:directory-tags}
+
 
 \section{The Prerequisites System}\label{section:prerequisites-system}
 
@@ -528,8 +616,6 @@ After the build is complete, there are two files in the gluex
 directory, setup.sh and setup.csh, that can be used to set-up the
 complete GlueX environment under Bourne-like shells or C-like shells
 respectively.
-
-\section{junk section}\label{section:directory-tags}
 
 \end{document}
 
