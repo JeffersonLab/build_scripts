@@ -388,7 +388,7 @@ structure so we {\tt cd} to the standard directory.
 The versioning system uses an XML-formatted version file to specify
 both package version information and package home directory definition
 in the shell environment. An example file is shown in
-Fig.~/ref{figure:version-xml}.
+Fig.~\ref{figure:version-xml}.
 
 \begin{figure}
 \begin{verbatim}
@@ -418,15 +418,7 @@ There is only one type of element, the {\tt package}. Attributes are:
   checked out.\footnote{Not yet implemented; at this writing the
     master branch will always be checked out.}
 \item{\bf dirtag}: A string (directory tag) to be appended to the
-  standard directory name of the package when it is built. This
-  attribute can be used to distinguish different builds of a package
-  where the only difference between them is the version(s) of one or
-  more prequisite packages. The string used is
-  arbitrary.\footnote{There are a lot possible meanings for the
-    directory tag. It could mark different combinations of multiple
-    prerequisites as well as custom modifications to packages that
-    otherwise would have a standard name. Because of the large number
-    of possibilities, the form of this string is left to the user.}
+  standard directory name of the package when it is built.
 \end{description}
 
 \subsection{Setting Up the Environment with a Version File}
@@ -479,12 +471,71 @@ Since you would want these commands applied to the current shell level, in pract
 \begin{verbatim}
        eval `$BUILD_SCRIPTS/version.pl version_1.7.xml`
 \end{verbatim}
+Following this step, one normally would invoke {\tt gluex\_env.(c)sh}
+to complete the set-up of the environment.
 
-Finally, the script {\tt gluex\_env\_version.(c)sh} combines use of {\tt version.pl} and {\tt gluex\_env.(c)sh} to more conveniently set up the environment. We have already seen an example of its use in Fig.~\ref{figure:version-script}. The script uses {\tt version.pl} just as shown above to set the stage for an invocation of {\tt gluex\_env.(c)sh}.
+In this example, the variable definitions come (mostly) in pairs, a
+version variable and a home directory variable. The version variable
+affects only the build process since the corresponding package
+makefile keys off it (see
+Section~\ref{section:package-makefiles}). The home directory variable
+affects the build as well in that it tells the package makefile where
+to find any prerequistite packages and in addition it affects use of a
+build via its effect on path variables.
 
-\subsection{Specifying Build Parameters with a Version File}
-\subsubsection{Directory Tags}\label{section:directory-tags}
+Finally, the script {\tt gluex\_env\_version.(c)sh} combines use of
+{\tt version.pl} and {\tt gluex\_env.(c)sh} to more conveniently set
+up the environment. We have already seen an example of its use in
+Fig.~\ref{figure:version-script}. The script uses {\tt version.pl} as
+shown above to set the stage for an invocation of {\tt
+  gluex\_env.(c)sh}.
 
+\subsection{Specifying Alternate Source Code Sources with a Version File}
+
+We saw in Section~\ref{section:package-makefiles} that a URL variable
+can be used to instructed the package makefiles to get the source code
+from a version control repository rather downloading a tarball. The
+{\tt url} attribute in the package element calls out the value of the
+URL to use directly. In a particular {\tt package} element, either the
+{\tt version} attribute or the {\tt url} attribute should appear,
+never both. If the {\tt url} attribute is used, each package makefile
+will interpret the URL as is appropriate for that package, either as a
+Subversion repository or a Git repository; there can be only one
+answer and it is coded into the package makefile. For Git
+repositories, the optional {\tt branch} attribute controls which
+branch is checked out. If it is absent, the master branch is
+used. Note that for Subversion repositories, branch specification is
+done via the URL itself.
+
+\subsection{Directory Tags}\label{section:directory-tags}
+
+The {\tt dirtag} attribute can be used to distinguish different builds
+of a package where the only difference between them is the version(s)
+of one or more prequisite packages. The string used is arbitrary. A
+directory tag can be attached to either a source directory made from a
+tarball or one from a source code repository. The tag name is appended
+after a caret symbol (\^), for example,
+\begin{verbatim}
+  <package name="hdds" version="3.3" dirtag="xerces_test"\>
+\end{verbatim}
+in a version file would cause {\tt version.pl} to add an additional
+variable to the environment:
+\begin{verbatim}
+  setenv HDDS_DIRTAG xerces_test
+\end{verbatim}
+and {\tt Makefile\_hdds} would then produce a directory named
+{\tt hdds-3.3\^xerces\_test}, with source code obtained from the standard
+tarball, {\tt hdds-3.3-src.tar.gz} in this case.
+
+The corresponding home directory variable will also reflect the
+directory tag, of course.
+
+There are a lot possible meanings for the directory tag. It could mark
+different combinations of prerequisites as well as designating
+packages where the source code does {\bf not} come from a standard
+source (tarball or repository). Because of the large number of
+possibilities, the form of the tag string is left to the user; no
+assumption is made about it meaning.
 
 \section{The Prerequisites System}\label{section:prerequisites-system}
 
@@ -516,7 +567,14 @@ sim-recon. An example is shown in Fig.~\ref{figure:prereqs-xml-file}
 \caption{An example of sim-recon\_prereqs\_version.xml.}\label{figure:prereqs-xml-file}
 \end{figure}
 
-At set-up time, when {\tt gluex\_env.(c)sh} is invoked, if a version file with prerequisites is found in the package home directory, then each package in that file is checked for version consistency. A match is sought between the version number specified in the version file and the version number encoded in the home directory for the prerequisite package, {\it i.~e.}, the directory defined as home in the environment being set-up. Here the version from the home directory is extracted in two ways depending on how the package was built:
+At set-up time, when {\tt gluex\_env.(c)sh} is invoked, if a version
+file with prerequisites is found in the package home directory, then
+each package in that file is checked for version consistency. A match
+is sought between the version number specified in the version file and
+the version number encoded in the home directory for the prerequisite
+package, {\it i.~e.}, the directory defined as home in the environment
+being set-up. Here the version from the home directory is extracted in
+two ways depending on how the package was built:
 \begin{enumerate}
 \item {\bf Tar File}. If the source code came from a tar file, then the version number is parsed out of the name of the home directory.
 \item {\bf Subversion Checkout}. If the source was checked out of a subversion repository, the {\tt svn info} command is used to get the name of the subversion directory checked out and the version is parsed from that directory name.
