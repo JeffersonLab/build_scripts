@@ -1,10 +1,20 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 
 \usepackage{graphicx}
 
-\title{A Version Management System for GlueX \\ \medskip \large GlueX Note 2793-v1}
+% global parameters
+\textwidth=6.5in
+\oddsidemargin=0in % use built-in offset of 1 inch for left margin
+\evensidemargin=0in % ditto for even pages
+\textheight=9in
+\topmargin=0in
+\headheight=0in % no headers in this document
+\headsep=0in
+
+\title{A Version Management System for GlueX \\ \medskip \large GlueX
+  Note 2793-v2}
 \author{Mark M.\ Ito \\ \medskip Jefferson Lab}
-\date{August 21, 2015}
+\date{August 24, 2015}
 
 \begin{document}
 
@@ -12,13 +22,13 @@
 
 \abstract{A system for building and managing GlueX software is
   described. The goal is to insulate the user from the need to the
-  master details of building each of several software packages and
-  from the detials of setting up a working environment, while
-  maintaining multiple versions of each of several packages
+  master details of building each of several software packages as well
+  as from the details of setting up a working environment. Multiple
+  versions of each of several packages can be maintained
   simultaneously. Particular combinations of package versions can be
-  specified succintly in an XML configuration file and this file can
+  specified succinctly in an XML configuration file and this file can
   be used both to guide a complete build of all needed packages and to
-  set up the shell environment to use such a build.}
+  set up the shell environment to use the resulting build.}
 
 \tableofcontents
 
@@ -103,17 +113,20 @@ in the environment variable {\tt GLUEX\_TOP}.
 \end{figure}
 
 Under gluex\_top, each package has its own container directory ({\it
-  e.~g.}, {\tt jana, hdds, sim-recon}) and for each package container
+  e.~g.}, {\tt JANA, hdds, sim-recon}) and for each package container
 directory one or more specific versions of that package are built.
 
-\section{Scripts to Implement the VMS: the {\tt BUILD\_SCRIPTS} Directory}
+\section{Scripts to Implement the VMS: \\ the {\tt BUILD\_SCRIPTS} Directory}
 
 All scripts and makefiles to support VMS are found the in the {\tt
   build\_scripts} directory. At JLab, the full path is
+
 $${\tt /group/halld/Software/scripts/build\_scripts}.$$
 The directory can also checked out from the Subversion repository:
 $${\tt https://halldsvn.jlab.org/repos/trunk/scripts/build\_scripts}.$$
-Many of the scripts and makefiles described in this note require that the environment variable {\tt BUILD\_SCRIPTS} be defined and point to an instance of this directory.
+Many of the scripts and makefiles described in this note require that
+the environment variable {\tt BUILD\_SCRIPTS} be defined and point to
+an instance of this directory.
 
 \section{Setting Up the Shell Environment}
 
@@ -124,7 +137,8 @@ with bash and tcsh. In the following all examples will be appropriate
 for bash. Note that whenever a script like foo.sh is mentioned, there
 is also a foo.csh in the build-scripts directory.
 
-\subsection{Low-Level Environment Set-Up: {\tt gluex\_env.(c)sh}}\label{section:low-level-environment-setting}
+\subsection{Low-Level Environment Set-Up: {\tt gluex\_env.(c)sh}}
+\label{section:low-level-environment-setting}
 
 The {\tt gluex\_env.(c)sh} script will define all environment
 variables needed to run and build GlueX software. It takes as input
@@ -180,7 +194,7 @@ letting the script finish the environment settings keying off of the
 user definitions (or lack thereof). The user is thus only responsible
 for setting the values of desired home directories. A side effect of
 this behavior is that the environment that results is
-non-determininistic in the sense that the result depend on the values
+non-deterministic in the sense that the result depend on the values
 of pre-existing home directory variables. Different initial conditions
 will give different environments.
 
@@ -199,7 +213,7 @@ details.
 
 Since {\tt gluex\_env.(c)sh} is sensitive to definitions hanging
 around in the environment, there is a script provided that will undo
-all GlueX-related definitions: {\tt gluex\_env\_clean.(c)sh}. Sourcing
+all GlueX-related definitions: \break {\tt gluex\_env\_clean.(c)sh}. Sourcing
 it will eliminate unintended consequences from previously made
 definitions. For the path variables the script only removes the
 GlueX-related elements leaving all others present in the path.
@@ -214,7 +228,7 @@ a package that is outside the standard directory structure. Since {\tt
 home directories, this can be done without making a private version of
 {\tt gluex\_env.(c)sh}. See Fig.~\ref{figure:custom-script} for an
 example. Here a version of sim-recon built in a non-standard location
-(the user's home directory) will be used in the resulting enviroment.
+(the user's home directory) will be used in the resulting environment.
 
 \begin{figure}
 \begin{verbatim}
@@ -258,14 +272,14 @@ user's home area. An example version file is shown in Fig.~\ref{figure:version-x
 Each of the packages have their own native build system and each build
 system has its own set of details that have to be understood. In
 addition, the technology used to do the build varies from system to
-system. It may be make, imake, cmake, Scons, or something else. The
+system. It may be make, imake, cmake, SCons, or something else. The
 VMS system makes a choice of build options for each package so that
 the user need not master these details.
 
 \subsection{The Makefiles}
 
 The VMS build system is implemented in GNU Make. These makefiles
-invoke the natice package-specific build system. There is a ``package
+invoke the native package-specific build system. There is a ``package
 makefile'' for each package ({\it e.~g.}, {\tt Makefile\_jana,
   Makefile\_sim-recon}). Invoking make with a package makefile will
 build that package with the home directory placed in the current
@@ -276,7 +290,7 @@ locally.
 \subsubsection{The Top-Level: {\tt Makefile\_all}}
 
 Complete builds are orchestrated by {\tt Makefile\_all}. The highest-level
-targets of Makefile\_all, shown with their depedencies are:
+targets of Makefile\_all, shown with their dependencies are:
 
 \begin{verbatim}
 all: env xerces_build cernlib_build root_build clhep_build \
@@ -490,7 +504,7 @@ affects only the build process since the corresponding package
 makefile keys off it (see
 Section~\ref{section:package-makefiles}). The home directory variable
 affects the build as well in that it tells the package makefile where
-to find any prerequistite packages and in addition it affects use of a
+to find any prerequisite packages and in addition it affects use of a
 build via its effect on path variables.
 
 Finally, the script {\tt gluex\_env\_version.(c)sh} combines use of
@@ -521,7 +535,7 @@ done via the URL itself.
 
 The {\tt dirtag} attribute can be used to distinguish different builds
 of a package where the only difference between them is the version(s)
-of one or more prequisite packages. The string used is arbitrary. A
+of one or more prerequisite packages. The string used is arbitrary. A
 directory tag can be attached to either a source directory made from a
 tarball or one from a source code repository. The tag name is appended
 after a caret symbol (\^), for example,
@@ -672,7 +686,7 @@ set of packages.
   ``gluex\_top'', in the current working directory to house the build,
   sets up an environment, downloads all source files, and builds all
   libraries and executables needed to run GlueX software. The install
-  assumes a directory structure that accomodates multiple versions of
+  assumes a directory structure that accommodates multiple versions of
   the GlueX packages if they are needed later. The script is
   distribution independent.
 
