@@ -19,7 +19,7 @@ ifdef SIM_RECON_VERSION
  endif
  TARFILE = sim-recon-$(SIM_RECON_VERSION)-src.tar.gz
 else
- SOURCE_CODE_TARGET = $(HALLD_HOME)/.checkout_done
+ SOURCE_CODE_TARGET = $(HALLD_HOME)/.clone_done
  ifndef SIM_RECON_URL
   SIM_RECON_URL=https://github.com/jeffersonlab/sim-recon
  endif
@@ -47,7 +47,7 @@ $(HALLD_HOME)/.untar_done: $(TARFILE)
 	rmdir -v untar_temp_dir
 	date > $@
 
-$(HALLD_HOME)/.checkout_done:
+$(HALLD_HOME)/.clone_done:
 	git clone -b $(SIM_RECON_BRANCH) $(SIM_RECON_URL) $(SIM_RECON_DIR)
 	date > $@
 
