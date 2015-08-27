@@ -1,20 +1,19 @@
 #!/bin/tcsh
 # go to the target directory
 setenv TODAYS_DATE `date +%F`
-setenv TARGET_DIR /u/scratch/gluex/nightly/$TODAYS_DATE
+setenv TARGET_DIR /u/scratch/$USER/nightly/$TODAYS_DATE
+setenv BUILD_SCRIPTS $TARGET_DIR/build_scripts
 mkdir -p $TARGET_DIR
-cd $TARGET_DIR
 # get build scripts
-svn checkout file:///group/halld/Repositories/svnroot/trunk/scripts/build_scripts
-# temp update of git-enabled makefiles
-pushd build_scripts
-svn update -r19034 Makefile_hdds Makefile_sim-recon
-popd
+cd /group/halld/Repositories/build_scripts
+git archive --prefix build_scripts/ master | tar xv -C $TARGET_DIR
+cd $TARGET_DIR
 cp -v /group/halld/www/halldweb/html/dist/version.xml .
-source build_scripts/gluex_env_nightly.csh $TODAYS_DATE
+setenv NIGHTLY_DIR $TARGET_DIR
+source $BUILD_SCRIPTS/gluex_env_nightly.csh $TODAYS_DATE
 # make hdds
-make -f $BUILD_SCRIPTS/Makefile_hdds sconstruct
+make -f $BUILD_SCRIPTS/Makefile_hdds
 # make sim-recon
-make -f $BUILD_SCRIPTS/Makefile_sim-recon sconstruct
+make -f $BUILD_SCRIPTS/Makefile_sim-recon
 # exit
 exit
