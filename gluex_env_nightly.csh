@@ -1,6 +1,6 @@
 #!/bin/tcsh
 setenv BUILD_DATE $1
-if (! $NIGHTLY_DIR) set NIGHTLY_DIR=/u/scratch/gluex/nightly/$BUILD_DATE
+if (! $?NIGHTLY_DIR) set NIGHTLY_DIR=/u/scratch/gluex/nightly/$BUILD_DATE
 setenv BUILD_SCRIPTS $NIGHTLY_DIR/build_scripts
 setenv GLUEX_TOP /group/halld/Software/builds/`$BUILD_SCRIPTS/osrelease.pl`
 eval `$BUILD_SCRIPTS/version.pl $NIGHTLY_DIR/version.xml`
