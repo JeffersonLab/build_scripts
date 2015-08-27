@@ -11,12 +11,9 @@ cd $TARGET_DIR
 cp -v /group/halld/www/halldweb/html/dist/version.xml .
 setenv NIGHTLY_DIR $TARGET_DIR
 source $BUILD_SCRIPTS/gluex_env_nightly.csh $TODAYS_DATE
-echo BUILD_SCRIPTS = $BUILD_SCRIPTS
-unsetenv HDDS_VERSION SIM_RECON_VERSION
 # make hdds
-cat $BUILD_SCRIPTS/Makefile_hdds
-make -f $BUILD_SCRIPTS/Makefile_hdds sconstruct
+make -f $BUILD_SCRIPTS/Makefile_hdds
 # make sim-recon
-make -f $BUILD_SCRIPTS/Makefile_sim-recon sconstruct
+make -f $BUILD_SCRIPTS/Makefile_sim-recon
 # exit
 exit
