@@ -1,10 +1,25 @@
 ifdef CCDB_VERSION
-  CCDB_DIR = ccdb_$(CCDB_VERSION)
   TARFILE = ccdb_$(CCDB_VERSION)-src.tar.gz
   GET_SOURCE_TARGET = $(CCDB_DIR)/.untar_done
+  ifdef CCDB_DIRTAG
+    CCDB_DIR = ccdb_$(CCDB_VERSION)^$(CCDB_DIRTAG)
+  else
+    CCDB_DIR = ccdb_$(CCDB_VERSION)
+  endif
 else
   CCDB_DIR = ccdb
-  GET_SOURCE_TARGET = $(CCDB_DIR)/.checkout_done
+  GET_SOURCE_TARGET = $(CCDB_DIR)/.clone_done
+  ifndef CCDB_URL
+    CCDB_URL=https://github.com/JeffersonLab/ccdb
+  endif
+  ifdef CCDB_DIRTAG
+    CCDB_DIR = $(notdir $(CCDB_URL))^$(CCDB_DIRTAG)
+  else
+    CCDB_DIR = $(notdir $(CCDB_URL))
+  endif
+  ifndef CCDB_BRANCH
+    CCDB_BRANCH = master
+  endif
 endif
 
 all: prod_link
@@ -13,12 +28,15 @@ $(TARFILE):
 	wget --no-check-certificate https://halldweb.jlab.org/dist/$(TARFILE)
 
 $(CCDB_DIR)/.untar_done: $(TARFILE)
-	tar zxvf $(TARFILE)
+	rm -rfv untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(CCDB_DIR)
+	rmdir -v untar_temp_dir
 	date > $@
 
-$(CCDB_DIR)/.checkout_done:
-	if [ -d $(CCDB_DIR) ] ; then svn cleanup $(CCDB_DIR) ; fi
-	svn checkout https://phys12svn.jlab.org/repos/trunk/ccdb
+$(CCDB_DIR)/.clone_done:
+	git clone -b $(CCDB_BRANCH) $(CCDB_URL) $(CCDB_DIR)
 	date > $@
 
 $(CCDB_DIR)/.untar_local_scons: $(GET_SOURCE_TARGET)
