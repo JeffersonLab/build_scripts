@@ -1,7 +1,7 @@
 #!/bin/tcsh
 # go to the target directory
 setenv TODAYS_DATE `date +%F`
-setenv TARGET_DIR /u/scratch/$USER/nightly/$TODAYS_DATE
+setenv TARGET_DIR /u/scratch/$USER/nightly/$TODAYS_DATE/`/group/halld/Software/build_scripts/osrelease.pl`
 setenv BUILD_SCRIPTS $TARGET_DIR/build_scripts
 mkdir -p $TARGET_DIR
 # get build scripts
