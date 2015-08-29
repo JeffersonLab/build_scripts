@@ -12,9 +12,9 @@
 \headsep=0in
 
 \title{A Version Management System for GlueX \\ \medskip \large GlueX
-  Note 2793-v2}
+  Note 2793-v3}
 \author{Mark M.\ Ito \\ \medskip Jefferson Lab}
-\date{August 24, 2015}
+\date{August 29, 2015}
 
 \begin{document}
 
@@ -439,8 +439,7 @@ There is only one type of element, the {\tt package}. Attributes are:
 \item{\bf url}: A URL to be used to checkout (Subversion) or clone
   (Git) the code. The URL should point to an appropriate repository.
 \item{\bf branch}: When using a Git repository, the branch to be
-  checked out.\footnote{Not yet implemented; at this writing the
-    master branch will always be checked out.}
+  checked out.
 \item{\bf dirtag}: A string (directory tag) to be appended to the
   standard directory name of the package when it is built.
 \end{description}
@@ -452,7 +451,7 @@ environment setting via {\tt gluex\_env.(c)sh} is sensitive to the
 definition of the package home variables. In
 Section~\ref{section:package-makefiles}, we saw that the package
 makefiles are sensitive to either the version-defining environment
-variables or the URL-defining environment variables to choose the
+variables or the URL-defining environment variables, using them to choose the
 version of code to build. The version file can be used to define both
 classes of variables. In this way it can be used to both build a
 consistent set of packages and to set-up the environment to use the
@@ -521,15 +520,24 @@ can be used to instructed the package makefiles to get the source code
 from a version control repository rather downloading a tarball. The
 {\tt url} attribute in the package element calls out the value of the
 URL to use directly. In a particular {\tt package} element, either the
-{\tt version} attribute or the {\tt url} attribute should appear,
-never both. If the {\tt url} attribute is used, each package makefile
+{\tt version} attribute or the {\tt url} attribute should
+appear; if both appear then the {\tt version} attribute will
+be used ({\it i.~e.}, tarball).
+If the {\tt url} attribute is used, each package makefile
 will interpret the URL as is appropriate for that package, either as a
 Subversion repository or a Git repository; there can be only one
 answer and it is coded into the package makefile. For Git
 repositories, the optional {\tt branch} attribute controls which
 branch is checked out. If it is absent, the master branch is
-used. Note that for Subversion repositories, branch specification is
-done via the URL itself.
+used. For example, to clone sim-recon and checkout the branch
+{\tt test\_stuff}, use
+\begin{verbatim}
+     <package name="sim-recon"
+              url="https://github.com/jeffersonlab/sim-recon"
+              branch="test_stuff"/>
+\end{verbatim}
+Note that for Subversion repositories, the branch specification is
+encoded in the URL itself and the branch attribute is ignored.
 
 \subsection{Directory Tags}\label{section:directory-tags}
 
@@ -538,7 +546,7 @@ of a package where the only difference between them is the version(s)
 of one or more prerequisite packages. The string used is arbitrary. A
 directory tag can be attached to either a source directory made from a
 tarball or one from a source code repository. The tag name is appended
-after a caret symbol (\^), for example,
+after a caret symbol (\^{}), for example,
 \begin{verbatim}
   <package name="hdds" version="3.3" dirtag="xerces_test"\>
 \end{verbatim}
@@ -548,7 +556,7 @@ variable to the environment:
   setenv HDDS_DIRTAG xerces_test
 \end{verbatim}
 and {\tt Makefile\_hdds} would then produce a directory named
-{\tt hdds-3.3\^xerces\_test}, with source code obtained from the standard
+{\tt hdds-3.3\^{}xerces\_test}, with source code obtained from the standard
 tarball, {\tt hdds-3.3-src.tar.gz} in this case.
 
 The corresponding home directory variable will also reflect the
@@ -607,8 +615,7 @@ If a version mismatch is found, a warning is written to the screen.
 
 \section{The gluex\_install System}
 
-Independent of the {\tt build\_scripts} directory, the {\tt
-  gluex\_install} system uses {\tt build\_scripts} to create a
+The {\tt gluex\_install} system uses {\tt build\_scripts} to create a
 complete install of GlueX software from scratch. This is especially
 useful for new machines.
 
