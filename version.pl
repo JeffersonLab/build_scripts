@@ -59,23 +59,39 @@ foreach $href (@b) {
     $version = $d{version};
     $dirtag = $d{dirtag};
     $url = $d{url};
-    if ($version) {print_command("${name_in_caps}_VERSION", $version);}
+    $branch = $d{branch};
+    $home = $d{home};
+    if ($version) {
+	print_command("${name_in_caps}_VERSION", $version);
+    }
     if ($name eq 'cernlib') {
-	print_command('CERN', "$gluex_top/cernlib");
-	print_command('CERN_LEVEL', $version);
-	print_command('CERNLIB_WORD_LENGTH', $d{word_length});
-    } else {
-	if ($dirtag) {$sep = '^';} else {$sep = '';}
-	if ($url) {
-	    $basename = basename($url);
-	    $package_home_dir = "$gluex_top/$name/$basename$sep$dirtag$dir_suffix{$name}";
+	if ($home) {
+	    print_command('CERN', "$home");
 	} else {
-	    $package_home_dir = "$gluex_top/$name/$dir_prefix{$name}$version$sep$dirtag$dir_suffix{$name}";
+	    print_command('CERN', "$gluex_top/cernlib");
 	}
+	print_command('CERN_LEVEL', $version);
+	$word_length = $d{word_length};
+	if ($word_length) {
+	    print_command('CERNLIB_WORD_LENGTH', $word_length);
+	}
+    } else {
 	$package_home_var = $home_variable{$name};
+	if ($home) {
+	    $package_home_dir = $home;
+	} else {
+	    if ($dirtag) {$sep = '^';} else {$sep = '';}
+	    if ($url) {
+		$basename = basename($url);
+		$package_home_dir = "$gluex_top/$name/$basename$sep$dirtag$dir_suffix{$name}";
+	    } else {
+		$package_home_dir = "$gluex_top/$name/$dir_prefix{$name}$version$sep$dirtag$dir_suffix{$name}";
+	    }
+	    if ($dirtag) {print_command("${name_in_caps}_DIRTAG", $dirtag);}
+	    if ($url) {print_command("${name_in_caps}_URL", $url);}
+	    if ($branch) {print_command("${name_in_caps}_BRANCH", $branch);}
+	}
 	print_command($package_home_var, $package_home_dir);
-	if ($dirtag) {print_command("${name_in_caps}_DIRTAG", $dirtag);}
-	if ($url) {print_command("${name_in_caps}_URL", $url);}
     }
 }
 
