@@ -1,8 +1,9 @@
 #!/bin/tcsh
 setenv BUILD_DATE $1
-if (! $?NIGHTLY_DIR) set NIGHTLY_DIR=/u/scratch/gluex/nightly/$BUILD_DATE
+setenv BMS_OSNAME `/group/halld/Software/build_scripts/osrelease.pl` # boot strap from official build_scripts directory
+if (! $?NIGHTLY_DIR) set NIGHTLY_DIR=/u/scratch/gluex/nightly/$BUILD_DATE/$BMS_OSNAME
 setenv BUILD_SCRIPTS $NIGHTLY_DIR/build_scripts
-setenv GLUEX_TOP /group/halld/Software/builds/`$BUILD_SCRIPTS/osrelease.pl`
+setenv GLUEX_TOP /group/halld/Software/builds/$BMS_OSNAME
 eval `$BUILD_SCRIPTS/version.pl $NIGHTLY_DIR/version.xml`
 # overwrite variables set by version.xml to get latest versions of hdds and sim-recon
 unsetenv HDDS_VERSION SIM_RECON_VERSION
