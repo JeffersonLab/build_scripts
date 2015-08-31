@@ -127,7 +127,7 @@ foreach $package (@packages) {
 			print $message;
 		    }
 		} else {
-		    print "error: no version and no url for prereq $d{name} of $package\n";
+		    print "info: no version and no url for prereq $d{name} of $package\n";
 		}
 		# check dirtags
 		$dirtag_dirname = $dirtag_hash{$d{name}};
