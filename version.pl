@@ -61,7 +61,9 @@ foreach $href (@b) {
     $url = $d{url};
     $branch = $d{branch};
     $home = $d{home};
-    if ($version && ! $home) {print_command("${name_in_caps}_VERSION", $version);}
+    if ($version) {
+	print_command("${name_in_caps}_VERSION", $version);
+    }
     if ($name eq 'cernlib') {
 	if ($home) {
 	    print_command('CERN', "$home");
@@ -74,6 +76,7 @@ foreach $href (@b) {
 	    print_command('CERNLIB_WORD_LENGTH', $word_length);
 	}
     } else {
+	$package_home_var = $home_variable{$name};
 	if ($home) {
 	    $package_home_dir = $home;
 	} else {
@@ -84,7 +87,6 @@ foreach $href (@b) {
 	    } else {
 		$package_home_dir = "$gluex_top/$name/$dir_prefix{$name}$version$sep$dirtag$dir_suffix{$name}";
 	    }
-	    $package_home_var = $home_variable{$name};
 	    if ($dirtag) {print_command("${name_in_caps}_DIRTAG", $dirtag);}
 	    if ($url) {print_command("${name_in_caps}_URL", $url);}
 	    if ($branch) {print_command("${name_in_caps}_BRANCH", $branch);}
