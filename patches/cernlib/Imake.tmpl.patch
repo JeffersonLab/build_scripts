@@ -1,0 +1,11 @@
+--- Imake.tmpl	2015-09-01 12:37:17.017505846 -0400
++++ Imake.tmpl.new	2015-08-31 13:35:34.543525941 -0400
+@@ -632,7 +632,7 @@
+ #define DefaultFCOptions /**/
+ #endif
+ #ifndef FortranDebugFlags	/* flags to turn on debug and/or optimasatio */
+-#define FortranDebugFlags OptimisedFortranFlags
++#define FortranDebugFlags DebuggableFortranDebugFlags
+ #endif
+ #ifndef FortranLinkCmd
+ #define FortranLinkCmd FortranCmd

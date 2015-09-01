@@ -24,6 +24,9 @@ $(DIST_FILES):
 	cd cern ; cp -v ../$(CORR_FILE) cernlib.2005.corr.tgz
 	cd cern ; tar zxvf ../$(INSTALL_FILE)
 	cd cern ; patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_cernlib.patch
+ifdef DEBUG
+	cd cern ; patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_cernlib.debug.patch
+endif
 	date > $@
 
 .build_done: .unpack_done
@@ -35,6 +38,10 @@ $(DIST_FILES):
 	date > $@
 
 .copy_done: .error_check_done
+ifndef DEBUG
+	cp -pr cern/2005 2005_debug
+else
 	cp -pr cern/2005 .
+endif
 	date > $@
 
