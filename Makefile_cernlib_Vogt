@@ -7,41 +7,28 @@ ALL_FILE = cernlib-2005-all-new.tgz
 DIST_FILES = $(ALL_FILE) $(CORR_FILE) $(INSTALL_FILE)
 
 ifndef GVMS_TEST
-all: mkdir .copy_done
+all: .build_done
 else
-all: mkdir .unpack_done
+all: .unpack_done
 endif
-
-mkdir:
-	mkdir -p cern
 
 $(DIST_FILES):
 	wget http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
 
 .unpack_done: $(DIST_FILES)
-	cd cern ; rm -rf *
-	cd cern ; tar zxvf ../$(ALL_FILE)
-	cd cern ; cp -v ../$(CORR_FILE) cernlib.2005.corr.tgz
-	cd cern ; tar zxvf ../$(INSTALL_FILE)
-	cd cern ; patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_cernlib.patch
+	tar zxvf $(ALL_FILE)
+	cp -v $(CORR_FILE) cernlib.2005.corr.tgz
+	tar zxvf $(INSTALL_FILE)
+	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_cernlib.patch
 ifdef DEBUG
-	cd cern ; patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_cernlib.debug.patch
+	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_cernlib.debug.patch
 endif
 	date > $@
 
 .build_done: .unpack_done
-	cd cern ; ./Install_cernlib
+	./Install_cernlib
 	date > $@
 
 .error_check_done: .build_done
-	grep Error cern/2005/build/log/make.???? ; if [ $$? -eq 0 ] ; then exit 1 ; else exit 0 ; fi
+	grep Error 2005/build/log/make.???? ; if [ $$? -eq 0 ] ; then exit 1 ; else exit 0 ; fi
 	date > $@
-
-.copy_done: .error_check_done
-ifndef DEBUG
-	cp -pr cern/2005 2005_debug
-else
-	cp -pr cern/2005 .
-endif
-	date > $@
-

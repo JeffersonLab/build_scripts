@@ -38,6 +38,18 @@ else
 	$(MAKE) -C${CERNLIB} -f${BUILD_SCRIPTS}/Makefile_cernlib_Vogt
 endif
 
+cernlib_debug_build: cernlib_debug_dir cernlib_debug_make
+
+cernlib_debug_dir:
+	test -d ${CERNLIB}_debug || mkdir -pv ${CERNLIB}_debug
+
+cernlib_debug_make:
+ifneq ($(MACHINE_NAME),x86_64)
+	$(MAKE) -C${CERNLIB}_debug -f${BUILD_SCRIPTS}/Makefile_cernlib
+else
+	$(MAKE) -C${CERNLIB}_debug -f${BUILD_SCRIPTS}/Makefile_cernlib_Vogt DEBUG=true
+endif
+
 xerces_build: xerces_dir xerces_make
 
 xerces_dir:
