@@ -12,9 +12,9 @@
 \headsep=0in
 
 \title{A Version Management System for GlueX \\ \medskip \large GlueX
-  Note 2793-v3}
+  Note 2793-v4}
 \author{Mark M.\ Ito \\ \medskip Jefferson Lab}
-\date{August 29, 2015}
+\date{September 2, 2015}
 
 \begin{document}
 
@@ -120,10 +120,9 @@ directory one or more specific versions of that package are built.
 
 All scripts and makefiles to support VMS are found the in the {\tt
   build\_scripts} directory. At JLab, the full path is
-
-$${\tt /group/halld/Software/scripts/build\_scripts}.$$
-The directory can also checked out from the Subversion repository:
-$${\tt https://halldsvn.jlab.org/repos/trunk/scripts/build\_scripts}.$$
+$${\tt /group/halld/Software/build\_scripts}.$$
+The directory can also cloned from the Git repository at GitHub. The URL is
+$${\tt https://github.com/jeffersonlab/build\_scripts}.$$
 Many of the scripts and makefiles described in this note require that
 the environment variable {\tt BUILD\_SCRIPTS} be defined and point to
 an instance of this directory.
@@ -165,7 +164,7 @@ sim-recon & {\tt HALLD\_HOME} \\
 \caption{Packages and their home directories.}\label{table:home-directories}
 \end{table}
 
-Given the home directory of a package there may or may not be other
+Given the home directory of a package, there may or may not be other
 environment variables that need to be set, those variables derived
 from the value of home. {\tt gluex\_env.(c)sh} takes care of this. For
 example, {\tt XERCES\_INCLUDE} is used in the build system and must be
