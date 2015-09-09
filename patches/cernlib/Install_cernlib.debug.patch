@@ -1,0 +1,15 @@
+--- Install_cernlib	2015-09-01 12:54:36.959744936 -0400
++++ Install_cernlib.with_debug_patch	2015-09-01 12:58:34.584217980 -0400
+@@ -27,6 +27,12 @@
+ patch < $BUILD_SCRIPTS/patches/cernlib/linux.cf.patch
+ popd
+ 
++# patch Imake.tmpl to get debug versions
++
++pushd 2005/src/config
++patch < $BUILD_SCRIPTS/patches/cernlib/Imake.tmpl.patch
++popd
++
+ # Define the cernlib version
+ 
+ export CERN_LEVEL=`gunzip -c src_Imakefile.tar.gz | tar tf - | awk -F/ '{print $1}'`

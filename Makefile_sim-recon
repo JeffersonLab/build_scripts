@@ -59,7 +59,7 @@ endif
 	date > $@
 
 $(HALLD_HOME)/.sconstruct_done: $(HALLD_HOME)/.getarg_patches_done
-	cd $(HALLD_HOME)/src ; scons install SHOWBUILD=1
+	cd $(HALLD_HOME)/src ; scons install $(SIM_RECON_SCONS_OPTIONS)
 	date > $@
 
 ifndef GVMS_TEST
