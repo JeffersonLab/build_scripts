@@ -12,9 +12,9 @@
 \headsep=0in
 
 \title{A Version Management System for GlueX \\ \medskip \large GlueX
-  Note 2793-v4}
+  Note 2793-v5}
 \author{Mark M.\ Ito \\ \medskip Jefferson Lab}
-\date{September 2, 2015}
+\date{September 11, 2015}
 
 \begin{document}
 
@@ -219,7 +219,7 @@ GlueX-related elements leaving all others present in the path.
 
 \subsection{High-Level Environment Set-Up}
 
-\subsubsection{Custom Scripts}
+\subsubsection{Custom Scripts}\label{section:custom-scripts}
 
 The most common reason to have a custom script is when you want to use
 a package that is outside the standard directory structure. Since {\tt
@@ -292,9 +292,9 @@ Complete builds are orchestrated by {\tt Makefile\_all}. The highest-level
 targets of Makefile\_all, shown with their dependencies are:
 
 \begin{verbatim}
-all: env xerces_build cernlib_build root_build clhep_build \
-     geant4_build gsl_build evio_build ccdb_build jana_build \
-     hdds_build sim-recon_build
+all: env xerces_build cernlib_build cernlib_debug_build root_build \
+     clhep_build geant4_build gsl_build evio_build ccdb_build \
+     jana_build hdds_build sim-recon_build
 
 gluex: env xerces_build cernlib_build root_build clhep_build \
        evio_build ccdb_build jana_build hdds_build \
@@ -325,6 +325,18 @@ makefile is invoked from within the package container directory.
 
 Of course, each individual package build target can be invoked
 directly. More on this in Section~\ref{section:adding-packages}
+
+\subsubsection{Special Package Target}
+
+The target {\tt cernlib\_debug} is non-standard. If this target is
+invoked, it well create a separate container directory {\tt
+  cernlib\_debug} for the debug versions. Also it does not have its
+own package makefile, rather on 64-bit machines, it invokes {\tt
+  Makefile\_cernlib\_Vogt} with command line options that cause
+appropriate debug compiler flags to be used.
+
+To use the resulting debug version of CERNLIB, the {\tt CERN} variable
+must be set to point to the {\tt cernlib\_debug} directory, either explicitly as an environment variable (as described in Section~\ref{section:custom-scripts} or by using the {\tt home} attribute in the {\tt package} element of a version file (as described in Section~\ref{section:versioning}.
 
 \subsection{The Package Makefiles}\label{section:package-makefiles}
 
@@ -366,6 +378,18 @@ setenv HDDS_URL https://halldsvn.jlab.org/repos/trunk/hdds
 will cause the HDDS makefile to check out the trunk version. The names
 of the variables for JANA and sim-recon are {\tt JANA\_URL} and {\tt
   SIM\_RECON\_URL} respectively.
+
+\subsubsection{Package-Specific Variable for {\tt Makefile\_sim-recon}}
+
+For the sim-recon package, there is a variable, {\tt
+  SIM\_RECON\_SCONS\_OPTIONS} that can be defined, either in the shell
+environment on on the make command line, that will supply optional
+arguments to the {\tt scons} command invoked by make. For example,
+\begin{verbatim}
+        make -f $BUILD_SCRIPTS/Makefile_sim-recon \
+            SIM_RECON_SCONS_OPTIONS='SHOWBUILDS=1'
+\end{verbatim}
+will cause SCons to show the compiler commands explicitly.
 
 \subsection{Adding New Package Builds to an Existing Tree}\label{section:adding-packages}
 
@@ -567,6 +591,25 @@ packages where the source code does {\bf not} come from a standard
 source (tarball or repository). Because of the large number of
 possibilities, the form of the tag string is left to the user; no
 assumption is made about it meaning.
+
+\subsection{Specifying Alternate Home Directory Locations}
+
+Often one wants to use a build of a specific package that lies outside
+of the standard directory structure. This can be put into the
+environment by setting the {\tt home} attribute of the corresponding
+{\tt package} element. For example
+\begin{center} \tt
+<package name="sim-recon" home="/home/my/sim-recon"/>
+\end{center}
+will cause {\tt version.pl} to generate
+\begin{center} \tt
+export HALLD\_HOME=/home/my/sim-recon
+\end{center}
+Note that this feature is mainly useful for creating an environment
+for use; when building it (a) gives no guidance on where the source
+code should come from and (b) does not cause the build to be done in
+the named directory. It is useful when a pre-built package needs to be
+referenced for the current task.
 
 \section{The Prerequisites System}\label{section:prerequisites-system}
 
