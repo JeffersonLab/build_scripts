@@ -7,7 +7,10 @@ mkdir -p -v $target_dir
 pushd $target_dir
 # setup environment
 source /group/halld/Software/build_scripts/gluex_env_jlab.sh
-export BUILD_SCRIPTS=/home/gluex/build_scripts # for debugging only
+############################################
+echo === warning: using hard-wired location of build_scripts for development ===
+export BUILD_SCRIPTS=/home/gluex/build_scripts # for development only
+############################################
 unset SIM_RECON_VERSION
 export SIM_RECON_URL=https://github.com/jeffersonlab/sim-recon
 export SIM_RECON_BRANCH=$branch
