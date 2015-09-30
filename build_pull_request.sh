@@ -19,6 +19,7 @@ export SIM_RECON_SCONS_OPTIONS="-j6 SHOWBUILD=1"
 # make sim-recon
 rm -fv $logfile
 make -f $BUILD_SCRIPTS/Makefile_sim-recon >& $logfile
+build_exit_code=$?
 mv -v $logfile sim-recon^$branch
 # exit
-exit
+exit $build_exit_code
