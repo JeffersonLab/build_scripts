@@ -12,9 +12,9 @@
 \headsep=0in
 
 \title{A Version Management System for GlueX \\ \medskip \large GlueX
-  Note 2793-v5}
+  Note 2793-v6}
 \author{Mark M.\ Ito \\ \medskip Jefferson Lab}
-\date{September 11, 2015}
+\date{October 1, 2015}
 
 \begin{document}
 
@@ -244,15 +244,15 @@ example. Here a version of sim-recon built in a non-standard location
 default.}\label{figure:custom-script}
 \end{figure}
 
-\subsubsection{Using the Versioning System}
+\subsubsection{Using the Versioning System}/label{section:env-use-versioning}
 
 Another way to get a non-default environment is to use the versioning
 system to set home directory locations which in turn are respected by
 {\tt gluex\_env.(c)sh}. The versioning system is described in detail
 in Section~\ref{section:versioning}, but an example set-up script is
-shown in Fig.~\ref{figure:version-script}. Here package version
+shown in Fig.~\ref{figure:version-script}. In this example, package version
 information is contained in the XML file {\tt my\_versions.xml} in the
-user's home area. An example version file is shown in Fig.~\ref{figure:version-xml}.
+user's home area. An example version file is shown in Fig.~\ref{figure:version-xml}. Alternate combinations of package versions can be tried by making alternate versions of the version file.
 
 \begin{figure}
 \begin{verbatim}
@@ -265,6 +265,17 @@ user's home area. An example version file is shown in Fig.~\ref{figure:version-x
   file. See Section~\ref{section:versioning} for the format of the
   file.}\label{figure:version-script}
 \end{figure}
+
+\subsubsection{Default Environment at JLab}
+
+At JLab there is script that packages the steps shown in Fig.~\ref{figure:version-script}, with the appropriate values of {\tt GLUEX\_TOP} and {\tt BUILD\_SCRIPTS}. It uses the latest version of {\tt version.xml}. It can also be used as an example for using custom version of {\tt version.xml}. To use it, for bash:
+\begin{verbatim}
+        source /group/halld/Software/build_scripts/gluex_env_jlab.sh
+\end{verbatim}
+and for tcsh:
+\begin{verbatim}
+        source /group/halld/Software/build_scripts/gluex_env_jlab.csh
+\end{verbatim}
 
 \section{The Build System}
 
