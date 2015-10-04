@@ -1,5 +1,4 @@
 #!/bin/bash
-set +e
 branch=$1
 comment_url=$2
 echo build_pull_request_service.sh: building branch $branch
@@ -17,16 +16,17 @@ else
 fi
 build_dir=/u/scratch/$USER/pull_request_test/sim-recon^$branch
 pushd $build_dir
+cd $build_dir
 rm -f $report_file
 echo build_pull_request_service.sh: create $report_file
 $BUILD_SCRIPTS/build_pull_request_report.sh make_${branch}.log > $report_file
 # create build status
 read -r -d '' comment << EOM
-Build status for this pull request: $status\n \
+Build status for this pull request: \*\*${status\n}\*\* \
 \n \
 Build log: $build_dir/make_${branch}.log\n \
 Build report: $build_dir/$report_file\n \
-Location of build: $build_dir\n \
+Location of build: $build_dir\n 
 EOM
 # leave comment on github
 export PYTHONPATH=/home/gluex/lib/python2.7/site-packages

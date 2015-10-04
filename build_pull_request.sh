@@ -15,7 +15,7 @@ unset SIM_RECON_VERSION
 export SIM_RECON_URL=https://github.com/jeffersonlab/sim-recon
 export SIM_RECON_BRANCH=$branch
 export SIM_RECON_DIRTAG=$branch
-export SIM_RECON_SCONS_OPTIONS="-j6 SHOWBUILD=1"
+export SIM_RECON_SCONS_OPTIONS="-j8 SHOWBUILD=1"
 # make sim-recon
 rm -fv $logfile
 make -f $BUILD_SCRIPTS/Makefile_sim-recon >& $logfile
