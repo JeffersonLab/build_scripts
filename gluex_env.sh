@@ -89,6 +89,10 @@ fi
 # ccdb
 if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=$GLUEX_TOP/ccdb/prod; fi
 . $BUILD_SCRIPTS/ccdb_env.sh
+if [ -z "$CCDB_USER" ]
+    then
+    if [ -n "${USER:-}" ]; then export CCDB_USER=$USER; fi
+fi
 if [ -z "$CCDB_CONNECTION" ]; then export CCDB_CONNECTION=mysql://ccdb_user@hallddb.jlab.org/ccdb; fi
 # jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
 if [ -z "$JANA_HOME" ]; then export JANA_HOME=$GLUEX_TOP/jana/prod/$BMS_OSNAME; fi

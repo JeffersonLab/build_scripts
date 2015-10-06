@@ -57,6 +57,11 @@ if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
 # ccdb
 if (! $?CCDB_HOME) setenv CCDB_HOME $GLUEX_TOP/ccdb/prod
 source $BUILD_SCRIPTS/ccdb_env.csh
+if (! $?CCDB_USER) then
+    if ($?USER) then
+	setenv CCDB_USER $USER
+    endif
+endif
 if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb.jlab.org/ccdb
 # jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod/$BMS_OSNAME
