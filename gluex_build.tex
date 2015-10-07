@@ -13,9 +13,9 @@
 \headsep=0in
 
 \title{A Version Management System for GlueX \\ \medskip \large GlueX
-  Note 2793-v7}
+  Note 2793-v7-going-on-8}
 \author{Mark M.\ Ito \\ \medskip Jefferson Lab}
-\date{October 1, 2015}
+\date{October 7, 2015}
 
 \begin{document}
 
@@ -290,13 +290,16 @@ the user need not master these details.
 \subsection{The Makefiles}
 
 The VMS build system is implemented in GNU Make. These makefiles
-invoke the native package-specific build system. There is a ``package
+invoke the native package-specific build system. The top-level
+makefile builds packages into the standard directory structure
+described in Section~\ref{section:directory}. It in turn uses a
+``package
 makefile'' for each package ({\it e.~g.}, {\tt Makefile\_jana,
   Makefile\_sim-recon}). Invoking make with a package makefile will
 build that package with the home directory placed in the current
-working directory. Thus, the package makefiles have no knowledge of
+working directory. In other words, the package makefiles have no knowledge of
 the directory structure within which they are used; they just build
-locally.
+locally. Only the top-level makefile knows about the directory structure.
 
 \subsubsection{The Top-Level: {\tt Makefile\_all}}
 
@@ -477,6 +480,7 @@ There is only one type of element, the {\tt package}. Attributes are:
   checked out.
 \item{\bf dirtag}: A string (directory tag) to be appended to the
   standard directory name of the package when it is built.
+\item{\bf home}: Force the location of the package home directory when setting up the environment.
 \end{description}
 
 \subsection{Setting Up the Environment with a Version File}
