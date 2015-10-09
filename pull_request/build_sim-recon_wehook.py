@@ -1,31 +1,27 @@
-#!/usr/bin/python
+import sys
+sys.stdout = sys.stderr
 
-# CGI script to process GitHub webhook callback and launch a test build 
-# based on the branch referenced in a pull request
-# Basic auth over HTTPS is used
-
-import web
 import json
-#import requests
 import re
 import subprocess
 import os
 
-#import smtplib
-#from email.mime.text import MIMEText
+import atexit
+import threading
+import cherrypy
 
-class hooks:
-    def __init__(self):
-        self.webhook_user = "test"
-        self.webhook_password = "testest"
-        self.github_user = "<None>"
-        self.github_password = "<None>"
-        #with open(".config") as f:
-        #    lines = f.readlines()
-        #    # TODO: add more error checking
-        #    self.github_user = lines[0].strip()
-        #    self.github_password = lines[1].strip()
-            
+cherrypy.config.update({'environment': 'embedded'})
+
+if cherrypy.__version__.startswith('3.0') and cherrypy.engine.state == 0:
+    cherrypy.engine.start(blocking=False)
+    atexit.register(cherrypy.engine.stop)
+
+## web application
+class Root(object):
+    exposed = True
+    #def GET(self):
+    #    return "hi"
+
     def validate_input(self, str):
         # we do these checks to attempt to reject malformed or
         # malicious inputs - 
@@ -37,41 +33,12 @@ class hooks:
             return False
         return True
 
-    def check_auth(username, password):
-        return username == self.webhook_user and password == self.webhook_password
-
-    def GET(self):
-        print 
-        print "hello"
-        return "OK"
-
-    def POST(self):
-        print
-        #print "HI THERE"
-        #print str(web.ctx.env)
-        #return "ok"
-        ## do some simple HTTPS basic auth
-        #auth = web.ctx.env.get('HTTP_AUTHORIZATION')
-        #if auth is not None:
-        #    print str(auth)
-        #print
-        #i = web.input()
-        #print str(i)
-        #print
-        #if auth:
-        #    auth = re.sub('^Basic ', '', auth)
-        #    username, password = base64.decodestring(auth).split(':')
-        #    print "username = %s   password = %s"%(username, password)
-        #if not auth or not self.check_auth(username, password):
-        #    web.header('WWW-Authenticate','Basic realm="sim-recon build"')
-        #    web.ctx.status = '401 Unauthorized'
-        #    return
+    def POST(self, *args):
+        outstr = str(cherrypy.request.headers)
 
         # parse the data
-        data = json.loads(web.data())
-        #print
-        #print "DATA RECEIVED:"
-        #print data
+        data = json.loads(cherrypy.request.body.read())
+        
         # only do anything if the pull requests is opened or reopened 
         if data["action"] == "opened" or data["action"] == "reopened":
             # do some sanity checks
@@ -79,8 +46,7 @@ class hooks:
             pull_request_comment_url = data["pull_request"]["comments_url"]  # we need this info to report the status back on the pull request
             pull_request_branch = data["pull_request"]["head"]["ref"]
             if not self.validate_input(pull_request_branch):
-                print "bad branch name: %s"%pull_request_branch
-                return self.internalerror()
+                return "bad branch name: %s"%pull_request_branch
             # process git branch name
             branch_name = data["pull_request"]["head"]["ref"]
             # sanitize data - escape single and double quotes 
@@ -91,12 +57,21 @@ class hooks:
             # launch the test build
             # we use a single-command ssh key to launch the build on the ifarm
             cmd = "env -u SSH_AUTH_SOCK ssh -i /home/marki/.ssh/id_dsa_pull_request gluex@ifarm1102 %s %s"%(branch_name_cleaned,pull_request_comment_url)
-            #os.environ['USER'] = "apache"  # hack for cgi environment
             subprocess.Popen(cmd, shell=True)
-            print "Test build for branch %s launched successfully!"%branch_name_cleaned 
-        #
-        return 'OK'
+            return "Test build for branch %s launched successfully!"%branch_name_cleaned 
+        else:
+            return "Ignoring this callback."
 
-if __name__ == "__main__":
-    urls = ('/.*', 'hooks')
-    web.application(urls, globals()).run()
+        #return str("DATA:\n\n" + str(cherrypy.request.body.read()))
+
+## cherrpy configuration
+conf = {
+    '/': {
+        'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
+        'tools.sessions.on': True,
+        'tools.response_headers.on': True,
+        'tools.response_headers.headers': [('Content-Type', 'text/plain')],
+        }
+    }
+
+application = cherrypy.Application(Root(), script_name=None, config=conf)

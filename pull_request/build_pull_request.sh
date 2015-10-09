@@ -1,7 +1,8 @@
 #!/bin/bash
 # go to the target directory
 branch=$1
-target_dir=/u/scratch/$USER/pull_request_test
+#target_dir=/u/scratch/$USER/pull_request_test
+target_dir=/work/halld/pull_request_test
 logfile=make_${branch}.log
 mkdir -p -v $target_dir
 pushd $target_dir
