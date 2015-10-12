@@ -40,6 +40,7 @@ unsetenv BMS_OSNAME
 unsetenv JANA_HOME
 unsetenv JANA_CALIB_URL
 unsetenv JANA_GEOMETRY_URL
+unsetenv JANA_PLUGIN_PATH
 unsetenv CCDB_HOME
 unsetenv AMPTOOLS_HOME
 unsetenv AMPTOOLS
