@@ -8,6 +8,7 @@ endif
 if (! $?GLUEX_TOP) setenv GLUEX_TOP /usr/local/gluex
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
+setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 set machine_type=`uname -m`
 # xerces-c++
 if (! $?XERCESCROOT) setenv XERCESCROOT $GLUEX_TOP/xerces-c/prod
@@ -44,16 +45,6 @@ if ($status) setenv LD_LIBRARY_PATH ${CLHEP_LIB}:${LD_LIBRARY_PATH}
 #setenv AMPPLOTTER $AMPTOOLS_HOME/AmpPlotter
 #setenv CLHEP_INCLUDE_DIR $CLHEP_INCLUDE
 #setenv CLHEP_LIB_DIR $CLHEP_LIB
-# hdds
-if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
-# halld
-if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/sim-recon/prod
-if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
-setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
-echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null
-if ($status) setenv PATH $HALLD_HOME/${BMS_OSNAME}/bin:$PATH
-echo $PATH | grep $HALLD_MY/$BMS_OSNAME/bin > /dev/null
-if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
 # ccdb
 if (! $?CCDB_HOME) setenv CCDB_HOME $GLUEX_TOP/ccdb/prod
 source $BUILD_SCRIPTS/ccdb_env.csh
@@ -66,12 +57,28 @@ if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb.jlab.o
 # jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod/$BMS_OSNAME
 if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL $CCDB_CONNECTION
-if (! $?JANA_GEOMETRY_URL) setenv JANA_GEOMETRY_URL \
-    xmlfile://$HDDS_HOME/main_HDDS.xml
 # EVIO
 if (! $?EVIOROOT) setenv EVIOROOT $GLUEX_TOP/evio/prod/`uname -s`-`uname -m`
 echo $LD_LIBRARY_PATH | grep $EVIOROOT/lib > /dev/null
 if ($status) setenv LD_LIBRARY_PATH  $EVIOROOT/lib:$LD_LIBRARY_PATH
+# hdds
+if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
+if (! $?JANA_GEOMETRY_URL) setenv JANA_GEOMETRY_URL \
+    xmlfile://$HDDS_HOME/main_HDDS.xml
+# halld
+if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/sim-recon/prod
+if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
+echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null
+if ($status) setenv PATH $HALLD_HOME/${BMS_OSNAME}/bin:$PATH
+echo $PATH | grep $HALLD_MY/$BMS_OSNAME/bin > /dev/null
+if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
+if (! $?JANA_PLUGIN_PATH) then
+    set jpp_save=""
+else
+    set jpp_save=":$JANA_PLUGIN_PATH"
+endif
+setenv JANA_PLUGIN_PATH ${HALLD_HOME}/${BMS_OSNAME}/plugins:${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
+unset jpp_save
 # refresh the list of items in the path
 rehash
 # report environment
