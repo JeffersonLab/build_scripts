@@ -1,8 +1,8 @@
 #!/bin/sh
 rm -f before_setup.tmp after_setup.tmp after_clean.tmp
 printenv > before_setup.tmp
-echo source gluex_env.sh
-source gluex_env.sh -v
+echo source test.sh
+source test.sh -v
 printenv > after_setup.tmp
 echo source gluex_env_clean.sh
 source gluex_env_clean.sh

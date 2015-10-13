@@ -47,6 +47,7 @@ unset CLHEP_INCLUDE_DIR
 unset CLHEP_LIB_DIR
 unset EVIOROOT
 unset CCDB_CONNECTION
+unset CCDB_USER
 # versions
 unset JANA_VERSION
 unset HDDS_VERSION

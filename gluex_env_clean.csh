@@ -48,6 +48,7 @@ unsetenv AMPPLOTTER
 unsetenv CLHEP_INCLUDE_DIR
 unsetenv CLHEP_LIB_DIR
 unsetenv CCDB_CONNECTION
+unsetenv CCDB_USER
 unsetenv EVIOROOT
 # versions
 unsetenv JANA_VERSION
