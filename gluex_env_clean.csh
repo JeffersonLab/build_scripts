@@ -33,14 +33,12 @@ unsetenv CLHEP_INCLUDE
 unsetenv HDDS_HOME
 unsetenv HALLD_HOME
 unsetenv HALLD_MY
-unsetenv SIM_RECON_DIRTAG
-unsetenv SIM_RECON_VERSION
-unsetenv SIM_RECON_URL
 unsetenv BMS_OSNAME
 unsetenv JANA_HOME
 unsetenv JANA_CALIB_URL
 unsetenv JANA_GEOMETRY_URL
 unsetenv JANA_PLUGIN_PATH
+unsetenv JANA_RESOURCE_DIR
 unsetenv CCDB_HOME
 unsetenv AMPTOOLS_HOME
 unsetenv AMPTOOLS
@@ -51,6 +49,7 @@ unsetenv CCDB_CONNECTION
 unsetenv CCDB_USER
 unsetenv EVIOROOT
 # versions
+unsetenv SIM_RECON_VERSION
 unsetenv JANA_VERSION
 unsetenv HDDS_VERSION
 unsetenv CERNLIB_VERSION
@@ -59,7 +58,8 @@ unsetenv CLHEP_VERSION
 unsetenv ROOT_VERSION
 unsetenv CCDB_VERSION
 unsetenv EVIO_VERSION
-# directory tags
+# urls for checkout
+unsetenv SIM_RECON_URL
 unsetenv JANA_URL
 unsetenv HDDS_URL
 unsetenv CERNLIB_URL
@@ -68,7 +68,8 @@ unsetenv CLHEP_URL
 unsetenv ROOT_URL
 unsetenv CCDB_URL
 unsetenv EVIO_URL
-# urls for checkout
+# directory tags
+unsetenv SIM_RECON_DIRTAG
 unsetenv JANA_DIRTAG
 unsetenv HDDS_DIRTAG
 unsetenv CERNLIB_DIRTAG

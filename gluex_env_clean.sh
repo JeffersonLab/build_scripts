@@ -39,6 +39,7 @@ unset JANA_HOME
 unset JANA_CALIB_URL
 unset JANA_GEOMETRY_URL
 unset JANA_PLUGIN_PATH
+unset JANA_RESOURCE_DIR
 unset CCDB_HOME
 unset AMPTOOLS_HOME
 unset AMPTOOLS
@@ -49,6 +50,7 @@ unset EVIOROOT
 unset CCDB_CONNECTION
 unset CCDB_USER
 # versions
+unset SIM_RECON_VERSION
 unset JANA_VERSION
 unset HDDS_VERSION
 unset CERNLIB_VERSION
@@ -57,7 +59,8 @@ unset CLHEP_VERSION
 unset ROOT_VERSION
 unset CCDB_VERSION
 unset EVIO_VERSION
-# directory tags
+# urls for checkout
+unset SIM_RECON_URL
 unset JANA_URL
 unset HDDS_URL
 unset CERNLIB_URL
@@ -66,7 +69,8 @@ unset CLHEP_URL
 unset ROOT_URL
 unset CCDB_URL
 unset EVIO_URL
-# urls for checkout
+# directory tags
+unset SIM_RECON_DIRTAG
 unset JANA_DIRTAG
 unset HDDS_DIRTAG
 unset CERNLIB_DIRTAG
