@@ -8,7 +8,5 @@ export GLUEX_TOP=/group/halld/Software/builds/$BMS_OSNAME
 export JANA_CALIB_URL=$CCDB_CONNECTION
 export JANA_RESOURCE_DIR=/group/halld/www/halldweb/html/resources
 # python on the cue
-echo path before = $PATH
 export PATH=/apps/python/PRO/bin:$PATH
-echo path after = $PATH
 export LD_LIBRARY_PATH=/apps/python/PRO/lib:$LD_LIBRARY_PATH
