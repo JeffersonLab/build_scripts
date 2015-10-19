@@ -15,7 +15,7 @@
 \title{A Version Management System for GlueX \\ \medskip \large GlueX
   Note 2793-v7-going-on-8}
 \author{Mark M.\ Ito \\ \medskip Jefferson Lab}
-\date{October 7, 2015}
+\date{October 19, 2015}
 
 \begin{document}
 
@@ -670,6 +670,17 @@ two ways depending on how the package was built:
 \item {\bf Subversion Checkout}. If the source was checked out of a subversion repository, the {\tt svn info} command is used to get the name of the subversion directory checked out and the version is parsed from that directory name.
 \end{enumerate}
 If a version mismatch is found, a warning is written to the screen.
+
+There are cases where the home directory does not contain any
+information about the source of its source code. For example, the code
+could have come via the {\tt svn\ export} command or the {\tt
+  git\ archive} command. If a such a build (for example HDDS) is a
+prerequisite of another package (for example, sim-recon), then the
+dependent package (sim-recon) will usually have listed the prequisite
+(hdds) with the {\tt home} attribute in its (sim-recon's) prerequisite
+file and will have neither a {\tt version} or a {\tt url} attribute
+defined. In that case, a warning will be issued noting the absence of
+both {\tt version} and {\tt url} attributes.
 
 \section{The gluex\_install System}
 
