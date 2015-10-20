@@ -49,12 +49,9 @@ $(HALLD_HOME)/.untar_done: $(TARFILE)
 
 $(HALLD_HOME)/.clone_done:
 	git clone -b $(SIM_RECON_BRANCH) $(SIM_RECON_URL) $(SIM_RECON_DIR)
-	@cd $(SIM_RECON_DIR) ; \
-	if git status | grep "On branch $(SIM_RECON_BRANCH)" ; \
-	then echo Makefile_sim-recon: branch $(SIM_RECON_BRANCH) checked out ; \
-	else echo Makefile_sim-recon: could not checkout branch $(SIM_RECON_BRANCH) ; \
-	exit 1 ; \
-	fi
+ifdef SIM_RECON_HASH
+	cd $(SIM_RECON_DIR) ; git checkout $(SIM_RECON_HASH)
+endif
 	date > $@
 
 $(HALLD_HOME)/.getarg_patches_done: $(SOURCE_CODE_TARGET)

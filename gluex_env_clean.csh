@@ -78,3 +78,23 @@ unsetenv CLHEP_DIRTAG
 unsetenv ROOT_DIRTAG
 unsetenv CCDB_DIRTAG
 unsetenv EVIO_DIRTAG
+# git branches
+unsetenv SIM_RECON_BRANCH
+unsetenv JANA_BRANCH
+unsetenv HDDS_BRANCH
+unsetenv CERNLIB_BRANCH
+unsetenv XERCES_C_BRANCH
+unsetenv CLHEP_BRANCH
+unsetenv ROOT_BRANCH
+unsetenv CCDB_BRANCH
+unsetenv EVIO_BRANCH
+# git hashes
+unsetenv SIM_RECON_HASH
+unsetenv JANA_HASH
+unsetenv HDDS_HASH
+unsetenv CERNLIB_HASH
+unsetenv XERCES_C_HASH
+unsetenv CLHEP_HASH
+unsetenv ROOT_HASH
+unsetenv CCDB_HASH
+unsetenv EVIO_HASH

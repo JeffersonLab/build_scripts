@@ -79,3 +79,23 @@ unset CLHEP_DIRTAG
 unset ROOT_DIRTAG
 unset CCDB_DIRTAG
 unset EVIO_DIRTAG
+# git branches
+unset SIM_RECON_BRANCH
+unset JANA_BRANCH
+unset HDDS_BRANCH
+unset CERNLIB_BRANCH
+unset XERCES_C_BRANCH
+unset CLHEP_BRANCH
+unset ROOT_BRANCH
+unset CCDB_BRANCH
+unset EVIO_BRANCH
+# git hashes
+unset SIM_RECON_HASH
+unset JANA_HASH
+unset HDDS_HASH
+unset CERNLIB_HASH
+unset XERCES_C_HASH
+unset CLHEP_HASH
+unset ROOT_HASH
+unset CCDB_HASH
+unset EVIO_HASH

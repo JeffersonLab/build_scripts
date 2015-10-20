@@ -37,6 +37,9 @@ $(CCDB_DIR)/.untar_done: $(TARFILE)
 
 $(CCDB_DIR)/.clone_done:
 	git clone -b $(CCDB_BRANCH) $(CCDB_URL) $(CCDB_DIR)
+ifdef CCDB_HASH
+	cd $(CCDB_DIR) ; git checkout $(CCDB_HASH)
+endif
 	date > $@
 
 $(CCDB_DIR)/.untar_local_scons: $(GET_SOURCE_TARGET)

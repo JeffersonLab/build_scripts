@@ -61,6 +61,7 @@ foreach $href (@b) {
     $url = $d{url};
     $branch = $d{branch};
     $home = $d{home};
+    $hash = $d{hash};
     if ($version) {
 	print_command("${name_in_caps}_VERSION", $version);
     }
@@ -90,6 +91,7 @@ foreach $href (@b) {
 	    if ($dirtag) {print_command("${name_in_caps}_DIRTAG", $dirtag);}
 	    if ($url) {print_command("${name_in_caps}_URL", $url);}
 	    if ($branch) {print_command("${name_in_caps}_BRANCH", $branch);}
+	    if ($hash) {print_command("${name_in_caps}_HASH", $hash);}
 	}
 	print_command($package_home_var, $package_home_dir);
     }

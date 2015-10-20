@@ -41,12 +41,14 @@ foreach $prepackage (@prepackages) {
     $version = '';
     $url = '';
     $dirtag = '';
+    $branch = '';
     if ($prepackage eq 'cernlib') {
 	$version = $ENV{CERN_LEVEL};
     } else {
 	$home_var = $home_variable{$prepackage};
 	$home_var_value = $ENV{$home_var};
 	$svn_hidden_dir = $home_var_value . "/.svn";
+	$git_hidden_dir = $home_var_value . "/.git";
 	@token2 = split(/\//, $home_var_value); # split on slash
 	$dirname_home = $token2[$#token2]; # last token is directory name
 	if (-d $svn_hidden_dir) {
@@ -55,7 +57,20 @@ foreach $prepackage (@prepackages) {
 	    #print "for $home_var = $home_var_value, url_raw = $url_raw\n";
 	    @t = split(/URL: /, $url_raw);
 	    $url = $t[1];
-	    @token3 = split(/^/, $dirname_home); # split on colon
+	    @token3 = split(/^/, $dirname_home); # split on caret
+	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
+	} elsif (-d $git_hidden_dir) {
+	    $url_raw = `cd $home_var_value ; git remote -v | grep \"\(fetch\)\"`;
+	    chomp $url_raw;
+	    #print "for $home_var = $home_var_value, url_raw = $url_raw\n";
+	    @t = split(/\s+/, $url_raw);
+	    $url = $t[1];
+	    $branch_raw = `cd $home_var_value ; git status | grep \" On branch \"`;
+	    chomp $branch_raw;
+	    #print "for $home_var = $home_var_value, branch_raw = $branch_raw\n";
+	    @t = split(/\s+/, $branch_raw);
+	    $branch = $t[3];
+	    @token3 = split(/^/, $dirname_home); # split on caret
 	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} else {
 	    if ($home_var_value =~ 'ExternalPackages') {adjust_prefix_suffix()}
@@ -85,6 +100,7 @@ foreach $prepackage (@prepackages) {
     } else {
 	print "version_prereqs.pl, warning: for package $prepackage, version or url could not be determined, $home_var = $home_var_value\n";
     }
+    if ($branch) {$write_element_command .= ", \"branch\" => \"$branch\"";}
     if ($dirtag) {$write_element_command .= ", \"dirtag\" => \"$dirtag\"";}
     $write_element_command .= ");";
     #print "write_element_command = $write_element_command\n";

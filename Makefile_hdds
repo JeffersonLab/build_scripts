@@ -43,6 +43,9 @@ $(TARFILE):
 
 $(HDDS_HOME)/.clone_done:
 	git clone -b $(HDDS_BRANCH) $(HDDS_URL) $(HDDS_DIR)
+ifdef HDDS_HASH
+	cd $(HDDS_DIR) ; git checkout $(HDDS_HASH)
+endif
 	date > $@
 
 $(HDDS_HOME)/.untar_done: $(TARFILE)
