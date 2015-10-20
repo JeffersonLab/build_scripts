@@ -16,6 +16,10 @@ eval $definitions;
 %version_hash = ();
 %url_hash = ();
 %dirtag_hash = ();
+
+# loop through packages, get value of home variable from environment,
+# grab version info from the home directory
+
 foreach $package (@packages) {
     #print "== unpack environment variable for $package ==\n";
     $home_variable = $home_variable{$package};
@@ -25,11 +29,13 @@ foreach $package (@packages) {
     if (-e $home_value) {
 	$version = '';
 	$url = '';
+	$branch = '';
 	$dirtag = '';
 	if ($package eq 'cernlib') {
 	    $version_hash{$package} = $ENV{CERN_LEVEL}
 	} else {
 	    $svn_hidden_dir = $home_value . "/.svn";
+	    $git_hidden_dir = $home_value . "/.git";
 	    @token2 = split(/\//, $home_value); # split on slash
 	    $dirname_home = $token2[$#token2]; # last token is directory name
 	    if (-d $svn_hidden_dir) {
@@ -37,9 +43,26 @@ foreach $package (@packages) {
 		chomp $url_raw;
 		#print "for $home_variable = $home_value, url_raw = $url_raw\n";
 		@t = split(/URL: /, $url_raw);
-		$url_hash{$package} = $t[1];
+		$url = $t[1];
 		@token3 = split(/^/, $dirname_home); # split on colon
 		if ($#token3 > 0) {$dirtag = $token3[$#token3];}
+	    } elsif (-d $git_hidden_dir) {
+
+		$url_raw = `cd $home_value ; git remote -v | grep \"\(fetch\)\"`;
+		chomp $url_raw;
+		#print "for $home_variable = $home_value, url_raw = $url_raw\n";
+		@t = split(/\s+/, $url_raw);
+		$url = $t[1];
+
+		$branch_raw = `cd $home_value ; git status | grep \" On branch \"`;
+		chomp $branch_raw;
+		#print "for $home_variable = $home_value, branch_raw = $branch_raw\n";
+		@t = split(/\s+/, $branch_raw);
+		$branch = $t[3];
+
+		@token3 = split(/^/, $dirname_home); # split on colon
+		if ($#token3 > 0) {$dirtag = $token3[$#token3];}
+
 	    } else {
 		# extract the version
 		#print "dir_prefix = $dir_prefix{$package}\n";
@@ -67,8 +90,16 @@ foreach $package (@packages) {
 	    }
 	}
 	if ($dirtag) {
-	    #print "dirtag found: /$dirtag/\n";
+	    #print "dirtag found: \"$dirtag\"\n";
 	    $dirtag_hash{$package} = $dirtag;
+	}
+	if ($url) {
+	    #print "url found: \"$url\"\n";
+	    $url_hash{$package} = $url;
+	}
+	if ($branch) {
+	    #print "branch found: \"$branch\"\n";
+	    $branch_hash{$package} = $branch;
 	}
     } else {
 	    #print "$home_variable not defined\n";
@@ -128,6 +159,35 @@ foreach $package (@packages) {
 		    }
 		} else {
 		    print "info: no version and no url for prereq $d{name} of $package\n";
+		}
+		# check branch
+		$branch_repo = $branch_hash{$d{name}};
+		if ($branch_repo) {
+		    if ($d{branch}) { # branch appears in prereq spec
+			if ($branch_repo ne $d{branch}) {
+			    $consistent = 0;
+			    $message = "======= git branch mismatch found =======\n";
+			    $message .= "== package being checked = $package\n";
+			    $message .= "== prerequisite package = $d{name}\n";
+			    $message .= "== prerequisite's home directory = $home_value_hash{$d{name}}\n";
+			    $message .= "== branch checked out in home directory name = $branch_repo\n";
+			    $message .= "== ${package}'s prerequisite xml file = $filename\n";
+			    $message .= "== branch in prerequisite xml file for $d{name} = $d{branch}\n";
+			    print $message;
+			}
+		    } else { # no branch in prereq spec
+			if ($branch_repo ne "master") {
+			    $consistent = 0;
+			    $message = "======= git branch mismatch found =======\n";
+			    $message .= "== package being checked = $package\n";
+			    $message .= "== prerequisite package = $d{name}\n";
+			    $message .= "== prerequisite's home directory = $home_value_hash{$d{name}}\n";
+			    $message .= "== branch checked out in home directory name = $branch_repo\n";
+			    $message .= "== ${package}'s prerequisite xml file = $filename\n";
+			    $message .= "== no branch specified in prerequisite xml file for $d{name}\n";
+			    print $message;
+			}
+		    }
 		}
 		# check dirtags
 		$dirtag_dirname = $dirtag_hash{$d{name}};
