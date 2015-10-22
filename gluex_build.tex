@@ -13,9 +13,9 @@
 \headsep=0in
 
 \title{A Version Management System for GlueX \\ \medskip \large GlueX
-  Note 2793-v7-going-on-8}
+  Note 2793-v8}
 \author{Mark M.\ Ito \\ \medskip Jefferson Lab}
-\date{October 19, 2015}
+\date{October 22, 2015}
 
 \begin{document}
 
@@ -121,9 +121,9 @@ directory one or more specific versions of that package are built.
 
 All scripts and makefiles to support VMS are found the in the {\tt
   build\_scripts} directory. At JLab, the full path is
-$${\tt /group/halld/Software/build\_scripts}.$$
-The directory can also cloned from the Git repository at GitHub. The URL is
-$${\tt https://github.com/jeffersonlab/build\_scripts}.$$
+$${\tt /group/halld/Software/build\_scripts}$$
+The directory can also be cloned from the Git repository at GitHub. The URL is
+$${\tt https://github.com/jeffersonlab/build\_scripts}$$
 Many of the scripts and makefiles described in this note require that
 the environment variable {\tt BUILD\_SCRIPTS} be defined and point to
 an instance of this directory.
@@ -357,7 +357,12 @@ must be set to point to the {\tt cernlib\_debug} directory, either explicitly as
 
 Each of the package makefiles is sensitive to environment variables
 that control which version of the package to build. The makefiles
-themselves take care of obtaining the source code.
+themselves take care of obtaining the source code. In general, there
+are two ways to get the code: downloading a tarball or checking the
+code out from a version control repository, although the later option
+is not available for all packages.
+
+\subsubsection{Specifying the Version of a Tarball}
 
 Each packages respects a version-specifying environment variable. Here
 is an example of how they might be set in the C-shell:
@@ -382,17 +387,23 @@ that appears in the tarball (with exceptions as mentioned in
 Section~\ref{section:directory-tags}. Note that the version variable
 can be set on the make command line as well.
 
-Some packages can be checked out from a Subversion repository. In
-these cases, the version variable is ignored. JANA, HDDS, and
-sim-recon have this support. So for example:
+\subsubsection{Checking-Out from a Repository}
+
+Some packages can be checked out from a Subversion or Git
+repository. If that is the desired source of the code, the version
+variable should not be set. Instead a URL variable should be used to
+specify the location of the repository. For example:
 
 \begin{verbatim}
-setenv HDDS_URL https://halldsvn.jlab.org/repos/trunk/hdds
+  setenv HDDS_URL https://github.com/jeffersonlab/hdds
 \end{verbatim}
 
-will cause the HDDS makefile to check out the trunk version. The names
-of the variables for JANA and sim-recon are {\tt JANA\_URL} and {\tt
-  SIM\_RECON\_URL} respectively.
+will cause the HDDS package makefile to check out the master branch of
+the HDDS Git repository at GitHub. The names of the variables for JANA
+and sim-recon are {\tt JANA\_URL} (Subversion), {\tt CCDB\_URL} (Git), and {\tt
+  SIM\_RECON\_URL} (Git) respectively.
+
+For packages that use a Git repository, there are two additional variables that can be used to control the checkout. {\tt SIM\_RECON\_BRANCH} is used to check-out a specific branch and {\tt SIM\_RECON\_HASH} is used to check-out a specific commit of sim-recon. If one is set, the other should not be. There are analogous variables for CCDB and HDDS.
 
 \subsubsection{Package-Specific Variable for {\tt Makefile\_sim-recon}}
 
@@ -477,7 +488,8 @@ There is only one type of element, the {\tt package}. Attributes are:
 \item{\bf url}: A URL to be used to checkout (Subversion) or clone
   (Git) the code. The URL should point to an appropriate repository.
 \item{\bf branch}: When using a Git repository, the branch to be
-  checked out.
+  checked-out.
+\item{\bf hash}: When using a Git repository, the hash of the commit to be checked-out.
 \item{\bf dirtag}: A string (directory tag) to be appended to the
   standard directory name of the package when it is built.
 \item{\bf home}: Force the location of the package home directory when setting up the environment.
@@ -575,8 +587,17 @@ used. For example, to clone sim-recon and checkout the branch
               url="https://github.com/jeffersonlab/sim-recon"
               branch="test_stuff"/>
 \end{verbatim}
+This will cause the {\tt SIM\_RECON\_BRANCH} variable to be set in
+the environment. Similarly the {\tt hash} attribute can be used to
+specify the hash of the particular commit to be checked-out.
+\begin{verbatim}
+     <package name="sim-recon"
+              url="https://github.com/jeffersonlab/sim-recon"
+              hash="22fe917"/>
+\end{verbatim}
+
 Note that for Subversion repositories, the branch specification is
-encoded in the URL itself and the branch attribute is ignored.
+encoded in the URL itself and the branch and hash attributes are ignored.
 
 \subsection{Directory Tags}\label{section:directory-tags}
 
@@ -666,8 +687,24 @@ package, {\it i.~e.}, the directory defined as home in the environment
 being set-up. Here the version from the home directory is extracted in
 two ways depending on how the package was built:
 \begin{enumerate}
-\item {\bf Tar File}. If the source code came from a tar file, then the version number is parsed out of the name of the home directory.
-\item {\bf Subversion Checkout}. If the source was checked out of a subversion repository, the {\tt svn info} command is used to get the name of the subversion directory checked out and the version is parsed from that directory name.
+
+\item {\bf Tar File}. If the source code came from a tar file, then
+  the version number is parsed out of the name of the home directory.
+
+\item {\bf Subversion Check-Out}. If the source was checked out of a
+  subversion repository, the {\tt svn info} command is used to get the
+  name of the subversion directory checked out and the version is
+  parsed from that directory name.
+
+\item {\bf Git Clone and Check-Out}. If the source code was
+  checked-out from a Git repository, the {\tt git remote -v} command
+  is issued and the URL is parsed from the ``fetch'' line. The branch
+  is obtained from the {\tt git status} command. If the prerequisite
+  file does not contain a branch specification, then the version check
+  will require the master branch to have been checked out. At this
+  writing, version checking for specific commit hashes has not been
+  implemented.
+
 \end{enumerate}
 If a version mismatch is found, a warning is written to the screen.
 
@@ -676,11 +713,11 @@ information about the source of its source code. For example, the code
 could have come via the {\tt svn\ export} command or the {\tt
   git\ archive} command. If a such a build (for example HDDS) is a
 prerequisite of another package (for example, sim-recon), then the
-dependent package (sim-recon) will usually have listed the prequisite
-(hdds) with the {\tt home} attribute in its (sim-recon's) prerequisite
-file and will have neither a {\tt version} or a {\tt url} attribute
-defined. In that case, a warning will be issued noting the absence of
-both {\tt version} and {\tt url} attributes.
+dependent package (sim-recon) will usually have listed the
+prerequisite (HDDS) with neither a {\tt version} nor a {\tt url}
+attribute defined in its (sim-recon's) prerequisite file. In that
+case, a warning will be issued noting the absence of both {\tt
+  version} and {\tt url} attributes.
 
 \section{The gluex\_install System}
 
@@ -692,7 +729,7 @@ No interaction from the user should be required to get a successful
 build. The only assumption made is that the basic packages that come
 in a minimal install are present. The definition of minimal
 depends on the installation. In all cases, the distribution was tested
-by first installing from a DVD or CD iso image. Typically, the ``live
+by first installing from a DVD or CD ISO image. Typically, the ``live
 DVD'' version was chosen since that installs the smallest number of
 packages.
 
@@ -734,12 +771,10 @@ Root access is required for steps (1) and (2).
 \begin{verbatim}
   https://halldweb.jlab.org/dist/gluex_install.tar
 \end{verbatim}
-  You can also do a subversion check out of the latest version at
+  You can also do a git clone of the latest version at
 \begin{verbatim}
-https://halldsvn.jlab.org/repos/trunk/scripts/gluex_install
+https://github.com/jeffersonlab/gluex_install
 \end{verbatim}
-Note that most distributions do not have subversion in their minimal
-set of packages.
 
 \item {\bf Prerequisites: gluex\_prereq\_$<$distribution$>$.sh}. The
   prerequisites script installs packages from the distribution
