@@ -40,7 +40,7 @@ class Root(object):
         data = json.loads(cherrypy.request.body.read())
         
         # only do anything if the pull requests is opened or reopened 
-        if data["action"] == "opened" or data["action"] == "reopened":
+        if data["action"] == "opened" or data["action"] == "reopened" or data["action"] == "synchronize":
             # do some sanity checks
             pull_request_url = data["pull_request"]["issue_url"]
             pull_request_comment_url = data["pull_request"]["comments_url"]  # we need this info to report the status back on the pull request
