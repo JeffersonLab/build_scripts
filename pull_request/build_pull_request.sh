@@ -20,7 +20,7 @@ export SIM_RECON_SCONS_OPTIONS="-j8 SHOWBUILD=1"
 # make sim-recon
 rm -fv $logfile
 if [ -d "sim-recon^$branch" ]; then
-    rm -r sim-recon^$branch
+    rm -rf sim-recon^$branch
 fi
 make -f $BUILD_SCRIPTS/Makefile_sim-recon >& $logfile
 build_exit_code=$?
