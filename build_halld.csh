@@ -14,6 +14,6 @@ source $BUILD_SCRIPTS/gluex_env_nightly.csh $TODAYS_DATE
 # make hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds
 # make sim-recon
-make -f $BUILD_SCRIPTS/Makefile_sim-recon
+make -f $BUILD_SCRIPTS/Makefile_sim-recon SIM_RECON_SCONS_OPTIONS="SHOWBUILD=1"
 # exit
 exit
