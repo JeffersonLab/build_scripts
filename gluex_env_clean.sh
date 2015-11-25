@@ -7,6 +7,7 @@ if [ -n "$BUILD_SCRIPTS" ]; then
     if [ -n "$CERN_ROOT" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $CERN_ROOT/bin`; fi
     if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $ROOTSYS/bin`; fi
     if [ -n "$CCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $CCDB_HOME/bin`; fi
+    if [ -n "$JANA_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $JANA_HOME/bin`; fi
     # clean LD_LIBRARY_PATH
     if [ -n "$CLHEP_LIB" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $CLHEP_LIB`; fi
     if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $ROOTSYS/lib`; fi

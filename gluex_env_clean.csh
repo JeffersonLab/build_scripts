@@ -7,6 +7,7 @@ if ($?BUILD_SCRIPTS) then
     if ($?CERN_ROOT) eval `$BUILD_SCRIPTS/delpath.pl $CERN_ROOT/bin`
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl $ROOTSYS/bin`
     if ($?CCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl $CCDB_HOME/bin`
+    if ($?JANA_HOME) eval `$BUILD_SCRIPTS/delpath.pl $JANA_HOME/bin`
     # clean LD_LIBRARY_PATH
     if ($?CLHEP_LIB) eval `$BUILD_SCRIPTS/delpath.pl -l $CLHEP_LIB`
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl -l $ROOTSYS/lib`
