@@ -57,6 +57,8 @@ if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb.jlab.o
 # jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod/$BMS_OSNAME
 if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL $CCDB_CONNECTION
+echo $PATH | grep $JANA_HOME/bin > /dev/null
+if ($status) setenv PATH $JANA_HOME/bin:$PATH
 # EVIO
 if (! $?EVIOROOT) setenv EVIOROOT $GLUEX_TOP/evio/prod/`uname -s`-`uname -m`
 echo $LD_LIBRARY_PATH | grep $EVIOROOT/lib > /dev/null

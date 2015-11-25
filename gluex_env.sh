@@ -88,6 +88,9 @@ if [ -z "$JANA_HOME" ]; then export JANA_HOME=$GLUEX_TOP/jana/prod/$BMS_OSNAME; 
 if [ -z "$JANA_CALIB_URL" ]
     then export JANA_CALIB_URL=$CCDB_CONNECTION
 fi
+if [ `echo $PATH | grep -c $JANA_HOME/bin` -eq 0 ]
+    then export PATH=$JANA_HOME/bin:$PATH
+fi
 # EVIO
 if [ -z "$EVIOROOT" ]; then export EVIOROOT=$GLUEX_TOP/evio/prod/`uname -s`-`uname -m`; fi
 if [ `echo $LD_LIBRARY_PATH | grep -c $EVIOROOT/lib` -eq 0 ]
