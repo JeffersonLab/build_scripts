@@ -3,37 +3,13 @@ ifndef ROOT_VERSION
 endif
 
 TARFILE=root_v$(ROOT_VERSION).source.tar.gz
-ROOTDIR=root_$(ROOT_VERSION)
 PWD := $(shell pwd)
 ROOTSYS=$(PWD)/$(ROOTDIR)
 
-all: prod_link
+ROOT_MAJOR_VERSION := $(shell $(BUILD_SCRIPTS)/extract_version_numbers.pl major $(ROOT_VERSION))
 
-ifndef GVMS_TEST
-prod_link: $(ROOTDIR)/.make_done
+ifeq ($(ROOT_MAJOR_VERSION), 6)
+include $(BUILD_SCRIPTS)/Makefile_root_6_inc
 else
-prod_link: $(ROOTDIR)/.untar_done
+include $(BUILD_SCRIPTS)/Makefile_root_5_inc
 endif
-	   test -L prod || ln -s $(ROOTDIR) prod # will not overwrite existing link 
-
-$(TARFILE):
-	wget ftp://root.cern.ch/root/$@
-
-$(ROOTDIR)/.untar_done: $(TARFILE)
-	$(RM) -r $(ROOTDIR)
-	tar zxf $(TARFILE)
-	mv root $(ROOTDIR)
-	date > $@
-
-$(ROOTDIR)/.configure_done: $(ROOTDIR)/.untar_done
-	cd $(ROOTDIR); ./configure --enable-gdml
-	date > $@
-
-$(ROOTDIR)/.make_done: $(ROOTDIR)/.configure_done $(ROOTDIR)/.patch_done
-	cd $(ROOTDIR) ; make
-	date > $@
-
-$(ROOTDIR)/.patch_done:
-	#needed for 5.19.04
-	#cd $(ROOTDIR); patch -p1 < $(BUILD_SCRIPTS)/patches/root/patch_stropts.txt
-	date > $@

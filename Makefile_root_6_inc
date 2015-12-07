@@ -1,0 +1,28 @@
+ROOTDIR=root-$(ROOT_VERSION)
+BUILD_DIR = $(ROOTDIR)/build_dir
+
+all: prod_link
+
+prod_link: $(ROOTDIR)/.install_done
+	test -L prod || ln -s $(ROOTDIR) prod # will not overwrite existing link
+
+$(TARFILE):
+	wget ftp://root.cern.ch/root/$@
+
+$(ROOTDIR)/.untar_done: $(TARFILE)
+	$(RM) -r $(ROOTDIR)
+	tar zxf $(TARFILE)
+	date > $@
+
+$(ROOTDIR)/.cmake_done: $(ROOTDIR)/.untar_done
+	mkdir -p $(BUILD_DIR)
+	cd $(BUILD_DIR) ; cmake ..
+	date > $@
+
+$(ROOTDIR)/.build_done: $(ROOTDIR)/.cmake_done
+	cd $(BUILD_DIR) ; cmake --build .
+	date > $@
+
+$(ROOTDIR)/.install_done: $(ROOTDIR)/.build_done
+	cd $(BUILD_DIR) ; cmake -DCMAKE_INSTALL_PREFIX=.. -P cmake_install.cmake
+	date > $@
