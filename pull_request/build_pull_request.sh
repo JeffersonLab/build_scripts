@@ -17,6 +17,8 @@ export SIM_RECON_URL=https://github.com/jeffersonlab/sim-recon
 export SIM_RECON_BRANCH=$branch
 export SIM_RECON_DIRTAG=$branch
 export SIM_RECON_SCONS_OPTIONS="-j8 SHOWBUILD=1"
+# for testing
+printenv >& env^$branch
 # make sim-recon
 rm -fv $logfile
 if [ -d "sim-recon^$branch" ]; then
