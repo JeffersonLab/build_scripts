@@ -1,5 +1,5 @@
 ifdef CCDB_VERSION
-  TARFILE = ccdb_$(CCDB_VERSION)-src.tar.gz
+  TARFILE = v$(CCDB_VERSION).tar.gz
   GET_SOURCE_TARGET = $(CCDB_DIR)/.untar_done
   ifdef CCDB_DIRTAG
     CCDB_DIR = ccdb_$(CCDB_VERSION)^$(CCDB_DIRTAG)
@@ -25,7 +25,7 @@ endif
 all: prod_link
 
 $(TARFILE):
-	wget --no-check-certificate https://halldweb.jlab.org/dist/$(TARFILE)
+	wget --no-check-certificate https://github.com/jeffersonlab/ccdb/archive/$(TARFILE)
 
 $(CCDB_DIR)/.untar_done: $(TARFILE)
 	rm -rfv untar_temp_dir
