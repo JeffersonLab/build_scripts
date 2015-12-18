@@ -24,5 +24,5 @@ $(ROOTDIR)/.build_done: $(ROOTDIR)/.cmake_done
 	date > $@
 
 $(ROOTDIR)/.install_done: $(ROOTDIR)/.build_done
-	cd $(BUILD_DIR) ; cmake -DCMAKE_INSTALL_PREFIX=.. -P cmake_install.cmake
+	cd $(BUILD_DIR) ; cmake -DCMAKE_INSTALL_PREFIX=.. -Dgdml=ON -Droofit=ON -P cmake_install.cmake
 	date > $@
