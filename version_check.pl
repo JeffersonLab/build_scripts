@@ -44,7 +44,7 @@ foreach $package (@packages) {
 		#print "for $home_variable = $home_value, url_raw = $url_raw\n";
 		@t = split(/URL: /, $url_raw);
 		$url = $t[1];
-		@token3 = split(/^/, $dirname_home); # split on colon
+		@token3 = split(/^/, $dirname_home); # split on caret
 		if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	    } elsif (-d $git_hidden_dir) {
 
@@ -60,7 +60,7 @@ foreach $package (@packages) {
 		@t = split(/\s+/, $branch_raw);
 		$branch = $t[3];
 
-		@token3 = split(/^/, $dirname_home); # split on colon
+		@token3 = split(/^/, $dirname_home); # split on caret
 		if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 
 	    } else {
