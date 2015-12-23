@@ -1,0 +1,13 @@
+--- Makefile~	2015-11-01 11:21:47.000000000 -0500
++++ Makefile	2015-12-18 18:01:45.000000000 -0500
+@@ -8,8 +8,8 @@
+ 
+ all: lapack_install lib blas_testing lapack_testing 
+ 
+-lib: lapacklib tmglib
+-#lib: blaslib variants lapacklib tmglib
++#lib: lapacklib tmglib
++lib: blaslib variants lapacklib tmglib
+ 
+ clean: cleanlib cleantesting cleanblas_testing cleancblas_testing
+ 
