@@ -12,9 +12,9 @@
 \headheight=0in % no headers in this document
 \headsep=0in
 
-\title{A Version Management System for GlueX \\ \medskip \large GlueX-Doc-2793-v8 going on v9}
+\title{A Version Management System for GlueX \\ \medskip \large GlueX-Doc-2793-v9}
 \author{Mark M.\ Ito \\ \medskip Jefferson Lab}
-\date{October 22, 2015}
+\date{January 8, 2016}
 
 \begin{document}
 
@@ -151,6 +151,7 @@ variables listed in Table~\ref{table:home-directories}.
 \bf Package & \bf Home Directory Variable \\
 \hline Xerces-C & {\tt XERCESCROOT} \\
 CERNLIB & {\tt CERN} \\
+LAPACK/BLAS & see Section~\ref{section:makefile-extras} \\
 Geant4 & {\tt GEANT4\_HOME} \\
 ROOT & {\tt ROOTSYS} \\
 EVIO & {\tt EVIOROOT} \\
@@ -404,7 +405,11 @@ and sim-recon are {\tt JANA\_URL} (Subversion), {\tt CCDB\_URL} (Git), and {\tt
 
 For packages that use a Git repository, there are two additional variables that can be used to control the checkout. {\tt SIM\_RECON\_BRANCH} is used to check-out a specific branch and {\tt SIM\_RECON\_HASH} is used to check-out a specific commit of sim-recon. If one is set, the other should not be. There are analogous variables for CCDB and HDDS.
 
-\subsubsection{Package-Specific Variable for {\tt Makefile\_sim-recon}}
+\subsubsection{Extra Features for Specific Packages}\label{section:makefile-extras}
+
+\begin{description}
+
+\item{\bf SCons Options for {\tt Makefile\_sim-recon}}
 
 For the sim-recon package, there is a variable, {\tt
   SIM\_RECON\_SCONS\_OPTIONS} that can be defined, either in the shell
@@ -415,6 +420,12 @@ arguments to the {\tt scons} command invoked by make. For example,
             SIM_RECON_SCONS_OPTIONS='SHOWBUILDS=1'
 \end{verbatim}
 will cause SCons to show the compiler commands explicitly.
+
+\item{\bf Building a Local Version of LAPACK/BLAS}
+
+Under RedHat Enterprise 7 at JLab the lapack and blas static libraries seem to have disappeared from the standard repositories. In general if this is a problem you can use the {\tt Makefile\_lapack} in the {\tt BUILD\_SCRIPTS} directory to create these libraries. The ``install'' target will add them to the lib directory of your CERNLIB build, assuming the canonical environment settings.
+
+\end{description}
 
 \subsection{Adding New Package Builds to an Existing Tree}\label{section:adding-packages}
 
