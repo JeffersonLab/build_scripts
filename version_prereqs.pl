@@ -57,7 +57,7 @@ foreach $prepackage (@prepackages) {
 	    #print "for $home_var = $home_var_value, url_raw = $url_raw\n";
 	    @t = split(/URL: /, $url_raw);
 	    $url = $t[1];
-	    @token3 = split(/^/, $dirname_home); # split on caret
+	    @token3 = split(/\^/, $dirname_home); # split on caret
 	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} elsif (-d $git_hidden_dir) {
 	    $url_raw = `cd $home_var_value ; git remote -v | grep \"\(fetch\)\"`;
@@ -70,7 +70,7 @@ foreach $prepackage (@prepackages) {
 	    #print "for $home_var = $home_var_value, branch_raw = $branch_raw\n";
 	    @t = split(/\s+/, $branch_raw);
 	    $branch = $t[3];
-	    @token3 = split(/^/, $dirname_home); # split on caret
+	    @token3 = split(/\^/, $dirname_home); # split on caret
 	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} else {
 	    if ($home_var_value =~ 'ExternalPackages') {adjust_prefix_suffix()}
@@ -82,16 +82,15 @@ foreach $prepackage (@prepackages) {
 	    } else {
 		$version = $token0[1];
 	    }
-	    @token4 = split(/^/, $version);
+	    @token4 = split(/\^/, $version);
 	    if ($#token4 > 0) {
 		$dirtag = $token4[$#token4];
-		$dirtag_string = '^' . $dirtag;
-		@token5 = split (/$dirtag_string/, $version);
+		@token5 = split (/\^$dirtag/, $version);
 		$version = $token5[0];
 	    }
 	}
     }
-    #print "idebug = $idebug, prepackage = $prepackage, home_var = $home_var, home_var_value = $home_var_value, home_var_value_tail = $home_var_value_tail, dir_prefix{prepackage} = $dir_prefix{$prepackage}, dir_suffix{prepackage} = $dir_suffix{$prepackage}, version = $version\n";
+    #print "idebug = $idebug, prepackage = $prepackage, home_var = $home_var, home_var_value = $home_var_value, home_var_value_tail = $home_var_value_tail, dir_prefix{prepackage} = $dir_prefix{$prepackage}, dir_suffix{prepackage} = $dir_suffix{$prepackage}, dirtag = $dirtag, branch = $branch, version = $version\n\n";
     $write_element_command = "\$writer->emptyTag(\"package\", \"name\" => $prepackage";
     if ($version) {
 	$write_element_command .= ", \"version\" => \"$version\"";
