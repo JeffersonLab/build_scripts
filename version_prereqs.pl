@@ -10,6 +10,7 @@ use IO::File;
 use File::Slurp;
 use File::Basename;
 use Cwd 'abs_path';
+$debug = 0;
 
 $package_in = $ARGV[0];
 if (! $package_in) {die "must name a package";}
@@ -36,12 +37,13 @@ eval $definitions;
 	    ccdb => []);
 
 @prepackages = @{$prereqs{$package_in}};
-$idebug = 0;
+$itemno = 0;
 foreach $prepackage (@prepackages) {
     $version = '';
     $url = '';
     $dirtag = '';
     $branch = '';
+    if ($debug) {print "working on prerequisite $prepackage\n";}
     if ($prepackage eq 'cernlib') {
 	$version = $ENV{CERN_LEVEL};
     } else {
@@ -90,8 +92,10 @@ foreach $prepackage (@prepackages) {
 	    }
 	}
     }
-    #print "idebug = $idebug, prepackage = $prepackage, home_var = $home_var, home_var_value = $home_var_value, home_var_value_tail = $home_var_value_tail, dir_prefix{prepackage} = $dir_prefix{$prepackage}, dir_suffix{prepackage} = $dir_suffix{$prepackage}, dirtag = $dirtag, branch = $branch, version = $version\n\n";
-    $write_element_command = "\$writer->emptyTag(\"package\", \"name\" => $prepackage";
+    if ($debug) {
+	print "idebug = $itemno, prepackage = $prepackage, home_var = $home_var, home_var_value = $home_var_value, home_var_value_tail = $home_var_value_tail, dir_prefix{prepackage} = $dir_prefix{$prepackage}, dir_suffix{prepackage} = $dir_suffix{$prepackage}, dirtag = $dirtag, branch = $branch, version = $version\n\n";
+    }
+    $write_element_command = "\$writer->emptyTag(\"package\", \"name\" => \"$prepackage\"";
     if ($version) {
 	$write_element_command .= ", \"version\" => \"$version\"";
     } elsif ($url) {
@@ -102,9 +106,9 @@ foreach $prepackage (@prepackages) {
     if ($branch) {$write_element_command .= ", \"branch\" => \"$branch\"";}
     if ($dirtag) {$write_element_command .= ", \"dirtag\" => \"$dirtag\"";}
     $write_element_command .= ");";
-    #print "write_element_command = $write_element_command\n";
+    if ($debug) {print "write_element_command = $write_element_command\n";}
     eval $write_element_command;
-    $idebug++;
+    $itemno++;
 }
 
 $writer->endTag("gversion");
