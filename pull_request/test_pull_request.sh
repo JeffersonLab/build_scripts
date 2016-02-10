@@ -12,7 +12,7 @@ cp -p $bscripts/pull_request/plugins.txt .
 cp -p $bscripts/pull_request/control.in .
 bash $bscripts/pull_request/clean_tests.sh
 LOG=log; mkdir -p $LOG
-source ../$osrelease/setenv.csh
+source ../$osrelease/setenv.sh
 EVIO=/work/halld/nsparks/hd_rawdata_003180_000_f2000.evio
 EVENTS=500
 THREADS=8
