@@ -37,13 +37,13 @@ if [ $status == "SUCCESS" ]; then
     read -r -d '' comment << EOM
     Test status for this pull request: ${test_status}\n \
     \n \
+    Failures: [$build_dir/tests/failures.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/failures.txt)\n \
+    Summary: [$build_dir/tests/summary.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/summary.txt)\n \
+    Logs: [$build_dir/tests/log](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/log)\n
+    \n \
     Build log: [$build_dir/make_${branch}.log](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/make_${branch}.log)\n \
     Build report: [$build_dir/$report_file](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/$report_file)\n \
     Location of build: $build_dir\n
-    \n \
-    Test failures: [$build_dir/tests/failures.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/failures.txt)\n \
-    Test summary: [$build_dir/tests/summary.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/summary.txt)\n \
-    Log directory: [$build_dir/tests/log](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/log)\n
     EOM
 else
     # create build status comment
