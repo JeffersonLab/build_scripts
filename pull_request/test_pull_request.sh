@@ -2,18 +2,18 @@
 # nonzero exit code signals runtime error or mistake in env. setup
 # EVIO: path to evio file to process
 # plugins.txt: list of plugins to test
-cwd=$(pwd)
-bscripts=/home/gluex/build_scripts
-osrelease=$(perl $bscripts/osrelease.pl)
+initial_dir=$(pwd)
+BUILD_SCRIPTS=/home/gluex/build_scripts
+osrelease=$(perl $BUILD_SCRIPTS/osrelease.pl)
 branch=$1
-target=/work/halld/pull_request_test/sim-recon^$branch/tests
-mkdir -p $target; cd $target
-cp -p $bscripts/pull_request/plugins.txt .
-cp -p $bscripts/pull_request/control.in .
-bash $bscripts/pull_request/clean_tests.sh
+target_dir=/work/halld/pull_request_test/sim-recon^$branch/tests
+mkdir -p $target_dir; cd $target_dir
+cp -p $BUILD_SCRIPTS/pull_request/plugins.txt .
+cp -p $BUILD_SCRIPTS/pull_request/control.in .
+bash $BUILD_SCRIPTS/pull_request/clean_tests.sh
 LOG=log; mkdir -p $LOG
 source ../$osrelease/setenv.sh
-EVIO=/work/halld/nsparks/hd_rawdata_003180_000.evio
+EVIO=/work/halld/pull_request_test/hd_rawdata_003180_000.evio
 EVENTS=500
 THREADS=8
 TLIMIT=60
@@ -43,4 +43,4 @@ if test $? -ne 0; then
 else
     echo "hdgeant passed."
 fi
-cd $cwd
+cd $initial_dir

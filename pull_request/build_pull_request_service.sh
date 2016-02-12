@@ -1,11 +1,12 @@
 #!/bin/bash
-branch=$1
+branch_git=$1
 comment_url=$2
+branch=$(echo $branch_git | sed -r 's/\//_/g')
 echo build_pull_request_service.sh: building branch $branch
 report_file=report_${branch}.txt
 export BUILD_SCRIPTS=/home/gluex/build_scripts
 echo build_pull_request_service.sh: using BUILD_SCRIPTS = $BUILD_SCRIPTS
-command="$BUILD_SCRIPTS/pull_request/build_pull_request.sh $branch"
+command="$BUILD_SCRIPTS/pull_request/build_pull_request.sh $branch_git"
 echo build_pull_request_service.sh: executing $command
 $command
 if [ $? -eq 0 ]
@@ -30,14 +31,16 @@ if [ $status == "SUCCESS" ]; then
     if [ $? -ne 0 ]
     then
         test_status="SUCCESS"
+        failure_comment=""
     else
         test_status="FAILURE"
+        failure_comment="Failures: [$build_dir/tests/failures.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/failures.txt)\n"
     fi
     # create test status comment
     read -r -d '' comment << EOM
     Test status for this pull request: ${test_status}\n \
     \n \
-    Failures: [$build_dir/tests/failures.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/failures.txt)\n \
+    $failure_comment
     Summary: [$build_dir/tests/summary.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/summary.txt)\n \
     Logs: [$build_dir/tests/log](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/log)\n
     \n \
