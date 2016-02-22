@@ -16,7 +16,7 @@ source ../$osrelease/setenv.sh
 EVIO=/work/halld/pull_request_test/hd_rawdata_003180_000.evio
 EVENTS=500
 THREADS=8
-TLIMIT=60
+TLIMIT=180
 echo "Test summary" > summary.txt
 for plugin in $(cat plugins.txt); do
     echo -e "\nTesting $plugin ..." >> summary.txt
