@@ -53,12 +53,15 @@ class Root(object):
             # this is a little paranoid, but better safe...
             branch_name_cleaned = branch_name.replace('"', '\\"')
             branch_name_cleaned.replace("'", "\\'")
+            # get the URL of the git repo, to support forked repos
+            # probably should clean this URL too..
+            repo_url = data["pull_request"]["base"]["repo"]["html_url"]
 
             # launch the test build
             # we use a single-command ssh key to launch the build on the ifarm
-            cmd = "env -u SSH_AUTH_SOCK ssh -i /home/marki/.ssh/id_dsa_pull_request gluex@ifarm1102 %s %s"%(branch_name_cleaned,pull_request_comment_url)
+            cmd = "env -u SSH_AUTH_SOCK ssh -i /home/marki/.ssh/id_dsa_pull_request gluex@ifarm1102 %s %s %s"%(branch_name_cleaned,pull_request_comment_url,repo_url)
             subprocess.Popen(cmd, shell=True)
-            return "Test build for branch %s launched successfully!"%branch_name_cleaned 
+            return "Test build for branch %s from repository %s launched successfully!"%(branch_name_cleaned,repo_url) 
         else:
             return "Ignoring this callback."
 

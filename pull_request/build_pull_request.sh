@@ -14,7 +14,9 @@ echo === warning: using hard-wired location of build_scripts for development ===
 export BUILD_SCRIPTS=/home/gluex/build_scripts # for development only
 ############################################
 unset SIM_RECON_VERSION
-export SIM_RECON_URL=https://github.com/jeffersonlab/sim-recon
+if [ -z "$SIM_RECON_URL" ]; then
+    export SIM_RECON_URL=https://github.com/jeffersonlab/sim-recon
+fi
 export SIM_RECON_BRANCH=$branch_git
 export SIM_RECON_DIRTAG=$branch
 export SIM_RECON_SCONS_OPTIONS="-j8 SHOWBUILD=1"
