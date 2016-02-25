@@ -15,7 +15,18 @@ export BUILD_SCRIPTS=/home/gluex/build_scripts # for development only
 ############################################
 unset SIM_RECON_VERSION
 if [ -z "$SIM_RECON_URL" ]; then
-    export SIM_RECON_URL=https://github.com/jeffersonlab/sim-recon
+    export SIM_RECON_URL=https://github.com/JeffersonLab/sim-recon
+fi
+# only run tests from the main JLab repo, not forked repos for security
+echo COMPARE "$SIM_RECON_URL"
+echo TO "https://github.com/JeffersonLab/sim-recon"
+if [ "$SIM_RECON_URL" != "https://github.com/JeffersonLab/sim-recon" ]; then
+    # create notice where the build log would be
+    if [ ! -d "sim-recon^$branch" ]; then
+       mkdir "sim-recon^$branch"
+    fi
+    echo "Tests are not run on pull requests from forked repositories." > "sim-recon^$branch/$logfile"
+    exit 1
 fi
 export SIM_RECON_BRANCH=$branch_git
 export SIM_RECON_DIRTAG=$branch
