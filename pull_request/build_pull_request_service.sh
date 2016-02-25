@@ -2,6 +2,9 @@
 branch_git=$1
 comment_url=$2
 branch=$(echo $branch_git | sed -r 's/\//_/g')
+if [ ! -z "$3" ]; then
+    export SIM_RECON_URL=$3
+fi
 echo build_pull_request_service.sh: building branch $branch
 report_file=report_${branch}.txt
 export BUILD_SCRIPTS=/home/gluex/build_scripts
