@@ -24,12 +24,14 @@ $(LAPACKROOT)/.make_done: $(LAPACKROOT)/make.inc $(LAPACKROOT)/.edit_makefile_do
 	ulimit -s 65000 ; $(MAKE) -C$(LAPACKROOT)
 	date > $@
 
+$(LAPACKROOT)/.edit_makefile_done: $(LAPACKROOT)/make.inc
+	cd $(LAPACKROOT); patch < $(BUILD_SCRIPTS)/patches/lapack/Makefile.patch
+	date > $@
+
 $(LAPACKROOT)/make.inc: $(LAPACKROOT)/make.inc.example
 	cp -v $< $@
 
-$(LAPACKROOT)/.edit_makefile_done: $(LAPACKROOT)/.untar_done
-	cd $(LAPACKROOT); patch < $(BUILD_SCRIPTS)/patches/lapack/Makefile.patch
-	date > $@
+$(LAPACKROOT)/make.inc.example: $(LAPACKROOT)/.untar_done
 
 $(LAPACKROOT)/.untar_done: $(TARFILE)
 	tar zxf $(TARFILE)
