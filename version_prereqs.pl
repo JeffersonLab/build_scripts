@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 # get the version numbers of prerequisite packages for the requested package from the home directories defined in the environment
 # write an xml file with the prerequisite version numbers
