@@ -37,7 +37,7 @@ export HALLD_HOME = $(PWD)/$(SIM_RECON_DIR)
 all: prod_link
 
 $(TARFILE):
-	wget --no-check-certificate https://github.com/JeffersonLab/sim-recon/archive/$(SIM_RECON_VERSION).tar.gz
+	wget --no-check-certificate -O $@ https://github.com/JeffersonLab/sim-recon/archive/$(SIM_RECON_VERSION).tar.gz
 
 $(HALLD_HOME)/.untar_done: $(TARFILE)
 	rm -rf untar_temp_dir

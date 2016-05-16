@@ -25,7 +25,7 @@ endif
 all: prod_link
 
 $(TARFILE):
-	wget --no-check-certificate https://github.com/jeffersonlab/ccdb/archive/$(TARFILE)
+	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/ccdb/archive/$(TARFILE)
 
 $(CCDB_DIR)/.untar_done: $(TARFILE)
 	rm -rfv untar_temp_dir
