@@ -30,6 +30,7 @@ unset CERN
 unset CERN_LEVEL
 unset CERN_ROOT
 unset CLHEP
+unset CERNLIB_WORD_LENGTH
 unset CLHEP_LIB
 unset CLHEP_INCLUDE
 unset HDDS_HOME

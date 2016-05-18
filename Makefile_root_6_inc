@@ -7,7 +7,7 @@ prod_link: $(ROOTDIR)/.install_done
 	test -L prod || ln -s $(ROOTDIR) prod # will not overwrite existing link
 
 $(TARFILE):
-	wget ftp://root.cern.ch/root/$@
+	wget https://root.cern.ch/download/$@
 
 $(ROOTDIR)/.untar_done: $(TARFILE)
 	$(RM) -r $(ROOTDIR)

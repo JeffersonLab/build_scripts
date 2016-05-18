@@ -1,8 +1,10 @@
 #!/bin/tcsh
-set VERSION_XML=/group/halld/www/halldweb/html/dist/version.xml
+set VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
 setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 setenv GLUEX_TOP /group/halld/Software/builds/$BMS_OSNAME
+# perl on the cue
+setenv PATH /apps/perl/bin:$PATH
 # finish the rest of the gluex environment
 source $BUILD_SCRIPTS/gluex_env_version.csh $VERSION_XML
 setenv JANA_CALIB_URL $CCDB_CONNECTION

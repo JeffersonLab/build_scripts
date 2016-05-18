@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 # get the version numbers of prerequisite packages for the requested package from the home directories defined in the environment
 # write an xml file with the prerequisite version numbers
@@ -10,6 +10,7 @@ use IO::File;
 use File::Slurp;
 use File::Basename;
 use Cwd 'abs_path';
+$debug = 0;
 
 $package_in = $ARGV[0];
 if (! $package_in) {die "must name a package";}
@@ -36,12 +37,13 @@ eval $definitions;
 	    ccdb => []);
 
 @prepackages = @{$prereqs{$package_in}};
-$idebug = 0;
+$itemno = 0;
 foreach $prepackage (@prepackages) {
     $version = '';
     $url = '';
     $dirtag = '';
     $branch = '';
+    if ($debug) {print "working on prerequisite $prepackage\n";}
     if ($prepackage eq 'cernlib') {
 	$version = $ENV{CERN_LEVEL};
     } else {
@@ -57,7 +59,7 @@ foreach $prepackage (@prepackages) {
 	    #print "for $home_var = $home_var_value, url_raw = $url_raw\n";
 	    @t = split(/URL: /, $url_raw);
 	    $url = $t[1];
-	    @token3 = split(/^/, $dirname_home); # split on caret
+	    @token3 = split(/\^/, $dirname_home); # split on caret
 	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} elsif (-d $git_hidden_dir) {
 	    $url_raw = `cd $home_var_value ; git remote -v | grep \"\(fetch\)\"`;
@@ -70,7 +72,7 @@ foreach $prepackage (@prepackages) {
 	    #print "for $home_var = $home_var_value, branch_raw = $branch_raw\n";
 	    @t = split(/\s+/, $branch_raw);
 	    $branch = $t[3];
-	    @token3 = split(/^/, $dirname_home); # split on caret
+	    @token3 = split(/\^/, $dirname_home); # split on caret
 	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} else {
 	    if ($home_var_value =~ 'ExternalPackages') {adjust_prefix_suffix()}
@@ -82,17 +84,18 @@ foreach $prepackage (@prepackages) {
 	    } else {
 		$version = $token0[1];
 	    }
-	    @token4 = split(/^/, $version);
+	    @token4 = split(/\^/, $version);
 	    if ($#token4 > 0) {
 		$dirtag = $token4[$#token4];
-		$dirtag_string = '^' . $dirtag;
-		@token5 = split (/$dirtag_string/, $version);
+		@token5 = split (/\^$dirtag/, $version);
 		$version = $token5[0];
 	    }
 	}
     }
-    #print "idebug = $idebug, prepackage = $prepackage, home_var = $home_var, home_var_value = $home_var_value, home_var_value_tail = $home_var_value_tail, dir_prefix{prepackage} = $dir_prefix{$prepackage}, dir_suffix{prepackage} = $dir_suffix{$prepackage}, version = $version\n";
-    $write_element_command = "\$writer->emptyTag(\"package\", \"name\" => $prepackage";
+    if ($debug) {
+	print "idebug = $itemno, prepackage = $prepackage, home_var = $home_var, home_var_value = $home_var_value, home_var_value_tail = $home_var_value_tail, dir_prefix{prepackage} = $dir_prefix{$prepackage}, dir_suffix{prepackage} = $dir_suffix{$prepackage}, dirtag = $dirtag, branch = $branch, version = $version\n\n";
+    }
+    $write_element_command = "\$writer->emptyTag(\"package\", \"name\" => \"$prepackage\"";
     if ($version) {
 	$write_element_command .= ", \"version\" => \"$version\"";
     } elsif ($url) {
@@ -103,9 +106,9 @@ foreach $prepackage (@prepackages) {
     if ($branch) {$write_element_command .= ", \"branch\" => \"$branch\"";}
     if ($dirtag) {$write_element_command .= ", \"dirtag\" => \"$dirtag\"";}
     $write_element_command .= ");";
-    #print "write_element_command = $write_element_command\n";
+    if ($debug) {print "write_element_command = $write_element_command\n";}
     eval $write_element_command;
-    $idebug++;
+    $itemno++;
 }
 
 $writer->endTag("gversion");

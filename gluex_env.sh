@@ -116,7 +116,7 @@ if [ -z "$JANA_PLUGIN_PATH" ]
 else
     jpp_save=":$JANA_PLUGIN_PATH"
 fi
-export JANA_PLUGIN_PATH=${HALLD_HOME}/${BMS_OSNAME}/plugins:${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
+export JANA_PLUGIN_PATH=${HALLD_MY}/${BMS_OSNAME}/plugins:${HALLD_HOME}/${BMS_OSNAME}/plugins:${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
 unset jpp_save
 # refresh the list of items in the path
 hash -r
