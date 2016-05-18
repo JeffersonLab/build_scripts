@@ -13,7 +13,7 @@ all: .unpack_done
 endif
 
 $(DIST_FILES):
-	wget http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
+	wget --no-check-certificate http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
 
 .unpack_done: $(DIST_FILES)
 	tar zxvf $(ALL_FILE)
