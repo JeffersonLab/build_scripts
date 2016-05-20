@@ -33,10 +33,6 @@ $(LAPACKROOT)/make.inc: $(LAPACKROOT)/make.inc.example
 
 $(LAPACKROOT)/make.inc.example: $(LAPACKROOT)/.untar_done
 
-$(LAPACKROOT)/.edit_makefile_done: $(LAPACKROOT)/.untar_done
-	cd $(LAPACKROOT); patch < $(BUILD_SCRIPTS)/patches/lapack/Makefile.patch
-	date > $@
-
 $(LAPACKROOT)/.untar_done: $(TARFILE)
 	tar zxf $(TARFILE)
 	date > $@
