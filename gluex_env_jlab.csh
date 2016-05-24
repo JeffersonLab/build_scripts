@@ -12,4 +12,9 @@ setenv JANA_RESOURCE_DIR /group/halld/www/halldweb/html/resources
 # python on the cue
 setenv PATH /apps/python/PRO/bin:$PATH
 setenv LD_LIBRARY_PATH /apps/python/PRO/lib:$LD_LIBRARY_PATH
-exit
+# HTTP proxy on the farm
+set nodename=`uname -n`
+if ( X$nodename =~ Xi*farm[0-9]* ) then
+    setenv http_proxy http://jprox.jlab.org:8081
+    setenv https_proxy https://jprox.jlab.org:8081
+endif

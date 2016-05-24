@@ -19,10 +19,11 @@ GEANT4 = ${ROOT_OF_ALL}/geant4
 GSL = ${ROOT_OF_ALL}/gsl
 CCDB = ${ROOT_OF_ALL}/ccdb
 EVIO = ${ROOT_OF_ALL}/evio
+LAPACK = ${ROOT_OF_ALL}/lapack
 
-all: env xerces_build cernlib_build root_build clhep_build geant4_build gsl_build evio_build ccdb_build jana_build hdds_build sim-recon_build
+all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build ccdb_build jana_build hdds_build sim-recon_build
 
-gluex: env xerces_build cernlib_build root_build clhep_build evio_build ccdb_build jana_build hdds_build sim-recon_build
+gluex: env xerces_build cernlib_build lapack_build root_build clhep_build evio_build ccdb_build jana_build hdds_build sim-recon_build
 
 gluex_jlab: env xerces_build root_build clhep_build evio_build ccdb_build jana_build hdds_build sim-recon_build
 
@@ -130,6 +131,14 @@ evio_dir:
 
 evio_make:
 	$(MAKE) -C$(EVIO) -f$(BUILD_SCRIPTS)/Makefile_evio
+
+lapack_build: lapack_dir lapack_make
+
+lapack_dir:
+	test -d ${LAPACK} || mkdir -pv ${LAPACK}
+
+lapack_make:
+	$(MAKE) -C${LAPACK} -f${BUILD_SCRIPTS}/Makefile_lapack
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}

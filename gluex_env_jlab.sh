@@ -12,3 +12,10 @@ export JANA_RESOURCE_DIR=/group/halld/www/halldweb/html/resources
 # python on the cue
 export PATH=/apps/python/PRO/bin:$PATH
 export LD_LIBRARY_PATH=/apps/python/PRO/lib:$LD_LIBRARY_PATH
+# HTTP proxy on the farm
+nodename=`uname -n`
+if [[ $nodename =~ ^i*farm[0-9]* ]]
+    then
+    export http_proxy=http://jprox.jlab.org:8081
+    export https_proxy=https://jprox.jlab.org:8081
+fi
