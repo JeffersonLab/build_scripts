@@ -1,5 +1,6 @@
 #!/bin/tcsh
-set VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
+#set VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
+set VERSION_XML=/group/halld/www/halldweb/html/dist/version_build_jlab.xml
 setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 setenv GLUEX_TOP /group/halld/Software/builds/$BMS_OSNAME
@@ -12,6 +13,8 @@ setenv JANA_RESOURCE_DIR /group/halld/www/halldweb/html/resources
 # python on the cue
 setenv PATH /apps/python/PRO/bin:$PATH
 setenv LD_LIBRARY_PATH /apps/python/PRO/lib:$LD_LIBRARY_PATH
+# gcc 4.9 on the cue (C++11 support)
+module load gcc_4.9.2
 # HTTP proxy on the farm
 set nodename=`uname -n`
 if ( X$nodename =~ Xi*farm[0-9]* ) then
