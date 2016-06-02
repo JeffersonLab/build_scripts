@@ -1,5 +1,12 @@
 #!/bin/tcsh
 set VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
+# farm-specific set-up
+set nodename=`uname -n`
+if ( X$nodename =~ Xi*farm[0-9]* ) then
+    setenv http_proxy http://jprox.jlab.org:8081
+    setenv https_proxy https://jprox.jlab.org:8081
+    module load gcc_4.9.2
+endif
 setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 setenv GLUEX_TOP /group/halld/Software/builds/$BMS_OSNAME
@@ -12,9 +19,3 @@ setenv JANA_RESOURCE_DIR /group/halld/www/halldweb/html/resources
 # python on the cue
 setenv PATH /apps/python/PRO/bin:$PATH
 setenv LD_LIBRARY_PATH /apps/python/PRO/lib:$LD_LIBRARY_PATH
-# HTTP proxy on the farm
-set nodename=`uname -n`
-if ( X$nodename =~ Xi*farm[0-9]* ) then
-    setenv http_proxy http://jprox.jlab.org:8081
-    setenv https_proxy https://jprox.jlab.org:8081
-endif
