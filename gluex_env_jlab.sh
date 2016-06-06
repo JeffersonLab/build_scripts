@@ -1,13 +1,4 @@
 #!/bin/bash
-<<<<<<< HEAD
-export VERSION_XML=/group/halld/www/halldweb/html/dist/version_build_jlab.xml
-# gcc 4.9 on the cue (C++11 support)
-# config 'modules' package by hand since the CUE configures it 
-# by defualt for tcsh but not bash??
-export MODULESHOME=/usr/share/Modules
-source $MODULESHOME/init/bash
-module load gcc_4.9.2
-=======
 VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
 # farm-specific set-up
 nodename=`uname -n`
@@ -19,7 +10,6 @@ if [[ $nodename =~ ^i*farm[0-9]* ]]
     source $MODULESHOME/init/bash
     module load gcc_4.9.2
 fi
->>>>>>> 5e800dcc53423dcee9b735c45fcc8fbd255a2b6e
 export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
 export GLUEX_TOP=/group/halld/Software/builds/$BMS_OSNAME
