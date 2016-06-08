@@ -1,7 +1,6 @@
 BCAL_Eff
 BCAL_inv_mass
 BCAL_online
-CDC_Cosmics
 CDC_drift
 CDC_expert
 CDC_online

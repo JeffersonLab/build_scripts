@@ -37,12 +37,13 @@ if [ $status == "SUCCESS" ]; then
         failure_comment=""
     else
         test_status="FAILURE"
-        failure_comment="Failures: [$build_dir/tests/failures.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/failures.txt)\n"
+        failure_comment="Failures: [$build_dir/tests/failures.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/tests-failures.txt)\n"
     fi
     # save files to web accessible directory
     cp -v $build_dir/make_${branch}.log $web_dir/make_${branch}.log
     cp -v $build_dir/$report_file $web_dir/$report_file
     cp -v $build_dir/tests/summary.txt $web_dir/tests-summary.txt
+    cp -v $build_dir/tests/failures.txt $web_dir/tests-failures.txt
     cp -av $build_dir/tests/log $web_dir/tests-logs
     # create test status comment
     read -r -d '' comment << EOM
