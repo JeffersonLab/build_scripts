@@ -39,4 +39,4 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
 	       geant4 => '',
 	       ccdb => '',
 	       evio => $evio_suffix,
-	       evio => '');
+	       rcdb => '');
