@@ -10,7 +10,8 @@
 		  'xerces-c' => 'XERCESCROOT',
 		  geant4 => 'GEANT4_HOME',
 		  ccdb => 'CCDB_HOME',
-		  evio => 'EVIOROOT');
+		  evio => 'EVIOROOT',
+		  rcdb => 'RCDB_HOME');
 
 %dir_prefix = (root => 'root_',
 	       clhep => '',
@@ -21,7 +22,8 @@
 	       'xerces-c' => 'xerces-c-',
 	       geant4 => 'geant4.',
 	       ccdb => 'ccdb_',
-	       evio => 'evio-');
+	       evio => 'evio-',
+	       rcdb => 'rcdb_');
 $unames = `uname -s`;
 chomp $unames;
 $unamem = `uname -m`;
@@ -36,4 +38,5 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
 	       'xerces-c' => '',
 	       geant4 => '',
 	       ccdb => '',
-	       evio => $evio_suffix);
+	       evio => $evio_suffix,
+	       evio => '');

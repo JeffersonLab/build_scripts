@@ -1,0 +1,55 @@
+ifdef RCDB_VERSION
+  TARFILE = v$(RCDB_VERSION).tar.gz
+  GET_SOURCE_TARGET = $(RCDB_DIR)/.untar_done
+  ifdef RCDB_DIRTAG
+    RCDB_DIR = rcdb_$(RCDB_VERSION)^$(RCDB_DIRTAG)
+  else
+    RCDB_DIR = rcdb_$(RCDB_VERSION)
+  endif
+else
+  RCDB_DIR = rcdb
+  GET_SOURCE_TARGET = $(RCDB_DIR)/.clone_done
+  ifndef RCDB_URL
+    RCDB_URL=https://github.com/JeffersonLab/rcdb
+  endif
+  ifdef RCDB_DIRTAG
+    RCDB_DIR = $(notdir $(RCDB_URL))^$(RCDB_DIRTAG)
+  else
+    RCDB_DIR = $(notdir $(RCDB_URL))
+  endif
+  ifndef RCDB_BRANCH
+    RCDB_BRANCH = master
+  endif
+endif
+
+all: prod_link
+
+$(TARFILE):
+	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/rcdb/archive/$(TARFILE)
+
+$(RCDB_DIR)/.untar_done: $(TARFILE)
+	rm -rfv untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(RCDB_DIR)
+	rmdir -v untar_temp_dir
+	date > $@
+
+$(RCDB_DIR)/.clone_done:
+	git clone -b $(RCDB_BRANCH) $(RCDB_URL) $(RCDB_DIR)
+ifdef RCDB_HASH
+	cd $(RCDB_DIR) ; git checkout $(RCDB_HASH)
+endif
+	date > $@
+
+$(RCDB_DIR)/.scons_done: $(GET_SOURCE_TARGET)
+	source $(RCDB_DIR)/environment.bash ; \
+	cd $(RCDB_DIR)/cpp ; \
+	scons
+
+prod_link: $(RCDB_DIR)/.scons_done
+	test -L prod || ln -s $(RCDB_DIR) prod
+
+.PHONY: $(RCDB_DIR)/.scons_done
+
+# end of makefile

@@ -20,12 +20,13 @@ GSL = ${ROOT_OF_ALL}/gsl
 CCDB = ${ROOT_OF_ALL}/ccdb
 EVIO = ${ROOT_OF_ALL}/evio
 LAPACK = ${ROOT_OF_ALL}/lapack
+RCDB = ${ROOT_OF_ALL}/rcdb
 
-all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build ccdb_build jana_build hdds_build sim-recon_build
+all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build
 
-gluex: env xerces_build cernlib_build lapack_build root_build clhep_build evio_build ccdb_build jana_build hdds_build sim-recon_build
+gluex: env xerces_build cernlib_build lapack_build root_build clhep_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build
 
-gluex_jlab: env xerces_build root_build clhep_build evio_build ccdb_build jana_build hdds_build sim-recon_build
+gluex_jlab: env xerces_build root_build clhep_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -115,6 +116,14 @@ gsl_dir:
 
 gsl_make:
 	$(MAKE) -C$(GSL) -f$(BUILD_SCRIPTS)/Makefile_gsl
+
+rcdb_build: rcdb_dir rcdb_make
+
+rcdb_dir:
+	test -d ${RCDB} || mkdir -pv ${RCDB}
+
+rcdb_make:
+	$(MAKE) -C$(RCDB) -f$(BUILD_SCRIPTS)/Makefile_rcdb
 
 ccdb_build: ccdb_dir ccdb_make
 
