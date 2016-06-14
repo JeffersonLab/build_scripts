@@ -4,6 +4,12 @@
 # EVIO: path to evio file to process
 # plugins.txt: list of plugins to test
 initial_dir=$(pwd)
+# farm-specific set-up - from gluex_env_jlab.csh
+set nodename=`uname -n`
+if ( X$nodename =~ Xi*farm[0-9]* ) then
+    module load gcc_4.9.2
+endif
+#
 BUILD_SCRIPTS=/home/gluex/build_scripts
 osrelease=$(perl $BUILD_SCRIPTS/osrelease.pl)
 branch=$1
