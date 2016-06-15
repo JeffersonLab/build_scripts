@@ -42,15 +42,17 @@ unset JANA_CALIB_URL
 unset JANA_GEOMETRY_URL
 unset JANA_PLUGIN_PATH
 unset JANA_RESOURCE_DIR
-unset CCDB_HOME
 unset AMPTOOLS_HOME
 unset AMPTOOLS
 unset AMPPLOTTER
 unset CLHEP_INCLUDE_DIR
 unset CLHEP_LIB_DIR
 unset EVIOROOT
+unset CCDB_HOME
 unset CCDB_CONNECTION
 unset CCDB_USER
+unset RCDB_HOME
+unset RCDB_CONNECTION
 # versions
 unset SIM_RECON_VERSION
 unset JANA_VERSION
@@ -60,6 +62,7 @@ unset XERCES_C_VERSION
 unset CLHEP_VERSION
 unset ROOT_VERSION
 unset CCDB_VERSION
+unset RCDB_VERSION
 unset EVIO_VERSION
 # urls for checkout
 unset SIM_RECON_URL
@@ -70,6 +73,7 @@ unset XERCES_C_URL
 unset CLHEP_URL
 unset ROOT_URL
 unset CCDB_URL
+unset RCDB_URL
 unset EVIO_URL
 # directory tags
 unset SIM_RECON_DIRTAG
@@ -80,6 +84,7 @@ unset XERCES_C_DIRTAG
 unset CLHEP_DIRTAG
 unset ROOT_DIRTAG
 unset CCDB_DIRTAG
+unset RCDB_DIRTAG
 unset EVIO_DIRTAG
 # git branches
 unset SIM_RECON_BRANCH
@@ -90,6 +95,7 @@ unset XERCES_C_BRANCH
 unset CLHEP_BRANCH
 unset ROOT_BRANCH
 unset CCDB_BRANCH
+unset RCDB_BRANCH
 unset EVIO_BRANCH
 # git hashes
 unset SIM_RECON_HASH
@@ -100,4 +106,5 @@ unset XERCES_C_HASH
 unset CLHEP_HASH
 unset ROOT_HASH
 unset CCDB_HASH
+unset RCDB_HASH
 unset EVIO_HASH

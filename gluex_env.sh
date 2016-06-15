@@ -83,6 +83,10 @@ if [ -z "$CCDB_USER" ]
     if [ -n "${USER:-}" ]; then export CCDB_USER=$USER; fi
 fi
 if [ -z "$CCDB_CONNECTION" ]; then export CCDB_CONNECTION=mysql://ccdb_user@hallddb.jlab.org/ccdb; fi
+# rcdb
+if [ -z "$RCDB_HOME" ]; then export RCDB_HOME=$GLUEX_TOP/rcdb/prod; fi
+. $RCDB_HOME/environment.bash
+if [ -z "$RCDB_CONNECTION" ]; then export RCDB_CONNECTION=mysql://rcdb@hallddb.jlab.org/rcdb; fi
 # jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
 if [ -z "$JANA_HOME" ]; then export JANA_HOME=$GLUEX_TOP/jana/prod/$BMS_OSNAME; fi
 if [ -z "$JANA_CALIB_URL" ]
