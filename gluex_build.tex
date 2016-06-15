@@ -12,9 +12,9 @@
 \headheight=0in % no headers in this document
 \headsep=0in
 
-\title{A Version Management System for GlueX \\ \medskip \large GlueX-Doc-2793-v11}
+\title{A Version Management System for GlueX \\ \medskip \large GlueX-Doc-2793-v12}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{May 19, 2016}
+\date{June 15, 2016}
 
 \begin{document}
 
@@ -62,6 +62,7 @@ built by the GlueX user. They are:
 \item ROOT: general purpose HENP toolkit
 \item EVIO: CODA format data handling library
 \item CCDB: Calibration Constants Database
+\item RCDB: Run Conditions Database
 \item JANA: event-based analysis framework
 \item HDDS: detector geometry specification library 
 \item sim-recon: simulation and reconstruction for GlueX
@@ -156,6 +157,7 @@ Geant4 & {\tt GEANT4\_HOME} \\
 ROOT & {\tt ROOTSYS} \\
 EVIO & {\tt EVIOROOT} \\
 CCDB & {\tt CCDB\_HOME} \\
+RCDB & {\tt RCDB\_HOME} \\
 JANA & {\tt JANA\_HOME} \\
 HDDS & {\tt HDDS\_HOME} \\
 sim-recon & {\tt HALLD\_HOME} \\
@@ -307,16 +309,16 @@ Complete builds are orchestrated by {\tt Makefile\_all}. The highest-level
 targets of Makefile\_all, shown with their dependencies are:
 
 \begin{verbatim}
-all: env xerces_build cernlib_build cernlib_debug_build root_build \
-     clhep_build geant4_build gsl_build evio_build ccdb_build \
-     jana_build hdds_build sim-recon_build
+all: env xerces_build cernlib_build lapack_build root_build \
+    clhep_build geant4_build gsl_build evio_build rcdb_build \
+    ccdb_build jana_build hdds_build sim-recon_build
 
-gluex: env xerces_build cernlib_build root_build clhep_build \
-       evio_build ccdb_build jana_build hdds_build \
-       sim-recon_build
+gluex: env xerces_build cernlib_build lapack_build root_build \
+    clhep_build evio_build rcdb_build ccdb_build jana_build \
+    hdds_build sim-recon_build
 
 gluex_jlab: env xerces_build root_build clhep_build evio_build \
-            ccdb_build jana_build hdds_build sim-recon_build
+    rcdb_build ccdb_build jana_build hdds_build sim-recon_build
 \end{verbatim}
 
 The {\tt all} target builds every package that {\tt Makefile\_all} knows
@@ -376,6 +378,7 @@ setenv XERCES_C_VERSION 3.1.1
 setenv CLHEP_VERSION 2.0.4.5
 setenv ROOT_VERSION 5.34.26
 setenv CCDB_VERSION 1.05
+setenv RCDB_VERSION 0.00
 setenv EVIO_VERSION 4.3.1
 \end{verbatim}
 
@@ -399,11 +402,17 @@ specify the location of the repository. For example:
 \end{verbatim}
 
 will cause the HDDS package makefile to check out the master branch of
-the HDDS Git repository at GitHub. The names of the variables for JANA
-and sim-recon are {\tt JANA\_URL} (Subversion), {\tt CCDB\_URL} (Git), and {\tt
-  SIM\_RECON\_URL} (Git) respectively.
+the HDDS Git repository at GitHub. The names of the variables for
+other packages are {\tt JANA\_URL} (Subversion), {\tt CCDB\_URL}
+(Git), {\tt RCDB\_URL} (Git), and {\tt SIM\_RECON\_URL} (Git)
+respectively.
 
-For packages that use a Git repository, there are two additional variables that can be used to control the checkout. {\tt SIM\_RECON\_BRANCH} is used to check-out a specific branch and {\tt SIM\_RECON\_HASH} is used to check-out a specific commit of sim-recon. If one is set, the other should not be. There are analogous variables for CCDB and HDDS.
+For packages that use a Git repository, there are two additional
+variables that can be used to control the checkout. {\tt
+  SIM\_RECON\_BRANCH} is used to check-out a specific branch and {\tt
+  SIM\_RECON\_HASH} is used to check-out a specific commit of
+sim-recon. If one is set, the other should not be. There are analogous
+variables for CCDB, RCDB, and HDDS.
 
 \subsubsection{Extra Features for Specific Packages}\label{section:makefile-extras}
 
@@ -421,9 +430,13 @@ arguments to the {\tt scons} command invoked by make. For example,
 \end{verbatim}
 will cause SCons to show the compiler commands explicitly.
 
-\item{\bf Building a Local Version of LAPACK/BLAS}
+\item{\bf Building LAPACK/BLAS}
 
-Under RedHat Enterprise 7 at JLab the lapack and blas static libraries seem to have disappeared from the standard repositories. In general if this is a problem you can use the {\tt Makefile\_lapack} in the {\tt BUILD\_SCRIPTS} directory to create these libraries. The ``install'' target will add them to the lib directory of your CERNLIB build, assuming the canonical environment settings.
+The {\tt LAPACK} and {\tt BLAS} libraries are needed by CERNLIB. They
+are downloaded and build automatically, but rather than being
+installed in their own home directory, The ``install'' target of {\tt
+  Makefile\_lapack} adds them to the lib directory of your CERNLIB
+build.
 
 \end{description}
 
@@ -485,6 +498,7 @@ Fig.~\ref{figure:version-xml}.
   <package name="root" version="5.34.26"/>
   <package name="ccdb" version="1.05"/>
   <package name="evio" version="4.3.1"/>
+  <package name="rcdb" version="0.00"/>
   </gversions>
 \end{verbatim}
 \caption{An example version file. {\tt version\_1.7.xml} is shown.}\label{figure:version-xml}
@@ -548,6 +562,8 @@ setenv CCDB_VERSION 1.05;
 setenv CCDB_HOME /home/gluex/gluex_top/ccdb/ccdb_1.05;
 setenv EVIO_VERSION 4.3.1;
 setenv EVIOROOT /home/gluex/gluex_top/evio/evio-4.3.1/Linux-x86_64;
+setenv RCDB_VERSION 0.00;
+setenv RCDB_HOME /home/gluex/gluex_top/rcdb/rcdb_0.00;
 \end{verbatim}
 \caption{Output of {\tt \$BUILD\_SCRIPTS/version.pl}.}\label{figure:version-pl-output}
 \end{figure}

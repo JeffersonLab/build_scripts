@@ -4,6 +4,7 @@
 *.pdf
 *.toc
 *.out
+*.dvi
 gluex_build_web
 gluex_build_web.tar
 gluex_build_web.tex
