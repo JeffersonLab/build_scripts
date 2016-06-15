@@ -50,6 +50,8 @@ unsetenv CLHEP_LIB_DIR
 unsetenv CCDB_CONNECTION
 unsetenv CCDB_USER
 unsetenv EVIOROOT
+unsetenv RCDB_HOME
+unsetenv RCDB_CONNECTION
 # versions
 unsetenv SIM_RECON_VERSION
 unsetenv JANA_VERSION
@@ -60,6 +62,7 @@ unsetenv CLHEP_VERSION
 unsetenv ROOT_VERSION
 unsetenv CCDB_VERSION
 unsetenv EVIO_VERSION
+unsetenv RCDB_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
 unsetenv JANA_URL
@@ -79,6 +82,7 @@ unsetenv XERCES_C_DIRTAG
 unsetenv CLHEP_DIRTAG
 unsetenv ROOT_DIRTAG
 unsetenv CCDB_DIRTAG
+unsetenv RCDB_DIRTAG
 unsetenv EVIO_DIRTAG
 # git branches
 unsetenv SIM_RECON_BRANCH
@@ -89,6 +93,7 @@ unsetenv XERCES_C_BRANCH
 unsetenv CLHEP_BRANCH
 unsetenv ROOT_BRANCH
 unsetenv CCDB_BRANCH
+unsetenv RCDB_BRANCH
 unsetenv EVIO_BRANCH
 # git hashes
 unsetenv SIM_RECON_HASH
@@ -99,4 +104,5 @@ unsetenv XERCES_C_HASH
 unsetenv CLHEP_HASH
 unsetenv ROOT_HASH
 unsetenv CCDB_HASH
+unsetenv RCDB_HASH
 unsetenv EVIO_HASH

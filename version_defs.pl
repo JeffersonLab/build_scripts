@@ -1,5 +1,5 @@
 @packages = (root, clhep, jana, 'sim-recon', hdds, cernlib, 'xerces-c', ccdb,
-	     geant4, evio);
+	     geant4, evio, rcdb);
 
 %home_variable = (root => 'ROOTSYS',
 		  clhep => 'CLHEP',

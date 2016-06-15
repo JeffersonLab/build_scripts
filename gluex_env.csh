@@ -5,7 +5,7 @@ else
     set gluex_env_verbose=0
 endif
 # general stuff
-if (! $?GLUEX_TOP) setenv GLUEX_TOP /usr/local/gluex
+if (! $?GLUEX_TOP) setenv GLUEX_TOP $HOME/gluex_top
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
@@ -54,6 +54,10 @@ if (! $?CCDB_USER) then
     endif
 endif
 if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb.jlab.org/ccdb
+# rcdb
+if (! $?RCDB_HOME) setenv RCDB_HOME $GLUEX_TOP/rcdb/prod
+source $RCDB_HOME/environment.csh
+if (! $?RCDB_CONNECTION) setenv RCDB_CONNECTION mysql://rcdb@hallddb.jlab.org/rcdb
 # jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod/$BMS_OSNAME
 if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL $CCDB_CONNECTION
