@@ -2,10 +2,12 @@
 set VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
 # farm-specific set-up
 set nodename=`uname -n`
-if ( X$nodename =~ Xi*farm[0-9]* ) then
+if ( $nodename =~ farm* || $nodename =~ ifarm* || $nodename =~ qcd* ) then
     setenv http_proxy http://jprox.jlab.org:8081
     setenv https_proxy https://jprox.jlab.org:8081
-    module load gcc_4.9.2
+    set GCC_HOME=/apps/gcc/4.9.2
+    setenv PATH ${GCC_HOME}/bin:${PATH}
+    setenv LD_LIBRARY_PATH ${GCC_HOME}/lib64:${GCC_HOME}/lib
 endif
 setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
