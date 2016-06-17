@@ -2,7 +2,7 @@
 VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
 # farm-specific set-up
 nodename=`uname -n`
-if [[ $nodename =~ ^i*farm[0-9]* ]]
+if [[ $nodename =~ ^farm* || $nodename =~ ^ifarm* || $nodename =~ ^qcd* ]]
     then
     export http_proxy=http://jprox.jlab.org:8081
     export https_proxy=https://jprox.jlab.org:8081
