@@ -8,7 +8,9 @@ if [[ $nodename =~ ^farm* || $nodename =~ ^ifarm* || $nodename =~ ^qcd* ]]
     export https_proxy=https://jprox.jlab.org:8081
     export MODULESHOME=/usr/share/Modules
     source $MODULESHOME/init/bash
-    module load gcc_4.9.2
+    GCC_HOME=/apps/gcc/4.9.2
+    export PATH=${GCC_HOME}/bin:${PATH}
+    export LD_LIBRARY_PATH=${GCC_HOME}/lib64:${GCC_HOME}/lib
 fi
 export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
