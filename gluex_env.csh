@@ -69,8 +69,7 @@ echo $LD_LIBRARY_PATH | grep $EVIOROOT/lib > /dev/null
 if ($status) setenv LD_LIBRARY_PATH  $EVIOROOT/lib:$LD_LIBRARY_PATH
 # hdds
 if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
-if (! $?JANA_GEOMETRY_URL) setenv JANA_GEOMETRY_URL \
-    xmlfile://$HDDS_HOME/main_HDDS.xml
+setenv JANA_GEOMETRY_URL xmlfile://$HDDS_HOME/main_HDDS.xml
 # halld
 if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/sim-recon/prod
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my

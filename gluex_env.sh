@@ -102,9 +102,7 @@ if [ `echo $LD_LIBRARY_PATH | grep -c $EVIOROOT/lib` -eq 0 ]
 fi
 # hdds
 if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=$GLUEX_TOP/hdds/prod; fi
-if [ -z "$JANA_GEOMETRY_URL" ]
-    then export JANA_GEOMETRY_URL=xmlfile://$HDDS_HOME/main_HDDS.xml
-fi
+export JANA_GEOMETRY_URL=xmlfile://$HDDS_HOME/main_HDDS.xml
 # sim-recon
 if [ -z "$HALLD_HOME" ]; then export HALLD_HOME=$GLUEX_TOP/sim-recon/prod; fi
 if [ -z "$HALLD_MY" ]; then export HALLD_MY=$HOME/halld_my; fi
