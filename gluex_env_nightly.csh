@@ -2,8 +2,12 @@
 setenv BUILD_DATE $1
 # farm-specific set-up
 set nodename=`uname -n`
-if ( X$nodename =~ Xi*farm[0-9]* ) then
-    module load gcc_4.9.2
+if ( $nodename =~ farm* || $nodename =~ ifarm* || $nodename =~ qcd* ) then
+    setenv http_proxy http://jprox.jlab.org:8081
+    setenv https_proxy https://jprox.jlab.org:8081
+    set GCC_HOME=/apps/gcc/4.9.2
+    setenv PATH ${GCC_HOME}/bin:${PATH}
+    setenv LD_LIBRARY_PATH ${GCC_HOME}/lib64:${GCC_HOME}/lib
 endif
 setenv BMS_OSNAME `/group/halld/Software/build_scripts/osrelease.pl` # boot strap from official build_scripts directory
 if (! $?NIGHTLY_DIR) set NIGHTLY_DIR=/u/scratch/gluex/nightly/$BUILD_DATE/$BMS_OSNAME
