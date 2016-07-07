@@ -6,8 +6,6 @@ if [[ $nodename =~ ^farm* || $nodename =~ ^ifarm* || $nodename =~ ^qcd* ]]
     then
     export http_proxy=http://jprox.jlab.org:8081
     export https_proxy=https://jprox.jlab.org:8081
-    export MODULESHOME=/usr/share/Modules
-    source $MODULESHOME/init/bash
     GCC_HOME=/apps/gcc/4.9.2
     export PATH=${GCC_HOME}/bin:${PATH}
     export LD_LIBRARY_PATH=${GCC_HOME}/lib64:${GCC_HOME}/lib
