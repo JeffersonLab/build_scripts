@@ -2,7 +2,7 @@
 set VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
 # farm-specific set-up
 set nodename=`uname -n`
-if ( $nodename =~ farm* || $nodename =~ ifarm* || $nodename =~ qcd* ) then
+if ( $nodename =~ farm* || $nodename =~ ifarm* || $nodename =~ qcd* || $nodename =~ gluon* ) then
     setenv http_proxy http://jprox.jlab.org:8081
     setenv https_proxy https://jprox.jlab.org:8081
     set GCC_HOME=/apps/gcc/4.9.2
