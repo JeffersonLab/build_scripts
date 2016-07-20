@@ -56,7 +56,7 @@ endif
 if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb.jlab.org/ccdb
 # rcdb
 if (! $?RCDB_HOME) setenv RCDB_HOME $GLUEX_TOP/rcdb/prod
-source $RCDB_HOME/environment.csh
+source $BUILD_SCRIPTS/rcdb_env.csh
 if (! $?RCDB_CONNECTION) setenv RCDB_CONNECTION mysql://rcdb@hallddb.jlab.org/rcdb
 # jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod/$BMS_OSNAME
