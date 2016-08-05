@@ -86,7 +86,15 @@ foreach $href (@b) {
 		$basename = basename($url);
 		$package_home_dir = "$gluex_top/$name/$basename$sep$dirtag$dir_suffix{$name}";
 	    } else {
-		$package_home_dir = "$gluex_top/$name/$dir_prefix{$name}$version$sep$dirtag$dir_suffix{$name}";
+		my $this_dir_prefix = $dir_prefix{$name};
+		if ($name == 'root') { # prefix depends on root version
+		    if ($version =~ /^6./) {
+			$this_dir_prefix =~ s/\[_-\]/-/;
+		    } else {
+			$this_dir_prefix =~ s/\[_-\]/_/;
+		    }
+		}
+		$package_home_dir = "$gluex_top/$name/$this_dir_prefix$version$sep$dirtag$dir_suffix{$name}";
 	    }
 	    if ($dirtag) {print_command("${name_in_caps}_DIRTAG", $dirtag);}
 	    if ($url) {print_command("${name_in_caps}_URL", $url);}
