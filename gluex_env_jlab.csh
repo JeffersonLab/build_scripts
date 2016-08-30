@@ -4,7 +4,6 @@ if ( "x$1" == "x" ) then
 else
     set VERSION_XML=$1
 endif
-echo VERSION_XML = $VERSION_XML
 # farm-specific set-up
 set nodename=`uname -n`
 if ( $nodename =~ farm* || $nodename =~ ifarm* || $nodename =~ qcd* || $nodename =~ gluon* ) then

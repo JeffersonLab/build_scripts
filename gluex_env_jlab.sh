@@ -5,7 +5,6 @@ if [ -z $1 ]
 else
     VERSION_XML=$1
 fi
-echo VERSION_XML = $VERSION_XML
 # farm-specific set-up
 nodename=`uname -n`
 if [[ $nodename =~ ^farm* || $nodename =~ ^ifarm* || $nodename =~ ^qcd* || $nodename =~ ^gluon* ]]
