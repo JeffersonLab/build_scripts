@@ -5,6 +5,7 @@ use Data::Dumper;
 use Getopt::Std;
 use File::Slurp;
 use XML::Writer;
+use IO::File;
 
 # get the file name
 getopts("i:o:d:h");
