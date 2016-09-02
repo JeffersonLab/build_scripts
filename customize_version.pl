@@ -8,18 +8,25 @@ use XML::Writer;
 use IO::File;
 
 # get the file name
-getopts("i:o:d:h");
+getopts("i:o:d:s:h");
 $filename_in = $opt_i;
 $filename_out = $opt_o;
 $halld_home = $opt_d;
+$hdds_home = $opt_s;
+
 if ($opt_h) {
     print_usage();
     exit;
 }
-if (!$filename_in || !$filename_out || !$halld_home) {
+if (!$filename_in || !$filename_out ) {
     print "\nError: required command-line option missing\n\n";
     print_usage();
     exit 1;
+}
+if (!($halld_home || $hdds_home)) {
+    print "\nError: no custom home directories specified, no action taken\n\n";
+    print_usage();
+    exit 2;
 }
 # slurp in the xml file
 $ref = XMLin($filename_in, KeyAttr=>[]);
@@ -48,7 +55,11 @@ foreach $href (@b) {
     $home = $d{home};
     $hash = $d{hash};
     #print "package = $name, version = $version\n";
-    if ($name ne "sim-recon") {
+    if ($name eq "sim-recon" && $halld_home) {
+	$writer->emptyTag("package", "name" => "$name", "home" => "$halld_home");
+    } elsif ($name eq "hdds" && $hdds_home) {
+	$writer->emptyTag("package", "name" => "$name", "home" => "$hdds_home");
+    } else {
 	$write_element_command = "\$writer->emptyTag(\"package\", \"name\" => \"$name\"";
 	if ($version) {
 	    $write_element_command .= ", \"version\" => \"$version\"";
@@ -68,8 +79,6 @@ foreach $href (@b) {
 	$write_element_command .= ");";
 	#print "write_element_command = $write_element_command\n";
 	eval $write_element_command;
-    } else {
-	$writer->emptyTag("package", "name" => "$name", "home" => "$halld_home");
     }
 }
 
@@ -83,10 +92,12 @@ sub print_usage {
     my $usage = <<'EOM';
 custom_sim_recon.pl: creates a version xml file with custom sim-recon home directory.
 
-Options, all required:
-    -i <input xml file name>
-    -o <output xml file name>
-    -d <sim-recon home directory>
+Options:
+    -i <input xml file name> (required)
+    -o <output xml file name> (required)
+    -d <custom sim-recon home directory> (optional)
+    -s <custom HDDS home directory> (optional)
+    -h print this usage message
 EOM
 
     print $usage;
