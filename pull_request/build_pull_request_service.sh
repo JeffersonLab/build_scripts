@@ -11,7 +11,7 @@ export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 echo build_pull_request_service.sh: using BUILD_SCRIPTS = $BUILD_SCRIPTS
 command="$BUILD_SCRIPTS/pull_request/build_pull_request.sh $branch_git"
 echo build_pull_request_service.sh: executing $command
-#$command
+$command
 if [ $? -eq 0 ]; then
     status="SUCCESS"
 else
