@@ -76,10 +76,10 @@ foreach $package (@packages) {
 		    $version_field = $token0[1];
 		}
 		#print "version_field = $version_field\n";
-		@token4 = split(/^/, $version_field);
+		@token4 = split(/\^/, $version_field);
 		if ($#token4 > 0) {
 		    $dirtag = $token4[$#token4];
-		    $dirtag_string = '^' . $dirtag;
+		    $dirtag_string = "\\^" . $dirtag;
 		    @token5 = split (/$dirtag_string/, $version_field);
 		    $version = $token5[0];
 		} else {

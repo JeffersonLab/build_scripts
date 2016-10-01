@@ -1,8 +1,13 @@
 #!/bin/bash
-VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
+if [ -z $1 ]
+    then
+    VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
+else
+    VERSION_XML=$1
+fi
 # farm-specific set-up
 nodename=`uname -n`
-if [[ $nodename =~ ^farm* || $nodename =~ ^ifarm* || $nodename =~ ^qcd* ]]
+if [[ $nodename =~ ^farm* || $nodename =~ ^ifarm* || $nodename =~ ^qcd* || $nodename =~ ^gluon* ]]
     then
     export http_proxy=http://jprox.jlab.org:8081
     export https_proxy=https://jprox.jlab.org:8081

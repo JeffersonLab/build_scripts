@@ -26,11 +26,11 @@ chomp $bms_osname;
 $definitions = read_file("$build_scripts/version_defs.pl");
 eval $definitions;
 
-%prereqs = (root => ['sim-recon'],
+%prereqs = (root => [],
 	    clhep => [],
 	    jana => ['evio', 'ccdb', 'xerces-c', 'root'],
 	    'sim-recon' => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb'],
-	    hdds => ['xerces-c'],
+	    hdds => ['xerces-c', 'root'],
 	    cernlib => [],
 	    'xerces-c' => [],
 	    geant4 => ['clhep'],

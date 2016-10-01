@@ -13,7 +13,7 @@
 		  evio => 'EVIOROOT',
 		  rcdb => 'RCDB_HOME');
 
-%dir_prefix = (root => 'root_',
+%dir_prefix = (root => 'root[_-]',
 	       clhep => '',
 	       jana => 'jana_',
 	       'sim-recon' => 'sim-recon-',
