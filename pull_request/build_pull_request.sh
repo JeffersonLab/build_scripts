@@ -10,9 +10,11 @@ pushd $target_dir
 # setup environment
 #source /group/halld/Software/build_scripts/gluex_env_jlab.sh
 ############################################
-echo === warning: using hard-wired location of build_scripts for development ===
-export BUILD_SCRIPTS=/home/gluex/build_scripts # for development only
-source $BUILD_SCRIPTS/gluex_env_jlab.sh
+#echo === warning: using hard-wired location of build_scripts for development ===
+# this is maybe redundant?
+export BUILD_SCRIPTS=/group/halld/Software/build_scripts  
+source $BUILD_SCRIPTS/gluex_env_jlab_test.sh /group/halld/www/halldweb/html/dist/version_jlab.xml
+unset CPLUS_INCLUDE_PATH
 ############################################
 unset SIM_RECON_VERSION
 if [ -z "$SIM_RECON_URL" ]; then

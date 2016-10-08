@@ -7,7 +7,7 @@ if [ ! -z "$3" ]; then
 fi
 echo build_pull_request_service.sh: building branch $branch
 report_file=report_${branch}.txt
-export BUILD_SCRIPTS=/home/gluex/build_scripts
+export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 echo build_pull_request_service.sh: using BUILD_SCRIPTS = $BUILD_SCRIPTS
 command="$BUILD_SCRIPTS/pull_request/build_pull_request.sh $branch_git"
 echo build_pull_request_service.sh: executing $command
