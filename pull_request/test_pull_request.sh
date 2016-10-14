@@ -22,7 +22,7 @@ cp $BUILD_SCRIPTS/pull_request/control.in .
 LOG=log; mkdir $LOG
 source ../$osrelease/setenv.sh
 # hack for RCDB
-export LD_LIBRARY_PATH=/group/halld/Software/builds/Linux_CentOS6-x86_64-gcc4.9.2/rcdb/rcdb_0.00/cpp/lib:$LD_LIBRARY_PATH
+#export LD_LIBRARY_PATH=/group/halld/Software/builds/Linux_CentOS6-x86_64-gcc4.9.2/rcdb/rcdb_0.00/cpp/lib:$LD_LIBRARY_PATH
 EVIO=/work/halld/pull_request_test/hd_rawdata_003180_000.evio
 EVENTS=500
 THREADS=8
