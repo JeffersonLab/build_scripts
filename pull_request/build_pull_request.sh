@@ -13,7 +13,7 @@ pushd $target_dir
 #echo === warning: using hard-wired location of build_scripts for development ===
 # this is maybe redundant?
 export BUILD_SCRIPTS=/group/halld/Software/build_scripts  
-source $BUILD_SCRIPTS/gluex_env_jlab_test.sh /group/halld/www/halldweb/html/dist/version_jlab.xml
+source $BUILD_SCRIPTS/gluex_env_jlab.sh /group/halld/www/halldweb/html/dist/version_jlab.xml
 unset CPLUS_INCLUDE_PATH
 ############################################
 unset SIM_RECON_VERSION
