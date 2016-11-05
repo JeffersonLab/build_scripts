@@ -1,10 +1,6 @@
 #!/bin/tcsh
 # go to the target directory
 setenv TODAYS_DATE `date +%F`
-set nodename=`uname -n`
-if ( X$nodename =~ Xi*farm[0-9]* ) then
-    module load gcc_4.9.2
-endif
 setenv TARGET_DIR /u/scratch/$USER/nightly/$TODAYS_DATE/`/group/halld/Software/build_scripts/osrelease.pl`
 setenv BUILD_SCRIPTS $TARGET_DIR/build_scripts
 mkdir -p $TARGET_DIR
