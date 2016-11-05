@@ -1,4 +1,12 @@
-ROOTDIR=root-$(ROOT_VERSION)
+ifdef DEBUG
+ CMAKE_VERBOSE_OPTION = -DCMAKE_VERBOSE_MAKEFILE=ON
+endif
+
+ifdef ROOT_DIRTAG
+ ROOTDIR = root-$(ROOT_VERSION)^$(ROOT_DIRTAG)
+else
+ ROOTDIR = root-$(ROOT_VERSION)
+endif
 BUILD_DIR = $(ROOTDIR)/build_dir
 
 all: prod_link
@@ -11,12 +19,16 @@ $(TARFILE):
 
 $(ROOTDIR)/.untar_done: $(TARFILE)
 	$(RM) -r $(ROOTDIR)
-	tar zxf $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(ROOTDIR)
+	rmdir -v untar_temp_dir
 	date > $@
 
 $(ROOTDIR)/.cmake_done: $(ROOTDIR)/.untar_done
 	mkdir -p $(BUILD_DIR)
-	cd $(BUILD_DIR) ; cmake ..
+	cd $(BUILD_DIR) ; cmake .. -DCMAKE_INSTALL_PREFIX=.. $(CMAKE_VERBOSE_OPTION) -Dgdml=ON -Droofit=ON
 	date > $@
 
 $(ROOTDIR)/.build_done: $(ROOTDIR)/.cmake_done
@@ -24,5 +36,5 @@ $(ROOTDIR)/.build_done: $(ROOTDIR)/.cmake_done
 	date > $@
 
 $(ROOTDIR)/.install_done: $(ROOTDIR)/.build_done
-	cd $(BUILD_DIR) ; cmake -DCMAKE_INSTALL_PREFIX=.. -Dgdml=ON -Droofit=ON -P cmake_install.cmake
+	cd $(BUILD_DIR) ; cmake --build . --target install
 	date > $@

@@ -7,7 +7,7 @@ if [ ! -z "$3" ]; then
 fi
 echo build_pull_request_service.sh: building branch $branch
 report_file=report_${branch}.txt
-export BUILD_SCRIPTS=/home/gluex/build_scripts
+export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 echo build_pull_request_service.sh: using BUILD_SCRIPTS = $BUILD_SCRIPTS
 command="$BUILD_SCRIPTS/pull_request/build_pull_request.sh $branch_git"
 echo build_pull_request_service.sh: executing $command
@@ -37,7 +37,7 @@ if [ $status == "SUCCESS" ]; then
         failure_comment=""
     else
         test_status="FAILURE"
-        failure_comment="Failures: [$build_dir/tests/failures.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests/tests-failures.txt)\n"
+        failure_comment="Failures: [$build_dir/tests/failures.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests-failures.txt)\n"
     fi
     # save files to web accessible directory
     cp -v $build_dir/make_${branch}.log $web_dir/make_${branch}.log
