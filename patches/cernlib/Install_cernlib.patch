@@ -25,11 +25,12 @@
  
  # Define the cernlib version
  
-@@ -31,6 +43,7 @@
+@@ -31,6 +43,8 @@
  FC=" "
  [ "$GCCVSN" = "3" ]&&FC=g77
  [ "$GCCVSN" = "4" ]&&FC=gfortran
 +[ "$GCCVSN" = "5" ]&&FC=gfortran
++[ "$GCCVSN" = "6" ]&&FC=gfortran
  if [ "$GCCVSN" = " " ]; then
    echo " "
    echo "====================================="
