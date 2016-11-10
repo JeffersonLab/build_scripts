@@ -1,4 +1,4 @@
-VERSION = 10.01.p02
+VERSION = 10.02.p02
 TARFILE = geant4.$(VERSION).tar.gz
 G4DIR = geant4.$(VERSION)
 G4DIR_ABS = $(shell pwd)/$(G4DIR)
