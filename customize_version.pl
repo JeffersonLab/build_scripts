@@ -8,11 +8,11 @@ use XML::Writer;
 use IO::File;
 
 # get the file name
-getopts("i:o:d:s:h");
+getopts("i:o:s:g:h");
 $filename_in = $opt_i;
 $filename_out = $opt_o;
-$halld_home = $opt_d;
-$hdds_home = $opt_s;
+$halld_home = $opt_s;
+$hdds_home = $opt_g;
 
 if ($opt_h) {
     print_usage();
@@ -86,6 +86,11 @@ $writer->endTag("gversion");
 $writer->end();
 $output->close();
 
+print "\nInfo: contents of $filename_out:\n";
+print "----------------------------------------\n";
+system("cat $filename_out");
+print "----------------------------------------\n";
+
 exit;
 
 sub print_usage {
@@ -95,8 +100,8 @@ custom_sim_recon.pl: creates a version xml file with custom sim-recon home direc
 Options:
     -i <input xml file name> (required)
     -o <output xml file name> (required)
-    -d <custom sim-recon home directory> (optional)
-    -s <custom HDDS home directory> (optional)
+    -s <custom sim-recon home directory> (optional, s for sim-recon)
+    -g <custom HDDS home directory> (optional, g for geometry)
     -h print this usage message
 EOM
 
