@@ -1,6 +1,8 @@
-VERSION = 10.02.p02
-TARFILE = geant4.$(VERSION).tar.gz
-G4DIR = geant4.$(VERSION)
+ifndef G4_VERSION
+    G4_VERSION = 10.02.p02
+endif
+TARFILE = geant4.$(G4_VERSION).tar.gz
+G4DIR = geant4.$(G4_VERSION)
 
 all: $(G4DIR)/.make_install_done
 
