@@ -1,7 +1,6 @@
 VERSION = 10.02.p02
 TARFILE = geant4.$(VERSION).tar.gz
 G4DIR = geant4.$(VERSION)
-G4DIR_ABS = $(shell pwd)/$(G4DIR)
 
 all: $(G4DIR)/.make_install_done
 
@@ -13,16 +12,21 @@ $(G4DIR)/.untar_done: $(TARFILE)
 	date > $@
 
 $(G4DIR)/.configure_done: $(G4DIR)/.untar_done
-	mkdir -p $(G4DIR)-build
-	cd $(G4DIR)-build ; cmake -DCMAKE_INSTALL_PREFIX=$(G4DIR_ABS)-install $(G4DIR_ABS)
+	mkdir -p $(G4DIR)/build
+	cd $(G4DIR)/build ; cmake -DCMAKE_INSTALL_PREFIX=.. ..
 	date > $@
 
 $(G4DIR)/.create_makefiles: $(G4DIR)/.configure_done
-	cd $(G4DIR)-build ; cmake -DGEANT4_INSTALL_DATA=ON .
+	cd $(G4DIR)/build ; cmake -DGEANT4_INSTALL_DATA=ON .
 	date > $@
 
 $(G4DIR)/.make_done: $(G4DIR)/.create_makefiles
-	cd $(G4DIR)-build ; make -j4
+	cd $(G4DIR)/build ; make -j4
+	date > $@
 
 $(G4DIR)/.make_install_done: $(G4DIR)/.make_done
-	cd $(G4DIR)-build ; make install
+	cd $(G4DIR)/build ; make install
+	date > $@
+
+help:
+	@echo untar target = $(G4DIR)/.untar_done
