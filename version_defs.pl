@@ -8,7 +8,7 @@
 		  hdds => 'HDDS_HOME',
 		  cernlib => 'CERN',
 		  'xerces-c' => 'XERCESCROOT',
-		  geant4 => 'GEANT4_HOME',
+		  geant4 => 'G4ROOT',
 		  ccdb => 'CCDB_HOME',
 		  evio => 'EVIOROOT',
 		  rcdb => 'RCDB_HOME');

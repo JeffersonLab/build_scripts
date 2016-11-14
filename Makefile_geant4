@@ -1,7 +1,8 @@
-VERSION = 10.02.p02
-TARFILE = geant4.$(VERSION).tar.gz
-G4DIR = geant4.$(VERSION)
-G4DIR_ABS = $(shell pwd)/$(G4DIR)
+ifndef G4_VERSION
+    G4_VERSION = 10.02.p02
+endif
+TARFILE = geant4.$(G4_VERSION).tar.gz
+G4DIR = geant4.$(G4_VERSION)
 
 all: $(G4DIR)/.make_install_done
 
@@ -13,16 +14,26 @@ $(G4DIR)/.untar_done: $(TARFILE)
 	date > $@
 
 $(G4DIR)/.configure_done: $(G4DIR)/.untar_done
-	mkdir -p $(G4DIR)-build
-	cd $(G4DIR)-build ; cmake -DCMAKE_INSTALL_PREFIX=$(G4DIR_ABS)-install $(G4DIR_ABS)
+	mkdir -p $(G4DIR)/build
+	cd $(G4DIR)/build ; cmake \
+	   -DCMAKE_INSTALL_PREFIX=.. \
+	   -DGEANT4_INSTALL_DATA=ON \
+	   -DGEANT4_USE_GDML=ON \
+	   -DXERCESC_ROOT_DIR=$(XERCESCROOT) \
+	   -DGEANT4_USE_OPENGL_X11=ON \
+	   -DGEANT4_USE_RAYTRACER_X11=ON \
+	   -DGEANT4_BUILD_MULTITHREADED=ON \
+	   -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+	   ..
 	date > $@
 
-$(G4DIR)/.create_makefiles: $(G4DIR)/.configure_done
-	cd $(G4DIR)-build ; cmake -DGEANT4_INSTALL_DATA=ON .
+$(G4DIR)/.make_done: $(G4DIR)/.configure_done
+	cd $(G4DIR)/build ; make -j4
 	date > $@
-
-$(G4DIR)/.make_done: $(G4DIR)/.create_makefiles
-	cd $(G4DIR)-build ; make -j4
 
 $(G4DIR)/.make_install_done: $(G4DIR)/.make_done
-	cd $(G4DIR)-build ; make install
+	cd $(G4DIR)/build ; make install
+	date > $@
+
+help:
+	@echo untar target = $(G4DIR)/.untar_done
