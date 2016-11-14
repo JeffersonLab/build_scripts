@@ -15,14 +15,19 @@ $(G4DIR)/.untar_done: $(TARFILE)
 
 $(G4DIR)/.configure_done: $(G4DIR)/.untar_done
 	mkdir -p $(G4DIR)/build
-	cd $(G4DIR)/build ; cmake -DCMAKE_INSTALL_PREFIX=.. ..
+	cd $(G4DIR)/build ; cmake \
+	   -DCMAKE_INSTALL_PREFIX=.. \
+	   -DGEANT4_INSTALL_DATA=ON \
+	   -DGEANT4_USE_GDML=ON \
+	   -DXERCESC_ROOT_DIR=$(XERCESCROOT) \
+	   -DGEANT4_USE_OPENGL_X11=ON \
+	   -DGEANT4_USE_RAYTRACER_X11=ON \
+	   -DGEANT4_BUILD_MULTITHREADED=ON \
+	   -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+	   ..
 	date > $@
 
-$(G4DIR)/.create_makefiles: $(G4DIR)/.configure_done
-	cd $(G4DIR)/build ; cmake -DGEANT4_INSTALL_DATA=ON .
-	date > $@
-
-$(G4DIR)/.make_done: $(G4DIR)/.create_makefiles
+$(G4DIR)/.make_done: $(G4DIR)/.configure_done
 	cd $(G4DIR)/build ; make -j4
 	date > $@
 
