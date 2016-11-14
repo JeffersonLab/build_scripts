@@ -10,7 +10,7 @@ $(TARFILE):
 	wget http://geant4.web.cern.ch/geant4/support/source/$(TARFILE)
 
 $(G4DIR)/.untar_done: $(TARFILE)
-	tar zxvf $(TARFILE)
+	tar zxf $(TARFILE)
 	date > $@
 
 $(G4DIR)/.configure_done: $(G4DIR)/.untar_done
