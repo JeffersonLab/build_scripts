@@ -2,6 +2,7 @@
 
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{html}
 
 % global parameters
 \textwidth=6.5in
@@ -13,7 +14,7 @@
 \headsep=0in
 
 \title{A Version Management System for GlueX \\ \medskip \large
-  GlueX-Doc-2793-v14}
+  GlueX-Doc-2793-v15}
 \author{Mark M.\ Ito \\ Jefferson Lab}
 \date{December 7, 2016}
 
@@ -124,7 +125,9 @@ All scripts and makefiles to support VMS are found the in the {\tt
   build\_scripts} directory. At JLab, the full path is
 $${\tt /group/halld/Software/build\_scripts}$$
 The directory can also be cloned from the Git repository at GitHub. The URL is
-$${\tt https://github.com/jeffersonlab/build\_scripts}$$
+\begin{center}\tt 
+  \htmladdnormallink{https://github.com/jeffersonlab/build\_scripts}{https://github.com/jeffersonlab/build_scripts}
+\end{center}
 Many of the scripts and makefiles described in this note require that
 the environment variable {\tt BUILD\_SCRIPTS} be defined and point to
 an instance of this directory.
@@ -795,13 +798,13 @@ Root access is required for steps (1) and (3).
 
 \item {\bf Get the Scripts}. A tar file with the scripts described
   here is available at
-\begin{verbatim}
-  https://github.com/JeffersonLab/gluex_install/archive/latest.tar.gz
-\end{verbatim}
+  \begin{center}
+    \htmladdnormallink{\tt https://github.com/JeffersonLab/gluex\_install/archive/latest.tar.gz}{https://github.com/JeffersonLab/gluex_install/archive/latest.tar.gz}
+  \end{center}
 You can also do a git clone of the latest version:
-\begin{verbatim}
-  git clone https://github.com/jeffersonlab/gluex_install
-\end{verbatim}
+\begin{center}\tt
+  git clone \htmladdnormallink{https://github.com/jeffersonlab/gluex\_install}{https://github.com/jeffersonlab/gluex_install}
+\end{center}
 
 \item {\bf Prerequisites: gluex\_prereq\_$<$distribution$>$.sh}. The
   prerequisites script installs packages from the distribution
