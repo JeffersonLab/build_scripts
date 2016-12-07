@@ -12,9 +12,10 @@
 \headheight=0in % no headers in this document
 \headsep=0in
 
-\title{A Version Management System for GlueX \\ \medskip \large GlueX-Doc-2793-v12}
+\title{A Version Management System for GlueX \\ \medskip \large
+  GlueX-Doc-2793-v14}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{June 15, 2016}
+\date{December 7, 2016}
 
 \begin{document}
 
@@ -810,14 +811,6 @@ You can also do a git clone of the latest version:
   are specific to particular distributions. You must run this
   script from inside the ``gluex\_install'' directory created when you
   get the scripts (see Get the Scripts, step 2).
-
-\item {\bf Subversion test: svn\_touch.sh}. Simply does an ``l'' of the
-  Hall D and 12 GeV subversion repositories at JLab, both as a test
-  and to dispense with interactive prompts asking about certificates
-  from the servers. Respond with ``p'', to permanently accept the
-  certificates. These prompts would otherwise hang the build. If you
-  are not prompted, you already recognize the certificates. The script
-  is distribution independent.
 
 \item {\bf Install: gluex\_install.sh}. Creates a directory,
   ``gluex\_top'', in the current working directory to house the build,
