@@ -22,7 +22,7 @@ $(DIST_FILES):
 	date > $@
 
 .install_src_done: .untar_done
-	export CERN=$(PWD) ; ./Install_cernlib_src
+	export CERN=`pwd` ; ./Install_cernlib_src
 	date > $@
 
 .patch_done: .install_src_done
