@@ -28,12 +28,14 @@ $(TARFILE):
 $(EVIO_HOME)/.untar_done: $(TARFILE)
 	mkdir -p temp
 	cd temp ; tar zxf ../$(TARFILE)
-	mv -v temp/evio-$(MAJOR_MINOR) $(DIR_NAME)
+	mv -v temp/evio-$(MAJOR_MINOR)* $(DIR_NAME)
 	rmdir -v temp
 	date > $@
 
 $(EVIO_HOME)/.patch_done: $(EVIO_HOME)/.untar_done
+ifeq ($(MAJOR_MINOR),4.3)
 	cd $(EVIO_HOME) ; patch -p1 < $(BUILD_SCRIPTS)/patches/evio/evio-4.3.patch
+endif
 	date > $@
 
 $(EVIO_HOME)/.scons_done: $(EVIO_HOME)/.patch_done

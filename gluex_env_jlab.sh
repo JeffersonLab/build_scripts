@@ -32,4 +32,4 @@ export JANA_RESOURCE_DIR=/group/halld/www/halldweb/html/resources
 export PATH=/apps/python/PRO/bin:$PATH
 export LD_LIBRARY_PATH=/apps/python/PRO/lib:$LD_LIBRARY_PATH
 # cmake on the cue
-export PATH=/apps/cmake/bin:$PATH
+export PATH=/apps/cmake/cmake-3.5.1/bin:$PATH

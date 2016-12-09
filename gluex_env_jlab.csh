@@ -29,4 +29,4 @@ setenv JANA_RESOURCE_DIR /group/halld/www/halldweb/html/resources
 setenv PATH /apps/python/PRO/bin:$PATH
 setenv LD_LIBRARY_PATH /apps/python/PRO/lib:$LD_LIBRARY_PATH
 # cmake on the cue
-setenv PATH /apps/cmake/bin:$PATH
+setenv PATH /apps/cmake/cmake-3.5.1/bin:$PATH
