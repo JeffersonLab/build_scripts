@@ -1,10 +1,13 @@
---- Imake.cf	2006-06-15 04:59:55.000000000 -0400
-+++ Imake.cf.patched	2015-06-04 16:17:50.171621833 -0400
-@@ -393,6 +393,9 @@
+--- Imake.cf	2016-12-08 11:39:06.857083976 -0500
++++ Imake.cf.new	2016-12-08 11:40:22.681268411 -0500
+@@ -393,6 +393,12 @@
  #elif __GNUC__ == 3
  #undef __GNUC__
  #define GCC3
 +#elif __GNUC__ == 5
++#undef __GNUC__
++#define GCC4
++#elif __GNUC__ == 6
 +#undef __GNUC__
 +#define GCC4
  #else
