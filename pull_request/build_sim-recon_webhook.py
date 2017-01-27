@@ -59,9 +59,9 @@ class Root(object):
 
             # launch the test build
             # we use a single-command ssh key to launch the build on the ifarm
-            cmd = "env -u SSH_AUTH_SOCK ssh -i /home/marki/.ssh/id_dsa_pull_request gluex@ifarm1102 %s %s %s"%(branch_name_cleaned,pull_request_comment_url,repo_url)
+            cmd = "env -u SSH_AUTH_SOCK ssh -i /home/marki/.ssh/id_dsa_pull_request gluex@ifarm1401 %s %s %s"%(branch_name_cleaned,pull_request_comment_url,repo_url)
             subprocess.Popen(cmd, shell=True)
-            return "Test build for branch %s from repository %s launched successfully!"%(branch_name_cleaned,repo_url)
+            return "Test build for branch %s from repository %s launched successfully!"%(branch_name_cleaned,repo_url) 
         else:
             return "Ignoring this callback."
 
