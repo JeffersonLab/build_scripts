@@ -1,0 +1,71 @@
+# Makefile_hdgeant4
+
+# Builds HDGEANT4 under a new directory rooted in the current working
+# directory. The new directory (DIR_NAME) has a name that depends on
+# the version being built.
+
+# HDGEANT4_VERSION defines which tagged version to build. It should
+# correspond to the name of the desired directory in the repos/tags
+# directory of the repository. If left undefined, the latest version
+# will be checked out from the repos/trunk.
+
+PWD = $(shell pwd)
+
+ifdef HDGEANT4_VERSION
+ SOURCE_CODE_TARGET = $(HDGEANT4_HOME)/.untar_done
+ ifdef HDGEANT4_DIRTAG
+  HDGEANT4_DIR = hdgeant4-$(HDGEANT4_VERSION)^$(HDGEANT4_DIRTAG)
+ else
+  HDGEANT4_DIR = hdgeant4-$(HDGEANT4_VERSION)
+ endif
+ TARFILE = $(HDGEANT4_VERSION).tar.gz
+else
+ SOURCE_CODE_TARGET = $(HDGEANT4_HOME)/.clone_done
+ ifndef HDGEANT4_URL
+  HDGEANT4_URL=https://github.com/markito3/hdgeant4
+ endif
+ ifdef HDGEANT4_DIRTAG
+  HDGEANT4_DIR = $(notdir $(HDGEANT4_URL))^$(HDGEANT4_DIRTAG)
+ else
+  HDGEANT4_DIR = $(notdir $(HDGEANT4_URL))
+ endif
+ ifndef HDGEANT4_BRANCH
+  HDGEANT4_BRANCH = master
+ endif
+endif
+
+HDGEANT4_HOME = $(PWD)/$(HDGEANT4_DIR)
+
+all: prod_link
+
+$(TARFILE):
+	wget --no-check-certificate -O $@ https://github.com/markito3/hdgeant4/archive/$(TARFILE)
+
+$(HDGEANT4_HOME)/.clone_done:
+	git clone -b $(HDGEANT4_BRANCH) $(HDGEANT4_URL) $(HDGEANT4_DIR)
+ifdef HDGEANT4_HASH
+	cd $(HDGEANT4_DIR) ; git checkout $(HDGEANT4_HASH)
+endif
+	date > $@
+
+$(HDGEANT4_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(HDGEANT4_DIR)
+	rmdir -v untar_temp_dir
+	date > $@
+
+$(HDGEANT4_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
+	cd $(HDGEANT4_HOME) ; scons install SHOWBUILD=1
+	date > $@
+
+ifndef GVMS_TEST
+$(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(HDGEANT4_HOME)/.sconstruct_done
+else
+$(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(SOURCE_CODE_TARGET)
+endif
+	cd $(HDGEANT4_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl hdgeant4
+
+prod_link: $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml
+	test -L prod || ln -s hdgeant4 prod # will not overwrite existing link
