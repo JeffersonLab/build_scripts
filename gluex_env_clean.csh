@@ -52,6 +52,7 @@ unsetenv CCDB_USER
 unsetenv EVIOROOT
 unsetenv RCDB_HOME
 unsetenv RCDB_CONNECTION
+unsetenv HDGEANT4_HOME
 # versions
 unsetenv SIM_RECON_VERSION
 unsetenv JANA_VERSION
@@ -63,6 +64,7 @@ unsetenv ROOT_VERSION
 unsetenv CCDB_VERSION
 unsetenv EVIO_VERSION
 unsetenv RCDB_VERSION
+unsetenv HDGEANT4_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
 unsetenv JANA_URL
@@ -73,6 +75,7 @@ unsetenv CLHEP_URL
 unsetenv ROOT_URL
 unsetenv CCDB_URL
 unsetenv EVIO_URL
+unsetenv HDGEANT4_URL
 # directory tags
 unsetenv SIM_RECON_DIRTAG
 unsetenv JANA_DIRTAG
@@ -95,6 +98,7 @@ unsetenv ROOT_BRANCH
 unsetenv CCDB_BRANCH
 unsetenv RCDB_BRANCH
 unsetenv EVIO_BRANCH
+unsetenv HDGEANT4_BRANCH
 # git hashes
 unsetenv SIM_RECON_HASH
 unsetenv JANA_HASH
@@ -106,3 +110,4 @@ unsetenv ROOT_HASH
 unsetenv CCDB_HASH
 unsetenv RCDB_HASH
 unsetenv EVIO_HASH
+unsetenv HDGEANT4_HASH
