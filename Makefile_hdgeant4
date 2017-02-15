@@ -56,16 +56,18 @@ $(HDGEANT4_HOME)/.untar_done: $(TARFILE)
 	rmdir -v untar_temp_dir
 	date > $@
 
-$(HDGEANT4_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
-	cd $(HDGEANT4_HOME) ; scons install SHOWBUILD=1
+$(HDGEANT4_HOME)/.link_to_fixes_done: $(SOURCE_CODE_TARGET)
+	test -d $(HDGEANT4_HOME)/src/G4.$(GEANT4_VERSION)fixes || (echo G4fixes directory does not exist. GEANT4_VERSION must be defined. GEANT4_VERSION = $(GEANT4_VERSION) ; exit 1)
+	cd $(HDGEANT4_HOME)/src ; ln -s G4.$(GEANT4_VERSION)fixes G4fixes 
 	date > $@
 
-ifndef GVMS_TEST
-$(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(HDGEANT4_HOME)/.sconstruct_done
-else
-$(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(SOURCE_CODE_TARGET)
-endif
+
+$(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.link_to_fixes_done
+	cd $(HDGEANT4_HOME) ; make
+	date > $@
+
+$(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(HDGEANT4_HOME)/.make_done
 	cd $(HDGEANT4_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl hdgeant4
 
 prod_link: $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml
-	test -L prod || ln -s hdgeant4 prod # will not overwrite existing link
+	test -L prod || ln -s $(HDGEAN4_DIR) prod # will not overwrite existing link
