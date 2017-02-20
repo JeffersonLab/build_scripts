@@ -83,6 +83,13 @@ echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null
 if ($status) setenv PATH $HALLD_HOME/${BMS_OSNAME}/bin:$PATH
 echo $PATH | grep $HALLD_MY/$BMS_OSNAME/bin > /dev/null
 if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
+#
+# HDGeant4
+#
+if (! $?HDGEANT_HOME) setenv HDGEANT4_HOME $GLUEX_TOP/hdgeant4/prod
+echo $PATH | grep $HDGEANT4_HOME/bin > /dev/null
+if ($status) setenv PATH $HDGEANT4_HOME/bin:$PATH
+#
 if (! $?JANA_PLUGIN_PATH) then
     set jpp_save=""
 else
