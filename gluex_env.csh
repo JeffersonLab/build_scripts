@@ -41,10 +41,15 @@ if ($status) setenv PATH $CERN_ROOT/bin:$PATH
 #if ($status) setenv LD_LIBRARY_PATH ${CLHEP_LIB}:${LD_LIBRARY_PATH}
 # Geant4
 if (! $?G4ROOT) setenv G4ROOT $GLUEX_TOP/geant4/prod
-set g4setup=`find $G4ROOT/share/ -name geant4make.csh`
-set g4dir=`dirname $g4setup`
-source $g4setup $g4dir
-unset g4setup g4dir
+if ( -e $G4ROOT) then
+    set g4setup=`find $G4ROOT/share/ -name geant4make.csh`
+    if ( -f $g4setup) then
+	set g4dir=`dirname $g4setup`
+	source $g4setup $g4dir
+	unset g4dir
+    endif
+    unset g4setup
+endif
 ## amptools
 #if (! $?AMPTOOLS_HOME) setenv AMPTOOLS_HOME $GLUEX_TOP/AmpTools/prod
 #setenv AMPTOOLS $AMPTOOLS_HOME/AmpTools
@@ -87,8 +92,10 @@ if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
 # HDGeant4
 #
 if (! $?HDGEANT4_HOME) setenv HDGEANT4_HOME $GLUEX_TOP/hdgeant4/prod
-echo $PATH | grep $HDGEANT4_HOME/bin/$G4SYSTEM > /dev/null
-if ($status) setenv PATH $HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
+if ($?G4SYSTEM) then
+    echo $PATH | grep $HDGEANT4_HOME/bin/$G4SYSTEM > /dev/null
+    if ($status) setenv PATH $HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
+endif
 #
 if (! $?JANA_PLUGIN_PATH) then
     set jpp_save=""

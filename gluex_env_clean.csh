@@ -128,6 +128,8 @@ unsetenv ROOT_DIRTAG
 unsetenv CCDB_DIRTAG
 unsetenv RCDB_DIRTAG
 unsetenv EVIO_DIRTAG
+unsetenv GEANT4_DIRTAG
+unsetenv HDGEANT4_DIRTAG
 # git branches
 unsetenv SIM_RECON_BRANCH
 unsetenv JANA_BRANCH
