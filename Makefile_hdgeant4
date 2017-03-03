@@ -39,7 +39,7 @@ HDGEANT4_HOME = $(PWD)/$(HDGEANT4_DIR)
 all: prod_link
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/markito3/hdgeant4/archive/$(TARFILE)
+	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/hdgeant4/archive/$(TARFILE)
 
 $(HDGEANT4_HOME)/.clone_done:
 	git clone -b $(HDGEANT4_BRANCH) $(HDGEANT4_URL) $(HDGEANT4_DIR)
@@ -61,9 +61,13 @@ $(HDGEANT4_HOME)/.link_to_fixes_done: $(SOURCE_CODE_TARGET)
 	cd $(HDGEANT4_HOME)/src ; ln -s G4.$(GEANT4_VERSION)fixes G4fixes 
 	date > $@
 
-
 $(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.link_to_fixes_done
-	cd $(HDGEANT4_HOME) ; make
+	cd $(HDGEANT4_HOME) ; \
+	if [ -z "$$G4SYSTEM" ] ; \
+	then source `find $(G4ROOT)/share/ -name geant4make.sh` ; \
+	echo doing the source ; \
+	fi ; \
+	make
 	date > $@
 
 $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(HDGEANT4_HOME)/.make_done
