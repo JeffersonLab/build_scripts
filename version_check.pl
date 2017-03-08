@@ -66,7 +66,9 @@ foreach $package (@packages) {
 	    } else {
 		# extract the version
 		#print "dir_prefix = $dir_prefix{$package}\n";
-		@token0 = split(/$dir_prefix{$package}/, $home_value);
+		$dir_prefix_escaped = $dir_prefix{$package};
+		$dir_prefix_escaped =~ s/\./\\\./g;
+		@token0 = split(/$dir_prefix_escaped/, $home_value);
 		$home_value_tail = $token0[1];
 		#print "dir_suffix = $dir_suffix{$package}\n";
 		if ($dir_suffix{$package}) {
