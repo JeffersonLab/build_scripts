@@ -4,4 +4,4 @@ $BUILD_SCRIPTS/customize_version.pl -i /group/halld/www/halldweb/html/dist/versi
 echo source $BUILD_SCRIPTS/gluex_env_jlab.sh `pwd`/${USER}_`date +%F`.xml > setup_gluex.sh
 echo source $BUILD_SCRIPTS/gluex_env_jlab.csh `pwd`/${USER}_`date +%F`.xml > setup_gluex.csh
 source $BUILD_SCRIPTS/gluex_env_jlab.sh `pwd`/${USER}_`date +%F`.xml
-make -f $BUILD_SCRIPTS/Makefile_sim-recon -j8
+make -f $BUILD_SCRIPTS/Makefile_sim-recon SIM_RECON_SCONS_OPTIONS="-j8"
