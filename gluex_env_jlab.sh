@@ -20,6 +20,9 @@ if [[ $BMS_OSNAME == *CentOS6* || $BMS_OSNAME == *RHEL6* ]]
     export PATH=${GCC_HOME}/bin:${PATH}
     export LD_LIBRARY_PATH=${GCC_HOME}/lib64:${GCC_HOME}/lib
     export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
+    # python on the cue
+    export PATH=$BUILD_SCRIPTS/patches/jlab_extras/rh6:/apps/python/PRO/bin:$PATH
+    export LD_LIBRARY_PATH=/apps/python/PRO/lib:$LD_LIBRARY_PATH
 fi
 export GLUEX_TOP=/group/halld/Software/builds/$BMS_OSNAME
 # perl on the cue
@@ -28,8 +31,5 @@ export PATH=/apps/perl/bin:$PATH
 . $BUILD_SCRIPTS/gluex_env_version.sh $VERSION_XML
 export JANA_CALIB_URL=$CCDB_CONNECTION
 export JANA_RESOURCE_DIR=/group/halld/www/halldweb/html/resources
-# python on the cue
-export PATH=/apps/python/PRO/bin:$PATH
-export LD_LIBRARY_PATH=/apps/python/PRO/lib:$LD_LIBRARY_PATH
 # cmake on the cue
 export PATH=/apps/cmake/cmake-3.5.1/bin:$PATH

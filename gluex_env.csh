@@ -33,12 +33,23 @@ endif
 setenv CERN_ROOT $CERN/$CERN_LEVEL
 echo $PATH | grep $CERN_ROOT/bin > /dev/null
 if ($status) setenv PATH $CERN_ROOT/bin:$PATH
-# clhep
-if (! $?CLHEP) setenv CLHEP $GLUEX_TOP/clhep/prod
-setenv CLHEP_INCLUDE $CLHEP/include
-setenv CLHEP_LIB $CLHEP/lib
-echo $LD_LIBRARY_PATH | grep $CLHEP_LIB > /dev/null
-if ($status) setenv LD_LIBRARY_PATH ${CLHEP_LIB}:${LD_LIBRARY_PATH}
+## clhep
+#if (! $?CLHEP) setenv CLHEP $GLUEX_TOP/clhep/prod
+#setenv CLHEP_INCLUDE $CLHEP/include
+#setenv CLHEP_LIB $CLHEP/lib
+#echo $LD_LIBRARY_PATH | grep $CLHEP_LIB > /dev/null
+#if ($status) setenv LD_LIBRARY_PATH ${CLHEP_LIB}:${LD_LIBRARY_PATH}
+# Geant4
+if (! $?G4ROOT) setenv G4ROOT $GLUEX_TOP/geant4/prod
+if ( -e $G4ROOT) then
+    set g4setup=`find $G4ROOT/share/ -name geant4make.csh`
+    if ( -f $g4setup) then
+	set g4dir=`dirname $g4setup`
+	source $g4setup $g4dir
+	unset g4dir
+    endif
+    unset g4setup
+endif
 ## amptools
 #if (! $?AMPTOOLS_HOME) setenv AMPTOOLS_HOME $GLUEX_TOP/AmpTools/prod
 #setenv AMPTOOLS $AMPTOOLS_HOME/AmpTools
@@ -77,6 +88,15 @@ echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null
 if ($status) setenv PATH $HALLD_HOME/${BMS_OSNAME}/bin:$PATH
 echo $PATH | grep $HALLD_MY/$BMS_OSNAME/bin > /dev/null
 if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
+#
+# HDGeant4
+#
+if (! $?HDGEANT4_HOME) setenv HDGEANT4_HOME $GLUEX_TOP/hdgeant4/prod
+if ($?G4SYSTEM) then
+    echo $PATH | grep $HDGEANT4_HOME/bin/$G4SYSTEM > /dev/null
+    if ($status) setenv PATH $HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
+endif
+#
 if (! $?JANA_PLUGIN_PATH) then
     set jpp_save=""
 else
