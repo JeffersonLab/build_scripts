@@ -15,17 +15,28 @@ endif
 $(DIST_FILES):
 	wget --no-check-certificate http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
 
-.unpack_done: $(DIST_FILES)
+.untar_done: $(DIST_FILES)
 	tar zxvf $(ALL_FILE)
 	cp -v $(CORR_FILE) cernlib.2005.corr.tgz
 	tar zxvf $(INSTALL_FILE)
+	date > $@
+
+.install_src_done: .untar_done
+	export CERN=`pwd` ; ./Install_cernlib_src
+	date > $@
+
+.patch_done: .install_src_done
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_cernlib.patch
 ifdef DEBUG
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_cernlib.debug.patch
 endif
+	cd 2005/src/packlib/kuip/kuip ; \
+	patch < $(BUILD_SCRIPTS)/patches/cernlib/kstring.h.patch
+	cd 2005/src/config ; \
+	patch < $(BUILD_SCRIPTS)/patches/cernlib/Imake.cf.patch
 	date > $@
 
-.build_done: .unpack_done
+.build_done: .patch_done
 	./Install_cernlib
 	date > $@
 

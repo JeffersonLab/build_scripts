@@ -8,15 +8,32 @@ if ($?BUILD_SCRIPTS) then
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl $ROOTSYS/bin`
     if ($?CCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl $CCDB_HOME/bin`
     if ($?JANA_HOME) eval `$BUILD_SCRIPTS/delpath.pl $JANA_HOME/bin`
+    if ($?RCDB_HOME) then
+	eval `$BUILD_SCRIPTS/delpath.pl $RCDB_HOME`
+	eval `$BUILD_SCRIPTS/delpath.pl $RCDB_HOME/bin`
+	eval `$BUILD_SCRIPTS/delpath.pl $RCDB_HOME/cpp/bin`
+    endif
+    if ($?G4ROOT) then
+	eval `$BUILD_SCRIPTS/delpath.pl $G4ROOT/bin`
+	eval `$BUILD_SCRIPTS/delpath.pl /u$G4ROOT/bin`
+	eval `$BUILD_SCRIPTS/delpath.pl $G4WORKDIR/bin/$G4SYSTEM`
+    endif
+    if ($?HDGEANT4_HOME) eval `$BUILD_SCRIPTS/delpath.pl $HDGEANT4_HOME/bin/$G4SYSTEM`
     # clean LD_LIBRARY_PATH
     if ($?CLHEP_LIB) eval `$BUILD_SCRIPTS/delpath.pl -l $CLHEP_LIB`
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl -l $ROOTSYS/lib`
     if ($?XERCESCROOT) eval `$BUILD_SCRIPTS/delpath.pl -l $XERCESCROOT/lib`
     if ($?CCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -l $CCDB_HOME/lib`
     if ($?EVIOROOT) eval `$BUILD_SCRIPTS/delpath.pl -l $EVIOROOT/lib`
+    if ($?RCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -l $RCDB_HOME/cpp/lib`
+    if ($?G4ROOT) then
+        eval `$BUILD_SCRIPTS/delpath.pl -l $G4ROOT/lib64`
+        eval `$BUILD_SCRIPTS/delpath.pl -l /u$G4ROOT/lib64`
+    endif
     eval `$BUILD_SCRIPTS/delpath.pl -l`
     # clean PYTHONPATH
     if ($?CCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`
+    if ($?RCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $RCDB_HOME/python`
     eval `$BUILD_SCRIPTS/delpath.pl -p`
 endif
 # clean_environment
@@ -52,6 +69,30 @@ unsetenv CCDB_USER
 unsetenv EVIOROOT
 unsetenv RCDB_HOME
 unsetenv RCDB_CONNECTION
+unsetenv HDGEANT4_HOME
+unsetenv G4ABLADATA
+unsetenv G4ENSDFSTATEDATA
+unsetenv G4INCLUDE
+unsetenv G4INSTALL
+unsetenv G4LEDATA
+unsetenv G4LEVELGAMMADATA
+unsetenv G4LIB_BUILD_SHARED
+unsetenv G4LIB
+unsetenv G4LIB_USE_GDML
+unsetenv G4LIB_USE_ZLIB
+unsetenv G4MULTITHREADED
+unsetenv G4NEUTRONHPDATA
+unsetenv G4NEUTRONXSDATA
+unsetenv G4PIIDATA
+unsetenv G4RADIOACTIVEDATA
+unsetenv G4REALSURFACEDATA
+unsetenv G4ROOT
+unsetenv G4SAIDXSDATA
+unsetenv G4SYSTEM
+unsetenv G4UI_USE_TCSH
+unsetenv G4VIS_USE_OPENGLX
+unsetenv G4VIS_USE_RAYTRACERX
+unsetenv G4WORKDIR
 # versions
 unsetenv SIM_RECON_VERSION
 unsetenv JANA_VERSION
@@ -63,6 +104,8 @@ unsetenv ROOT_VERSION
 unsetenv CCDB_VERSION
 unsetenv EVIO_VERSION
 unsetenv RCDB_VERSION
+unsetenv HDGEANT4_VERSION
+unsetenv GEANT4_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
 unsetenv JANA_URL
@@ -73,6 +116,7 @@ unsetenv CLHEP_URL
 unsetenv ROOT_URL
 unsetenv CCDB_URL
 unsetenv EVIO_URL
+unsetenv HDGEANT4_URL
 # directory tags
 unsetenv SIM_RECON_DIRTAG
 unsetenv JANA_DIRTAG
@@ -84,6 +128,8 @@ unsetenv ROOT_DIRTAG
 unsetenv CCDB_DIRTAG
 unsetenv RCDB_DIRTAG
 unsetenv EVIO_DIRTAG
+unsetenv GEANT4_DIRTAG
+unsetenv HDGEANT4_DIRTAG
 # git branches
 unsetenv SIM_RECON_BRANCH
 unsetenv JANA_BRANCH
@@ -95,6 +141,7 @@ unsetenv ROOT_BRANCH
 unsetenv CCDB_BRANCH
 unsetenv RCDB_BRANCH
 unsetenv EVIO_BRANCH
+unsetenv HDGEANT4_BRANCH
 # git hashes
 unsetenv SIM_RECON_HASH
 unsetenv JANA_HASH
@@ -106,3 +153,4 @@ unsetenv ROOT_HASH
 unsetenv CCDB_HASH
 unsetenv RCDB_HASH
 unsetenv EVIO_HASH
+unsetenv HDGEANT4_HASH

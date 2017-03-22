@@ -62,12 +62,20 @@ export CERN_ROOT=$CERN/$CERN_LEVEL
 if [ `echo $PATH | grep -c $CERN_ROOT/bin` -eq 0 ]
     then export PATH=$CERN_ROOT/bin:$PATH
 fi
-# clhep
-if [ -z "$CLHEP" ]; then export CLHEP=$GLUEX_TOP/clhep/prod; fi
-export CLHEP_INCLUDE=$CLHEP/include
-export CLHEP_LIB=$CLHEP/lib
-if [ `echo $LD_LIBRARY_PATH | grep -c $CLHEP_LIB` -eq 0 ]
-    then export LD_LIBRARY_PATH=${CLHEP_LIB}:${LD_LIBRARY_PATH}
+## clhep
+#if [ -z "$CLHEP" ]; then export CLHEP=$GLUEX_TOP/clhep/prod; fi
+#export CLHEP_INCLUDE=$CLHEP/include
+#export CLHEP_LIB=$CLHEP/lib
+#if [ `echo $LD_LIBRARY_PATH | grep -c $CLHEP_LIB` -eq 0 ]
+#    then export LD_LIBRARY_PATH=${CLHEP_LIB}:${LD_LIBRARY_PATH}
+#fi
+# Geant4
+if [ -z "$G4ROOT" ]; then export G4ROOT=$GLUEX_TOP/geant4/prod; fi
+if [ -e "$G4ROOT" ]
+    then
+    g4setup=`find $G4ROOT/share/ -name geant4make.sh`
+    if [ -f "$g4setup" ]; then source $g4setup; fi
+    unset g4setup
 fi
 ## amptools
 #if [ -z "$AMPTOOLS_HOME" ]; then export AMPTOOLS_HOME=$GLUEX_TOP/AmpTools/prod; fi
@@ -111,6 +119,16 @@ if [ `echo $PATH | grep -c $HALLD_HOME/$BMS_OSNAME/bin` -eq 0 ]
 fi
 if [ `echo $PATH | grep -c $HALLD_MY/$BMS_OSNAME/bin` -eq 0 ]
     then export PATH=$HALLD_MY/${BMS_OSNAME}/bin:$PATH
+fi
+#
+# HDGeant4
+#
+if [ -z "$HDGEANT4_HOME" ]; then export HDGEANT4_HOME=$GLUEX_TOP/hdgeant4/prod; fi
+if [ -n "$G4SYSTEM" ]
+    then
+    if [ `echo $PATH | grep -c $HDGEANT4_HOME/bin/$G4SYSTEM` -eq 0 ]
+        then export PATH=$HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
+    fi
 fi
 if [ -z "$JANA_PLUGIN_PATH" ]
     then

@@ -29,12 +29,13 @@ eval $definitions;
 %prereqs = (root => [],
 	    clhep => [],
 	    jana => ['evio', 'ccdb', 'xerces-c', 'root'],
-	    'sim-recon' => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb'],
+	    'sim-recon' => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb', 'rcdb'],
 	    hdds => ['xerces-c', 'root'],
 	    cernlib => [],
 	    'xerces-c' => [],
-	    geant4 => ['clhep'],
-	    ccdb => []);
+	    geant4 => [],
+	    ccdb => [],
+	    hdgeant4 => ['geant4', 'sim-recon', 'jana', 'ccdb']);
 
 @prepackages = @{$prereqs{$package_in}};
 $itemno = 0;
@@ -76,7 +77,9 @@ foreach $prepackage (@prepackages) {
 	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} else {
 	    if ($home_var_value =~ 'ExternalPackages') {adjust_prefix_suffix()}
-	    @token0 = split(/$dir_prefix{$prepackage}/, $home_var_value);
+	    $dir_prefix_escaped = $dir_prefix{$prepackage};
+	    $dir_prefix_escaped =~ s/\./\\\./g;
+	    @token0 = split(/$dir_prefix_escaped/, $home_var_value);
 	    $home_var_value_tail = $token0[1];
 	    if ($dir_suffix{$prepackage}) {
 		@token1 = split(/$dir_suffix{$prepackage}/, $home_var_value_tail);
