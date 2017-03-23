@@ -5,15 +5,15 @@
 # plugins.txt: list of plugins to test
 initial_dir=$(pwd)
 # farm-specific set-up - from gluex_env_jlab.sh
-nodename=`uname -n`
-if [[ $nodename =~ ^farm* || $nodename =~ ^ifarm* || $nodename =~ ^qcd* || $nodename =~ ^gluon* ]]
+BUILD_SCRIPTS=/group/halld/Software/build_scripts
+osrelease=$(perl $BUILD_SCRIPTS/osrelease.pl)
+if [[ $osrelease == *CentOS6* || $osrelease == *RHEL6* ]]
     then
     GCC_HOME=/apps/gcc/4.9.2
     export PATH=${GCC_HOME}/bin:${PATH}
     export LD_LIBRARY_PATH=${GCC_HOME}/lib64:${GCC_HOME}/lib
+    osrelease=$(perl $BUILD_SCRIPTS/osrelease.pl)
 fi
-BUILD_SCRIPTS=/home/gluex/build_scripts
-osrelease=$(perl $BUILD_SCRIPTS/osrelease.pl)
 branch=$1
 target_dir=/work/halld/pull_request_test/sim-recon^$branch/tests
 rm -rf $target_dir; mkdir $target_dir; cd $target_dir
@@ -21,8 +21,6 @@ cp $BUILD_SCRIPTS/pull_request/plugins.txt .
 cp $BUILD_SCRIPTS/pull_request/control.in .
 LOG=log; mkdir $LOG
 source ../$osrelease/setenv.sh
-# hack for RCDB
-#export LD_LIBRARY_PATH=/group/halld/Software/builds/Linux_CentOS6-x86_64-gcc4.9.2/rcdb/rcdb_0.00/cpp/lib:$LD_LIBRARY_PATH
 EVIO=/work/halld/pull_request_test/hd_rawdata_003180_000.evio
 EVENTS=500
 THREADS=8
