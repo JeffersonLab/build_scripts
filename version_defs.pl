@@ -1,5 +1,5 @@
 @packages = (root, clhep, jana, 'sim-recon', hdds, cernlib, 'xerces-c', ccdb,
-	     geant4, evio, rcdb, hdgeant4);
+	     geant4, evio, rcdb, hdgeant4, hdutil);
 
 %home_variable = (root => 'ROOTSYS',
 		  clhep => 'CLHEP',
@@ -12,7 +12,8 @@
 		  ccdb => 'CCDB_HOME',
 		  evio => 'EVIOROOT',
 		  rcdb => 'RCDB_HOME',
-                  hdgeant4 => 'HDGEANT4_HOME');
+                  hdgeant4 => 'HDGEANT4_HOME',
+                  hdutil => 'HDUTIL_HOME');
 
 %dir_prefix = (root => 'root[_-]',
 	       clhep => '',
@@ -25,7 +26,8 @@
 	       ccdb => 'ccdb_',
 	       evio => 'evio-',
 	       rcdb => 'rcdb_',
-               hdgeant4 => 'hdgeant4-');
+               hdgeant4 => 'hdgeant4-',
+               hdutil => 'hd_utilities-');
 $unames = `uname -s`;
 chomp $unames;
 $unamem = `uname -m`;
@@ -42,4 +44,5 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
 	       ccdb => '',
 	       evio => $evio_suffix,
 	       rcdb => '',
-               hdgeant4 => '');
+               hdgeant4 => '',
+               hdutil => '');

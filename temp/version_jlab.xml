@@ -1,0 +1,15 @@
+<gversions>
+<package name="jana" version="0.7.7p1" dirtag="ccdb163"/>
+<package name="sim-recon" version="2.12.0" dirtag="ccdb163"/>
+<package name="hdds" version="3.9"/>
+<package name="cernlib" version="2005" word_length="64-bit"/>
+<package name="xerces-c" version="3.1.4"/>
+<package name="clhep" version="2.0.4.5"/>
+<package name="root" version="6.08.00"/>
+<package name="ccdb" version="1.06.03"/>
+<package name="evio" version="4.4.6"/>
+<package name="rcdb" version="0.01"/>
+<package name="geant4" version="10.02.p02"/>
+<package name="hdgeant4" version="1.1.0" dirtag="ccdb163"/>
+<package name="hdutil" home="/home/marki/build_scripts/temp/hd_utilities"/>
+</gversions>
