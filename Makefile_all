@@ -21,10 +21,11 @@ CCDB = ${ROOT_OF_ALL}/ccdb
 EVIO = ${ROOT_OF_ALL}/evio
 LAPACK = ${ROOT_OF_ALL}/lapack
 RCDB = ${ROOT_OF_ALL}/rcdb
+HDUTIL = ${ROOT_OF_ALL}/hd_utilities
 
-all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build
+all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build hdutil_build
 
-gluex: env xerces_build cernlib_build lapack_build root_build clhep_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build
+gluex: env xerces_build cernlib_build lapack_build root_build clhep_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build hdutil_build
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -146,6 +147,14 @@ lapack_dir:
 
 lapack_make:
 	$(MAKE) -C${LAPACK} -f${BUILD_SCRIPTS}/Makefile_lapack
+
+hdutil_build: hdutil_dir hdutil_make
+
+hdutil_dir:
+	test -d ${HDUTIL} || mkdir -pv ${HDUTIL}
+
+hdutil_make:
+	$(MAKE) -C${HDUTIL} -f${BUILD_SCRIPTS}/Makefile_hdutil
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
