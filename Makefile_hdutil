@@ -5,9 +5,9 @@ PWD = $(shell pwd)
 ifdef HDUTIL_VERSION
  SOURCE_CODE_TARGET = $(HDUTIL_HOME)/.untar_done
  ifdef HDUTIL_DIRTAG
-  HDUTIL_DIR = hdutil-$(HDUTIL_VERSION)^$(HDUTIL_DIRTAG)
+  HDUTIL_DIR = hd_utilities-$(HDUTIL_VERSION)^$(HDUTIL_DIRTAG)
  else
-  HDUTIL_DIR = hdutil-$(HDUTIL_VERSION)
+  HDUTIL_DIR = hd_utilities-$(HDUTIL_VERSION)
  endif
  TARFILE = $(HDUTIL_VERSION).tar.gz
 else
