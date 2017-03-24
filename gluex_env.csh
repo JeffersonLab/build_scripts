@@ -99,8 +99,8 @@ endif
 #
 # hd_utilities
 #
-if (! $?HDUTIL_HOME) setenv HDUTIL_HOME $GLUEX_TOP/hd_utilities/prod
-setenv MCWRAPPER_CENTRAL $HDUTIL_HOME/MCwrapper
+if (! $?HD_UTILITIES_HOME) setenv HD_UTILITIES_HOME $GLUEX_TOP/hd_utilities/prod
+setenv MCWRAPPER_CENTRAL $HD_UTILITIES_HOME/MCwrapper
 setenv PATH ${MCWRAPPER_CENTRAL}:$PATH
 #
 if (! $?JANA_PLUGIN_PATH) then

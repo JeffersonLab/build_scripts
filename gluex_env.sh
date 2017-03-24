@@ -133,8 +133,8 @@ fi
 #
 # hd_utilities
 #
-if [ -z "$HDUTIL_HOME" ]; then export HDUTIL_HOME=$GLUEX_TOP/hd_utilities/prod; fi
-export MCWRAPPER_CENTRAL=$HDUTIL_HOME/MCwrapper
+if [ -z "$HD_UTILITIES_HOME" ]; then export HD_UTILITIES_HOME=$GLUEX_TOP/hd_utilities/prod; fi
+export MCWRAPPER_CENTRAL=$HD_UTILITIES_HOME/MCwrapper
 export PATH=${MCWRAPPER_CENTRAL}:$PATH
 #
 if [ -z "$JANA_PLUGIN_PATH" ]
