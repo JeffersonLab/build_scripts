@@ -21,10 +21,11 @@ CCDB = ${ROOT_OF_ALL}/ccdb
 EVIO = ${ROOT_OF_ALL}/evio
 LAPACK = ${ROOT_OF_ALL}/lapack
 RCDB = ${ROOT_OF_ALL}/rcdb
+HD_UTILITIES = ${ROOT_OF_ALL}/hd_utilities
 
-all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build
+all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build hd_utilities_build
 
-gluex: env xerces_build cernlib_build lapack_build root_build clhep_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build
+gluex: env xerces_build cernlib_build lapack_build root_build clhep_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build hd_utilities_build
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -146,6 +147,14 @@ lapack_dir:
 
 lapack_make:
 	$(MAKE) -C${LAPACK} -f${BUILD_SCRIPTS}/Makefile_lapack
+
+hd_utilities_build: hd_utilities_dir hd_utilities_make
+
+hd_utilities_dir:
+	test -d ${HD_UTILITIES} || mkdir -pv ${HD_UTILITIES}
+
+hd_utilities_make:
+	$(MAKE) -C${HD_UTILITIES} -f${BUILD_SCRIPTS}/Makefile_hd_utilities
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}

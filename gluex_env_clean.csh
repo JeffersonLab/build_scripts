@@ -19,6 +19,7 @@ if ($?BUILD_SCRIPTS) then
 	eval `$BUILD_SCRIPTS/delpath.pl $G4WORKDIR/bin/$G4SYSTEM`
     endif
     if ($?HDGEANT4_HOME) eval `$BUILD_SCRIPTS/delpath.pl $HDGEANT4_HOME/bin/$G4SYSTEM`
+    if ($?HD_UTILITIES_HOME) eval `$BUILD_SCRIPTS/delpath.pl $MCWRAPPER_CENTRAL`
     # clean LD_LIBRARY_PATH
     if ($?CLHEP_LIB) eval `$BUILD_SCRIPTS/delpath.pl -l $CLHEP_LIB`
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl -l $ROOTSYS/lib`
@@ -93,6 +94,8 @@ unsetenv G4UI_USE_TCSH
 unsetenv G4VIS_USE_OPENGLX
 unsetenv G4VIS_USE_RAYTRACERX
 unsetenv G4WORKDIR
+unsetenv HD_UTILITIES_HOME
+unsetenv MCWRAPPER_CENTRAL
 # versions
 unsetenv SIM_RECON_VERSION
 unsetenv JANA_VERSION
@@ -106,6 +109,7 @@ unsetenv EVIO_VERSION
 unsetenv RCDB_VERSION
 unsetenv HDGEANT4_VERSION
 unsetenv GEANT4_VERSION
+unsetenv HD_UTILITIES_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
 unsetenv JANA_URL
@@ -117,6 +121,7 @@ unsetenv ROOT_URL
 unsetenv CCDB_URL
 unsetenv EVIO_URL
 unsetenv HDGEANT4_URL
+unsetenv HD_UTILITIES_URL
 # directory tags
 unsetenv SIM_RECON_DIRTAG
 unsetenv JANA_DIRTAG
@@ -130,6 +135,7 @@ unsetenv RCDB_DIRTAG
 unsetenv EVIO_DIRTAG
 unsetenv GEANT4_DIRTAG
 unsetenv HDGEANT4_DIRTAG
+unsetenv HD_UTILITIES_DIRTAG
 # git branches
 unsetenv SIM_RECON_BRANCH
 unsetenv JANA_BRANCH
@@ -142,6 +148,7 @@ unsetenv CCDB_BRANCH
 unsetenv RCDB_BRANCH
 unsetenv EVIO_BRANCH
 unsetenv HDGEANT4_BRANCH
+unsetenv HD_UTILITIES_BRANCH
 # git hashes
 unsetenv SIM_RECON_HASH
 unsetenv JANA_HASH
@@ -154,3 +161,4 @@ unsetenv CCDB_HASH
 unsetenv RCDB_HASH
 unsetenv EVIO_HASH
 unsetenv HDGEANT4_HASH
+unsetenv HD_UTILITIES_HASH

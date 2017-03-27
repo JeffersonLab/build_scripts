@@ -21,6 +21,7 @@ if [ -n "$BUILD_SCRIPTS" ]; then
         eval `$BUILD_SCRIPTS/delpath.pl -b $G4WORKDIR/bin/$G4SYSTEM`
     fi
     if [ -n "$HDGEANT4_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $HDGEANT4_HOME/bin/$G4SYSTEM`; fi
+    if [ -n "$HD_UTILITIES_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $MCWRAPPER_CENTRAL`; fi
     # clean LD_LIBRARY_PATH
     if [ -n "$CLHEP_LIB" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $CLHEP_LIB`; fi
     if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $ROOTSYS/lib`; fi
@@ -96,6 +97,8 @@ unset G4UI_USE_TCSH
 unset G4VIS_USE_OPENGLX
 unset G4VIS_USE_RAYTRACERX
 unset G4WORKDIR
+unset HD_UTILITIES_HOME
+unset MCWRAPPER_CENTRAL
 # versions
 unset SIM_RECON_VERSION
 unset JANA_VERSION
@@ -109,6 +112,7 @@ unset EVIO_VERSION
 unset RCDB_VERSION
 unset HDGEANT4_VERSION
 unset GEANT4_VERSION
+unset HD_UTILITIES_VERSION
 # urls for checkout
 unset SIM_RECON_URL
 unset JANA_URL
@@ -121,6 +125,7 @@ unset CCDB_URL
 unset RCDB_URL
 unset EVIO_URL
 unset HDGEANT4_URL
+unset HD_UTILITIES_URL
 # directory tags
 unset SIM_RECON_DIRTAG
 unset JANA_DIRTAG
@@ -134,6 +139,7 @@ unset RCDB_DIRTAG
 unset EVIO_DIRTAG
 unset GEANT4_DIRTAG
 unset HDGEANT4_DIRTAG
+unset HD_UTILITIES_DIRTAG
 # git branches
 unset SIM_RECON_BRANCH
 unset JANA_BRANCH
@@ -146,6 +152,7 @@ unset CCDB_BRANCH
 unset RCDB_BRANCH
 unset EVIO_BRANCH
 unset HDGEANT4_BRANCH
+unset HD_UTILITIES_BRANCH
 # git hashes
 unset SIM_RECON_HASH
 unset JANA_HASH
@@ -158,3 +165,4 @@ unset CCDB_HASH
 unset RCDB_HASH
 unset EVIO_HASH
 unset HDGEANT4_HASH
+unset HD_UTILITIES_HASH

@@ -97,6 +97,12 @@ if ($?G4SYSTEM) then
     if ($status) setenv PATH $HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
 endif
 #
+# hd_utilities
+#
+if (! $?HD_UTILITIES_HOME) setenv HD_UTILITIES_HOME $GLUEX_TOP/hd_utilities/prod
+setenv MCWRAPPER_CENTRAL $HD_UTILITIES_HOME/MCwrapper
+setenv PATH ${MCWRAPPER_CENTRAL}:$PATH
+#
 if (! $?JANA_PLUGIN_PATH) then
     set jpp_save=""
 else

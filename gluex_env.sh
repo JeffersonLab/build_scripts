@@ -130,6 +130,13 @@ if [ -n "$G4SYSTEM" ]
         then export PATH=$HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
     fi
 fi
+#
+# hd_utilities
+#
+if [ -z "$HD_UTILITIES_HOME" ]; then export HD_UTILITIES_HOME=$GLUEX_TOP/hd_utilities/prod; fi
+export MCWRAPPER_CENTRAL=$HD_UTILITIES_HOME/MCwrapper
+export PATH=${MCWRAPPER_CENTRAL}:$PATH
+#
 if [ -z "$JANA_PLUGIN_PATH" ]
     then
     jpp_save=""

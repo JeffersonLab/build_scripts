@@ -1,0 +1,54 @@
+# Makefile_hd_utilities
+
+PWD = $(shell pwd)
+
+ifdef HD_UTILITIES_VERSION
+ SOURCE_CODE_TARGET = $(HD_UTILITIES_HOME)/.untar_done
+ ifdef HD_UTILITIES_DIRTAG
+  HD_UTILITIES_DIR = hd_utilities-$(HD_UTILITIES_VERSION)^$(HD_UTILITIES_DIRTAG)
+ else
+  HD_UTILITIES_DIR = hd_utilities-$(HD_UTILITIES_VERSION)
+ endif
+ TARFILE = $(HD_UTILITIES_VERSION).tar.gz
+else
+ SOURCE_CODE_TARGET = $(HD_UTILITIES_HOME)/.clone_done
+ ifndef HD_UTILITIES_URL
+  HD_UTILITIES_URL=https://github.com/jeffersonlab/hd_utilities
+ endif
+ ifdef HD_UTILITIES_DIRTAG
+  HD_UTILITIES_DIR = $(notdir $(HD_UTILITIES_URL))^$(HD_UTILITIES_DIRTAG)
+ else
+  HD_UTILITIES_DIR = $(notdir $(HD_UTILITIES_URL))
+ endif
+ ifndef HD_UTILITIES_BRANCH
+  HD_UTILITIES_BRANCH = master
+ endif
+endif
+
+HD_UTILITIES_HOME = $(PWD)/$(HD_UTILITIES_DIR)
+
+all: $(HD_UTILITIES_HOME)/hd_utilities_prereqs_version.xml prod_link
+
+$(TARFILE):
+	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/hd_utilities/archive/$(TARFILE)
+
+$(HD_UTILITIES_HOME)/.clone_done:
+	git clone -b $(HD_UTILITIES_BRANCH) $(HD_UTILITIES_URL) $(HD_UTILITIES_DIR)
+ifdef HD_UTILITIES_HASH
+	cd $(HD_UTILITIES_DIR) ; git checkout $(HD_UTILITIES_HASH)
+endif
+	date > $@
+
+$(HD_UTILITIES_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(HD_UTILITIES_DIR)
+	rmdir -v untar_temp_dir
+	date > $@
+
+$(HD_UTILITIES_HOME)/hd_utilities_prereqs_version.xml: $(SOURCE_CODE_TARGET)
+	cd $(HD_UTILITIES_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl hd_utilities
+
+prod_link: $(HD_UTILITIES_HOME)/hd_utilities_prereqs_version.xml
+	test -L prod || ln -s $(HD_UTILITIES_DIR) prod # will not overwrite existing link
