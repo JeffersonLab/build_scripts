@@ -1,0 +1,67 @@
+# Makefile_gluex_root_analysis
+
+# Builds GLUEX_ROOT_ANALYSIS under a new directory rooted in the current working
+# directory. The new directory (DIR_NAME) has a name that depends on
+# the version being built.
+
+# GLUEX_ROOT_ANALYSIS_VERSION defines which tagged version to build. It should
+# correspond to the name of the desired directory in the repos/tags
+# directory of the repository. If left undefined, the latest version
+# will be checked out from the repos/trunk.
+
+PWD = $(shell pwd)
+
+ifdef GLUEX_ROOT_ANALYSIS_VERSION
+ SOURCE_CODE_TARGET = $(GLUEX_ROOT_ANALYSIS_HOME)/.untar_done
+ ifdef GLUEX_ROOT_ANALYSIS_DIRTAG
+  GLUEX_ROOT_ANALYSIS_DIR = gluex_root_analysis-$(GLUEX_ROOT_ANALYSIS_VERSION)^$(GLUEX_ROOT_ANALYSIS_DIRTAG)
+ else
+  GLUEX_ROOT_ANALYSIS_DIR = gluex_root_analysis-$(GLUEX_ROOT_ANALYSIS_VERSION)
+ endif
+ TARFILE = $(GLUEX_ROOT_ANALYSIS_VERSION).tar.gz
+else
+ SOURCE_CODE_TARGET = $(GLUEX_ROOT_ANALYSIS_HOME)/.clone_done
+ ifndef GLUEX_ROOT_ANALYSIS_URL
+  GLUEX_ROOT_ANALYSIS_URL=https://github.com/jeffersonlab/gluex_root_analysis
+ endif
+ ifdef GLUEX_ROOT_ANALYSIS_DIRTAG
+  GLUEX_ROOT_ANALYSIS_DIR = $(notdir $(GLUEX_ROOT_ANALYSIS_URL))^$(GLUEX_ROOT_ANALYSIS_DIRTAG)
+ else
+  GLUEX_ROOT_ANALYSIS_DIR = $(notdir $(GLUEX_ROOT_ANALYSIS_URL))
+ endif
+ ifndef GLUEX_ROOT_ANALYSIS_BRANCH
+  GLUEX_ROOT_ANALYSIS_BRANCH = master
+ endif
+endif
+
+GLUEX_ROOT_ANALYSIS_HOME = $(PWD)/$(GLUEX_ROOT_ANALYSIS_DIR)
+
+all: prod_link
+
+$(TARFILE):
+	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/gluex_root_analysis/archive/$(TARFILE)
+
+$(GLUEX_ROOT_ANALYSIS_HOME)/.clone_done:
+	git clone -b $(GLUEX_ROOT_ANALYSIS_BRANCH) $(GLUEX_ROOT_ANALYSIS_URL) $(GLUEX_ROOT_ANALYSIS_DIR)
+ifdef GLUEX_ROOT_ANALYSIS_HASH
+	cd $(GLUEX_ROOT_ANALYSIS_DIR) ; git checkout $(GLUEX_ROOT_ANALYSIS_HASH)
+endif
+	date > $@
+
+$(GLUEX_ROOT_ANALYSIS_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(GLUEX_ROOT_ANALYSIS_DIR)
+	rmdir -v untar_temp_dir
+	date > $@
+
+$(GLUEX_ROOT_ANALYSIS_HOME)/.make_script_done: $(SOURCE_CODE_TARGET)
+	cd $(GLUEX_ROOT_ANALYSIS_HOME) ; ./make_all.sh
+	date > $@
+
+$(GLUEX_ROOT_ANALYSIS_HOME)/gluex_root_analysis_prereqs_version.xml: $(GLUEX_ROOT_ANALYSIS_HOME)/.make_script_done
+	cd $(GLUEX_ROOT_ANALYSIS_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl gluex_root_analysis
+
+prod_link: $(GLUEX_ROOT_ANALYSIS_HOME)/gluex_root_analysis_prereqs_version.xml
+	test -L prod || ln -s gluex_root_analysis prod # will not overwrite existing link
