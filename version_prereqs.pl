@@ -35,7 +35,8 @@ eval $definitions;
 	    'xerces-c' => [],
 	    geant4 => [],
 	    ccdb => [],
-	    hdgeant4 => ['geant4', 'sim-recon', 'jana', 'ccdb']);
+	    hdgeant4 => ['geant4', 'sim-recon', 'jana', 'ccdb'],
+	    gluex_root_analysis => ['sim-recon']);
 
 @prepackages = @{$prereqs{$package_in}};
 $itemno = 0;

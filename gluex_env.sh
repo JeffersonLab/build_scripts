@@ -137,6 +137,11 @@ if [ -z "$HD_UTILITIES_HOME" ]; then export HD_UTILITIES_HOME=$GLUEX_TOP/hd_util
 export MCWRAPPER_CENTRAL=$HD_UTILITIES_HOME/MCwrapper
 export PATH=${MCWRAPPER_CENTRAL}:$PATH
 #
+# gluex_root_analysis
+#
+if [ -z "$ROOT_ANALYSIS_HOME" ]; then export ROOT_ANALYSIS_HOME=$GLUEX_TOP/gluex_root_analysis/prod
+if [ -e "$ROOT_ANALYSIS_HOME" ]; then source $ROOT_ANALYSIS_HOME/env_analysis.sh
+#
 if [ -z "$JANA_PLUGIN_PATH" ]
     then
     jpp_save=""
