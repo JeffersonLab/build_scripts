@@ -32,7 +32,7 @@ $(ROOTDIR)/.cmake_done: $(ROOTDIR)/.untar_done
 	date > $@
 
 $(ROOTDIR)/.build_done: $(ROOTDIR)/.cmake_done
-	cd $(BUILD_DIR) ; cmake --build .
+	cd $(BUILD_DIR) ; cmake --build . -- $(ROOT6_BUILD_OPTIONS)
 	date > $@
 
 $(ROOTDIR)/.install_done: $(ROOTDIR)/.build_done
