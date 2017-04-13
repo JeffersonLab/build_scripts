@@ -2,7 +2,7 @@
 rm -f before_setup.tmp after_setup.tmp after_clean.tmp
 printenv | sort > before_setup.tmp
 echo source test.csh
-source test.csh -v
+source test.csh
 printenv | sort > after_setup.tmp
 echo source gluex_env_clean.csh
 source $BUILD_SCRIPTS/gluex_env_clean.csh
