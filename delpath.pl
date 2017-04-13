@@ -18,15 +18,16 @@ while ($this) {
 	    die "bad command option: $this";
 	}
     } else {
+	#print STDERR "delete $this\n";
 	push (@token, ($this));
     }
     $this = shift;
 }
 $line=$ENV{$pathtype};
-#print "$line\n";
+#print STDERR "$line\n";
 @field = split(/:/,$line);
-#print "number of fields $#field\n";
-#print "number of fields to delete $#ARGV\n";
+#print STDERR "number of fields - 1 = $#field\n";
+#print STDERR "number of fields to delete - 1 = $#token\n";
 if ($#field == -1) {
     if ($shell eq "C") {
 	print "unsetenv $pathtype\n";
@@ -37,7 +38,7 @@ if ($#field == -1) {
     $newpath = "";
     for ($j = 0; $j <= $#field ; $j++) {
 	$path = $field[$j];
-	#print "$j $path\n";
+	#print STDERR "$j $path\n";
 	$keep = 1;
 	for($i = 0; $i <= $#token; $i++) {
 	    #print "$i $token[$i]\n";
@@ -46,7 +47,7 @@ if ($#field == -1) {
 	    }
 	}
 	if ($keep) {
-	    #print "keep it\n";
+	    #print STDERR "keep it\n";
 	    if ($newpath ne "") {$newpath = $newpath . ":"}
 	    $newpath = $newpath . $path;
 	}
