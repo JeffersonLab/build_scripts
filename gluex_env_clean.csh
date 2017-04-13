@@ -20,6 +20,7 @@ if ($?BUILD_SCRIPTS) then
     endif
     if ($?HDGEANT4_HOME) eval `$BUILD_SCRIPTS/delpath.pl $HDGEANT4_HOME/bin/$G4SYSTEM`
     if ($?HD_UTILITIES_HOME) eval `$BUILD_SCRIPTS/delpath.pl $MCWRAPPER_CENTRAL`
+    if ($?ROOT_ANALYSIS_HOME) eval `$BUILD_SCRIPTS/delpath.pl $ROOT_ANALYSIS_HOME/$BMS_OSNAME/bin/`
     # clean LD_LIBRARY_PATH
     if ($?CLHEP_LIB) eval `$BUILD_SCRIPTS/delpath.pl -l $CLHEP_LIB`
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl -l $ROOTSYS/lib`
@@ -31,6 +32,7 @@ if ($?BUILD_SCRIPTS) then
         eval `$BUILD_SCRIPTS/delpath.pl -l $G4ROOT/lib64`
         eval `$BUILD_SCRIPTS/delpath.pl -l /u$G4ROOT/lib64`
     endif
+    if ($?ROOT_ANALYSIS_HOME) eval `$BUILD_SCRIPTS/delpath.pl -l $ROOT_ANALYSIS_HOME/$BMS_OSNAME/lib/`
     eval `$BUILD_SCRIPTS/delpath.pl -l`
     # clean PYTHONPATH
     if ($?CCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`
@@ -96,6 +98,7 @@ unsetenv G4VIS_USE_RAYTRACERX
 unsetenv G4WORKDIR
 unsetenv HD_UTILITIES_HOME
 unsetenv MCWRAPPER_CENTRAL
+unsetenv ROOT_ANALYSIS_HOME
 # versions
 unsetenv SIM_RECON_VERSION
 unsetenv JANA_VERSION
@@ -110,6 +113,7 @@ unsetenv RCDB_VERSION
 unsetenv HDGEANT4_VERSION
 unsetenv GEANT4_VERSION
 unsetenv HD_UTILITIES_VERSION
+unsetenv GLUEX_ROOT_ANALYSIS_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
 unsetenv JANA_URL
@@ -122,6 +126,7 @@ unsetenv CCDB_URL
 unsetenv EVIO_URL
 unsetenv HDGEANT4_URL
 unsetenv HD_UTILITIES_URL
+unsetenv GLUEX_ROOT_ANALYSIS_URL
 # directory tags
 unsetenv SIM_RECON_DIRTAG
 unsetenv JANA_DIRTAG
@@ -136,6 +141,7 @@ unsetenv EVIO_DIRTAG
 unsetenv GEANT4_DIRTAG
 unsetenv HDGEANT4_DIRTAG
 unsetenv HD_UTILITIES_DIRTAG
+unsetenv GLUEX_ROOT_ANALYSIS_DIRTAG
 # git branches
 unsetenv SIM_RECON_BRANCH
 unsetenv JANA_BRANCH
@@ -149,6 +155,7 @@ unsetenv RCDB_BRANCH
 unsetenv EVIO_BRANCH
 unsetenv HDGEANT4_BRANCH
 unsetenv HD_UTILITIES_BRANCH
+unsetenv GLUEX_ROOT_ANALYSIS_BRANCH
 # git hashes
 unsetenv SIM_RECON_HASH
 unsetenv JANA_HASH
@@ -162,3 +169,4 @@ unsetenv RCDB_HASH
 unsetenv EVIO_HASH
 unsetenv HDGEANT4_HASH
 unsetenv HD_UTILITIES_HASH
+unsetenv GLUEX_ROOT_ANALYSIS_HASH

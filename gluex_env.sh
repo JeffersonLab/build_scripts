@@ -139,8 +139,8 @@ export PATH=${MCWRAPPER_CENTRAL}:$PATH
 #
 # gluex_root_analysis
 #
-if [ -z "$ROOT_ANALYSIS_HOME" ]; then export ROOT_ANALYSIS_HOME=$GLUEX_TOP/gluex_root_analysis/prod
-if [ -e "$ROOT_ANALYSIS_HOME" ]; then source $ROOT_ANALYSIS_HOME/env_analysis.sh
+if [ -z "$ROOT_ANALYSIS_HOME" ]; then export ROOT_ANALYSIS_HOME=$GLUEX_TOP/gluex_root_analysis/prod; fi
+if [ -e "$ROOT_ANALYSIS_HOME" ]; then source $ROOT_ANALYSIS_HOME/env_analysis.sh ; fi
 #
 if [ -z "$JANA_PLUGIN_PATH" ]
     then
