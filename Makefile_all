@@ -19,10 +19,11 @@ LAPACK = ${ROOT_OF_ALL}/lapack
 RCDB = ${ROOT_OF_ALL}/rcdb
 HD_UTILITIES = ${ROOT_OF_ALL}/hd_utilities
 HDGEANT4 = ${ROOT_OF_ALL}/hdgeant4
+GLUEX_ROOT_ANALYSIS = ${ROOT_OF_ALL}/gluex_root_analysis
 
-all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build hd_utilities_build hdgeant4_build
+all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build
 
-gluex: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build hd_utilities_build hdgeant4_build
+gluex: env xerces_build cernlib_build lapack_build root_build geant4_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -160,6 +161,14 @@ hdgeant4_dir:
 
 hdgeant4_make:
 	$(MAKE) -C${HDGEANT4} -f${BUILD_SCRIPTS}/Makefile_hdgeant4
+
+gluex_root_analysis_build: gluex_root_analysis_dir gluex_root_analysis_make
+
+gluex_root_analysis_dir:
+	test -d ${GLUEX_ROOT_ANALYSIS} || mkdir -pv ${GLUEX_ROOT_ANALYSIS}
+
+gluex_root_analysis_make:
+	$(MAKE) -C${GLUEX_ROOT_ANALYSIS} -f${BUILD_SCRIPTS}/Makefile_gluex_root_analysis
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
