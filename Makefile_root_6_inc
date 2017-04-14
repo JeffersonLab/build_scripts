@@ -9,6 +9,14 @@ else
 endif
 BUILD_DIR = $(ROOTDIR)/build_dir
 
+which_cmake3 := $(shell which cmake3)
+find_cmake3 := $(findstring cmake3, $(which_cmake3))
+ifeq (,$(find_cmake3))
+    CMAKE = cmake
+else
+    CMAKE = cmake3
+endif
+
 all: prod_link
 
 prod_link: $(ROOTDIR)/.install_done
@@ -28,13 +36,18 @@ $(ROOTDIR)/.untar_done: $(TARFILE)
 
 $(ROOTDIR)/.cmake_done: $(ROOTDIR)/.untar_done
 	mkdir -p $(BUILD_DIR)
-	cd $(BUILD_DIR) ; cmake .. -DCMAKE_INSTALL_PREFIX=.. $(CMAKE_VERBOSE_OPTION) -Dgdml=ON -Droofit=ON
+	cd $(BUILD_DIR) ; $(CMAKE) .. -DCMAKE_INSTALL_PREFIX=.. $(CMAKE_VERBOSE_OPTION) -Dgdml=ON -Droofit=ON
 	date > $@
 
 $(ROOTDIR)/.build_done: $(ROOTDIR)/.cmake_done
-	cd $(BUILD_DIR) ; cmake --build . -- $(ROOT6_BUILD_OPTIONS)
+	cd $(BUILD_DIR) ; $(CMAKE) --build . -- $(ROOT6_BUILD_OPTIONS)
 	date > $@
 
 $(ROOTDIR)/.install_done: $(ROOTDIR)/.build_done
-	cd $(BUILD_DIR) ; cmake --build . --target install
+	cd $(BUILD_DIR) ; $(CMAKE) --build . --target install
 	date > $@
+
+test:
+	@echo which_cmake3 = $(which_cmake3)
+	@echo find_cmake3 = $(find_cmake3)
+	@echo CMAKE = $(CMAKE)

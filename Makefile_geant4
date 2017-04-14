@@ -4,6 +4,14 @@ endif
 TARFILE = geant4.$(G4_VERSION).tar.gz
 G4DIR = geant4.$(G4_VERSION)
 
+which_cmake3 := $(shell which cmake3)
+find_cmake3 := $(findstring cmake3, $(which_cmake3))
+ifeq (,$(find_cmake3))
+    CMAKE = cmake
+else
+    CMAKE = cmake3
+endif
+
 all: $(G4DIR)/.make_install_done
 
 $(TARFILE):
@@ -15,7 +23,7 @@ $(G4DIR)/.untar_done: $(TARFILE)
 
 $(G4DIR)/.configure_done: $(G4DIR)/.untar_done
 	mkdir -p $(G4DIR)/build
-	cd $(G4DIR)/build ; cmake \
+	cd $(G4DIR)/build ; $(CMAKE) \
 	   -DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	   -DCMAKE_INSTALL_DATADIR=../data \
 	   -DCMAKE_INSTALL_PREFIX=.. \
