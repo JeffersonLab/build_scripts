@@ -38,8 +38,10 @@ if [ $status == "SUCCESS" ]; then
     code=$?
     # Check if the hdgeant test failed and use in overall status
     grep 'hdgeant failed' $build_dir/tests/summary.txt >> $build_dir/tests/failures.txt
+    code2=$?
+    # Check if the hdgeant test failed and use in overall status
     if [ $code -ne 0 ]; then
-        code=$?
+        code=$code2
     fi
     if [ $code -ne 0 ]; then
         test_status="SUCCESS"

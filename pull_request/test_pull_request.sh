@@ -30,10 +30,11 @@ echo "Test summary" > summary.txt
 for plugin in $(cat plugins.txt); do
     echo -e "\nTesting $plugin ..." >> summary.txt
     timeout $TLIMIT hd_root -PNTHREADS=$THREADS -PEVENTS_TO_KEEP=$EVENTS $EVIO -PPLUGINS=$plugin >& $LOG/$plugin.txt
-    if [ $? -eq 124 ]; then
+    code=$?
+    if [ $code -eq 124 ]; then
         echo "$plugin plugin failed with $TLIMIT seconds timeout (status=124)."
-    elif [ $? -ne 0 ]; then
-        echo "$plugin plugin failed with exit status $?."
+    elif [ $code -ne 0 ]; then
+        echo "$plugin plugin failed with exit status $code."
     else
         echo "$plugin plugin passed."
     fi >> summary.txt
@@ -42,20 +43,22 @@ function join { local IFS="$1"; shift; echo "$*"; }
 plugins=$(join , $(cat plugins.txt))
 echo -e "\nTesting all listed plugins at the same time ..." >> summary.txt
 timeout $TLIMIT hd_root -PNTHREADS=$THREADS -PEVENTS_TO_KEEP=$EVENTS $EVIO -PPLUGINS=$plugins >& $LOG/multiple_plugins.txt
-if [ $? -eq 124 ]; then
+code=$?
+if [ $code -eq 124 ]; then
     echo "Multiple-plugins test failed with $TLIMIT seconds timeout (status=124)."
-elif [ $? -ne 0 ]; then
-    echo "Multiple-plugins test failed with exit status $?."
+elif [ $code -ne 0 ]; then
+    echo "Multiple-plugins test failed with exit status $code."
 else
     echo "Multiple-plugins test passed."
 fi >> summary.txt
 echo -e "\nTesting hdgeant ..." >> summary.txt
 export JANA_CALIB_CONTEXT="variation=mc_sim1"
 timeout $TLIMIT hdgeant >& $LOG/hdgeant.txt
-if [ $? -eq 124 ]; then
+code=$?
+if [ $code -eq 124 ]; then
     echo "hdgeant failed with $TLIMIT seconds timeout (status=124)."
-elif [ $? -ne 0 ]; then
-    echo "hdgeant failed with exit status $?."
+elif [ $code -ne 0 ]; then
+    echo "hdgeant failed with exit status $code."
 else
     echo "hdgeant passed."
 fi >> summary.txt
