@@ -26,13 +26,22 @@ rm -f $report_file
 echo build_pull_request_service.sh: create $report_file
 $BUILD_SCRIPTS/pull_request/build_pull_request_report.sh make_${branch}.log > $report_file
 if [ $status == "SUCCESS" ]; then
-    # test for runtime errors and get overall status
+    # Test for runtime errors and form overall status
     command="$BUILD_SCRIPTS/pull_request/test_pull_request.sh $branch"
     echo build_pull_request_service.sh: executing $command
     $command
     echo "Failure list" > $build_dir/tests/failures.txt
-    grep -i 'failed' $build_dir/tests/summary.txt >> $build_dir/tests/failures.txt
-    if [ $? -ne 0 ]; then
+    # Record individual plugin test failures but don't include them in overall status
+    grep 'plugin failed' $build_dir/tests/summary.txt >> $build_dir/tests/failures.txt
+    # Check for failure of the multiple plugins test and use result in overall status
+    grep 'plugins test failed' $build_dir/tests/summary.txt >> $build_dir/tests/failures.txt
+    code=$?
+    # Check if the hdgeant test failed and use in overall status
+    grep 'hdgeant failed' $build_dir/tests/summary.txt >> $build_dir/tests/failures.txt
+    if [ $code -ne 0 ]; then
+        code=$?
+    fi
+    if [ $code -ne 0 ]; then
         test_status="SUCCESS"
         failure_comment=""
     else
