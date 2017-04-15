@@ -3,7 +3,6 @@
 # nonzero exit code signals runtime error or mistake in env. setup
 # EVIO: path to evio file to process
 # plugins.txt: list of plugins to test
-initial_dir=$(pwd)
 # farm-specific set-up - from gluex_env_jlab.sh
 BUILD_SCRIPTS=/group/halld/Software/build_scripts
 osrelease=$(perl $BUILD_SCRIPTS/osrelease.pl)
@@ -16,7 +15,8 @@ if [[ $osrelease == *CentOS6* || $osrelease == *RHEL6* ]]
 fi
 branch=$1
 target_dir=/work/halld/pull_request_test/sim-recon^$branch/tests
-rm -rf $target_dir; mkdir $target_dir; cd $target_dir
+rm -rf $target_dir && mkdir $target_dir
+pushd $target_dir
 cp $BUILD_SCRIPTS/pull_request/plugins.txt .
 cp $BUILD_SCRIPTS/pull_request/control.in .
 LOG=log; mkdir $LOG
@@ -62,4 +62,4 @@ elif [ $code -ne 0 ]; then
 else
     echo "hdgeant passed."
 fi >> summary.txt
-cd $initial_dir
+popd

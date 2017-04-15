@@ -19,8 +19,7 @@ else
 fi
 build_dir=/work/halld/pull_request_test/sim-recon^$branch
 web_dir=/work/halld2/pull_request_test/sim-recon^$branch
-mkdir -p $web_dir
-pushd $build_dir
+rm -rf $web_dir && mkdir -p $web_dir
 cd $build_dir
 rm -f $report_file
 echo build_pull_request_service.sh: create $report_file
@@ -39,7 +38,6 @@ if [ $status == "SUCCESS" ]; then
     # Check if the hdgeant test failed and use in overall status
     grep 'hdgeant failed' $build_dir/tests/summary.txt >> $build_dir/tests/failures.txt
     code2=$?
-    # Check if the hdgeant test failed and use in overall status
     if [ $code -ne 0 ]; then
         code=$code2
     fi
