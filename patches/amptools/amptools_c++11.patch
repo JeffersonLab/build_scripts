@@ -1,0 +1,24 @@
+diff -rupN AmpTools_original/AmpPlotter/Makefile AmpTools_patched/AmpPlotter/Makefile
+--- AmpTools_original/AmpPlotter/Makefile	2015-08-11 13:51:21.000000000 -0400
++++ AmpTools_patched/AmpPlotter/Makefile	2017-04-18 10:47:49.952473106 -0400
+@@ -4,7 +4,7 @@ INC_DIR :=  -I.. -I$(shell root-config -
+ SRCDIRS := AmpPlotter
+ 
+ CXX := gcc
+-CXX_FLAGS := -O3
++CXX_FLAGS := -O3 -std=c++11
+ 
+ TARGET_LIBS := $(addsuffix .a, $(addprefix lib, $(SRCDIRS)))
+ 
+diff -rupN AmpTools_original/AmpTools/Makefile AmpTools_patched/AmpTools/Makefile
+--- AmpTools_original/AmpTools/Makefile	2015-06-17 12:57:15.000000000 -0400
++++ AmpTools_patched/AmpTools/Makefile	2017-04-18 13:16:38.701370289 -0400
+@@ -4,7 +4,7 @@ INC_DIR :=  -I.. -I$(shell root-config -
+ SRCDIRS := UpRootMinuit MinuitInterface IUAmpTools
+ 
+ CXX := gcc
+-CXX_FLAGS := -O3
++CXX_FLAGS := -O3 -std=c++11
+ 
+ #To build in MPI-exentsions type: make MPI=1
+ #(this can be used with GPU, e.g.:  make MPI=1 GPU=1)

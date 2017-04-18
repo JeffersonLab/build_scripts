@@ -1,0 +1,118 @@
+diff -rupN AmpTools_original/AmpPlotter/Makefile AmpTools_patched/AmpPlotter/Makefile
+--- AmpTools_original/AmpPlotter/Makefile	2015-08-11 13:51:21.000000000 -0400
++++ AmpTools_patched/AmpPlotter/Makefile	2017-04-18 10:47:49.952473106 -0400
+@@ -4,7 +4,7 @@ INC_DIR :=  -I.. -I$(shell root-config -
+ SRCDIRS := AmpPlotter
+ 
+ CXX := gcc
+-CXX_FLAGS := -O3
++CXX_FLAGS := -O3 -std=c++11
+ 
+ TARGET_LIBS := $(addsuffix .a, $(addprefix lib, $(SRCDIRS)))
+ 
+diff -rupN AmpTools_original/AmpTools/Makefile AmpTools_patched/AmpTools/Makefile
+--- AmpTools_original/AmpTools/Makefile	2015-06-17 12:57:15.000000000 -0400
++++ AmpTools_patched/AmpTools/Makefile	2017-04-18 13:16:38.701370289 -0400
+@@ -4,7 +4,7 @@ INC_DIR :=  -I.. -I$(shell root-config -
+ SRCDIRS := UpRootMinuit MinuitInterface IUAmpTools
+ 
+ CXX := gcc
+-CXX_FLAGS := -O3
++CXX_FLAGS := -O3 -std=c++11
+ 
+ #To build in MPI-exentsions type: make MPI=1
+ #(this can be used with GPU, e.g.:  make MPI=1 GPU=1)
+diff -rupN AmpTools_original/AmpTools/Makefile~ AmpTools_patched/AmpTools/Makefile~
+--- AmpTools_original/AmpTools/Makefile~	1969-12-31 19:00:00.000000000 -0500
++++ AmpTools_patched/AmpTools/Makefile~	2017-04-18 10:48:37.413258540 -0400
+@@ -0,0 +1,90 @@
++
++INC_DIR :=  -I.. -I$(shell root-config --incdir)
++
++SRCDIRS := UpRootMinuit MinuitInterface IUAmpTools
++
++CXX := gcc
++CXX_FLAGS := -O3 -std=c++11
++
++#To build in MPI-exentsions type: make MPI=1
++#(this can be used with GPU, e.g.:  make MPI=1 GPU=1)
++
++ifdef MPI
++
++SRCDIRS += IUAmpToolsMPI
++
++MPICC := mpicxx 
++CXX_FLAGS += -DUSE_MPI
++
++endif
++
++TARGET_LIBS := $(addsuffix .a, $(addprefix lib, $(SRCDIRS)))
++
++#To build GPU-accelerated code type: make GPU=1
++
++ifdef GPU
++
++SRCDIRS += GPUManager
++TARGET_LIBS_GPU :=  $(addsuffix _GPU.a, $(addprefix lib, $(SRCDIRS)))
++
++NVCC :=	nvcc
++CUDA_FLAGS := -m64 -arch=sm_20
++INC_DIR += -I$(CUDA_INSTALL_PATH)/include 
++
++CXX_FLAGS += -DGPU_ACCELERATION
++DEFAULT := libAmpTools_GPU.a
++
++else
++
++DEFAULT := libAmpTools.a
++
++endif
++
++# To build code instrumented for Vampir Trace  VTRACE=1
++
++ifdef VTRACE
++
++CXX := vtcxx -vt:inst manual
++MPICC := vtcxx -vt:mpi -vt:inst manual
++NVCC := vtnvcc
++
++CXX_FLAGS += -DVTRACE
++
++endif
++
++export
++
++.PHONY: default clean
++
++default: lib $(DEFAULT)
++
++lib:
++	mkdir lib
++
++libAmpTools.a: $(TARGET_LIBS)
++	$(foreach lib, $(TARGET_LIBS), $(shell cd lib; ar -x $(lib) ) )
++	@cd lib && ar -rsv $@ *.o && ranlib $@
++	@cd lib && rm -f *.o
++
++libAmpTools_GPU.a: $(TARGET_LIBS) $(TARGET_LIBS_GPU)
++	$(foreach lib_GPU, $(TARGET_LIBS_GPU), $(shell cd lib; ar -x $(lib_GPU) ) )
++	@cd lib && ar -rsv $@ *.o && ranlib $@
++	@cd lib && rm -f *.o
++
++lib%_GPU.a: 
++	@$(MAKE) -C $(subst lib,, $(subst _GPU.a,, $@ )) LIB=$@
++	@cp $(subst lib,, $(subst _GPU.a,, $@))/$@ lib/
++
++lib%.a: 
++	@$(MAKE) -C $(subst lib,, $(subst .a,, $@ )) LIB=$@
++	@cp $(subst lib,, $(subst .a,, $@))/$@ lib/
++
++
++clean: $(addprefix clean_, $(SRCDIRS))
++	-rm -f lib/*.a
++
++clean_%:
++	@-cd $(subst clean_,, $@) && $(MAKE) clean
++
++test:
++	@echo INC_DIR = $(INC_DIR)

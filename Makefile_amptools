@@ -1,12 +1,16 @@
-AMPTOOLS_VERSION = 0.9.1
+ifndef AMPTOOLS_VERSION
+  AMPTOOLS_VERSION = 0.9.1
+endif
 TARFILE = AmpTools_v$(AMPTOOLS_VERSION).tgz
-AMPTOOLS_LOCAL_DIR = AmpTools_v$(AMPTOOLS_VERSION)
+ifdef AMPTOOLS_DIRTAG
+  AMPTOOLS_LOCAL_DIR = AmpTools-$(AMPTOOLS_VERSION)^$(AMPTOOLS_DIRTAG)
+else
+  AMPTOOLS_LOCAL_DIR = AmpTools-$(AMPTOOLS_VERSION)
+endif
 AMPTOOLS_DIR = $(shell pwd)/$(AMPTOOLS_LOCAL_DIR)
-AMPTOOLS = $(AMPTOOLS_DIR)/AmpTools
-AMPPLOTTER = $(AMPTOOLS_DIR)/AmpPlotter
 AMPTOOLS_PACKAGES = AmpTools AmpPlotter
 
-all: prod
+all: prod_link
 
 $(TARFILE):
 	wget http://downloads.sourceforge.net/project/amptools/$(TARFILE)
@@ -16,8 +20,20 @@ $(AMPTOOLS_DIR)/.unpack: $(TARFILE)
 	mv -v AmpTools $(AMPTOOLS_DIR)
 	date > $@
 
+$(AMPTOOLS_DIR)/.patch: $(AMPTOOLS_DIR)/.unpack
+	cd $(AMPTOOLS_DIR); \
+	patch -p1 < ${BUILD_SCRIPTS}/patches/amptools/amptools_c++11.patch
+	date > $@
+
+ifeq ($(AMPTOOLS_VERSION),0.9.1)
+$(AMPTOOLS_PACKAGES): $(AMPTOOLS_DIR)/.patch
+else
 $(AMPTOOLS_PACKAGES): $(AMPTOOLS_DIR)/.unpack
+endif
 	cd $(AMPTOOLS_DIR)/$@ ; make
 
-prod: $(AMPTOOLS_PACKAGES)
+$(AMPTOOLS_DIR)/amptools_prereqs_version.xml: $(AMPTOOLS_PACKAGES)
+	cd $(AMPTOOLS_DIR) ; $(BUILD_SCRIPTS)/version_prereqs.pl amptools
+
+prod_link: $(AMPTOOLS_DIR)/amptools_prereqs_version.xml
 	test -d prod || ln -s $(AMPTOOLS_LOCAL_DIR) prod
