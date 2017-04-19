@@ -114,6 +114,7 @@ unsetenv HDGEANT4_VERSION
 unsetenv GEANT4_VERSION
 unsetenv HD_UTILITIES_VERSION
 unsetenv GLUEX_ROOT_ANALYSIS_VERSION
+unsetenv AMPTOOLS_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
 unsetenv JANA_URL
@@ -142,6 +143,7 @@ unsetenv GEANT4_DIRTAG
 unsetenv HDGEANT4_DIRTAG
 unsetenv HD_UTILITIES_DIRTAG
 unsetenv GLUEX_ROOT_ANALYSIS_DIRTAG
+unsetenv AMPTOOLS_DIRTAG
 # git branches
 unsetenv SIM_RECON_BRANCH
 unsetenv JANA_BRANCH
