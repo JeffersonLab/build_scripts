@@ -96,6 +96,13 @@ unsetenv G4UI_USE_TCSH
 unsetenv G4VIS_USE_OPENGLX
 unsetenv G4VIS_USE_RAYTRACERX
 unsetenv G4WORKDIR
+unsetenv G4UI_USE_QT
+unsetenv G4UI_USE_XM
+unsetenv G4VIS_USE_DAWN
+unsetenv G4VIS_USE_OPENGLQT
+unsetenv G4VIS_USE_OPENGLXM
+unsetenv QTHOME
+unsetenv QTLIBPATH
 unsetenv HD_UTILITIES_HOME
 unsetenv MCWRAPPER_CENTRAL
 unsetenv ROOT_ANALYSIS_HOME

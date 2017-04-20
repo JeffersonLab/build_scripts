@@ -50,7 +50,7 @@ if ( -e $G4ROOT) then
     endif
     unset g4setup
 endif
-## amptools
+# amptools
 if (! $?AMPTOOLS_HOME) setenv AMPTOOLS_HOME $GLUEX_TOP/AmpTools/prod
 setenv AMPTOOLS $AMPTOOLS_HOME/AmpTools
 setenv AMPPLOTTER $AMPTOOLS_HOME/AmpPlotter
