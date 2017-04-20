@@ -77,12 +77,10 @@ if [ -e "$G4ROOT" ]
     if [ -f "$g4setup" ]; then source $g4setup; fi
     unset g4setup
 fi
-## amptools
-#if [ -z "$AMPTOOLS_HOME" ]; then export AMPTOOLS_HOME=$GLUEX_TOP/AmpTools/prod; fi
-#export AMPTOOLS=$AMPTOOLS_HOME/AmpTools
-#export AMPPLOTTER=$AMPTOOLS_HOME/AmpPlotter
-#export CLHEP_INCLUDE_DIR=$CLHEP_INCLUDE
-#export CLHEP_LIB_DIR=$CLHEP_LIB
+# amptools
+if [ -z "$AMPTOOLS_HOME" ]; then export AMPTOOLS_HOME=$GLUEX_TOP/AmpTools/prod; fi
+export AMPTOOLS=$AMPTOOLS_HOME/AmpTools
+export AMPPLOTTER=$AMPTOOLS_HOME/AmpPlotter
 # ccdb
 if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=$GLUEX_TOP/ccdb/prod; fi
 . $BUILD_SCRIPTS/ccdb_env.sh

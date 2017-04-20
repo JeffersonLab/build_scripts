@@ -50,12 +50,10 @@ if ( -e $G4ROOT) then
     endif
     unset g4setup
 endif
-## amptools
-#if (! $?AMPTOOLS_HOME) setenv AMPTOOLS_HOME $GLUEX_TOP/AmpTools/prod
-#setenv AMPTOOLS $AMPTOOLS_HOME/AmpTools
-#setenv AMPPLOTTER $AMPTOOLS_HOME/AmpPlotter
-#setenv CLHEP_INCLUDE_DIR $CLHEP_INCLUDE
-#setenv CLHEP_LIB_DIR $CLHEP_LIB
+# amptools
+if (! $?AMPTOOLS_HOME) setenv AMPTOOLS_HOME $GLUEX_TOP/AmpTools/prod
+setenv AMPTOOLS $AMPTOOLS_HOME/AmpTools
+setenv AMPPLOTTER $AMPTOOLS_HOME/AmpPlotter
 # ccdb
 if (! $?CCDB_HOME) setenv CCDB_HOME $GLUEX_TOP/ccdb/prod
 source $BUILD_SCRIPTS/ccdb_env.csh
