@@ -78,7 +78,7 @@ if [ -e "$G4ROOT" ]
     unset g4setup
 fi
 # amptools
-if [ -z "$AMPTOOLS_HOME" ]; then export AMPTOOLS_HOME=$GLUEX_TOP/AmpTools/prod; fi
+if [ -z "$AMPTOOLS_HOME" ]; then export AMPTOOLS_HOME=$GLUEX_TOP/amptools/prod; fi
 export AMPTOOLS=$AMPTOOLS_HOME/AmpTools
 export AMPPLOTTER=$AMPTOOLS_HOME/AmpPlotter
 # ccdb
