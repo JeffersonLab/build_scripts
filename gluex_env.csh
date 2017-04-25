@@ -51,9 +51,10 @@ if ( -e $G4ROOT) then
     unset g4setup
 endif
 # amptools
-if (! $?AMPTOOLS_HOME) setenv AMPTOOLS_HOME $GLUEX_TOP/amptools/prod
+if ($?AMPTOOLS_HOME) then
 setenv AMPTOOLS $AMPTOOLS_HOME/AmpTools
 setenv AMPPLOTTER $AMPTOOLS_HOME/AmpPlotter
+endif
 # ccdb
 if (! $?CCDB_HOME) setenv CCDB_HOME $GLUEX_TOP/ccdb/prod
 source $BUILD_SCRIPTS/ccdb_env.csh
@@ -89,10 +90,11 @@ if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
 #
 # HDGeant4
 #
-if (! $?HDGEANT4_HOME) setenv HDGEANT4_HOME $GLUEX_TOP/hdgeant4/prod
-if ($?G4SYSTEM) then
-    echo $PATH | grep $HDGEANT4_HOME/bin/$G4SYSTEM > /dev/null
-    if ($status) setenv PATH $HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
+if ($?HDGEANT4_HOME) then
+    if ($?G4SYSTEM) then
+        echo $PATH | grep $HDGEANT4_HOME/bin/$G4SYSTEM > /dev/null
+        if ($status) setenv PATH $HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
+    endif
 endif
 #
 # hd_utilities
@@ -103,8 +105,9 @@ setenv PATH ${MCWRAPPER_CENTRAL}:$PATH
 #
 # gluex_root_analysis
 #
-if (! $?ROOT_ANALYSIS_HOME) setenv ROOT_ANALYSIS_HOME $GLUEX_TOP/gluex_root_analysis/prod
-if (-e $ROOT_ANALYSIS_HOME) source $ROOT_ANALYSIS_HOME/env_analysis.csh
+if ($?ROOT_ANALYSIS_HOME) then
+    if (-e $ROOT_ANALYSIS_HOME) source $ROOT_ANALYSIS_HOME/env_analysis.csh
+endif
 #
 if (! $?JANA_PLUGIN_PATH) then
     set jpp_save=""
