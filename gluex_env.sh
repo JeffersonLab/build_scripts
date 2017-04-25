@@ -78,9 +78,10 @@ if [ -e "$G4ROOT" ]
     unset g4setup
 fi
 # amptools
-if [ -z "$AMPTOOLS_HOME" ]; then export AMPTOOLS_HOME=$GLUEX_TOP/amptools/prod; fi
-export AMPTOOLS=$AMPTOOLS_HOME/AmpTools
-export AMPPLOTTER=$AMPTOOLS_HOME/AmpPlotter
+if [ -n "$AMPTOOLS_HOME" ]; then
+    export AMPTOOLS=$AMPTOOLS_HOME/AmpTools
+    export AMPPLOTTER=$AMPTOOLS_HOME/AmpPlotter
+fi
 # ccdb
 if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=$GLUEX_TOP/ccdb/prod; fi
 . $BUILD_SCRIPTS/ccdb_env.sh
@@ -121,11 +122,11 @@ fi
 #
 # HDGeant4
 #
-if [ -z "$HDGEANT4_HOME" ]; then export HDGEANT4_HOME=$GLUEX_TOP/hdgeant4/prod; fi
-if [ -n "$G4SYSTEM" ]
-    then
-    if [ `echo $PATH | grep -c $HDGEANT4_HOME/bin/$G4SYSTEM` -eq 0 ]
-        then export PATH=$HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
+if [ -n "$HDGEANT4_HOME" ]; then
+    if [ -n "$G4SYSTEM" ]; then
+        if [ `echo $PATH | grep -c $HDGEANT4_HOME/bin/$G4SYSTEM` -eq 0 ]; then
+            export PATH=$HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
+        fi
     fi
 fi
 #
@@ -137,8 +138,9 @@ export PATH=${MCWRAPPER_CENTRAL}:$PATH
 #
 # gluex_root_analysis
 #
-if [ -z "$ROOT_ANALYSIS_HOME" ]; then export ROOT_ANALYSIS_HOME=$GLUEX_TOP/gluex_root_analysis/prod; fi
-if [ -e "$ROOT_ANALYSIS_HOME" ]; then source $ROOT_ANALYSIS_HOME/env_analysis.sh ; fi
+if [ -n "$ROOT_ANALYSIS_HOME" ]; then
+    if [ -e "$ROOT_ANALYSIS_HOME" ]; then source $ROOT_ANALYSIS_HOME/env_analysis.sh ; fi
+fi
 #
 if [ -z "$JANA_PLUGIN_PATH" ]
     then
