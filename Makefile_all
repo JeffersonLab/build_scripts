@@ -22,9 +22,9 @@ HDGEANT4 = ${ROOT_OF_ALL}/hdgeant4
 GLUEX_ROOT_ANALYSIS = ${ROOT_OF_ALL}/gluex_root_analysis
 AMPTOOLS_ALL = ${ROOT_OF_ALL}/amptools
 
-all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build amptools_build
+all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build
 
-gluex: env xerces_build cernlib_build lapack_build root_build geant4_build evio_build rcdb_build ccdb_build jana_build hdds_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build amptools_build
+gluex: env xerces_build cernlib_build lapack_build root_build geant4_build evio_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build
 
 cernlib_build: cernlib_dir cernlib_make
 
