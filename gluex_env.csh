@@ -4,9 +4,26 @@ if ($1 == '-v') then
 else
     set gluex_env_verbose=0
 endif
+# set non-default compiler
+setenv HOSTNAME `hostname`
+set VORTEX_WORKER=`echo $HOSTNAME | grep -c "vx"`
+set HURRICANE_WORKER=`echo $HOSTNAME | grep -c "hu"`
+if ($HOSTNAME == "hurricane.sciclone.wm.edu" || $HURRICANE_WORKER == 1) then
+    module unload pgi/11.10
+    module load python/2.7.2
+    module load cmake/2.8.8
+else if ($HOSTNAME == "vortex.sciclone.wm.edu" || $VORTEX_WORKER == 1) then
+    module unload pgi/14.3
+    module load python/2.7.8
+    module load cmake/3.2.3
+endif
+module load gcc/4.8.4
+# scons 
+setenv PATH $HOME/builds/external/scons-2.4.1/bin:${PATH}
+setenv PATH $HOME/builds/external/usr/bin:${PATH}
 # general stuff
-if (! $?GLUEX_TOP) setenv GLUEX_TOP $HOME/gluex_top
-if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
+if (! $?GLUEX_TOP) setenv GLUEX_TOP $HOME/builds
+if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $HOME/build_scripts
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 set machine_type=`uname -m`

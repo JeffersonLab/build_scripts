@@ -12,6 +12,8 @@ use File::Basename;
 use Cwd 'abs_path';
 $debug = 0;
 
+$XML::Simple::PREFERRED_PARSER = 'XML::Parser';
+
 $package_in = $ARGV[0];
 if (! $package_in) {die "must name a package";}
 

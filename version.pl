@@ -7,6 +7,8 @@ use File::Slurp;
 use File::Basename;
 use Cwd 'abs_path';
 use File::Basename;
+
+$XML::Simple::PREFERRED_PARSER = 'XML::Parser';
  
 $ERROR_NO_FILE_ARG = 1;
 $ERROR_FILE_DOES_NOT_EXIST = 2;
