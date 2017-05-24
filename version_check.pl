@@ -6,6 +6,8 @@ use File::Slurp;
 use File::Basename;
 use Cwd 'abs_path';
 
+$XML::Simple::PREFERRED_PARSER = 'XML::Parser';
+
 $this_file_with_full_path = abs_path(__FILE__);
 $build_scripts = dirname($this_file_with_full_path);
 $bms_osname = `$build_scripts/osrelease.pl`;

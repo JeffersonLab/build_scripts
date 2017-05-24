@@ -7,6 +7,8 @@ use File::Slurp;
 use XML::Writer;
 use IO::File;
 
+$XML::Simple::PREFERRED_PARSER = 'XML::Parser';
+
 # get the file name
 getopts("i:o:s:g:h");
 $filename_in = $opt_i;
