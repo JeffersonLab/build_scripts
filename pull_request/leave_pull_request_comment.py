@@ -31,7 +31,8 @@ comment = sys.argv[3]
 # leave comment
 message = "{ \"body\" : \""+comment+"\" }"
 print (message)
-r = requests.post(comment_url, data=message, auth=(user,password), verify='/site/etc/openssl/JLabCA.crt')
+#r = requests.post(comment_url, data=message, auth=(user,password), verify='/site/etc/openssl/JLabCA.crt')
+r = requests.post(comment_url, data=message, auth=(user,password))
 # response stored as "r.text"
 print("Result of comment POST:")
 print(r.text)
