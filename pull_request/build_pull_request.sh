@@ -33,7 +33,7 @@ if [ "$SIM_RECON_URL" != "https://github.com/JeffersonLab/sim-recon" ]; then
 fi
 export SIM_RECON_BRANCH=$branch_git
 export SIM_RECON_DIRTAG=$branch
-export SIM_RECON_SCONS_OPTIONS="-j6 SHOWBUILD=1"
+export SIM_RECON_SCONS_OPTIONS="-j8 SHOWBUILD=1"
 # for testing
 printenv >& env^$branch
 # make sim-recon
