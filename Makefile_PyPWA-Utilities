@@ -1,0 +1,74 @@
+# Makefile_hdds
+
+# Builds PYPWA-UTILITIES under a new directory rooted in the current working
+# directory. The new directory (DIR_NAME) has a name that depends on
+# the version being built.
+
+# PYPWA-UTILITIES_VERSION defines which tagged version to build. It should
+# correspond to the name of the desired directory in the repos/tags
+# directory of the repository. If left undefined, the latest version
+# will be checked out from the repos/trunk.
+
+PWD = $(shell pwd)
+
+ifdef PYPWA-UTILITIES_VERSION
+ SOURCE_CODE_TARGET = $(PYPWA-UTILITIES_HOME)/.untar_done
+ ifdef PYPWA-UTILITIES_DIRTAG
+  PYPWA-UTILITIES_DIR = pypwa-utilities-$(PYPWA-UTILITIES_VERSION)^$(PYPWA-UTILITIES_DIRTAG)
+ else
+  PYPWA-UTILITIES_DIR = pypwa-utilities-$(PYPWA-UTILITIES_VERSION)
+ endif
+ TARFILE = $(PYPWA-UTILITIES_VERSION).tar.gz
+else
+ SOURCE_CODE_TARGET = $(PYPWA-UTILITIES_HOME)/.clone_done
+ ifndef PYPWA-UTILITIES_URL
+  PYPWA-UTILITIES_URL=https://github.com/Markjonestx/PyPWA-Utilities
+ endif
+ ifdef PYPWA-UTILITIES_DIRTAG
+  PYPWA-UTILITIES_DIR = $(notdir $(PYPWA-UTILITIES_URL))^$(PYPWA-UTILITIES_DIRTAG)
+ else
+  PYPWA-UTILITIES_DIR = $(notdir $(PYPWA-UTILITIES_URL))
+ endif
+ ifndef PYPWA-UTILITIES_BRANCH
+  PYPWA-UTILITIES_BRANCH = master
+ endif
+endif
+
+PYPWA-UTILITIES_HOME = $(PWD)/$(PYPWA-UTILITIES_DIR)
+
+all: prod_link
+
+$(TARFILE):
+	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/pypwa-utilities/archive/$(TARFILE)
+
+$(PYPWA-UTILITIES_HOME)/.clone_done:
+	git clone -b $(PYPWA-UTILITIES_BRANCH) $(PYPWA-UTILITIES_URL) $(PYPWA-UTILITIES_DIR)
+ifdef PYPWA-UTILITIES_HASH
+	cd $(PYPWA-UTILITIES_DIR) ; git checkout $(PYPWA-UTILITIES_HASH)
+endif
+	date > $@
+
+$(PYPWA-UTILITIES_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(PYPWA-UTILITIES_DIR)
+	rmdir -v untar_temp_dir
+	date > $@
+
+$(PYPWA-UTILITIES_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
+	cd $(PYPWA-UTILITIES_HOME) ; mkdir -p build
+	cd $(PYPWA-UTILITIES_HOME)/build ; cmake -DCMAKE_INSTALL_PREFIX=$(PYPWA-UTILITIES_HOME) ..
+	date > $@
+
+make: $(PYPWA-UTILITIES_HOME)/.cmake_done
+	cd $(PYPWA-UTILITIES_HOME)/build ; make
+
+make-install: make
+	cd $(PYPWA-UTILITIES_HOME)/build ; make install
+
+$(PYPWA-UTILITIES_HOME)/pypwa-utilities_prereqs_version.xml: make-install
+	cd $(PYPWA-UTILITIES_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl pypwa-utilities
+
+prod_link: $(PYPWA-UTILITIES_HOME)/pypwa-utilities_prereqs_version.xml
+	test -L prod || ln -s pypwa-utilities prod # will not overwrite existing link
