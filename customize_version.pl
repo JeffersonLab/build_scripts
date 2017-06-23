@@ -70,7 +70,7 @@ foreach $href (@b) {
 	    $writer->emptyTag("package", "name" => "$name", "home" => "$hdgeant4_home");
 	}
     } elsif ($name eq "gluex_root_analysis" && $gluex_root_analysis_home) {
-	if (uc($root_analysis_home) ne "NONE") {
+	if (uc($gluex_root_analysis_home) ne "NONE") {
 	    $writer->emptyTag("package", "name" => "$name", "home" => "$gluex_root_analysis_home");
 	}
     } else {
@@ -112,13 +112,16 @@ sub print_usage {
 custom_sim_recon.pl: creates a version xml file with custom sim-recon home directory.
 
 Options:
-    -i <input xml file name> (required)
-    -o <output xml file name> (required)
+    -i <input XML file name> (required)
+    -o <output XML file name> (required)
     -s <custom sim-recon home directory> (optional, s for sim-recon)
     -g <custom HDDS home directory> (optional, g for geometry)
     -4 <custom HDGeant4 home directory> (optional, 4 for 4)
     -a <custom gluex_root_analysis home directory> (optional, a for analysis)
     -h print this usage message
+
+Note: if custom home directory name = "none", corresponding package element
+will be omitted in output XML file.
 EOM
 
     print $usage;
