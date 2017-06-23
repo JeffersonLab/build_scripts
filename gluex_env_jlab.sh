@@ -5,7 +5,9 @@ if [ -z $1 ]
 else
     VERSION_XML=$1
 fi
-export BUILD_SCRIPTS=/group/halld/Software/build_scripts
+if [ -z "$BUILD_SCRIPTS" ]
+    then export BUILD_SCRIPTS=/group/halld/Software/build_scripts
+fi
 export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
 # farm-specific set-up
 nodename=`uname -n`
