@@ -1,7 +1,7 @@
 ifndef AMPTOOLS_VERSION
-  AMPTOOLS_VERSION = 0.9.1
+  AMPTOOLS_VERSION = 0.9.2
 endif
-TARFILE = AmpTools_v$(AMPTOOLS_VERSION).tgz
+TARFILE = v$(AMPTOOLS_VERSION).tar.gz
 ifdef AMPTOOLS_DIRTAG
   AMPTOOLS_LOCAL_DIR = AmpTools-$(AMPTOOLS_VERSION)^$(AMPTOOLS_DIRTAG)
 else
@@ -13,11 +13,14 @@ AMPTOOLS_PACKAGES = AmpTools AmpPlotter
 all: prod_link
 
 $(TARFILE):
-	wget http://downloads.sourceforge.net/project/amptools/$(TARFILE)
+	wget https://github.com/mashephe/AmpTools/archive/$(TARFILE)
 
 $(AMPTOOLS_DIR)/.unpack: $(TARFILE)
-	tar zxvf $(TARFILE)
-	mv -v AmpTools $(AMPTOOLS_DIR)
+	rm -rfv untar_temp
+	mkdir -v untar_temp
+	cd untar_temp; tar zxvf ../$(TARFILE)
+	mv -v untar_temp/AmpTools-$(AMPTOOLS_VERSION) $(AMPTOOLS_DIR)
+	rmdir -v untar_temp
 	date > $@
 
 $(AMPTOOLS_DIR)/.patch: $(AMPTOOLS_DIR)/.unpack

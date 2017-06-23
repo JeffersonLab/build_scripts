@@ -54,6 +54,8 @@ if ($uname eq 'Linux') {
 	    $release = '_RHEL6';
 	} elsif ($release_string =~ /^Red Hat Enterprise Linux Workstation release 7.*/) {
 	    $release = '_RHEL7';
+	} elsif ($release_string =~ /^Red Hat Enterprise Linux Server release 7.*/) {
+	    $release = '_RHEL7';
 	} elsif ($release_string =~ /^CentOS release 5.*/) {
 	    $release = '_CentOS5';
 	} elsif ($release_string =~ /^CentOS release 6.*/) {
@@ -108,6 +110,10 @@ if ($uname eq 'Linux') {
         $release = '_macosx10.10';
     } elsif ($release_string =~ /^15.*/) {
         $release = '_macosx10.11';
+    } elsif ($release_string =~ /^16.*/) {
+        $release = '_macosx10.12';
+    } elsif ($release_string =~ /^17.*/) {
+        $release = '_macosx10.13';
 	} else {
 	    print STDERR "unrecognized Mac OS X (Darwin) release\n";
 	    $release = '_macosx';
