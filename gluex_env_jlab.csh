@@ -4,7 +4,7 @@ if ( "x$1" == "x" ) then
 else
     set VERSION_XML=$1
 endif
-setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
+if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 # farm-specific set-up
 set nodename=`uname -n`

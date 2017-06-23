@@ -22,7 +22,7 @@ ifdef HDGEANT4_VERSION
 else
  SOURCE_CODE_TARGET = $(HDGEANT4_HOME)/.clone_done
  ifndef HDGEANT4_URL
-  HDGEANT4_URL=https://github.com/markito3/hdgeant4
+  HDGEANT4_URL=https://github.com/jeffersonlab/hdgeant4
  endif
  ifdef HDGEANT4_DIRTAG
   HDGEANT4_DIR = $(notdir $(HDGEANT4_URL))^$(HDGEANT4_DIRTAG)
