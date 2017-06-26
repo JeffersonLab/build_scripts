@@ -18,7 +18,7 @@ setenv TARGET_DIR /u/scratch/$USER/nightly/$TODAYS_DATE/$BMS_OSNAME
 mkdir -p $TARGET_DIR
 cd $TARGET_DIR
 # make hdds
-make -f $BUILD_SCRIPTS/Makefile_hdds
+make -f $BUILD_SCRIPTS/Makefile_hdds HDDS_SCONS_OPTIONS="SHOWBUILD=1"
 # make sim-recon
 make -f $BUILD_SCRIPTS/Makefile_sim-recon SIM_RECON_SCONS_OPTIONS="SHOWBUILD=1"
 # make hdgeant4
