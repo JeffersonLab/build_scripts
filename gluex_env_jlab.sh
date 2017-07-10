@@ -23,8 +23,9 @@ if [[ $BMS_OSNAME == *CentOS6* || $BMS_OSNAME == *RHEL6* ]]
     export LD_LIBRARY_PATH=${GCC_HOME}/lib64:${GCC_HOME}/lib
     export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
     # python on the cue
-    export PATH=$BUILD_SCRIPTS/patches/jlab_extras/rh6:/apps/python/PRO/bin:$PATH
-    export LD_LIBRARY_PATH=/apps/python/PRO/lib:$LD_LIBRARY_PATH
+    pypath=/group/halld/Software/builds/$BMS_OSNAME/python/Python-2.7.13
+    export PATH=$pypath:$PATH
+    export LD_LIBRARY_PATH=$pypath/lib:$LD_LIBRARY_PATH
 fi
 export GLUEX_TOP=/group/halld/Software/builds/$BMS_OSNAME
 # perl on the cue
