@@ -134,6 +134,10 @@ if ($compiler_version_str =~ /\sgcc version\s/) {
 
 	$compiler_type = "gcc";
 	$ccversion = `gcc -dumpversion`;
+	if (! ($ccversion =~ /\./)) { # if there are no periods in the gcc
+	                              # version number
+	    $ccversion = `gcc -dumpfullversion`
+	}
 	chomp $ccversion;
 
 } elsif ($compiler_version_str =~ /clang version\s+/) {
