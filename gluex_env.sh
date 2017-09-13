@@ -73,7 +73,7 @@ fi
 if [ -z "$G4ROOT" ]; then export G4ROOT=$GLUEX_TOP/geant4/prod; fi
 if [ -e "$G4ROOT" ]
     then
-    g4setup=`find $G4ROOT/share/ -name geant4make.sh`
+    g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.sh`
     if [ -f "$g4setup" ]; then source $g4setup; fi
     unset g4setup
 fi
