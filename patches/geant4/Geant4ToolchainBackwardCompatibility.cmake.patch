@@ -1,0 +1,13 @@
+--- Geant4ToolchainBackwardCompatibility.cmake.original	2017-09-15 11:44:17.674626786 -0400
++++ Geant4ToolchainBackwardCompatibility.cmake.new	2017-09-14 15:59:17.816490052 -0400
+@@ -395,8 +395,8 @@
+     # Backward compatibility requires XERCESCROOT to be set
+     # As this is a 'rootdir' determine it from the XERCESC_INCLUDE_DIR
+     # variable...
+-    get_filename_component(_xercesc_root ${XERCESC_INCLUDE_DIR} PATH)
+-    _g4tc_setenv_command(GEANT4_TC_GDML_PATH_SETUP ${SHELL_FAMILY} XERCESCROOT ${_xercesc_root})
++#    get_filename_component(_xercesc_root ${XERCESC_INCLUDE_DIR} PATH)
++#    _g4tc_setenv_command(GEANT4_TC_GDML_PATH_SETUP ${SHELL_FAMILY} XERCESCROOT ${_xercesc_root})
+   else()
+     set(GEANT4_TC_G4LIB_USE_GDML "# NOT BUILT WITH GDML SUPPORT")
+   endif()
