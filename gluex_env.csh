@@ -61,7 +61,7 @@ if ($status) setenv PATH $CERN_ROOT/bin:$PATH
 # Geant4
 if (! $?G4ROOT) setenv G4ROOT $GLUEX_TOP/geant4/prod
 if ( -e $G4ROOT) then
-    set g4setup=`find $G4ROOT/share/ -name geant4make.csh`
+    set g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.csh`
     if ( -f $g4setup) then
 	set g4dir=`dirname $g4setup`
 	source $g4setup $g4dir

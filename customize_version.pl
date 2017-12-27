@@ -10,11 +10,13 @@ use IO::File;
 $XML::Simple::PREFERRED_PARSER = 'XML::Parser';
 
 # get the file name
-getopts("i:o:s:g:h");
+getopts("i:o:s:g:4:a:h");
 $filename_in = $opt_i;
 $filename_out = $opt_o;
 $halld_home = $opt_s;
 $hdds_home = $opt_g;
+$hdgeant4_home = $opt_4;
+$gluex_root_analysis_home = $opt_a;
 
 if ($opt_h) {
     print_usage();
@@ -25,7 +27,7 @@ if (!$filename_in || !$filename_out ) {
     print_usage();
     exit 1;
 }
-if (!($halld_home || $hdds_home)) {
+if (!($halld_home || $hdds_home || $hdgeant4_home || $gluex_root_analysis_home)) {
     print "\nError: no custom home directories specified, no action taken\n\n";
     print_usage();
     exit 2;
@@ -58,9 +60,21 @@ foreach $href (@b) {
     $hash = $d{hash};
     #print "package = $name, version = $version\n";
     if ($name eq "sim-recon" && $halld_home) {
-	$writer->emptyTag("package", "name" => "$name", "home" => "$halld_home");
+	if (uc($halld_home) ne "NONE") {
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_home");
+	}
     } elsif ($name eq "hdds" && $hdds_home) {
-	$writer->emptyTag("package", "name" => "$name", "home" => "$hdds_home");
+	if (uc($hdds_home) ne "NONE") {
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$hdds_home");
+	}
+    } elsif ($name eq "hdgeant4" && $hdgeant4_home) {
+	if (uc($hdgeant4_home) ne "NONE") {
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$hdgeant4_home");
+	}
+    } elsif ($name eq "gluex_root_analysis" && $gluex_root_analysis_home) {
+	if (uc($gluex_root_analysis_home) ne "NONE") {
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$gluex_root_analysis_home");
+	}
     } else {
 	$write_element_command = "\$writer->emptyTag(\"package\", \"name\" => \"$name\"";
 	if ($version) {
@@ -100,11 +114,16 @@ sub print_usage {
 custom_sim_recon.pl: creates a version xml file with custom sim-recon home directory.
 
 Options:
-    -i <input xml file name> (required)
-    -o <output xml file name> (required)
+    -i <input XML file name> (required)
+    -o <output XML file name> (required)
     -s <custom sim-recon home directory> (optional, s for sim-recon)
     -g <custom HDDS home directory> (optional, g for geometry)
+    -4 <custom HDGeant4 home directory> (optional, 4 for 4)
+    -a <custom gluex_root_analysis home directory> (optional, a for analysis)
     -h print this usage message
+
+Note: if custom home directory name = "none", corresponding package element
+will be omitted in output XML file.
 EOM
 
     print $usage;

@@ -22,7 +22,7 @@ ifdef HDGEANT4_VERSION
 else
  SOURCE_CODE_TARGET = $(HDGEANT4_HOME)/.clone_done
  ifndef HDGEANT4_URL
-  HDGEANT4_URL=https://github.com/markito3/hdgeant4
+  HDGEANT4_URL=https://github.com/jeffersonlab/hdgeant4
  endif
  ifdef HDGEANT4_DIRTAG
   HDGEANT4_DIR = $(notdir $(HDGEANT4_URL))^$(HDGEANT4_DIRTAG)
@@ -65,7 +65,7 @@ $(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.link_to_fixes_done
 	@cd $(HDGEANT4_HOME) ; \
 	if [ -z "$$G4SYSTEM" ] ; \
 	    then echo Geant4 setup not complete, sourcing geant4make.sh ; \
-	    source `find $(G4ROOT)/share/ -name geant4make.sh` ; \
+	    . `find $(G4ROOT)/share/ -name geant4make.sh` ; \
 	fi ; \
 	echo executing make ; \
 	make

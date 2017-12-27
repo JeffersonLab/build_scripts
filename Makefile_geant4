@@ -21,7 +21,16 @@ $(G4DIR)/.untar_done: $(TARFILE)
 	tar zxf $(TARFILE)
 	date > $@
 
-$(G4DIR)/.configure_done: $(G4DIR)/.untar_done
+$(G4DIR)/.patch_done: $(G4DIR)/.untar_done
+	cd $(G4DIR)/cmake/Templates ; \
+	patch geant4make-skeleton.in \
+	    < $(BUILD_SCRIPTS)/patches/geant4/geant4make-skeleton.in.patch
+	cd $(G4DIR)/cmake/Modules ; \
+	patch Geant4ToolchainBackwardCompatibility.cmake \
+	    < $(BUILD_SCRIPTS)/patches/geant4/Geant4ToolchainBackwardCompatibility.cmake.patch
+	date > $@
+
+$(G4DIR)/.configure_done: $(G4DIR)/.patch_done
 	mkdir -p $(G4DIR)/build
 	cd $(G4DIR)/build ; $(CMAKE) \
 	   -DCMAKE_BUILD_TYPE=RelWithDebInfo \
@@ -40,7 +49,7 @@ $(G4DIR)/.configure_done: $(G4DIR)/.untar_done
 	date > $@
 
 $(G4DIR)/.make_done: $(G4DIR)/.configure_done
-	cd $(G4DIR)/build ; make -j4
+	cd $(G4DIR)/build ; make $(GEANT4_MAKE_OPTIONS)
 	date > $@
 
 $(G4DIR)/.make_install_done: $(G4DIR)/.make_done
@@ -48,4 +57,6 @@ $(G4DIR)/.make_install_done: $(G4DIR)/.make_done
 	date > $@
 
 help:
-	@echo untar target = $(G4DIR)/.untar_done
+	@echo CMAKE = $(CMAKE)
+	@echo G4DIR = $(G4DIR)
+	@echo TARFILE = $(TARFILE)

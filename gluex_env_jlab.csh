@@ -4,7 +4,7 @@ if ( "x$1" == "x" ) then
 else
     set VERSION_XML=$1
 endif
-setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
+if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 # farm-specific set-up
 set nodename=`uname -n`
@@ -18,8 +18,9 @@ if ( $BMS_OSNAME =~ *CentOS6* || $BMS_OSNAME =~ *RHEL6* ) then
     setenv LD_LIBRARY_PATH ${GCC_HOME}/lib64:${GCC_HOME}/lib
     setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
     # python on the cue
-    setenv PATH $BUILD_SCRIPTS/patches/jlab_extras/rh6:/apps/python/PRO/bin:$PATH
-    setenv LD_LIBRARY_PATH /apps/python/PRO/lib:$LD_LIBRARY_PATH
+    set pypath=/group/halld/Software/builds/$BMS_OSNAME/python/Python-2.7.13
+    setenv PATH $pypath/bin:$PATH
+    setenv LD_LIBRARY_PATH $pypath/lib:$LD_LIBRARY_PATH
 endif
 setenv GLUEX_TOP /group/halld/Software/builds/$BMS_OSNAME
 # perl on the cue
