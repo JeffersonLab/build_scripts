@@ -1,10 +1,12 @@
 #!/bin/tcsh
 setenv TODAYS_DATE `date +%F`
-# make an xml file
-set xml=version_${TODAYS_DATE}.xml
+source /group/halld/Software/hd_utilities/jlab_builds/jlab_tricks.csh
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 setenv TARGET_DIR /u/scratch/$USER/nightly/$TODAYS_DATE/$BMS_OSNAME
+mkdir -pv $TARGET_DIR
+# make an xml file
+set xml=$TARGET_DIR/version_${TODAYS_DATE}.xml
 $BUILD_SCRIPTS/customize_version.pl \
     -i /group/halld/www/halldweb/html/dist/version_jlab.xml \
     -o $xml \
@@ -12,10 +14,9 @@ $BUILD_SCRIPTS/customize_version.pl \
     -g $TARGET_DIR/hdds \
     -4 $TARGET_DIR/hdgeant4 \
     -a $TARGET_DIR/gluex_root_analysis
+# set-up the environment
 source $BUILD_SCRIPTS/gluex_env_jlab.csh $xml
 # go to the target directory
-setenv TARGET_DIR /u/scratch/$USER/nightly/$TODAYS_DATE/$BMS_OSNAME
-mkdir -p $TARGET_DIR
 cd $TARGET_DIR
 # make hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds HDDS_SCONS_OPTIONS="SHOWBUILD=1"

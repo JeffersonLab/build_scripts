@@ -13,7 +13,7 @@ AMPTOOLS_PACKAGES = AmpTools AmpPlotter
 all: prod_link
 
 $(TARFILE):
-	wget https://github.com/mashephe/AmpTools/archive/$(TARFILE)
+	wget https://github.com/mashephe/AmpTools/archive/$(TARFILE) -O $(TARFILE)
 
 $(AMPTOOLS_DIR)/.unpack: $(TARFILE)
 	rm -rfv untar_temp

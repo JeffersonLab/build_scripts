@@ -135,6 +135,7 @@ foreach $package (@packages) {
 		    } else {
 			$consistent = 0;
 			$message = "======= version mismatch found =======\n";
+			$message .= "== $package built with version $d{version} of $d{name}. Environment using version $version_hash{$d{name}} from $home_value_hash{$d{name}}.\n";
 			$message .= "== package being checked = $package\n";
 			$message .= "== prerequisite package = $d{name}\n";
 			$message .= "== prerequisite's home directory = $home_value_hash{$d{name}}\n";
