@@ -1,6 +1,6 @@
 XERCES_SERIES = 3
 ifndef XERCES_C_VERSION
-XERCES_C_VERSION=3.1.1
+XERCES_C_VERSION=3.1.4
 endif
 TARFILE=xerces-c-$(XERCES_C_VERSION).tar.gz
 PWD := $(shell pwd)
@@ -8,11 +8,7 @@ export XERCESCROOT=$(PWD)/xerces-c-$(XERCES_C_VERSION)
 
 all: prod_link
 
-ifndef GVMS_TEST
 prod_link: $(XERCESCROOT)/.make_install_done
-else
-prod_link: $(XERCESCROOT)/.untar_done
-endif
 	   @echo this will not overwrite existing link
 	   test -L prod || ln -s xerces-c-$(XERCES_C_VERSION) prod
 
