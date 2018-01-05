@@ -5,15 +5,7 @@ TARFILE=lapack-$(LAPACK_VERSION).tgz
 PWD := $(shell pwd)
 export LAPACKROOT=$(PWD)/lapack-$(LAPACK_VERSION)
 
-all: prod_link
-
-ifndef GVMS_TEST
-prod_link: $(LAPACKROOT)/.make_install_done
-else
-prod_link: $(LAPACKROOT)/.untar_done
-endif
-	   @echo this will not overwrite existing link
-	   test -L prod || ln -s lapack-$(LAPACK_VERSION) prod
+all: $(LAPACKROOT)/.make_install_done
 
 $(LAPACKROOT)/.make_install_done: $(LAPACKROOT)/.make_done 
 	install $(LAPACKROOT)/liblapack.a $(CERN)/$(CERN_LEVEL)/lib/liblapack3.a

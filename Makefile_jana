@@ -22,17 +22,9 @@ endif
 
 export JANA_HOME = $(PWD)/$(JANA_DIR)
 
-all: prod_link
+all: $(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml
 
-prod_link: $(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml
-	test -L prod || ln -s $(JANA_DIR) prod # will not overwrite existing link
-
-ifndef GVMS_TEST
 $(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: $(JANA_HOME)/.sconstruct_done
-else
-$(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: $(SOURCE_CODE_TARGET)
-	mkdir -p $(JANA_HOME)/$(BMS_OSNAME)
-endif
 	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(BUILD_SCRIPTS)/version_prereqs.pl jana
 
 $(JANA_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)

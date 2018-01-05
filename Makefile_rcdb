@@ -22,7 +22,7 @@ else
   endif
 endif
 
-all: prod_link
+all: $(RCDB_DIR)/.scons_done
 
 $(TARFILE):
 	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/rcdb/archive/$(TARFILE)
@@ -46,9 +46,6 @@ $(RCDB_DIR)/.scons_done: $(GET_SOURCE_TARGET)
 	source $(RCDB_DIR)/environment.bash ; \
 	cd $(RCDB_DIR)/cpp ; \
 	scons
-
-prod_link: $(RCDB_DIR)/.scons_done
-	test -L prod || ln -s $(RCDB_DIR) prod
 
 .PHONY: $(RCDB_DIR)/.scons_done
 
