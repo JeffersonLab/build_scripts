@@ -17,10 +17,7 @@ else
     CMAKE = cmake3
 endif
 
-all: prod_link
-
-prod_link: $(ROOTDIR)/.install_done
-	test -L prod || ln -s $(ROOTDIR) prod # will not overwrite existing link
+all: $(ROOTDIR)/.install_done
 
 $(TARFILE):
 	wget https://root.cern.ch/download/$@

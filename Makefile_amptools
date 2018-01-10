@@ -10,7 +10,7 @@ endif
 AMPTOOLS_DIR = $(shell pwd)/$(AMPTOOLS_LOCAL_DIR)
 AMPTOOLS_PACKAGES = AmpTools AmpPlotter
 
-all: prod_link
+all: $(AMPTOOLS_DIR)/amptools_prereqs_version.xml
 
 $(TARFILE):
 	wget https://github.com/mashephe/AmpTools/archive/$(TARFILE) -O $(TARFILE)
@@ -37,6 +37,3 @@ endif
 
 $(AMPTOOLS_DIR)/amptools_prereqs_version.xml: $(AMPTOOLS_PACKAGES)
 	cd $(AMPTOOLS_DIR) ; $(BUILD_SCRIPTS)/version_prereqs.pl amptools
-
-prod_link: $(AMPTOOLS_DIR)/amptools_prereqs_version.xml
-	test -d prod || ln -s $(AMPTOOLS_LOCAL_DIR) prod

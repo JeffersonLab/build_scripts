@@ -36,7 +36,7 @@ endif
 
 HDGEANT4_HOME = $(PWD)/$(HDGEANT4_DIR)
 
-all: prod_link
+all: $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml
 
 $(TARFILE):
 	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/hdgeant4/archive/$(TARFILE)
@@ -73,6 +73,3 @@ $(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.link_to_fixes_done
 
 $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(HDGEANT4_HOME)/.make_done
 	cd $(HDGEANT4_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl hdgeant4
-
-prod_link: $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml
-	test -L prod || ln -s $(HDGEAN4_DIR) prod # will not overwrite existing link

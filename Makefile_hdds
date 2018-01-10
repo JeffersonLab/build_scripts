@@ -36,7 +36,7 @@ endif
 
 HDDS_HOME = $(PWD)/$(HDDS_DIR)
 
-all: prod_link
+all: $(HDDS_HOME)/hdds_prereqs_version.xml
 
 $(TARFILE):
 	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/hdds/archive/$(TARFILE)
@@ -66,6 +66,3 @@ else
 $(HDDS_HOME)/hdds_prereqs_version.xml: $(SOURCE_CODE_TARGET)
 endif
 	cd $(HDDS_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl hdds
-
-prod_link: $(HDDS_HOME)/hdds_prereqs_version.xml
-	test -L prod || ln -s hdds prod # will not overwrite existing link

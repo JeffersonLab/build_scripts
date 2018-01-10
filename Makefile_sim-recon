@@ -34,7 +34,7 @@ else
 endif
 export HALLD_HOME = $(PWD)/$(SIM_RECON_DIR)
 
-all: prod_link
+all: $(HALLD_HOME)/sim-recon_prereqs_version.xml
 
 $(TARFILE):
 	wget --no-check-certificate -O $@ https://github.com/JeffersonLab/sim-recon/archive/$(SIM_RECON_VERSION).tar.gz
@@ -71,9 +71,6 @@ else
 $(HALLD_HOME)/sim-recon_prereqs_version.xml: $(SOURCE_CODE_TARGET)
 endif
 	cd $(HALLD_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl sim-recon
-
-prod_link: $(HALLD_HOME)/sim-recon_prereqs_version.xml
-	test -L prod || ln -s $(SIM_RECON_DIR) prod # will not overwrite existing link
 
 env:
 	@echo SIM_RECON_DIR = $(SIM_RECON_DIR)

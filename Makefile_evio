@@ -20,7 +20,7 @@ TARFILE = evio-$(EVIO_VERSION).tgz
 EVIO_HOME = $(PWD)/$(DIR_NAME)
 EVIO_DOWNLOAD_URL_BASE = https://coda.jlab.org/drupal/system/files/coda/evio
 
-all: prod_link
+all: $(EVIO_HOME)/.scons_done
 
 $(TARFILE):
 	wget --no-check-certificate $(EVIO_DOWNLOAD_URL_BASE)/evio-$(MAJOR_MINOR)/$(TARFILE)
@@ -41,11 +41,3 @@ endif
 $(EVIO_HOME)/.scons_done: $(EVIO_HOME)/.patch_done
 	cd $(EVIO_HOME) ; scons --prefix=. install
 	date > $@
-
-ifndef GVMS_TEST
-prod_link: $(EVIO_HOME)/.scons_done
-else
-prod_link: $(EVIO_HOME)/.untar_done
-	mkdir -p $(EVIO_HOME)/`uname -s`-`uname -m`
-endif
-	test -L prod || ln -s $(DIR_NAME) prod # will not overwrite existing link
