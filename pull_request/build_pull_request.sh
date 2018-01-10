@@ -25,6 +25,9 @@ echo COMPARE "$SIM_RECON_URL"
 echo TO "https://github.com/JeffersonLab/sim-recon"
 if [ "$SIM_RECON_URL" != "https://github.com/JeffersonLab/sim-recon" ]; then
     # create notice where the build log would be
+    if [ -f "sim-recon^$branch" ]; then
+       rm "sim-recon^$branch"
+    fi
     if [ ! -d "sim-recon^$branch" ]; then
        mkdir "sim-recon^$branch"
     fi
