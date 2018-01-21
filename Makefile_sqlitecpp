@@ -3,9 +3,9 @@ PWD = $(shell pwd)
 ifdef SQLITECPP_VERSION
  SOURCE_CODE_TARGET = $(SQLITECPP_HOME)/.untar_done
  ifdef SQLITECPP_DIRTAG
-  SQLITECPP_DIR = sqlitecpp-$(SQLITECPP_VERSION)^$(SQLITECPP_DIRTAG)
+  SQLITECPP_DIR = SQLiteCpp-$(SQLITECPP_VERSION)^$(SQLITECPP_DIRTAG)
  else
-  SQLITECPP_DIR = sqlitecpp-$(SQLITECPP_VERSION)
+  SQLITECPP_DIR = SQLiteCpp-$(SQLITECPP_VERSION)
  endif
  TARFILE = $(SQLITECPP_VERSION).tar.gz
 else
@@ -25,7 +25,7 @@ endif
 
 SQLITECPP_HOME = $(PWD)/$(SQLITECPP_DIR)
 
-all: $(SQLITECPP_HOME)/sqlitecpp_prereqs_version.xml
+all: $(SQLITECPP_HOME)/.build_done
 
 $(TARFILE):
 	wget --no-check-certificate -O $@ https://github.com/SRombauts/SQLiteCpp/archive/$(TARFILE)
