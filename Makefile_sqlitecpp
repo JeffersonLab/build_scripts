@@ -25,7 +25,7 @@ endif
 
 SQLITECPP_HOME = $(PWD)/$(SQLITECPP_DIR)
 
-all: $(SQLITECPP_HOME)/.build_done
+all: $(SQLITECPP_HOME)/.install_done
 
 $(TARFILE):
 	wget --no-check-certificate -O $@ https://github.com/SRombauts/SQLiteCpp/archive/$(TARFILE)
@@ -45,6 +45,15 @@ $(SQLITECPP_HOME)/.untar_done: $(TARFILE)
 	rmdir -v untar_temp_dir
 	date > $@
 
-$(SQLITECPP_HOME)/.build_done: $(SOURCE_CODE_TARGET)
-	cd $(SQLITECPP_HOME) ; mkdir -p build ; cd build ; cmake .. ; make
-	date > $@
+$(SQLITECPP_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
+	cd $(SQLITECPP_HOME) ; mkdir -p build
+	cd $(SQLITECPP_HOME)/build; \
+	   cmake -DSQLITECPP_INTERNAL_SQLITE=OFF \
+	   	 -DSQLITE_USE_LEGACY_STRUCT=ON \
+		 -DCMAKE_INSTALL_PREFIX=$(SQLITECPP_HOME) ..
+
+$(SQLITECPP_HOME)/.make_done: $(SQLITECPP_HOME)/.cmake_done
+	make -C $(SQLITECPP_HOME)/build
+
+$(SQLITECPP_HOME)/.install_done: $(SQLITECPP_HOME)/.make_done
+	make -C $(SQLITECPP_HOME)/build install
