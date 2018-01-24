@@ -51,9 +51,12 @@ $(SQLITECPP_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	   cmake -DSQLITECPP_INTERNAL_SQLITE=OFF \
 	   	 -DSQLITE_USE_LEGACY_STRUCT=ON \
 		 -DCMAKE_INSTALL_PREFIX=$(SQLITECPP_HOME) ..
+	date > $@
 
 $(SQLITECPP_HOME)/.make_done: $(SQLITECPP_HOME)/.cmake_done
 	make -C $(SQLITECPP_HOME)/build
+	date > $@
 
 $(SQLITECPP_HOME)/.install_done: $(SQLITECPP_HOME)/.make_done
 	make -C $(SQLITECPP_HOME)/build install
+	date > $@
