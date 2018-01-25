@@ -1,4 +1,10 @@
 PWD = $(shell pwd)
+JLAB6 = $(shell $(BUILD_SCRIPTS)/jlab6.sh)
+ifeq ($(JLAB6),true)
+    CMAKE = cmake -E env CXXFLAGS="-I/apps/sqlite/sqlite-3.13.0/include" cmake
+else
+    CMAKE = cmake
+endif
 
 ifdef SQLITECPP_VERSION
  SOURCE_CODE_TARGET = $(SQLITECPP_HOME)/.untar_done
@@ -46,9 +52,10 @@ $(SQLITECPP_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(SQLITECPP_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
+	@echo JLAB6 = $(JLAB6)
 	cd $(SQLITECPP_HOME) ; mkdir -p build
-	cd $(SQLITECPP_HOME)/build; \
-	   cmake -DSQLITECPP_INTERNAL_SQLITE=OFF \
+	cd $(SQLITECPP_HOME)/build; $(CMAKE) \
+	   	 -DSQLITECPP_INTERNAL_SQLITE=OFF \
 	   	 -DSQLITE_USE_LEGACY_STRUCT=ON \
 		 -DCMAKE_INSTALL_PREFIX=$(SQLITECPP_HOME) ..
 	date > $@
