@@ -1,0 +1,22 @@
+SING_HOME = singularity
+all: build
+$(SING_HOME)/.clone_done:
+	git clone https://github.com/singularityware/singularity.git
+	date > $@
+clone: $(SING_HOME)/.clone_done
+$(SING_HOME)/.autogen_done: $(SING_HOME)/.clone_done
+	pushd $(SING_HOME) ; ./autogen.sh
+	date > $@
+autogen: $(SING_HOME)/.autogen_done
+$(SING_HOME)/.configure_done: $(SING_HOME)/.autogen_done
+	pushd $(SING_HOME) ; ./configure --prefix=/usr/local
+	date > $@
+configure: $(SING_HOME)/.configure_done
+$(SING_HOME)/.build_done: $(SING_HOME)/.configure_done
+	make -C $(SING_HOME)
+	date > $@
+build: $(SING_HOME)/.build_done
+$(SING_HOME)/.install_done: $(SING_HOME)/.build_done
+	make -C $(SING_HOME) install
+	date > $@
+install: $(SING_HOME)/.install_done
