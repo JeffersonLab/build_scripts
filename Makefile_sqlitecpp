@@ -1,0 +1,69 @@
+PWD = $(shell pwd)
+JLAB6 = $(shell $(BUILD_SCRIPTS)/jlab6.sh)
+ifeq ($(JLAB6),true)
+    CMAKE = cmake -E env CXXFLAGS="-I/apps/sqlite/sqlite-3.13.0/include" cmake
+else
+    CMAKE = cmake
+endif
+
+ifdef SQLITECPP_VERSION
+ SOURCE_CODE_TARGET = $(SQLITECPP_HOME)/.untar_done
+ ifdef SQLITECPP_DIRTAG
+  SQLITECPP_DIR = SQLiteCpp-$(SQLITECPP_VERSION)^$(SQLITECPP_DIRTAG)
+ else
+  SQLITECPP_DIR = SQLiteCpp-$(SQLITECPP_VERSION)
+ endif
+ TARFILE = $(SQLITECPP_VERSION).tar.gz
+else
+ SOURCE_CODE_TARGET = $(SQLITECPP_HOME)/.clone_done
+ ifndef SQLITECPP_URL
+  SQLITECPP_URL=https://github.com/SRombauts/SQLiteCpp
+ endif
+ ifdef SQLITECPP_DIRTAG
+  SQLITECPP_DIR = $(notdir $(SQLITECPP_URL))^$(SQLITECPP_DIRTAG)
+ else
+  SQLITECPP_DIR = $(notdir $(SQLITECPP_URL))
+ endif
+ ifndef SQLITECPP_BRANCH
+  SQLITECPP_BRANCH = master
+ endif
+endif
+
+SQLITECPP_HOME = $(PWD)/$(SQLITECPP_DIR)
+
+all: $(SQLITECPP_HOME)/.install_done
+
+$(TARFILE):
+	wget --no-check-certificate -O $@ https://github.com/SRombauts/SQLiteCpp/archive/$(TARFILE)
+
+$(SQLITECPP_HOME)/.clone_done:
+	git clone -b $(SQLITECPP_BRANCH) $(SQLITECPP_URL) $(SQLITECPP_DIR)
+ifdef SQLITECPP_HASH
+	cd $(SQLITECPP_DIR) ; git checkout $(SQLITECPP_HASH)
+endif
+	date > $@
+
+$(SQLITECPP_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(SQLITECPP_DIR)
+	rmdir -v untar_temp_dir
+	date > $@
+
+$(SQLITECPP_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
+	@echo JLAB6 = $(JLAB6)
+	cd $(SQLITECPP_HOME) ; mkdir -p build
+	cd $(SQLITECPP_HOME)/build; $(CMAKE) \
+	   	 -DSQLITECPP_INTERNAL_SQLITE=OFF \
+	   	 -DSQLITE_USE_LEGACY_STRUCT=ON \
+		 -DCMAKE_INSTALL_PREFIX=$(SQLITECPP_HOME) ..
+	date > $@
+
+$(SQLITECPP_HOME)/.make_done: $(SQLITECPP_HOME)/.cmake_done
+	make -C $(SQLITECPP_HOME)/build
+	date > $@
+
+$(SQLITECPP_HOME)/.install_done: $(SQLITECPP_HOME)/.make_done
+	make -C $(SQLITECPP_HOME)/build install
+	date > $@

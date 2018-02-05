@@ -109,6 +109,10 @@ if ($?ROOT_ANALYSIS_HOME) then
     if (-e $ROOT_ANALYSIS_HOME) source $ROOT_ANALYSIS_HOME/env_analysis.csh
 endif
 #
+# sqlitecpp
+#
+if (! $?SQLITECPP_HOME) setenv SQLITECPP_HOME $GLUEX_TOP/sqlitecpp/prod
+#
 if (! $?JANA_PLUGIN_PATH) then
     set jpp_save=""
 else
