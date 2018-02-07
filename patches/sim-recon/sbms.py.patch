@@ -1,0 +1,11 @@
+--- sbms.py.old	2018-02-05 13:38:20.741702319 -0500
++++ sbms.py.new	2018-02-05 13:37:45.057513071 -0500
+@@ -643,7 +643,7 @@
+         SQLITECPP_LIBPATH = ["%s/lib" % (sqlitecpp_home)]
+         env.AppendUnique(LIBPATH = SQLITECPP_LIBPATH)
+         env.AppendUnique(LIBS    = 'SQLiteCpp')
+-	AddSQLite.SQLITE_LINKFLAGS= "-lsqlite3"
++	AddSQLite.SQLITE_LINKFLAGS= "-lsqlite3 -Wl,-rpath=/apps/sqlite/sqlite-3.13.0/lib"
+ 	AddLinkFlags(env, AddSQLite.SQLITE_LINKFLAGS)
+ 
+ 
