@@ -10,6 +10,7 @@
 # will be checked out from the repos/trunk.
 
 PWD = $(shell pwd)
+JLAB6 = $(shell $(BUILD_SCRIPTS)/jlab6.sh)
 ifdef SIM_RECON_VERSION
  SOURCE_CODE_TARGET = $(HALLD_HOME)/.untar_done
  ifdef SIM_RECON_DIRTAG
@@ -54,14 +55,18 @@ ifdef SIM_RECON_HASH
 endif
 	date > $@
 
-$(HALLD_HOME)/.getarg_patches_done: $(SOURCE_CODE_TARGET)
+$(HALLD_HOME)/.patches_done: $(SOURCE_CODE_TARGET)
 ifdef APPLY_GETARG_PATCH
 	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
 		$(HALLD_HOME)/src/programs/Simulation/HDGeant
 endif
+ifeq ($(JLAB6),true)
+	cd $(HALLD_HOME)/src/SBMS ; \
+	patch sbms.py < $(BUILD_SCRIPTS)/patches/sim-recon/sbms.py.patch
+endif
 	date > $@
 
-$(HALLD_HOME)/.sconstruct_done: $(HALLD_HOME)/.getarg_patches_done
+$(HALLD_HOME)/.sconstruct_done: $(HALLD_HOME)/.patches_done
 	cd $(HALLD_HOME)/src ; scons install $(SIM_RECON_SCONS_OPTIONS)
 	date > $@
 
