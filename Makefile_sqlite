@@ -1,0 +1,36 @@
+PWD = $(shell pwd)
+
+SQLITE_VERSION = 3220000
+SQLITE_YEAR = 2018
+ifdef SQLITE_DIRTAG
+ SQLITE_DIR = sqlite-$(SQLITE_VERSION)^$(SQLITE_DIRTAG)
+else
+ SQLITE_DIR = sqlite-$(SQLITE_VERSION)
+endif
+TARFILE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+SQLITE_HOME = $(PWD)/$(SQLITE_DIR)
+
+all: $(SQLITE_HOME)/.install_done
+
+$(TARFILE):
+	wget --no-check-certificate https://www.sqlite.org/$(SQLITE_YEAR)/$(TARFILE)
+
+$(SQLITE_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(SQLITE_DIR)
+	rmdir -v untar_temp_dir
+	date > $@
+
+$(SQLITE_HOME)/.configure_done: $(SQLITE_HOME)/.untar_done
+	cd $(SQLITE_HOME) ; ./configure --prefix=$(SQLITE_HOME)
+	date > $@
+
+$(SQLITE_HOME)/.make_done: $(SQLITE_HOME)/.configure_done
+	make -C $(SQLITE_HOME)
+	date > $@
+
+$(SQLITE_HOME)/.install_done: $(SQLITE_HOME)/.make_done
+	make -C $(SQLITE_HOME) install
+	date > $@
