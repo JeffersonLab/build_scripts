@@ -27,6 +27,7 @@ setenv GLUEX_TOP /group/halld/Software/builds/$BMS_OSNAME
 setenv PATH /apps/perl/bin:$PATH
 # finish the rest of the gluex environment
 source $BUILD_SCRIPTS/gluex_env_version.csh $VERSION_XML
+if ($status) exit $status
 setenv JANA_CALIB_URL $CCDB_CONNECTION
 setenv JANA_RESOURCE_DIR /group/halld/www/halldweb/html/resources
 # cmake on the cue
