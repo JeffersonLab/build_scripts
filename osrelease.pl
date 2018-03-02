@@ -202,7 +202,7 @@ if ($processor eq 'unknown') {
 # container tag
 $container_tag = "";
 	if (-d "/.singularity.d") {
-	    $container_tag = "-sing";
+	    $container_tag = "-cntr";
 	}
 
 # Finally, form and print the complete string to stdout
