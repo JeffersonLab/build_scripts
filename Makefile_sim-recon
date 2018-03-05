@@ -59,10 +59,6 @@ ifdef APPLY_GETARG_PATCH
 	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
 		$(HALLD_HOME)/src/programs/Simulation/HDGeant
 endif
-ifeq ($(JLAB6),true)
-	cd $(HALLD_HOME)/src/SBMS ; \
-	patch sbms.py < $(BUILD_SCRIPTS)/patches/sim-recon/sbms.py.patch
-endif
 	date > $@
 
 $(HALLD_HOME)/.sconstruct_done: $(HALLD_HOME)/.patches_done
