@@ -10,7 +10,6 @@
 # will be checked out from the repos/trunk.
 
 PWD = $(shell pwd)
-JLAB6 = $(shell $(BUILD_SCRIPTS)/jlab6.sh)
 ifdef SIM_RECON_VERSION
  SOURCE_CODE_TARGET = $(HALLD_HOME)/.untar_done
  ifdef SIM_RECON_DIRTAG

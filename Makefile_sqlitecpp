@@ -1,10 +1,5 @@
 PWD = $(shell pwd)
-JLAB6 = $(shell $(BUILD_SCRIPTS)/jlab6.sh)
-ifeq ($(JLAB6),true)
-    CMAKE = cmake -E env CXXFLAGS="-I/apps/sqlite/sqlite-3.13.0/include" cmake
-else
-    CMAKE = cmake
-endif
+CMAKE = cmake -E env CXXFLAGS="-I$(SQLITE_HOME)/include" cmake
 
 ifdef SQLITECPP_VERSION
  SOURCE_CODE_TARGET = $(SQLITECPP_HOME)/.untar_done

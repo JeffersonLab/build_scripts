@@ -62,6 +62,7 @@ foreach $href (@b) {
     $branch = $d{branch};
     $home = $d{home};
     $hash = $d{hash};
+    $year = $d{year};
     if ($version) {
 	print_command("${name_in_caps}_VERSION", $version);
     }
@@ -106,6 +107,7 @@ foreach $href (@b) {
 	if ($url) {print_command("${name_in_caps}_URL", $url);}
 	if ($branch) {print_command("${name_in_caps}_BRANCH", $branch);}
 	if ($hash) {print_command("${name_in_caps}_HASH", $hash);}
+	if ($year) {print_command("${name_in_caps}_YEAR", $year);}
     }
 }
 

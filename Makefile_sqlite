@@ -1,13 +1,12 @@
 PWD = $(shell pwd)
 
-SQLITE_VERSION = 3130000
-SQLITE_YEAR = 2016
 ifdef SQLITE_DIRTAG
  SQLITE_DIR = sqlite-$(SQLITE_VERSION)^$(SQLITE_DIRTAG)
 else
  SQLITE_DIR = sqlite-$(SQLITE_VERSION)
 endif
-TARFILE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+TARFILE_VERSION_TAG =  $(shell $(BUILD_SCRIPTS)/sqlite_version.sh $(SQLITE_VERSION))
+TARFILE = sqlite-autoconf-$(TARFILE_VERSION_TAG).tar.gz
 SQLITE_HOME = $(PWD)/$(SQLITE_DIR)
 
 all: $(SQLITE_HOME)/.install_done
