@@ -29,7 +29,7 @@ eval $definitions;
 %prereqs = (root => [],
 	    clhep => [],
 	    jana => ['evio', 'ccdb', 'xerces-c', 'root'],
-	    'sim-recon' => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb', 'rcdb'],
+	    'sim-recon' => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb', 'rcdb', 'sqlitecpp'],
 	    hdds => ['xerces-c', 'root'],
 	    cernlib => [],
 	    'xerces-c' => [],
@@ -37,8 +37,11 @@ eval $definitions;
 	    ccdb => [],
 	    hdgeant4 => ['geant4', 'sim-recon', 'jana', 'ccdb'],
 	    gluex_root_analysis => ['sim-recon', 'root'],
-	    amptools => ['root'],
-	    rcdb => ['sqlitecpp']);
+	    amptools => ['root']);
+# add a prerequisite for sqlitecpp only if SQLITE_HOME is defined
+if (defined $ENV{SQLITE_HOME}) {
+    $prereqs{sqlitecpp} = ['sqlite'];
+}
 
 @prepackages = @{$prereqs{$package_in}};
 $itemno = 0;
