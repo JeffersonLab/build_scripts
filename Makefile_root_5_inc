@@ -1,9 +1,6 @@
 ROOTDIR=root_$(ROOT_VERSION)
 
-all: prod_link
-
-prod_link: $(ROOTDIR)/.make_done
-	test -L prod || ln -s $(ROOTDIR) prod # will not overwrite existing link
+all: $(ROOTDIR)/.make_done
 
 $(TARFILE):
 	wget https://root.cern.ch/download/$@

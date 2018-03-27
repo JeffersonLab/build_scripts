@@ -27,7 +27,7 @@ endif
 
 HD_UTILITIES_HOME = $(PWD)/$(HD_UTILITIES_DIR)
 
-all: $(HD_UTILITIES_HOME)/hd_utilities_prereqs_version.xml prod_link
+all: $(HD_UTILITIES_HOME)/hd_utilities_prereqs_version.xml
 
 $(TARFILE):
 	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/hd_utilities/archive/$(TARFILE)
@@ -49,6 +49,3 @@ $(HD_UTILITIES_HOME)/.untar_done: $(TARFILE)
 
 $(HD_UTILITIES_HOME)/hd_utilities_prereqs_version.xml: $(SOURCE_CODE_TARGET)
 	cd $(HD_UTILITIES_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl hd_utilities
-
-prod_link: $(HD_UTILITIES_HOME)/hd_utilities_prereqs_version.xml
-	test -L prod || ln -s $(HD_UTILITIES_DIR) prod # will not overwrite existing link

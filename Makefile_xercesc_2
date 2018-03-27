@@ -4,10 +4,7 @@ TARFILE=xerces-c-src_$(VERSION).tar.gz
 PWD := $(shell pwd)
 export XERCESCROOT=$(PWD)/xerces-c-src_$(VERSION)
 
-all: prod_link
-
-prod_link: make_xerces
-	   test -L prod || ln -s xerces-c-src_$(VERSION) prod # will not overwrite existing link 
+all: make_xerces
 
 make_xerces: $(XERCESCROOT)/.configure_done 
 	$(MAKE) -C$(XERCESCROOT)/src/xercesc

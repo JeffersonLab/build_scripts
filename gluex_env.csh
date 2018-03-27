@@ -61,7 +61,7 @@ if ($status) setenv PATH $CERN_ROOT/bin:$PATH
 # Geant4
 if (! $?G4ROOT) setenv G4ROOT $GLUEX_TOP/geant4/prod
 if ( -e $G4ROOT) then
-    set g4setup=`find $G4ROOT/share/ -name geant4make.csh`
+    set g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.csh`
     if ( -f $g4setup) then
 	set g4dir=`dirname $g4setup`
 	source $g4setup $g4dir
@@ -127,6 +127,10 @@ setenv PATH ${MCWRAPPER_CENTRAL}:$PATH
 if ($?ROOT_ANALYSIS_HOME) then
     if (-e $ROOT_ANALYSIS_HOME) source $ROOT_ANALYSIS_HOME/env_analysis.csh
 endif
+#
+# sqlitecpp
+#
+if (! $?SQLITECPP_HOME) setenv SQLITECPP_HOME $GLUEX_TOP/sqlitecpp/prod
 #
 if (! $?JANA_PLUGIN_PATH) then
     set jpp_save=""

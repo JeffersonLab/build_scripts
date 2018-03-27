@@ -73,7 +73,7 @@ fi
 if [ -z "$G4ROOT" ]; then export G4ROOT=$GLUEX_TOP/geant4/prod; fi
 if [ -e "$G4ROOT" ]
     then
-    g4setup=`find $G4ROOT/share/ -name geant4make.sh`
+    g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.sh`
     if [ -f "$g4setup" ]; then source $g4setup; fi
     unset g4setup
 fi
@@ -141,6 +141,10 @@ export PATH=${MCWRAPPER_CENTRAL}:$PATH
 if [ -n "$ROOT_ANALYSIS_HOME" ]; then
     if [ -e "$ROOT_ANALYSIS_HOME" ]; then source $ROOT_ANALYSIS_HOME/env_analysis.sh ; fi
 fi
+#
+# SQLiteCpp
+#
+if [ -z "$SQLITECPP_HOME" ]; then export SQLITECPP_HOME=$GLUEX_TOP/sqlitecpp/prod; fi
 #
 if [ -z "$JANA_PLUGIN_PATH" ]
     then
