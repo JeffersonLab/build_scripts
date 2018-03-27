@@ -4,25 +4,11 @@ if ($1 == '-v') then
 else
     set gluex_env_verbose=0
 endif
-# set non-default compiler
-setenv HOSTNAME `hostname`
-set VORTEX_WORKER=`echo $HOSTNAME | grep -c "vx"`
-set HURRICANE_WORKER=`echo $HOSTNAME | grep -c "hu"`
-set WHIRLWIND_WORKER=`echo $HOSTNAME | grep -c "wh"`
-if ($HOSTNAME == "hurricane.sciclone.wm.edu" || $HURRICANE_WORKER == 1 || $HOSTNAME == "whirlwind.sciclone.wm.edu" || $WHIRLWIND_WORKER == 1) then
-    module unload pgi/11.10
-    module load python/2.7.2
-    module load cmake/2.8.8
-else if ($HOSTNAME == "vortex.sciclone.wm.edu" || $VORTEX_WORKER == 1) then
-    module unload pgi/14.3
-    module load python/2.7.8
-    module load cmake/3.5.2
-endif
 
-module load gcc/4.8.4
 # scons 
 setenv PATH $HOME/builds/external/scons-2.4.1/bin:${PATH}
 setenv PATH $HOME/builds/external/usr/bin:${PATH}
+
 # general stuff
 if (! $?GLUEX_TOP) setenv GLUEX_TOP $HOME/builds
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $HOME/build_scripts
@@ -30,8 +16,12 @@ if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 set machine_type=`uname -m`
 
+setenv HOSTNAME `hostname`
+set VORTEX_WORKER=`echo $HOSTNAME | grep -c "vx"`
+set HURRICANE_WORKER=`echo $HOSTNAME | grep -c "hu"`
+set WHIRLWIND_WORKER=`echo $HOSTNAME | grep -c "wh"`
 if ($HOSTNAME == "vortex.sciclone.wm.edu" || $HOSTNAME == "hurricane.sciclone.wm.edu") then
-    setenv BMS_OSNAME Linux_RHEL6-x86_64-gcc4.8.4/
+    setenv BMS_OSNAME Linux_RHEL6-x86_64-gcc4.8.4/ 
 else if ($HURRICANE_WORKER == 1 || $WHIRLWIND_WORKER == 1 || $VORTEX_WORKER == 1) then
     setenv BMS_OSNAME Linux_CentOS6-x86_64-gcc4.8.4/
 endif
@@ -154,7 +144,6 @@ if ($gluex_env_verbose) then
     echo BMS_OSNAME =  $BMS_OSNAME
     echo BUILD_SCRIPTS = $BUILD_SCRIPTS
     echo CERN_ROOT =  $CERN_ROOT
-    echo CLHEP = $CLHEP
     echo GLUEX_TOP = $GLUEX_TOP
     echo HALLD_HOME =  $HALLD_HOME
     echo HALLD_MY = $HALLD_MY
