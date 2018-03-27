@@ -29,6 +29,13 @@ if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $HOME/build_scripts
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 set machine_type=`uname -m`
+
+if ($HOSTNAME == "vortex.sciclone.wm.edu" || $HOSTNAME == "hurricane.sciclone.wm.edu") then
+    setenv BMS_OSNAME Linux_RHEL6-x86_64-gcc4.8.4/
+else if ($HURRICANE_WORKER == 1 || $WHIRLWIND_WORKER == 1 || $VORTEX_WORKER == 1) then
+    setenv BMS_OSNAME Linux_CentOS6-x86_64-gcc4.8.4/
+endif
+
 # xerces-c++
 if (! $?XERCESCROOT) setenv XERCESCROOT $GLUEX_TOP/xerces-c/prod
 setenv XERCES_INCLUDE $XERCESCROOT/include
