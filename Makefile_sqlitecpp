@@ -1,5 +1,5 @@
 PWD = $(shell pwd)
-CMAKE = cmake -E env CXXFLAGS="-I$(SQLITE_HOME)/include" cmake
+CMAKE = cmake3 -E env CXXFLAGS="-I$(SQLITE_HOME)/include" cmake3
 
 ifdef SQLITECPP_VERSION
  SOURCE_CODE_TARGET = $(SQLITECPP_HOME)/.untar_done
