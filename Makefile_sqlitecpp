@@ -1,5 +1,11 @@
 PWD = $(shell pwd)
-CMAKE = cmake3 -E env CXXFLAGS="-I$(SQLITE_HOME)/include" cmake3
+CMAKE3_BIN := $(shell which cmake3)
+ifneq ($(CMAKE3_BIN),)
+   CMAKE_BIN = cmake3
+else
+   CMAKE_BIN = cmake
+endif
+CMAKE = $(CMAKE_BIN) -E env CXXFLAGS="-I$(SQLITE_HOME)/include" $(CMAKE_BIN)
 
 ifdef SQLITECPP_VERSION
  SOURCE_CODE_TARGET = $(SQLITECPP_HOME)/.untar_done
@@ -47,7 +53,6 @@ $(SQLITECPP_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(SQLITECPP_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
-	@echo JLAB6 = $(JLAB6)
 	cd $(SQLITECPP_HOME) ; mkdir -p build
 	cd $(SQLITECPP_HOME)/build; $(CMAKE) \
 	   	 -DSQLITECPP_INTERNAL_SQLITE=OFF \
