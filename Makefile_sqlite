@@ -22,7 +22,16 @@ $(SQLITE_HOME)/.untar_done: $(TARFILE)
 	rmdir -v untar_temp_dir
 	date > $@
 
-$(SQLITE_HOME)/.configure_done: $(SQLITE_HOME)/.untar_done
+$(SQLITE_HOME)/.patch_done: $(SQLITE_HOME)/.untar_done
+	cd $(SQLITE_HOME) ; \
+	patch configure.ac < $(BUILD_SCRIPTS)/patches/sqlite/configure.ac.patch
+	date >$@
+
+$(SQLITE_HOME)/.autoreconf_done: $(SQLITE_HOME)/.patch_done
+	cd $(SQLITE_HOME) ; autoreconf --force --install
+	date >$@
+
+$(SQLITE_HOME)/.configure_done: $(SQLITE_HOME)/.autoreconf_done
 	cd $(SQLITE_HOME) ; ./configure --prefix=$(SQLITE_HOME)
 	date > $@
 

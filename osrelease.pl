@@ -201,7 +201,7 @@ if ($processor eq 'unknown') {
 
 # container tag
 $container_tag = "";
-	if (-d "/.singularity.d") {
+	if (-d "/.singularity.d" || -f "/.dockerenv") {
 	    $container_tag = "-cntr";
 	}
 
