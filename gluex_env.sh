@@ -142,6 +142,10 @@ if [ -n "$ROOT_ANALYSIS_HOME" ]; then
     if [ -e "$ROOT_ANALYSIS_HOME" ]; then source $ROOT_ANALYSIS_HOME/env_analysis.sh ; fi
 fi
 #
+# SQLiteCpp
+#
+if [ -z "$SQLITECPP_HOME" ]; then export SQLITECPP_HOME=$GLUEX_TOP/sqlitecpp/prod; fi
+#
 if [ -z "$JANA_PLUGIN_PATH" ]
     then
     jpp_save=""

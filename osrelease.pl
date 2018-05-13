@@ -199,6 +199,12 @@ if ($processor eq 'unknown') {
 	chomp $processor;
 }
 
+# container tag
+$container_tag = "";
+	if (-d "/.singularity.d") {
+	    $container_tag = "-cntr";
+	}
+
 # Finally, form and print the complete string to stdout
-print "${uname}${release}-${processor}-${compiler_version}\n";
+print "${uname}${release}-${processor}-${compiler_version}${container_tag}\n";
 exit;

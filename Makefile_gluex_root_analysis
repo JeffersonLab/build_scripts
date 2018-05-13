@@ -36,7 +36,7 @@ endif
 
 GLUEX_ROOT_ANALYSIS_HOME = $(PWD)/$(GLUEX_ROOT_ANALYSIS_DIR)
 
-all: prod_link
+all: $(GLUEX_ROOT_ANALYSIS_HOME)/gluex_root_analysis_prereqs_version.xml
 
 $(TARFILE):
 	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/gluex_root_analysis/archive/$(TARFILE)
@@ -62,6 +62,3 @@ $(GLUEX_ROOT_ANALYSIS_HOME)/.make_script_done: $(SOURCE_CODE_TARGET)
 
 $(GLUEX_ROOT_ANALYSIS_HOME)/gluex_root_analysis_prereqs_version.xml: $(GLUEX_ROOT_ANALYSIS_HOME)/.make_script_done
 	cd $(GLUEX_ROOT_ANALYSIS_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl gluex_root_analysis
-
-prod_link: $(GLUEX_ROOT_ANALYSIS_HOME)/gluex_root_analysis_prereqs_version.xml
-	test -L prod || ln -s gluex_root_analysis prod # will not overwrite existing link

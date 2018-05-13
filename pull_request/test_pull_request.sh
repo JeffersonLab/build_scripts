@@ -21,7 +21,8 @@ cp $BUILD_SCRIPTS/pull_request/plugins.txt .
 cp $BUILD_SCRIPTS/pull_request/control.in .
 LOG=log; mkdir $LOG
 source ../$osrelease/setenv.sh
-EVIO=/work/halld/pull_request_test/hd_rawdata_030858_8k.evio
+#EVIO=/work/halld/pull_request_test/hd_rawdata_030858_8k.evio
+EVIO=/cache/halld/RunPeriod-2017-01/rawdata/Run030858/hd_rawdata_030858_000.evio
 EVENTS=500
 THREADS=8
 TLIMIT=180
