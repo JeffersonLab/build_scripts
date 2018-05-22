@@ -94,7 +94,7 @@ if [ -z "$CCDB_CONNECTION" ]; then export CCDB_CONNECTION=mysql://ccdb_user@hall
 if [ -z "$RCDB_HOME" ]; then export RCDB_HOME=$GLUEX_TOP/rcdb/prod; fi
 . $BUILD_SCRIPTS/rcdb_env.sh
 if [ -z "$RCDB_CONNECTION" ]; then export RCDB_CONNECTION=mysql://rcdb@hallddb.jlab.org/rcdb; fi
-# jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
+# jana
 if [ -z "$JANA_HOME" ]; then export JANA_HOME=$GLUEX_TOP/jana/prod/$BMS_OSNAME; fi
 if [ -z "$JANA_CALIB_URL" ]
     then export JANA_CALIB_URL=$CCDB_CONNECTION
@@ -109,7 +109,7 @@ if [ `echo $LD_LIBRARY_PATH | grep -c $EVIOROOT/lib` -eq 0 ]
 fi
 # hdds
 if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=$GLUEX_TOP/hdds/prod; fi
-export JANA_GEOMETRY_URL=xmlfile://$HDDS_HOME/main_HDDS.xml
+export JANA_GEOMETRY_URL=ccdb:///GEOMETRY/main_HDDS.xml
 # sim-recon
 if [ -z "$HALLD_HOME" ]; then export HALLD_HOME=$GLUEX_TOP/sim-recon/prod; fi
 if [ -z "$HALLD_MY" ]; then export HALLD_MY=$HOME/halld_my; fi
