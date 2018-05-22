@@ -68,7 +68,7 @@ if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb.jlab.o
 if (! $?RCDB_HOME) setenv RCDB_HOME $GLUEX_TOP/rcdb/prod
 source $BUILD_SCRIPTS/rcdb_env.csh
 if (! $?RCDB_CONNECTION) setenv RCDB_CONNECTION mysql://rcdb@hallddb.jlab.org/rcdb
-# jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
+# jana
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod/$BMS_OSNAME
 if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL $CCDB_CONNECTION
 echo $PATH | grep $JANA_HOME/bin > /dev/null
@@ -79,7 +79,7 @@ echo $LD_LIBRARY_PATH | grep $EVIOROOT/lib > /dev/null
 if ($status) setenv LD_LIBRARY_PATH  $EVIOROOT/lib:$LD_LIBRARY_PATH
 # hdds
 if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
-setenv JANA_GEOMETRY_URL xmlfile://$HDDS_HOME/main_HDDS.xml
+setenv JANA_GEOMETRY_URL ccdb:///GEOMETRY/main_HDDS.xml
 # halld
 if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/sim-recon/prod
 if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
