@@ -87,6 +87,7 @@ echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null
 if ($status) setenv PATH $HALLD_HOME/${BMS_OSNAME}/bin:$PATH
 echo $PATH | grep $HALLD_MY/$BMS_OSNAME/bin > /dev/null
 if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
+setenv PYTHONPATH $HALLD_HOME/$BMS_OSNAME/python2:$PYTHONPATH
 #
 # HDGeant4
 #
