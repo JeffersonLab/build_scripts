@@ -119,6 +119,7 @@ fi
 if [ `echo $PATH | grep -c $HALLD_MY/$BMS_OSNAME/bin` -eq 0 ]
     then export PATH=$HALLD_MY/${BMS_OSNAME}/bin:$PATH
 fi
+export PYTHONPATH=$HALLD_HOME/$BMS_OSNAME/python2:$PYTHONPATH
 #
 # HDGeant4
 #
