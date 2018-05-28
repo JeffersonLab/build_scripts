@@ -1,6 +1,5 @@
 #!/bin/tcsh
 setenv TODAYS_DATE `date +%F`
-source /group/halld/Software/hd_utilities/jlab_builds/jlab_tricks.csh
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 setenv TARGET_DIR /u/scratch/$USER/nightly/$TODAYS_DATE/$BMS_OSNAME
