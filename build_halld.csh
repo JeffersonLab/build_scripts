@@ -15,6 +15,10 @@ $BUILD_SCRIPTS/customize_version.pl \
     -a $TARGET_DIR/gluex_root_analysis
 # set-up the environment
 source $BUILD_SCRIPTS/gluex_env_jlab.csh $xml
+setenv HDDS_URL file:///group/halld/Repositories/hdds
+setenv SIM_RECON_URL file:///group/halld/Repositories/sim-recon
+setenv HDGEANT4_URL file:///group/halld/Repositories/hdgeant4
+setenv GLUEX_ROOT_ANALYSIS_URL file:///group/halld/Repositories/gluex_root_analysis
 # go to the target directory
 cd $TARGET_DIR
 # make hdds
