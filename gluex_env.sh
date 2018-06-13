@@ -46,6 +46,9 @@ fi
 if [ `echo $LD_LIBRARY_PATH | grep -c $ROOTSYS/lib` -eq 0 ]
     then export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
 fi
+if [ `echo $PYTHONPATH | grep -c $ROOTSYS/lib` -eq 0 ]
+    then export PYTHONPATH=$ROOTSYS/lib:$PYTHONPATH
+fi
 # cernlib
 if [ -z "$CERN" ]; then export CERN=$GLUEX_TOP/cernlib; fi
 if [ -z "$CERN_LEVEL" ]; then 					#We don't have CERN_LEVEL
