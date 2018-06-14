@@ -37,6 +37,8 @@ if ($?BUILD_SCRIPTS) then
     # clean PYTHONPATH
     if ($?CCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`
     if ($?RCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $RCDB_HOME/python`
+    if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl -p $ROOTSYS/lib`
+    if ($?HALLD_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_HOME/$BMS_OSNAME/python2`
     eval `$BUILD_SCRIPTS/delpath.pl -p`
 endif
 # clean_environment
@@ -107,6 +109,7 @@ unsetenv HD_UTILITIES_HOME
 unsetenv MCWRAPPER_CENTRAL
 unsetenv ROOT_ANALYSIS_HOME
 unsetenv SQLITECPP_HOME
+unsetenv SQLITE_HOME
 # versions
 unsetenv SIM_RECON_VERSION
 unsetenv JANA_VERSION
@@ -124,6 +127,7 @@ unsetenv HD_UTILITIES_VERSION
 unsetenv GLUEX_ROOT_ANALYSIS_VERSION
 unsetenv AMPTOOLS_VERSION
 unsetenv SQLITECPP_VERSION
+unsetenv SQLITE_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
 unsetenv JANA_URL
@@ -155,6 +159,7 @@ unsetenv HD_UTILITIES_DIRTAG
 unsetenv GLUEX_ROOT_ANALYSIS_DIRTAG
 unsetenv AMPTOOLS_DIRTAG
 unsetenv SQLITECPP_DIRTAG
+unsetenv SQLITE_DIRTAG
 # git branches
 unsetenv SIM_RECON_BRANCH
 unsetenv JANA_BRANCH
@@ -185,3 +190,5 @@ unsetenv HDGEANT4_HASH
 unsetenv HD_UTILITIES_HASH
 unsetenv GLUEX_ROOT_ANALYSIS_HASH
 unsetenv SQLITECPP_HASH
+# misc
+unsetenv SQLITE_YEAR

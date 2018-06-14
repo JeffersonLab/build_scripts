@@ -8,6 +8,7 @@ endif
 if (! $?GLUEX_TOP) setenv GLUEX_TOP $HOME/gluex_top
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
+if (! $?PYTHONPATH) setenv PYTHONPATH ''
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 set machine_type=`uname -m`
 # xerces-c++
@@ -21,6 +22,8 @@ echo $PATH | grep $ROOTSYS/bin > /dev/null
 if ($status) setenv PATH $ROOTSYS/bin:$PATH
 echo $LD_LIBRARY_PATH | grep $ROOTSYS/lib > /dev/null
 if ($status) setenv LD_LIBRARY_PATH  $ROOTSYS/lib:$LD_LIBRARY_PATH
+echo $PYTHONPATH | grep $ROOTSYS/lib > /dev/null
+if ($status) setenv PYTHONPATH $ROOTSYS/lib:$PYTHONPATH
 # cernlib
 if (! $?CERN ) setenv CERN $GLUEX_TOP/cernlib
 if (! $?CERN_LEVEL) then

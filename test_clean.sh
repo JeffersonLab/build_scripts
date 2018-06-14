@@ -2,7 +2,7 @@
 rm -f before_setup.tmp after_setup.tmp after_clean.tmp
 printenv | sort > before_setup.tmp
 echo source test.sh
-source test.sh -v
+source test.sh
 printenv | sort > after_setup.tmp
 echo source gluex_env_clean.sh
 source $BUILD_SCRIPTS/gluex_env_clean.sh
