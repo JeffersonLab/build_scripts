@@ -84,13 +84,27 @@ if ($status) setenv LD_LIBRARY_PATH  $EVIOROOT/lib:$LD_LIBRARY_PATH
 if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
 setenv JANA_GEOMETRY_URL ccdb:///GEOMETRY/main_HDDS.xml
 # halld
-if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/sim-recon/prod
-if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
-echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null
-if ($status) setenv PATH $HALLD_HOME/${BMS_OSNAME}/bin:$PATH
-echo $PATH | grep $HALLD_MY/$BMS_OSNAME/bin > /dev/null
-if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
-setenv PYTHONPATH $HALLD_HOME/$BMS_OSNAME/python2:$PYTHONPATH
+if ($?HALLD_HOME) then
+    echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null
+    if ($status) setenv PATH $HALLD_HOME/${BMS_OSNAME}/bin:$PATH
+    setenv PYTHONPATH $HALLD_HOME/$BMS_OSNAME/python2:$PYTHONPATH
+endif
+# halld_recon
+if ($?HALLD_RECON_HOME) then
+    echo $PATH | grep $HALLD_RECON_HOME/$BMS_OSNAME/bin > /dev/null
+    if ($status) setenv PATH $HALLD_RECON_HOME/${BMS_OSNAME}/bin:$PATH
+endif
+# halld_sim
+if ($?HALLD_SIM_HOME) then
+    echo $PATH | grep $HALLD_SIM_HOME/$BMS_OSNAME/bin > /dev/null
+    if ($status) setenv PATH $HALLD_SIM_HOME/${BMS_OSNAME}/bin:$PATH
+endif
+# halld_my
+if (! $?HALLD_MY) then
+    setenv HALLD_MY $HOME/halld_my
+    echo $PATH | grep $HALLD_MY/$BMS_OSNAME/bin > /dev/null
+    if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
+endif
 #
 # HDGeant4
 #
@@ -122,7 +136,11 @@ if (! $?JANA_PLUGIN_PATH) then
 else
     set jpp_save=":$JANA_PLUGIN_PATH"
 endif
-setenv JANA_PLUGIN_PATH ${HALLD_MY}/${BMS_OSNAME}/plugins:${HALLD_HOME}/${BMS_OSNAME}/plugins:${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
+setenv JANA_PLUGIN_PATH ${BMS_OSNAME}/plugins:${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
+if ($?HALLD_HOME) then
+    setenv JANA_PLUGIN_PATH ${HALLD_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+endif
+setenv JANA_PLUGIN_PATH ${HALLD_MY}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
 unset jpp_save
 # refresh the list of items in the path
 rehash

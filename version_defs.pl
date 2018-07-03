@@ -18,7 +18,9 @@
                   gluex_root_analysis => 'ROOT_ANALYSIS_HOME',
                   amptools => 'AMPTOOLS_HOME',
                   sqlitecpp => 'SQLITECPP_HOME',
-		  sqlite => 'SQLITE_HOME');
+		  sqlite => 'SQLITE_HOME',
+                  halld_sim => 'HALLD_SIM_HOME',
+                  halld_recon => 'HALLD_RECON_HOME');
 
 %dir_prefix = (root => 'root[_-]',
 	       clhep => '',
@@ -36,7 +38,9 @@
                gluex_root_analysis => 'gluex_root_analysis-',
                amptools => 'AmpTools-',
                sqlitecpp => 'SQLiteCpp-',
-               sqlite => 'sqlite-');
+               sqlite => 'sqlite-',
+               halld_sim => 'halld_sim_',
+               halld_recon => 'halld_recon_');
 
 $unames = `uname -s`;
 chomp $unames;
@@ -59,4 +63,6 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
                gluex_root_analysis => '',
                amptools => '',
                sqlitecpp => '',
-               sqlite => '');
+               sqlite => '',
+               halld_sim => '',
+               halld_recon => '');
