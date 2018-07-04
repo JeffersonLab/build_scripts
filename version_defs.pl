@@ -39,8 +39,8 @@
                amptools => 'AmpTools-',
                sqlitecpp => 'SQLiteCpp-',
                sqlite => 'sqlite-',
-               halld_sim => 'halld_sim_',
-               halld_recon => 'halld_recon_');
+               halld_sim => 'halld_sim-',
+               halld_recon => 'halld_recon-');
 
 $unames = `uname -s`;
 chomp $unames;
