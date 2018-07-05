@@ -114,15 +114,36 @@ fi
 if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=$GLUEX_TOP/hdds/prod; fi
 export JANA_GEOMETRY_URL=ccdb:///GEOMETRY/main_HDDS.xml
 # sim-recon
-if [ -z "$HALLD_HOME" ]; then export HALLD_HOME=$GLUEX_TOP/sim-recon/prod; fi
-if [ -z "$HALLD_MY" ]; then export HALLD_MY=$HOME/halld_my; fi
-if [ `echo $PATH | grep -c $HALLD_HOME/$BMS_OSNAME/bin` -eq 0 ]
-    then export PATH=$HALLD_HOME/${BMS_OSNAME}/bin:$PATH
+if [ -z "$HALLD_HOME" ]
+    then
+    if [ `echo $PATH | grep -c $HALLD_HOME/$BMS_OSNAME/bin` -eq 0 ]
+        then export PATH=$HALLD_HOME/${BMS_OSNAME}/bin:$PATH
+    fi
+    export PYTHONPATH=$HALLD_HOME/$BMS_OSNAME/python2:$PYTHONPATH
 fi
-if [ `echo $PATH | grep -c $HALLD_MY/$BMS_OSNAME/bin` -eq 0 ]
-    then export PATH=$HALLD_MY/${BMS_OSNAME}/bin:$PATH
+# halld_recon
+if [ -z "$HALLD_RECON_HOME" ]
+    then
+    if [ `echo $PATH | grep -c $HALLD_RECON_HOME/$BMS_OSNAME/bin` -eq 0 ]
+        then export PATH=$HALLD_RECON_HOME/${BMS_OSNAME}/bin:$PATH
+    fi
+    export PYTHONPATH=$HALLD_RECON_HOME/$BMS_OSNAME/python2:$PYTHONPATH
 fi
-export PYTHONPATH=$HALLD_HOME/$BMS_OSNAME/python2:$PYTHONPATH
+# halld_sim
+if [ -z "$HALLD_SIM_HOME" ]
+    then
+    if [ `echo $PATH | grep -c $HALLD_SIM_HOME/$BMS_OSNAME/bin` -eq 0 ]
+        then export PATH=$HALLD_SIM_HOME/${BMS_OSNAME}/bin:$PATH
+    fi
+fi
+# halld_my
+if [ -z "$HALLD_MY" ]
+    then
+    export HALLD_MY=$HOME/halld_my
+    if [ `echo $PATH | grep -c $HALLD_MY/$BMS_OSNAME/bin` -eq 0 ]
+        then export PATH=$HALLD_MY/${BMS_OSNAME}/bin:$PATH
+    fi
+fi
 #
 # HDGeant4
 #
@@ -156,7 +177,20 @@ if [ -z "$JANA_PLUGIN_PATH" ]
 else
     jpp_save=":$JANA_PLUGIN_PATH"
 fi
-export JANA_PLUGIN_PATH=${HALLD_MY}/${BMS_OSNAME}/plugins:${HALLD_HOME}/${BMS_OSNAME}/plugins:${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
+export JANA_PLUGIN_PATH=${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
+if [ -n "$HALLD_HOME" ]
+    then
+    export JANA_PLUGIN_PATH=${HALLD_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+fi
+if [ -n "$HALLD_RECON_HOME" ]
+    then
+    export JANA_PLUGIN_PATH=${HALLD_RECON_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+fi
+if [ -n "$HALLD_SIM_HOME" ]
+    then
+    export JANA_PLUGIN_PATH=${HALLD_SIM_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+fi
+export JANA_PLUGIN_PATH=${HALLD_MY}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
 unset jpp_save
 # refresh the list of items in the path
 hash -r

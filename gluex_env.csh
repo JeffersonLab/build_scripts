@@ -93,6 +93,7 @@ endif
 if ($?HALLD_RECON_HOME) then
     echo $PATH | grep $HALLD_RECON_HOME/$BMS_OSNAME/bin > /dev/null
     if ($status) setenv PATH $HALLD_RECON_HOME/${BMS_OSNAME}/bin:$PATH
+    setenv PYTHONPATH $HALLD_RECON_HOME/$BMS_OSNAME/python2:$PYTHONPATH
 endif
 # halld_sim
 if ($?HALLD_SIM_HOME) then
@@ -136,9 +137,15 @@ if (! $?JANA_PLUGIN_PATH) then
 else
     set jpp_save=":$JANA_PLUGIN_PATH"
 endif
-setenv JANA_PLUGIN_PATH ${BMS_OSNAME}/plugins:${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
+setenv JANA_PLUGIN_PATH ${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
 if ($?HALLD_HOME) then
     setenv JANA_PLUGIN_PATH ${HALLD_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+endif
+if ($?HALLD_RECON_HOME) then
+    setenv JANA_PLUGIN_PATH ${HALLD_RECON_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+endif
+if ($?HALLD_SIM_HOME) then
+    setenv JANA_PLUGIN_PATH ${HALLD_SIM_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
 endif
 setenv JANA_PLUGIN_PATH ${HALLD_MY}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
 unset jpp_save
