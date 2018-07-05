@@ -219,5 +219,5 @@ sqlite_make:
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
-	@echo HALLD = ${HALLD}
+	@echo HALLD_HOME = ${HALLD_HOME}
 	@echo ROOT_OF_ALL = ${ROOT_OF_ALL}
