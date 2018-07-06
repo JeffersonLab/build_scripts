@@ -1,6 +1,7 @@
 @packages = (root, clhep, jana, 'sim-recon', hdds, cernlib,
 	     'xerces-c', ccdb, geant4, evio, rcdb, hdgeant4,
-	     hd_utilities, gluex_root_analysis, amptools, sqlitecpp, sqlite);
+	     hd_utilities, gluex_root_analysis, amptools, sqlitecpp, sqlite,
+	     halld_sim, halld_recon);
 
 %home_variable = (root => 'ROOTSYS',
 		  clhep => 'CLHEP',
