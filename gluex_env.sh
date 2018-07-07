@@ -114,7 +114,7 @@ fi
 if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=$GLUEX_TOP/hdds/prod; fi
 export JANA_GEOMETRY_URL=ccdb:///GEOMETRY/main_HDDS.xml
 # sim-recon
-if [ -z "$HALLD_HOME" ]
+if [ -n "$HALLD_HOME" ]
     then
     if [ `echo $PATH | grep -c $HALLD_HOME/$BMS_OSNAME/bin` -eq 0 ]
         then export PATH=$HALLD_HOME/${BMS_OSNAME}/bin:$PATH
@@ -122,7 +122,7 @@ if [ -z "$HALLD_HOME" ]
     export PYTHONPATH=$HALLD_HOME/$BMS_OSNAME/python2:$PYTHONPATH
 fi
 # halld_recon
-if [ -z "$HALLD_RECON_HOME" ]
+if [ -n "$HALLD_RECON_HOME" ]
     then
     if [ `echo $PATH | grep -c $HALLD_RECON_HOME/$BMS_OSNAME/bin` -eq 0 ]
         then export PATH=$HALLD_RECON_HOME/${BMS_OSNAME}/bin:$PATH
@@ -130,7 +130,7 @@ if [ -z "$HALLD_RECON_HOME" ]
     export PYTHONPATH=$HALLD_RECON_HOME/$BMS_OSNAME/python2:$PYTHONPATH
 fi
 # halld_sim
-if [ -z "$HALLD_SIM_HOME" ]
+if [ -n "$HALLD_SIM_HOME" ]
     then
     if [ `echo $PATH | grep -c $HALLD_SIM_HOME/$BMS_OSNAME/bin` -eq 0 ]
         then export PATH=$HALLD_SIM_HOME/${BMS_OSNAME}/bin:$PATH
