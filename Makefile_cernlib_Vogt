@@ -6,11 +6,7 @@ INSTALL_FILE = cernlib.2005.install.$(VERSION_DATE).tgz
 ALL_FILE = cernlib-2005-all-new.tgz
 DIST_FILES = $(ALL_FILE) $(CORR_FILE) $(INSTALL_FILE)
 
-ifndef GVMS_TEST
-all: .build_done
-else
-all: .unpack_done
-endif
+all: .error_check_done
 
 $(DIST_FILES):
 	wget --no-check-certificate http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
