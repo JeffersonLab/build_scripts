@@ -2,6 +2,11 @@
 setenv TODAYS_DATE `date +%F`
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
+if ( $BMS_OSNAME =~ *CentOS6* || $BMS_OSNAME =~ *RHEL6* ) then
+    set GCC_HOME=/apps/gcc/4.9.2
+    setenv PATH ${GCC_HOME}/bin:${PATH}
+    setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
+endif
 setenv TARGET_DIR /u/scratch/$USER/nightly/$TODAYS_DATE/$BMS_OSNAME
 mkdir -pv $TARGET_DIR
 # make an xml file
