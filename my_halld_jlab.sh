@@ -22,7 +22,6 @@ echo source $BUILD_SCRIPTS/gluex_env_jlab.sh $mydir/${USER}_$mydate.xml \
 echo source $BUILD_SCRIPTS/gluex_env_jlab.csh $mydir/${USER}_$mydate.xml \
     > setup_gluex.csh
 source $BUILD_SCRIPTS/gluex_env_jlab.sh $mydir/${USER}_$mydate.xml
-show_gluex
 set -e
 make -f $BUILD_SCRIPTS/Makefile_hdds
 make -f $BUILD_SCRIPTS/Makefile_halld_recon
