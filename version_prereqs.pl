@@ -37,10 +37,13 @@ eval $definitions;
 	    ccdb => [],
 	    hdgeant4 => ['geant4', 'sim-recon', 'jana', 'ccdb'],
 	    gluex_root_analysis => ['sim-recon', 'root'],
-	    amptools => ['root']);
+	    amptools => ['root'],
+	    amptools => []);
 # add a prerequisite for sqlitecpp only if SQLITE_HOME is defined
 if (defined $ENV{SQLITE_HOME}) {
     $prereqs{sqlitecpp} = ['sqlite'];
+} else {
+    $prereqs{sqlitecpp} = [];
 }
 
 @prepackages = @{$prereqs{$package_in}};

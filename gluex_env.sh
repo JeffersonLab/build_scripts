@@ -137,7 +137,10 @@ fi
 # hd_utilities
 #
 if [ -z "$HD_UTILITIES_HOME" ]; then export HD_UTILITIES_HOME=$GLUEX_TOP/hd_utilities/prod; fi
-export MCWRAPPER_CENTRAL=$HD_UTILITIES_HOME/MCwrapper
+#
+# gluex_MCwrapper
+#
+if [ -z "$MCWRAPPER_CENTRAL" ]; then export MCWRAPPER_CENTRAL=$GLUEX_TOP/hd_utilities/prod; fi
 export PATH=${MCWRAPPER_CENTRAL}:$PATH
 #
 # gluex_root_analysis

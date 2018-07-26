@@ -1,6 +1,7 @@
 @packages = (root, clhep, jana, 'sim-recon', hdds, cernlib,
 	     'xerces-c', ccdb, geant4, evio, rcdb, hdgeant4,
-	     hd_utilities, gluex_root_analysis, amptools, sqlitecpp, sqlite);
+	     hd_utilities, gluex_root_analysis, amptools, sqlitecpp, sqlite,
+	     mcwrapper);
 
 %home_variable = (root => 'ROOTSYS',
 		  clhep => 'CLHEP',
@@ -18,7 +19,8 @@
                   gluex_root_analysis => 'ROOT_ANALYSIS_HOME',
                   amptools => 'AMPTOOLS_HOME',
                   sqlitecpp => 'SQLITECPP_HOME',
-		  sqlite => 'SQLITE_HOME');
+		  sqlite => 'SQLITE_HOME',
+		  mcwrapper => 'MCWRAPPER_CENTRAL');
 
 %dir_prefix = (root => 'root[_-]',
 	       clhep => '',
@@ -36,7 +38,8 @@
                gluex_root_analysis => 'gluex_root_analysis-',
                amptools => 'AmpTools-',
                sqlitecpp => 'SQLiteCpp-',
-               sqlite => 'sqlite-');
+               sqlite => 'sqlite-',
+               mcwrapper => 'gluex_MCwrapper-');
 
 $unames = `uname -s`;
 chomp $unames;
@@ -59,4 +62,5 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
                gluex_root_analysis => '',
                amptools => '',
                sqlitecpp => '',
-               sqlite => '');
+               sqlite => '',
+               mcwrapper => '');
