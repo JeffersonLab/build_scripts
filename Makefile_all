@@ -23,14 +23,15 @@ GLUEX_ROOT_ANALYSIS = ${ROOT_OF_ALL}/gluex_root_analysis
 AMPTOOLS_ALL = ${ROOT_OF_ALL}/amptools
 SQLITECPP = ${ROOT_OF_ALL}/sqlitecpp
 SQLITE = ${ROOT_OF_ALL}/sqlite
+MCWRAPPER = ${ROOT_OF_ALL}/gluex_MCwrapper
 HALLD_SIM = ${ROOT_OF_ALL}/halld_sim
 HALLD_RECON = ${ROOT_OF_ALL}/halld_recon
 
-all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build sqlite_build
+all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build sqlite_build mcwrapper_build
 
-gluex: env xerces_build cernlib_build lapack_build root_build geant4_build evio_build sqlite_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build
+gluex: env xerces_build cernlib_build lapack_build root_build geant4_build evio_build sqlite_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build mcwrapper_build
 
-gluex2: env xerces_build cernlib_build lapack_build root_build geant4_build evio_build sqlite_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build halld_recon_build halld_sim_build hd_utilities_build hdgeant4_build gluex_root_analysis_build
+gluex2: env xerces_build cernlib_build lapack_build root_build geant4_build evio_build sqlite_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build halld_recon_build halld_sim_build hd_utilities_build hdgeant4_build gluex_root_analysis_build mcwrapper_build
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -216,6 +217,14 @@ sqlite_dir:
 
 sqlite_make:
 	$(MAKE) -C${SQLITE} -f${BUILD_SCRIPTS}/Makefile_sqlite
+
+mcwrapper_build: mcwrapper_dir mcwrapper_make
+
+mcwrapper_dir:
+	test -d ${MCWRAPPER} || mkdir -pv ${MCWRAPPER}
+
+mcwrapper_make:
+	$(MAKE) -C${MCWRAPPER} -f${BUILD_SCRIPTS}/Makefile_mcwrapper
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}

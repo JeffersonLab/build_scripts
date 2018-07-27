@@ -1,7 +1,7 @@
 @packages = (root, clhep, jana, 'sim-recon', hdds, cernlib,
 	     'xerces-c', ccdb, geant4, evio, rcdb, hdgeant4,
 	     hd_utilities, gluex_root_analysis, amptools, sqlitecpp, sqlite,
-	     halld_sim, halld_recon);
+	     gluex_MCwrapper, halld_sim, halld_recon);
 
 %home_variable = (root => 'ROOTSYS',
 		  clhep => 'CLHEP',
@@ -20,6 +20,7 @@
                   amptools => 'AMPTOOLS_HOME',
                   sqlitecpp => 'SQLITECPP_HOME',
 		  sqlite => 'SQLITE_HOME',
+		  gluex_MCwrapper => 'MCWRAPPER_CENTRAL',
                   halld_sim => 'HALLD_SIM_HOME',
                   halld_recon => 'HALLD_RECON_HOME');
 
@@ -40,6 +41,7 @@
                amptools => 'AmpTools-',
                sqlitecpp => 'SQLiteCpp-',
                sqlite => 'sqlite-',
+               gluex_MCwrapper => 'gluex_MCwrapper-',
                halld_sim => 'halld_sim-',
                halld_recon => 'halld_recon-');
 
@@ -65,5 +67,6 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
                amptools => '',
                sqlitecpp => '',
                sqlite => '',
+               gluex_MCwrapper => '',
                halld_sim => '',
                halld_recon => '');

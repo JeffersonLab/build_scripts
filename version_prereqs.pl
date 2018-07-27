@@ -35,10 +35,15 @@ eval $definitions;
 	    'xerces-c' => [],
 	    geant4 => [],
 	    ccdb => [],
+	    hdgeant4 => ['geant4', 'sim-recon', 'jana', 'ccdb'],
+	    gluex_root_analysis => ['sim-recon', 'root'],
 	    amptools => ['root']);
+
 # add a prerequisite for sqlitecpp only if SQLITE_HOME is defined
 if (defined $ENV{SQLITE_HOME}) {
     $prereqs{sqlitecpp} = ['sqlite'];
+} else {
+    $prereqs{sqlitecpp} = [];
 }
 # set prerequisites for hdgeant4 and gluex_root_analysis according to whether
 # HALLD_HOME is set
