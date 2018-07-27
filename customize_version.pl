@@ -8,10 +8,12 @@ use XML::Writer;
 use IO::File;
 
 # get the file name
-getopts("i:o:s:g:4:a:h");
+$status=getopts("i:o:s:g:4:a:r:m:h");
 $filename_in = $opt_i;
 $filename_out = $opt_o;
 $halld_home = $opt_s;
+$halld_recon_home = $opt_r;
+$halld_sim_home = $opt_m;
 $hdds_home = $opt_g;
 $hdgeant4_home = $opt_4;
 $gluex_root_analysis_home = $opt_a;
@@ -25,10 +27,15 @@ if (!$filename_in || !$filename_out ) {
     print_usage();
     exit 1;
 }
-if (!($halld_home || $hdds_home || $hdgeant4_home || $gluex_root_analysis_home)) {
+if (!($halld_home || $halld_recon || $halld_sim || $hdds_home || $hdgeant4_home || $gluex_root_analysis_home)) {
     print "\nError: no custom home directories specified, no action taken\n\n";
     print_usage();
     exit 2;
+}
+if ($halld_home && $halld_recon || $halld_home && $halld_sim) {
+    print "\nError: halld_home used with either halld_recon or halld_sim or both, no action taken\n\n";
+    print_usage();
+    exit 3;
 }
 # slurp in the xml file
 $ref = XMLin($filename_in, KeyAttr=>[]);
@@ -60,6 +67,14 @@ foreach $href (@b) {
     if ($name eq "sim-recon" && $halld_home) {
 	if (uc($halld_home) ne "NONE") {
 	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_home");
+	}
+    } elsif ($name eq "halld_recon" && $halld_recon_home) {
+	if (uc($halld_recon_home) ne "NONE") {
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_recon_home");
+	}
+    } elsif ($name eq "halld_sim" && $halld_sim_home) {
+	if (uc($halld_sim_home) ne "NONE") {
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_sim_home");
 	}
     } elsif ($name eq "hdds" && $hdds_home) {
 	if (uc($hdds_home) ne "NONE") {

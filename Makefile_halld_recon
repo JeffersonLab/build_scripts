@@ -1,0 +1,76 @@
+# Makefile_halld_recon
+
+# Builds halld_recon under a new directory (HALLD_RECON_DIR) rooted in the current
+# working directory. The new directory has a name that depends on the
+# version being built.
+
+# HALLD_RECON_VERSION defines which tagged version to build. It should
+# correspond to the name of the desired directory in the repos/tags
+# directory of the repository. If left undefined, the latest version
+# will be checked out from the repos/trunk.
+
+PWD = $(shell pwd)
+ifdef HALLD_RECON_VERSION
+ SOURCE_CODE_TARGET = $(HALLD_RECON_HOME)/.untar_done
+ ifdef HALLD_RECON_DIRTAG
+  HALLD_RECON_DIR = halld_recon-$(HALLD_RECON_VERSION)^$(HALLD_RECON_DIRTAG)
+ else
+  HALLD_RECON_DIR = halld_recon-$(HALLD_RECON_VERSION)
+ endif
+ TARFILE = $(HALLD_RECON_VERSION).tar.gz
+else
+ SOURCE_CODE_TARGET = $(HALLD_RECON_HOME)/.clone_done
+ ifndef HALLD_RECON_URL
+  HALLD_RECON_URL=https://github.com/jeffersonlab/halld_recon
+ endif
+ ifdef HALLD_RECON_DIRTAG
+  HALLD_RECON_DIR = $(notdir $(HALLD_RECON_URL))^$(HALLD_RECON_DIRTAG)
+ else
+  HALLD_RECON_DIR = $(notdir $(HALLD_RECON_URL))
+ endif
+ ifndef HALLD_RECON_BRANCH
+  HALLD_RECON_BRANCH = master
+ endif
+endif
+export HALLD_RECON_HOME = $(PWD)/$(HALLD_RECON_DIR)
+
+all: $(HALLD_RECON_HOME)/halld_recon_prereqs_version.xml
+
+$(TARFILE):
+	wget --no-check-certificate -O $@ https://github.com/JeffersonLab/halld_recon/archive/$(HALLD_RECON_VERSION).tar.gz
+
+$(HALLD_RECON_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(HALLD_RECON_DIR)
+	rmdir -v untar_temp_dir
+	date > $@
+
+$(HALLD_RECON_HOME)/.clone_done:
+	git clone -b $(HALLD_RECON_BRANCH) $(HALLD_RECON_URL) $(HALLD_RECON_DIR)
+ifdef HALLD_RECON_HASH
+	cd $(HALLD_RECON_DIR) ; git checkout $(HALLD_RECON_HASH)
+endif
+	date > $@
+
+$(HALLD_RECON_HOME)/.patches_done: $(SOURCE_CODE_TARGET)
+ifdef APPLY_GETARG_PATCH
+	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
+		$(HALLD_RECON_HOME)/src/programs/Simulation/HDGeant
+endif
+	date > $@
+
+$(HALLD_RECON_HOME)/.sconstruct_done: $(HALLD_RECON_HOME)/.patches_done
+	cd $(HALLD_RECON_HOME)/src ; scons install $(HALLD_RECON_SCONS_OPTIONS)
+	date > $@
+
+ifndef GVMS_TEST
+$(HALLD_RECON_HOME)/halld_recon_prereqs_version.xml: $(HALLD_RECON_HOME)/.sconstruct_done
+else
+$(HALLD_RECON_HOME)/halld_recon_prereqs_version.xml: $(SOURCE_CODE_TARGET)
+endif
+	cd $(HALLD_RECON_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl halld_recon
+
+env:
+	@echo HALLD_RECON_DIR = $(HALLD_RECON_DIR)
