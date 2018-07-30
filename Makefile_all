@@ -224,7 +224,7 @@ mcwrapper_dir:
 	test -d ${MCWRAPPER} || mkdir -pv ${MCWRAPPER}
 
 mcwrapper_make:
-	$(MAKE) -C${MCWRAPPER} -f${BUILD_SCRIPTS}/Makefile_mcwrapper
+	$(MAKE) -C${MCWRAPPER} -f${BUILD_SCRIPTS}/Makefile_gluex_mcwrapper
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
