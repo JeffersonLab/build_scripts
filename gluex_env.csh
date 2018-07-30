@@ -122,7 +122,7 @@ if (! $?HD_UTILITIES_HOME) setenv HD_UTILITIES_HOME $GLUEX_TOP/hd_utilities/prod
 #
 # gluex_MCwrapper
 #
-if (! $?MCWRAPPER_CENTRAL) setenv MCWRAPPER_CENTRAL $GLUEX_TOP/gluex_MCwrapper/prod
+if (! $?MCWRAPPER_CENTRAL) setenv MCWRAPPER_CENTRAL $HD_UTILITIES_HOME/MCwrapper
 setenv PATH ${MCWRAPPER_CENTRAL}:$PATH
 #
 # gluex_root_analysis
