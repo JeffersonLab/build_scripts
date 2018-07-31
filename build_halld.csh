@@ -14,22 +14,26 @@ set xml=$TARGET_DIR/version_${TODAYS_DATE}.xml
 $BUILD_SCRIPTS/customize_version.pl \
     -i /group/halld/www/halldweb/html/dist/version_jlab.xml \
     -o $xml \
-    -s $TARGET_DIR/sim-recon \
+    -r $TARGET_DIR/halld_recon \
+    -m $TARGET_DIR/halld_sim \
     -g $TARGET_DIR/hdds \
     -4 $TARGET_DIR/hdgeant4 \
     -a $TARGET_DIR/gluex_root_analysis
 # set-up the environment
 source $BUILD_SCRIPTS/gluex_env_jlab.csh $xml
 setenv HDDS_URL file:///group/halld/Repositories/hdds
-setenv SIM_RECON_URL file:///group/halld/Repositories/sim-recon
+setenv HALLD_RECON_URL file:///group/halld/Repositories/halld_recon
+setenv HALLD_SIM_URL file:///group/halld/Repositories/halld_sim
 setenv HDGEANT4_URL file:///group/halld/Repositories/hdgeant4
 setenv GLUEX_ROOT_ANALYSIS_URL file:///group/halld/Repositories/gluex_root_analysis
 # go to the target directory
 cd $TARGET_DIR
 # make hdds
 make -f $BUILD_SCRIPTS/Makefile_hdds HDDS_SCONS_OPTIONS="SHOWBUILD=1"
-# make sim-recon
-make -f $BUILD_SCRIPTS/Makefile_sim-recon SIM_RECON_SCONS_OPTIONS="SHOWBUILD=1"
+# make recon
+make -f $BUILD_SCRIPTS/Makefile_halld_recon HALLD_RECON_SCONS_OPTIONS="SHOWBUILD=1"
+# make sim
+make -f $BUILD_SCRIPTS/Makefile_halld_sim HALLD_SIM_SCONS_OPTIONS="SHOWBUILD=1"
 # make hdgeant4
 make -f $BUILD_SCRIPTS/Makefile_hdgeant4
 # make gluex_root_analysis
