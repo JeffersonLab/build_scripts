@@ -130,6 +130,8 @@ Options:
     -i <input XML file name> (required)
     -o <output XML file name> (required)
     -s <custom sim-recon home directory> (optional, s for sim-recon)
+    -r <custom halld_recon home directory> (optional, r for recon)
+    -m <custom halld_sim home directory> (optional, m for Monte Carlo)
     -g <custom HDDS home directory> (optional, g for geometry)
     -4 <custom HDGeant4 home directory> (optional, 4 for 4)
     -a <custom gluex_root_analysis home directory> (optional, a for analysis)
