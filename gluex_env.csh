@@ -13,6 +13,7 @@ setenv PATH $HOME/builds/external/usr/bin:${PATH}
 if (! $?GLUEX_TOP) setenv GLUEX_TOP $HOME/builds
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $HOME/build_scripts
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
+if (! $?PYTHONPATH) setenv PYTHONPATH ''
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 set machine_type=`uname -m`
 
@@ -37,6 +38,8 @@ echo $PATH | grep $ROOTSYS/bin > /dev/null
 if ($status) setenv PATH $ROOTSYS/bin:$PATH
 echo $LD_LIBRARY_PATH | grep $ROOTSYS/lib > /dev/null
 if ($status) setenv LD_LIBRARY_PATH  $ROOTSYS/lib:$LD_LIBRARY_PATH
+echo $PYTHONPATH | grep $ROOTSYS/lib > /dev/null
+if ($status) setenv PYTHONPATH $ROOTSYS/lib:$PYTHONPATH
 # cernlib
 if (! $?CERN ) setenv CERN $GLUEX_TOP/cernlib
 if (! $?CERN_LEVEL) then
@@ -84,7 +87,7 @@ if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb.jlab.o
 if (! $?RCDB_HOME) setenv RCDB_HOME $GLUEX_TOP/rcdb/prod
 source $BUILD_SCRIPTS/rcdb_env.csh
 if (! $?RCDB_CONNECTION) setenv RCDB_CONNECTION mysql://rcdb@hallddb.jlab.org/rcdb
-# jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
+# jana
 if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod/$BMS_OSNAME
 if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL $CCDB_CONNECTION
 echo $PATH | grep $JANA_HOME/bin > /dev/null
@@ -95,14 +98,30 @@ echo $LD_LIBRARY_PATH | grep $EVIOROOT/lib > /dev/null
 if ($status) setenv LD_LIBRARY_PATH  $EVIOROOT/lib:$LD_LIBRARY_PATH
 # hdds
 if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
-setenv JANA_GEOMETRY_URL xmlfile://$HDDS_HOME/main_HDDS.xml
+setenv JANA_GEOMETRY_URL ccdb:///GEOMETRY/main_HDDS.xml
 # halld
-if (! $?HALLD_HOME) setenv HALLD_HOME $GLUEX_TOP/sim-recon/prod
-if (! $?HALLD_MY) setenv HALLD_MY $HOME/halld_my
-echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null
-if ($status) setenv PATH $HALLD_HOME/${BMS_OSNAME}/bin:$PATH
-echo $PATH | grep $HALLD_MY/$BMS_OSNAME/bin > /dev/null
-if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
+if ($?HALLD_HOME) then
+    echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null
+    if ($status) setenv PATH $HALLD_HOME/${BMS_OSNAME}/bin:$PATH
+    setenv PYTHONPATH $HALLD_HOME/$BMS_OSNAME/python2:$PYTHONPATH
+endif
+# halld_recon
+if ($?HALLD_RECON_HOME) then
+    echo $PATH | grep $HALLD_RECON_HOME/$BMS_OSNAME/bin > /dev/null
+    if ($status) setenv PATH $HALLD_RECON_HOME/${BMS_OSNAME}/bin:$PATH
+    setenv PYTHONPATH $HALLD_RECON_HOME/$BMS_OSNAME/python2:$PYTHONPATH
+endif
+# halld_sim
+if ($?HALLD_SIM_HOME) then
+    echo $PATH | grep $HALLD_SIM_HOME/$BMS_OSNAME/bin > /dev/null
+    if ($status) setenv PATH $HALLD_SIM_HOME/${BMS_OSNAME}/bin:$PATH
+endif
+# halld_my
+if (! $?HALLD_MY) then
+    setenv HALLD_MY $HOME/halld_my
+    echo $PATH | grep $HALLD_MY/$BMS_OSNAME/bin > /dev/null
+    if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
+endif
 #
 # HDGeant4
 #
@@ -116,7 +135,10 @@ endif
 # hd_utilities
 #
 if (! $?HD_UTILITIES_HOME) setenv HD_UTILITIES_HOME $GLUEX_TOP/hd_utilities/prod
-setenv MCWRAPPER_CENTRAL $HD_UTILITIES_HOME/MCwrapper
+#
+# gluex_MCwrapper
+#
+if (! $?MCWRAPPER_CENTRAL) setenv MCWRAPPER_CENTRAL $HD_UTILITIES_HOME/MCwrapper
 setenv PATH ${MCWRAPPER_CENTRAL}:$PATH
 #
 # gluex_root_analysis
@@ -134,7 +156,17 @@ if (! $?JANA_PLUGIN_PATH) then
 else
     set jpp_save=":$JANA_PLUGIN_PATH"
 endif
-setenv JANA_PLUGIN_PATH ${HALLD_MY}/${BMS_OSNAME}/plugins:${HALLD_HOME}/${BMS_OSNAME}/plugins:${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
+setenv JANA_PLUGIN_PATH ${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
+if ($?HALLD_HOME) then
+    setenv JANA_PLUGIN_PATH ${HALLD_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+endif
+if ($?HALLD_RECON_HOME) then
+    setenv JANA_PLUGIN_PATH ${HALLD_RECON_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+endif
+if ($?HALLD_SIM_HOME) then
+    setenv JANA_PLUGIN_PATH ${HALLD_SIM_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+endif
+setenv JANA_PLUGIN_PATH ${HALLD_MY}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
 unset jpp_save
 # refresh the list of items in the path
 rehash

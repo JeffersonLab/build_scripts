@@ -34,6 +34,7 @@ endif
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/kstring.h.patch
 	cd 2005/src/config ; \
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/Imake.cf.patch
+	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_old_patchy4.patch
 	date > $@
 
 .build_done: .patch_done

@@ -1,0 +1,76 @@
+# Makefile_halld_sim
+
+# Builds halld_sim under a new directory (HALLD_SIM_DIR) rooted in the current
+# working directory. The new directory has a name that depends on the
+# version being built.
+
+# HALLD_SIM_VERSION defines which tagged version to build. It should
+# correspond to the name of the desired directory in the repos/tags
+# directory of the repository. If left undefined, the latest version
+# will be checked out from the repos/trunk.
+
+PWD = $(shell pwd)
+ifdef HALLD_SIM_VERSION
+ SOURCE_CODE_TARGET = $(HALLD_SIM_HOME)/.untar_done
+ ifdef HALLD_SIM_DIRTAG
+  HALLD_SIM_DIR = halld_sim-$(HALLD_SIM_VERSION)^$(HALLD_SIM_DIRTAG)
+ else
+  HALLD_SIM_DIR = halld_sim-$(HALLD_SIM_VERSION)
+ endif
+ TARFILE = $(HALLD_SIM_VERSION).tar.gz
+else
+ SOURCE_CODE_TARGET = $(HALLD_SIM_HOME)/.clone_done
+ ifndef HALLD_SIM_URL
+  HALLD_SIM_URL=https://github.com/jeffersonlab/halld_sim
+ endif
+ ifdef HALLD_SIM_DIRTAG
+  HALLD_SIM_DIR = $(notdir $(HALLD_SIM_URL))^$(HALLD_SIM_DIRTAG)
+ else
+  HALLD_SIM_DIR = $(notdir $(HALLD_SIM_URL))
+ endif
+ ifndef HALLD_SIM_BRANCH
+  HALLD_SIM_BRANCH = master
+ endif
+endif
+export HALLD_SIM_HOME = $(PWD)/$(HALLD_SIM_DIR)
+
+all: $(HALLD_SIM_HOME)/halld_sim_prereqs_version.xml
+
+$(TARFILE):
+	wget --no-check-certificate -O $@ https://github.com/JeffersonLab/halld_sim/archive/$(HALLD_SIM_VERSION).tar.gz
+
+$(HALLD_SIM_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(HALLD_SIM_DIR)
+	rmdir -v untar_temp_dir
+	date > $@
+
+$(HALLD_SIM_HOME)/.clone_done:
+	git clone -b $(HALLD_SIM_BRANCH) $(HALLD_SIM_URL) $(HALLD_SIM_DIR)
+ifdef HALLD_SIM_HASH
+	cd $(HALLD_SIM_DIR) ; git checkout $(HALLD_SIM_HASH)
+endif
+	date > $@
+
+$(HALLD_SIM_HOME)/.patches_done: $(SOURCE_CODE_TARGET)
+ifdef APPLY_GETARG_PATCH
+	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
+		$(HALLD_SIM_HOME)/src/programs/Simulation/HDGeant
+endif
+	date > $@
+
+$(HALLD_SIM_HOME)/.sconstruct_done: $(HALLD_SIM_HOME)/.patches_done
+	cd $(HALLD_SIM_HOME)/src ; scons install $(HALLD_SIM_SCONS_OPTIONS)
+	date > $@
+
+ifndef GVMS_TEST
+$(HALLD_SIM_HOME)/halld_sim_prereqs_version.xml: $(HALLD_SIM_HOME)/.sconstruct_done
+else
+$(HALLD_SIM_HOME)/halld_sim_prereqs_version.xml: $(SOURCE_CODE_TARGET)
+endif
+	cd $(HALLD_SIM_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl halld_sim
+
+env:
+	@echo HALLD_SIM_DIR = $(HALLD_SIM_DIR)

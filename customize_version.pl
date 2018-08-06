@@ -10,10 +10,12 @@ use IO::File;
 $XML::Simple::PREFERRED_PARSER = 'XML::Parser';
 
 # get the file name
-getopts("i:o:s:g:4:a:h");
+$status=getopts("i:o:s:g:4:a:r:m:h");
 $filename_in = $opt_i;
 $filename_out = $opt_o;
 $halld_home = $opt_s;
+$halld_recon_home = $opt_r;
+$halld_sim_home = $opt_m;
 $hdds_home = $opt_g;
 $hdgeant4_home = $opt_4;
 $gluex_root_analysis_home = $opt_a;
@@ -27,10 +29,15 @@ if (!$filename_in || !$filename_out ) {
     print_usage();
     exit 1;
 }
-if (!($halld_home || $hdds_home || $hdgeant4_home || $gluex_root_analysis_home)) {
+if (!($halld_home || $halld_recon || $halld_sim || $hdds_home || $hdgeant4_home || $gluex_root_analysis_home)) {
     print "\nError: no custom home directories specified, no action taken\n\n";
     print_usage();
     exit 2;
+}
+if ($halld_home && $halld_recon || $halld_home && $halld_sim) {
+    print "\nError: halld_home used with either halld_recon or halld_sim or both, no action taken\n\n";
+    print_usage();
+    exit 3;
 }
 # slurp in the xml file
 $ref = XMLin($filename_in, KeyAttr=>[]);
@@ -62,6 +69,14 @@ foreach $href (@b) {
     if ($name eq "sim-recon" && $halld_home) {
 	if (uc($halld_home) ne "NONE") {
 	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_home");
+	}
+    } elsif ($name eq "halld_recon" && $halld_recon_home) {
+	if (uc($halld_recon_home) ne "NONE") {
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_recon_home");
+	}
+    } elsif ($name eq "halld_sim" && $halld_sim_home) {
+	if (uc($halld_sim_home) ne "NONE") {
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_sim_home");
 	}
     } elsif ($name eq "hdds" && $hdds_home) {
 	if (uc($hdds_home) ne "NONE") {
@@ -117,6 +132,8 @@ Options:
     -i <input XML file name> (required)
     -o <output XML file name> (required)
     -s <custom sim-recon home directory> (optional, s for sim-recon)
+    -r <custom halld_recon home directory> (optional, r for recon)
+    -m <custom halld_sim home directory> (optional, m for Monte Carlo)
     -g <custom HDDS home directory> (optional, g for geometry)
     -4 <custom HDGeant4 home directory> (optional, 4 for 4)
     -a <custom gluex_root_analysis home directory> (optional, a for analysis)
