@@ -46,6 +46,9 @@ fi
 if [ `echo $LD_LIBRARY_PATH | grep -c $ROOTSYS/lib` -eq 0 ]
     then export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
 fi
+if [ `echo $PYTHONPATH | grep -c $ROOTSYS/lib` -eq 0 ]
+    then export PYTHONPATH=$ROOTSYS/lib:$PYTHONPATH
+fi
 # cernlib
 if [ -z "$CERN" ]; then export CERN=$GLUEX_TOP/cernlib; fi
 if [ -z "$CERN_LEVEL" ]; then 					#We don't have CERN_LEVEL
@@ -73,7 +76,7 @@ fi
 if [ -z "$G4ROOT" ]; then export G4ROOT=$GLUEX_TOP/geant4/prod; fi
 if [ -e "$G4ROOT" ]
     then
-    g4setup=`find $G4ROOT/share/ -name geant4make.sh`
+    g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.sh`
     if [ -f "$g4setup" ]; then source $g4setup; fi
     unset g4setup
 fi
@@ -94,7 +97,7 @@ if [ -z "$CCDB_CONNECTION" ]; then export CCDB_CONNECTION=mysql://ccdb_user@hall
 if [ -z "$RCDB_HOME" ]; then export RCDB_HOME=$GLUEX_TOP/rcdb/prod; fi
 . $BUILD_SCRIPTS/rcdb_env.sh
 if [ -z "$RCDB_CONNECTION" ]; then export RCDB_CONNECTION=mysql://rcdb@hallddb.jlab.org/rcdb; fi
-# jana (JANA_GEOMETRY_URL depends on HDDS_HOME)
+# jana
 if [ -z "$JANA_HOME" ]; then export JANA_HOME=$GLUEX_TOP/jana/prod/$BMS_OSNAME; fi
 if [ -z "$JANA_CALIB_URL" ]
     then export JANA_CALIB_URL=$CCDB_CONNECTION
@@ -109,15 +112,37 @@ if [ `echo $LD_LIBRARY_PATH | grep -c $EVIOROOT/lib` -eq 0 ]
 fi
 # hdds
 if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=$GLUEX_TOP/hdds/prod; fi
-export JANA_GEOMETRY_URL=xmlfile://$HDDS_HOME/main_HDDS.xml
+export JANA_GEOMETRY_URL=ccdb:///GEOMETRY/main_HDDS.xml
 # sim-recon
-if [ -z "$HALLD_HOME" ]; then export HALLD_HOME=$GLUEX_TOP/sim-recon/prod; fi
-if [ -z "$HALLD_MY" ]; then export HALLD_MY=$HOME/halld_my; fi
-if [ `echo $PATH | grep -c $HALLD_HOME/$BMS_OSNAME/bin` -eq 0 ]
-    then export PATH=$HALLD_HOME/${BMS_OSNAME}/bin:$PATH
+if [ -n "$HALLD_HOME" ]
+    then
+    if [ `echo $PATH | grep -c $HALLD_HOME/$BMS_OSNAME/bin` -eq 0 ]
+        then export PATH=$HALLD_HOME/${BMS_OSNAME}/bin:$PATH
+    fi
+    export PYTHONPATH=$HALLD_HOME/$BMS_OSNAME/python2:$PYTHONPATH
 fi
-if [ `echo $PATH | grep -c $HALLD_MY/$BMS_OSNAME/bin` -eq 0 ]
-    then export PATH=$HALLD_MY/${BMS_OSNAME}/bin:$PATH
+# halld_recon
+if [ -n "$HALLD_RECON_HOME" ]
+    then
+    if [ `echo $PATH | grep -c $HALLD_RECON_HOME/$BMS_OSNAME/bin` -eq 0 ]
+        then export PATH=$HALLD_RECON_HOME/${BMS_OSNAME}/bin:$PATH
+    fi
+    export PYTHONPATH=$HALLD_RECON_HOME/$BMS_OSNAME/python2:$PYTHONPATH
+fi
+# halld_sim
+if [ -n "$HALLD_SIM_HOME" ]
+    then
+    if [ `echo $PATH | grep -c $HALLD_SIM_HOME/$BMS_OSNAME/bin` -eq 0 ]
+        then export PATH=$HALLD_SIM_HOME/${BMS_OSNAME}/bin:$PATH
+    fi
+fi
+# halld_my
+if [ -z "$HALLD_MY" ]
+    then
+    export HALLD_MY=$HOME/halld_my
+    if [ `echo $PATH | grep -c $HALLD_MY/$BMS_OSNAME/bin` -eq 0 ]
+        then export PATH=$HALLD_MY/${BMS_OSNAME}/bin:$PATH
+    fi
 fi
 #
 # HDGeant4
@@ -133,7 +158,10 @@ fi
 # hd_utilities
 #
 if [ -z "$HD_UTILITIES_HOME" ]; then export HD_UTILITIES_HOME=$GLUEX_TOP/hd_utilities/prod; fi
-export MCWRAPPER_CENTRAL=$HD_UTILITIES_HOME/MCwrapper
+#
+# gluex_MCwrapper
+#
+if [ -z "$MCWRAPPER_CENTRAL" ]; then export MCWRAPPER_CENTRAL=$HD_UTILITIES_HOME/MCwrapper; fi
 export PATH=${MCWRAPPER_CENTRAL}:$PATH
 #
 # gluex_root_analysis
@@ -142,13 +170,30 @@ if [ -n "$ROOT_ANALYSIS_HOME" ]; then
     if [ -e "$ROOT_ANALYSIS_HOME" ]; then source $ROOT_ANALYSIS_HOME/env_analysis.sh ; fi
 fi
 #
+# SQLiteCpp
+#
+if [ -z "$SQLITECPP_HOME" ]; then export SQLITECPP_HOME=$GLUEX_TOP/sqlitecpp/prod; fi
+#
 if [ -z "$JANA_PLUGIN_PATH" ]
     then
     jpp_save=""
 else
     jpp_save=":$JANA_PLUGIN_PATH"
 fi
-export JANA_PLUGIN_PATH=${HALLD_MY}/${BMS_OSNAME}/plugins:${HALLD_HOME}/${BMS_OSNAME}/plugins:${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
+export JANA_PLUGIN_PATH=${JANA_HOME}/plugins:${JANA_HOME}/lib${jpp_save}
+if [ -n "$HALLD_HOME" ]
+    then
+    export JANA_PLUGIN_PATH=${HALLD_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+fi
+if [ -n "$HALLD_RECON_HOME" ]
+    then
+    export JANA_PLUGIN_PATH=${HALLD_RECON_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+fi
+if [ -n "$HALLD_SIM_HOME" ]
+    then
+    export JANA_PLUGIN_PATH=${HALLD_SIM_HOME}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
+fi
+export JANA_PLUGIN_PATH=${HALLD_MY}/${BMS_OSNAME}/plugins:$JANA_PLUGIN_PATH
 unset jpp_save
 # refresh the list of items in the path
 hash -r

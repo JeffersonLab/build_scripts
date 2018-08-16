@@ -40,6 +40,8 @@ if [ -n "$BUILD_SCRIPTS" ]; then
     # clean PYTHONPATH
     if [ -n "$CCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`; fi
     if [ -n "$RCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $RCDB_HOME/python`; fi
+    if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $ROOTSYS/lib`; fi
+    if [ -n "$HALLD_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $HALLD_HOME/$BMS_OSNAME/python2`; fi
     eval `$BUILD_SCRIPTS/delpath.pl -b -p`
 fi
 # clean_environment
@@ -109,6 +111,8 @@ unset QTLIBPATH
 unset HD_UTILITIES_HOME
 unset MCWRAPPER_CENTRAL
 unset ROOT_ANALYSIS_HOME
+unset SQLITECPP_HOME
+unset SQLITE_HOME
 # versions
 unset SIM_RECON_VERSION
 unset JANA_VERSION
@@ -124,7 +128,10 @@ unset HDGEANT4_VERSION
 unset GEANT4_VERSION
 unset HD_UTILITIES_VERSION
 unset GLUEX_ROOT_ANALYSIS_VERSION
+unset SQLITECPP_VERSION
 unset AMPTOOLS_VERSION
+unset SQLITE_VERSION
+unset GLUEX_MCWRAPPER_VERSION
 # urls for checkout
 unset SIM_RECON_URL
 unset JANA_URL
@@ -139,6 +146,8 @@ unset EVIO_URL
 unset HDGEANT4_URL
 unset HD_UTILITIES_URL
 unset GLUEX_ROOT_ANALYSIS_URL
+unset SQLITECPP_URL
+unset GLUEX_MCWRAPPER_URL
 # directory tags
 unset SIM_RECON_DIRTAG
 unset JANA_DIRTAG
@@ -154,7 +163,10 @@ unset GEANT4_DIRTAG
 unset HDGEANT4_DIRTAG
 unset HD_UTILITIES_DIRTAG
 unset GLUEX_ROOT_ANALYSIS_DIRTAG
+unset SQLITECPP_DIRTAG
 unset AMPTOOLS_DIRTAG
+unset SQLITE_DIRTAG
+unset GLUEX_MCWRAPPER_DIRTAG
 # git branches
 unset SIM_RECON_BRANCH
 unset JANA_BRANCH
@@ -169,6 +181,8 @@ unset EVIO_BRANCH
 unset HDGEANT4_BRANCH
 unset HD_UTILITIES_BRANCH
 unset GLUEX_ROOT_ANALYSIS_BRANCH
+unset SQLITECPP_BRANCH
+unset GLUEX_MCWRAPPER_BRANCH
 # git hashes
 unset SIM_RECON_HASH
 unset JANA_HASH
@@ -183,3 +197,7 @@ unset EVIO_HASH
 unset HDGEANT4_HASH
 unset HD_UTILITIES_HASH
 unset GLUEX_ROOT_ANALYSIS_HASH
+unset SQLITECPP_HASH
+unset GLUEX_MCWRAPPER_HASH
+# misc
+unset SQLITE_YEAR

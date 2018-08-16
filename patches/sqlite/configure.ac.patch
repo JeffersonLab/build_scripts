@@ -1,0 +1,9 @@
+--- configure.ac.original	2018-04-04 14:50:03.757269548 -0400
++++ configure.ac.new	2018-04-04 14:34:28.037169443 -0400
+@@ -176,4 +176,6 @@
+ # AC_SUBST(TEMP_STORE)
+ #-----------------------------------------------------------------------
+ 
++AC_DEFINE(SQLITE_ENABLE_COLUMN_METADATA)
++
+ AC_OUTPUT
