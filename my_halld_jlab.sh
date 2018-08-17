@@ -1,5 +1,23 @@
 #!/bin/bash
 
+echo "For usage message, type \"$(basename "$0") -h\""
+
+usage="$(basename "$0") [-h] [-x filename] [package_1] [package_2] ...
+
+where:
+    -h        show this help text
+    -x        set name of version set XML file
+              (default: /group/halld/www/halldweb/html/dist/version_jlab.xml)
+    -n        set number of threads (default: 1)
+    package_n package name, choose from:
+                  hdds
+                  sim-recon
+                  halld_recon
+                  halld_sim
+                  hdgeant4
+                  gluex_root_analysis
+              if no package name supplied all except sim-recon will be built"
+
 mydir=`pwd`
 mydate=`date +%F`
 
@@ -14,8 +32,17 @@ while [[ $# -gt 0 ]]
 do
 key=$1
 case $key in
+    -h)
+	echo "$usage"
+	exit 0
+	;;
     -x)
 	xmlfile="$2"
+	shift
+	shift
+	;;
+    -n)
+	threads_option="-j$2"
 	shift
 	shift
 	;;
@@ -50,7 +77,7 @@ case $key in
 	shift
 	;;
     *)
-	echo error: unknown package name = $key
+	echo error: unknown package name or option = $key
 	exit 1
 	;;
 esac
@@ -71,6 +98,20 @@ fi
 cmd="$cmd -i $xmlfile"
 $cmd
 
+prompt="Will build the following packages in the local directory:
+
+$list
+
+Is this OK? "
+while true; do
+    read -p "$prompt" yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
 echo source $BUILD_SCRIPTS/gluex_env_jlab.sh $mydir/${USER}_$mydate.xml \
     > setup_gluex.sh
 echo source $BUILD_SCRIPTS/gluex_env_jlab.csh $mydir/${USER}_$mydate.xml \
@@ -82,13 +123,13 @@ if [[ $list = *hdds* ]]
     then make -f $BUILD_SCRIPTS/Makefile_hdds
 fi
 if [[ $list = *sim-recon* ]]
-    then make -f $BUILD_SCRIPTS/Makefile_sim-recon
+    then make -f $BUILD_SCRIPTS/Makefile_sim-recon SIM_RECON_SCONS_OPTIONS="$threads_option"
 fi
 if [[ $list = *halld_recon* ]]
-    then make -f $BUILD_SCRIPTS/Makefile_halld_recon
+    then make -f $BUILD_SCRIPTS/Makefile_halld_recon HALLD_RECON_SCONS_OPTIONS="$threads_option"
 fi
 if [[ $list = *halld_sim* ]]
-    then make -f $BUILD_SCRIPTS/Makefile_halld_sim
+    then make -f $BUILD_SCRIPTS/Makefile_halld_sim HALLD_SIM_SCONS_OPTIONS="$threads_option"
 fi
 if [[ $list = *hdgeant4* ]]
     then make -f $BUILD_SCRIPTS/Makefile_hdgeant4
