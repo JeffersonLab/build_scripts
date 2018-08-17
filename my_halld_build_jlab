@@ -2,13 +2,15 @@
 
 echo "For usage message, type \"$(basename "$0") -h\""
 
-usage="$(basename "$0") [-h] [-x filename] [package_1] [package_2] ...
+usage="$(basename "$0") [-h] [-x filename] [-n nthreads] [package_1] [package_2] ...
 
 where:
     -h        show this help text
     -x        set name of version set XML file
               (default: /group/halld/www/halldweb/html/dist/version_jlab.xml)
-    -n        set number of threads (default: 1)
+    -n        set number of threads to use in builds (default: 1)
+    -k        keep potentially inconsistent packages in environment
+              (default: remove them from the environment)
     package_n package name, choose from:
                   hdds
                   sim-recon
@@ -44,6 +46,10 @@ case $key in
     -n)
 	threads_option="-j$2"
 	shift
+	shift
+	;;
+    -k)
+	keep_inconsistent_packages=true
 	shift
 	;;
     hdds)
@@ -94,6 +100,31 @@ if [ -z "$list" ]
     cmd="$cmd -m $mydir/halld_sim"
     cmd="$cmd -4 $mydir/hdgeant4"
     cmd="$cmd -a $mydir/gluex_root_analysis"
+fi
+if [ "$keep_inconsistent_packages" != true ]
+    then
+    if [[ $list = *halld_recon* ]]
+	then
+	if [[ $list != *halld_sim* ]]
+	    then
+	    cmd="$cmd -m none"
+	fi
+	if [[ $list != *hdgeant4* ]]
+	    then
+	    cmd="$cmd -4 none"
+	fi
+	if [[ $list != *gluex_root_analysis* ]]
+	    then
+	    cmd="$cmd -a none"
+	fi
+    fi
+    if [[ $list = *hdds* ]]
+	then
+	if [[ $list != *halld_recon* ]]
+	    then
+	    cmd="$cmd -r none"
+	fi
+    fi
 fi
 cmd="$cmd -i $xmlfile"
 $cmd

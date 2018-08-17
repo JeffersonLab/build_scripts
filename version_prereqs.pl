@@ -35,8 +35,8 @@ eval $definitions;
 	    'xerces-c' => [],
 	    geant4 => [],
 	    ccdb => [],
-	    hdgeant4 => ['geant4', 'sim-recon', 'jana', 'ccdb'],
-	    gluex_root_analysis => ['sim-recon', 'root'],
+	    halld_recon => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb', 'rcdb', 'sqlitecpp'],
+	    halld_sim => ['halld_recon'],
 	    amptools => ['root']);
 
 # add a prerequisite for sqlitecpp only if SQLITE_HOME is defined
