@@ -7,14 +7,6 @@ import xml.dom.minidom
 
 packageList = ["hdds", "sim-recon", "halld_recon", "halld_sim", "hdgeant4", "gluex_root_analysis"]
 
-def updateCode(package, home):
-    print "updating", package, "in", home
-    p=subprocess.Popen(['git', 'pull'], cwd=home)
-    p.wait()
-
-def rebuild(package, home):
-    print "rebuilding", package, "in", home
-
 # command line arguments
 
 parser = argparse.ArgumentParser()
@@ -24,6 +16,18 @@ args = parser.parse_args()
 inputfile = args.xml
 inputPackages = args.inputPackages
 print inputPackages
+
+def updateCode(package, home):
+    print "updating", package, "in", home
+    p=subprocess.Popen(['git', 'pull'], cwd=home)
+    p.wait()
+
+def rebuild(package, home):
+    print "rebuilding", package, "in", home
+    aboveHome = home + "/.."
+    cmd = "source $BUILD_SCRIPTS/gluex_env_jlab.sh " + inputfile + "; make -f $BUILD_SCRIPTS/Makefile_" + package
+    p=subprocess.Popen(cmd, cwd=aboveHome, shell=True)
+    p.wait()
 
 # input values
 DOMTree = xml.dom.minidom.parse(inputfile)
