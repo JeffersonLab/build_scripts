@@ -12,6 +12,7 @@ packageList = ["hdds", "sim-recon", "halld_recon", "halld_sim", "hdgeant4", "glu
 
 # get a value for BUILD_SCRIPTS
 
+build_scripts = ""
 if "BUILD_SCRIPTS" in os.environ:
     build_scripts = os.environ["BUILD_SCRIPTS"]
     if not os.path.isdir(build_scripts):
