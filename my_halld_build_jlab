@@ -27,7 +27,13 @@ if [ -z "$BUILD_SCRIPTS" ]
     then export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 fi
 
-cmd="$BUILD_SCRIPTS/customize_version.pl -o ${USER}_$mydate.xml"
+if [ -f version.xml ]
+    then
+    echo error: version.xml already exists, move it out of the way or do the build in a different directory.
+    exit 2
+fi
+
+cmd="$BUILD_SCRIPTS/customize_version.pl -o version.xml"
 list=""
 
 while [[ $# -gt 0 ]]
@@ -143,11 +149,11 @@ while true; do
     esac
 done
 
-echo source $BUILD_SCRIPTS/gluex_env_jlab.sh $mydir/${USER}_$mydate.xml \
+echo source $BUILD_SCRIPTS/gluex_env_jlab.sh $mydir/version.xml \
     > setup_gluex.sh
-echo source $BUILD_SCRIPTS/gluex_env_jlab.csh $mydir/${USER}_$mydate.xml \
+echo source $BUILD_SCRIPTS/gluex_env_jlab.csh $mydir/version.xml \
     > setup_gluex.csh
-source $BUILD_SCRIPTS/gluex_env_jlab.sh $mydir/${USER}_$mydate.xml
+source $BUILD_SCRIPTS/gluex_env_jlab.sh $mydir/version.xml
 
 set -e
 if [[ $list = *hdds* ]]
