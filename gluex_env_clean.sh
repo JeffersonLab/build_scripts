@@ -3,6 +3,8 @@ if [ -n "$BUILD_SCRIPTS" ]; then
     if [ -n "$BMS_OSNAME" ]; then
 	if [ -n "$HALLD_MY" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $HALLD_MY/$BMS_OSNAME/bin`; fi
 	if [ -n "$HALLD_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $HALLD_HOME/$BMS_OSNAME/bin`; fi
+	if [ -n "$HALLD_RECON_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $HALLD_RECON_HOME/$BMS_OSNAME/bin`; fi
+	if [ -n "$HALLD_SIM_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $HALLD_SIM_HOME/$BMS_OSNAME/bin`; fi
     fi
     if [ -n "$CERN_ROOT" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $CERN_ROOT/bin`; fi
     if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b $ROOTSYS/bin`; fi
@@ -42,6 +44,7 @@ if [ -n "$BUILD_SCRIPTS" ]; then
     if [ -n "$RCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $RCDB_HOME/python`; fi
     if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $ROOTSYS/lib`; fi
     if [ -n "$HALLD_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $HALLD_HOME/$BMS_OSNAME/python2`; fi
+    if [ -n "$HALLD_RECON_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $HALLD_RECON_HOME/$BMS_OSNAME/python2`; fi
     eval `$BUILD_SCRIPTS/delpath.pl -b -p`
 fi
 # clean_environment
@@ -59,6 +62,8 @@ unset CLHEP_LIB
 unset CLHEP_INCLUDE
 unset HDDS_HOME
 unset HALLD_HOME
+unset HALLD_RECON_HOME
+unset HALLD_SIM_HOME
 unset HALLD_MY
 unset BMS_OSNAME
 unset JANA_HOME
@@ -115,6 +120,8 @@ unset SQLITECPP_HOME
 unset SQLITE_HOME
 # versions
 unset SIM_RECON_VERSION
+unset HALLD_RECON_VERSION
+unset HALLD_SIM_VERSION
 unset JANA_VERSION
 unset HDDS_VERSION
 unset CERNLIB_VERSION
@@ -134,6 +141,8 @@ unset SQLITE_VERSION
 unset GLUEX_MCWRAPPER_VERSION
 # urls for checkout
 unset SIM_RECON_URL
+unset HALLD_RECON_URL
+unset HALLD_SIM_URL
 unset JANA_URL
 unset HDDS_URL
 unset CERNLIB_URL
@@ -150,6 +159,8 @@ unset SQLITECPP_URL
 unset GLUEX_MCWRAPPER_URL
 # directory tags
 unset SIM_RECON_DIRTAG
+unset HALLD_RECON_DIRTAG
+unset HALLD_SIM_DIRTAG
 unset JANA_DIRTAG
 unset HDDS_DIRTAG
 unset CERNLIB_DIRTAG
@@ -169,6 +180,8 @@ unset SQLITE_DIRTAG
 unset GLUEX_MCWRAPPER_DIRTAG
 # git branches
 unset SIM_RECON_BRANCH
+unset HALLD_RECON_BRANCH
+unset HALLD_SIM_BRANCH
 unset JANA_BRANCH
 unset HDDS_BRANCH
 unset CERNLIB_BRANCH
@@ -185,6 +198,8 @@ unset SQLITECPP_BRANCH
 unset GLUEX_MCWRAPPER_BRANCH
 # git hashes
 unset SIM_RECON_HASH
+unset HALLD_RECON_HASH
+unset HALLD_SIM_HASH
 unset JANA_HASH
 unset HDDS_HASH
 unset CERNLIB_HASH

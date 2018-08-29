@@ -34,7 +34,15 @@ else
 endif
 export HALLD_RECON_HOME = $(PWD)/$(HALLD_RECON_DIR)
 
-all: $(HALLD_RECON_HOME)/halld_recon_prereqs_version.xml
+all: force_rebuild_action $(HALLD_RECON_HOME)/halld_recon_prereqs_version.xml
+
+force_rebuild_action:
+ifdef FORCE
+	@echo forcing rebuild
+	$(RM) $(HALLD_RECON_HOME)/.sconstruct_done
+else
+	@echo rebuild will not be forced
+endif
 
 $(TARFILE):
 	wget --no-check-certificate -O $@ https://github.com/JeffersonLab/halld_recon/archive/$(HALLD_RECON_VERSION).tar.gz

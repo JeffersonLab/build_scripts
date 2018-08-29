@@ -36,7 +36,15 @@ endif
 
 HDGEANT4_HOME = $(PWD)/$(HDGEANT4_DIR)
 
-all: $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml
+all: force_rebuild_action $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml
+
+force_rebuild_action:
+ifdef FORCE
+	@echo forcing rebuild
+	$(RM) $(HDGEANT4_HOME)/.make_done
+else
+	@echo rebuild will not be forced
+endif
 
 $(TARFILE):
 	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/hdgeant4/archive/$(TARFILE)
