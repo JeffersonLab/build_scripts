@@ -10,25 +10,6 @@ print "type", "\"" + os.path.basename(__file__), "-h\" for usage message"
 
 packageList = ["hdds", "sim-recon", "halld_recon", "halld_sim", "hdgeant4", "gluex_root_analysis"]
 
-# get a value for BUILD_SCRIPTS
-
-build_scripts = ""
-if "BUILD_SCRIPTS" in os.environ:
-    build_scripts = os.environ["BUILD_SCRIPTS"]
-    if not os.path.isdir(build_scripts):
-        message = "error: BUILD_SCRIPTS directory from environment, " + build_scripts + ", does not exist"
-        sys.exit(message)
-else:
-    groupDir = "/group/halld/Software/build_scripts"
-    if os.path.isdir(groupDir):
-        build_scripts = groupDir
-
-if build_scripts:
-    print "info: using build_scripts from", build_scripts
-else:
-    message = "error: BUILD_SCRIPTS directory not found, please set it"
-    sys.exit(message)
-
 # command line arguments
 
 parser = argparse.ArgumentParser()
@@ -58,6 +39,25 @@ if len(inputPackages) == 0:
     inputPackages = packageList
     defaultToAllPackages = True
 #print "packages to update:", inputPackages
+
+# get a value for BUILD_SCRIPTS
+
+build_scripts = ""
+if "BUILD_SCRIPTS" in os.environ:
+    build_scripts = os.environ["BUILD_SCRIPTS"]
+    if not os.path.isdir(build_scripts):
+        message = "error: BUILD_SCRIPTS directory from environment, " + build_scripts + ", does not exist"
+        sys.exit(message)
+else:
+    groupDir = "/group/halld/Software/build_scripts"
+    if os.path.isdir(groupDir):
+        build_scripts = groupDir
+
+if build_scripts:
+    print "info: using build_scripts from", build_scripts
+else:
+    message = "error: BUILD_SCRIPTS directory not found, please set it"
+    sys.exit(message)
 
 def updateCode(package, home):
     print "info: updating", package, "in", home, "with git pull"
