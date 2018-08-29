@@ -27,6 +27,12 @@ if [ -z "$BUILD_SCRIPTS" ]
     then export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 fi
 
+if [ -f version.xml ]
+    then
+    echo error: version.xml already exists, move it out of the way or do the build in a different directory.
+    exit 2
+fi
+
 cmd="$BUILD_SCRIPTS/customize_version.pl -o version.xml"
 list=""
 
