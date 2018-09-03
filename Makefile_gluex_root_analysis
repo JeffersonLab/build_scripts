@@ -36,7 +36,15 @@ endif
 
 GLUEX_ROOT_ANALYSIS_HOME = $(PWD)/$(GLUEX_ROOT_ANALYSIS_DIR)
 
-all: $(GLUEX_ROOT_ANALYSIS_HOME)/gluex_root_analysis_prereqs_version.xml
+all: force_rebuild_action $(GLUEX_ROOT_ANALYSIS_HOME)/gluex_root_analysis_prereqs_version.xml
+
+force_rebuild_action:
+ifdef FORCE
+	@echo forcing rebuild
+	$(RM) $(GLUEX_ROOT_ANALYSIS_HOME)/.make_script_done
+else
+	@echo rebuild will not be forced
+endif
 
 $(TARFILE):
 	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/gluex_root_analysis/archive/$(TARFILE)

@@ -3,6 +3,8 @@ if ($?BUILD_SCRIPTS) then
     if ($?BMS_OSNAME) then
 	if ($?HALLD_MY) eval `$BUILD_SCRIPTS/delpath.pl $HALLD_MY/$BMS_OSNAME/bin`
 	if ($?HALLD_HOME) eval `$BUILD_SCRIPTS/delpath.pl $HALLD_HOME/$BMS_OSNAME/bin`
+	if ($?HALLD_RECON_HOME) eval `$BUILD_SCRIPTS/delpath.pl $HALLD_RECON_HOME/$BMS_OSNAME/bin`
+	if ($?HALLD_SIM_HOME) eval `$BUILD_SCRIPTS/delpath.pl $HALLD_SIM_HOME/$BMS_OSNAME/bin`
     endif
     if ($?CERN_ROOT) eval `$BUILD_SCRIPTS/delpath.pl $CERN_ROOT/bin`
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl $ROOTSYS/bin`
@@ -39,6 +41,7 @@ if ($?BUILD_SCRIPTS) then
     if ($?RCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $RCDB_HOME/python`
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl -p $ROOTSYS/lib`
     if ($?HALLD_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_HOME/$BMS_OSNAME/python2`
+    if ($?HALLD_RECON_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_RECON_HOME/$BMS_OSNAME/python2`
     eval `$BUILD_SCRIPTS/delpath.pl -p`
 endif
 # clean_environment
@@ -56,6 +59,8 @@ unsetenv CLHEP_LIB
 unsetenv CLHEP_INCLUDE
 unsetenv HDDS_HOME
 unsetenv HALLD_HOME
+unsetenv HALLD_RECON_HOME
+unsetenv HALLD_SIM_HOME
 unsetenv HALLD_MY
 unsetenv BMS_OSNAME
 unsetenv JANA_HOME
@@ -112,6 +117,8 @@ unsetenv SQLITECPP_HOME
 unsetenv SQLITE_HOME
 # versions
 unsetenv SIM_RECON_VERSION
+unsetenv HALLD_RECON_VERSION
+unsetenv HALLD_SIM_VERSION
 unsetenv JANA_VERSION
 unsetenv HDDS_VERSION
 unsetenv CERNLIB_VERSION
@@ -131,6 +138,8 @@ unsetenv SQLITE_VERSION
 unsetenv GLUEX_MCWRAPPER_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
+unsetenv HALLD_RECON_URL
+unsetenv HALLD_SIM_URL
 unsetenv JANA_URL
 unsetenv HDDS_URL
 unsetenv CERNLIB_URL
@@ -145,6 +154,8 @@ unsetenv GLUEX_ROOT_ANALYSIS_URL
 unsetenv SQLITECPP_URL
 # directory tags
 unsetenv SIM_RECON_DIRTAG
+unsetenv HALLD_RECON_DIRTAG
+unsetenv HALLD_SIM_DIRTAG
 unsetenv JANA_DIRTAG
 unsetenv HDDS_DIRTAG
 unsetenv CERNLIB_DIRTAG
@@ -164,6 +175,8 @@ unsetenv SQLITE_DIRTAG
 unsetenv GLUEX_MCWRAPPER_DIRTAG
 # git branches
 unsetenv SIM_RECON_BRANCH
+unsetenv HALLD_RECON_BRANCH
+unsetenv HALLD_SIM_BRANCH
 unsetenv JANA_BRANCH
 unsetenv HDDS_BRANCH
 unsetenv CERNLIB_BRANCH
@@ -180,6 +193,8 @@ unsetenv SQLITECPP_BRANCH
 unsetenv GLUEX_MCWRAPPER_BRANCH
 # git hashes
 unsetenv SIM_RECON_HASH
+unsetenv HALLD_RECON_HASH
+unsetenv HALLD_SIM_HASH
 unsetenv JANA_HASH
 unsetenv HDDS_HASH
 unsetenv CERNLIB_HASH

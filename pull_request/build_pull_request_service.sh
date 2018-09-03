@@ -1,16 +1,17 @@
 #!/bin/bash
-branch_git=$1
-comment_url=$2
+repo=$1
+branch_git=$2
+comment_url=$3
 branch=$(echo $branch_git | sed -r 's/\//_/g')
-if [ ! -z "$3" ]; then
-    export SIM_RECON_URL=$3
+if [ ! -z "$4" ]; then
+    export REPO_URL=$4
 fi
 #
 echo build_pull_request_service.sh: building branch $branch
 report_file=report_${branch}.txt
 export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 echo build_pull_request_service.sh: using BUILD_SCRIPTS = $BUILD_SCRIPTS
-command="$BUILD_SCRIPTS/pull_request/build_pull_request.sh $branch_git"
+command="$BUILD_SCRIPTS/pull_request/build_pull_request.sh $repo $branch_git"
 echo build_pull_request_service.sh: executing $command
 $command
 if [ $? -eq 0 ]; then
@@ -18,8 +19,8 @@ if [ $? -eq 0 ]; then
 else
     status="FAILURE"
 fi
-build_dir=/work/halld/pull_request_test/sim-recon^$branch
-web_dir=/work/halld2/pull_request_test/sim-recon^$branch
+build_dir=/work/halld/pull_request_test/$repo^$branch
+web_dir=/work/halld2/pull_request_test/$repo^$branch
 rm -rf $web_dir && mkdir -p $web_dir
 cd $build_dir
 rm -f $report_file
@@ -47,7 +48,7 @@ if [ $status == "SUCCESS" ]; then
         failure_comment=""
     else
         test_status="FAILURE"
-        failure_comment="Failures: [$build_dir/tests/failures.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests-failures.txt)\n"
+        failure_comment="Failures: [$build_dir/tests/failures.txt](https://halldweb.jlab.org/pull_request_test/$repo^$branch/tests-failures.txt)\n"
     fi
     # save files to web accessible directory
     cp -v $build_dir/make_${branch}.log $web_dir/make_${branch}.log
@@ -59,11 +60,11 @@ if [ $status == "SUCCESS" ]; then
     read -r -d '' comment << EOM
 Test status for this pull request: ${test_status}\n \
 \n $failure_comment \
-Summary: [$build_dir/tests/summary.txt](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests-summary.txt)\n \
-Logs: [$build_dir/tests/log](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/tests-logs)\n \
+Summary: [$build_dir/tests/summary.txt](https://halldweb.jlab.org/pull_request_test/$repo^$branch/tests-summary.txt)\n \
+Logs: [$build_dir/tests/log](https://halldweb.jlab.org/pull_request_test/$repo^$branch/tests-logs)\n \
 \n \
-Build log: [$build_dir/make_${branch}.log](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/make_${branch}.log)\n \
-Build report: [$build_dir/$report_file](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/$report_file)\n \
+Build log: [$build_dir/make_${branch}.log](https://halldweb.jlab.org/pull_request_test/$repo^$branch/make_${branch}.log)\n \
+Build report: [$build_dir/$report_file](https://halldweb.jlab.org/pull_request_test/$repo^$branch/$report_file)\n \
 Location of build: $build_dir\n
 EOM
 else
@@ -74,8 +75,8 @@ else
     read -r -d '' comment << EOM
 Build status for this pull request: ${status}\n \
 \n \
-Build log: [$build_dir/make_${branch}.log](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/make_${branch}.log)\n \
-Build report: [$build_dir/$report_file](https://halldweb.jlab.org/pull_request_test/sim-recon^$branch/$report_file)\n \
+Build log: [$build_dir/make_${branch}.log](https://halldweb.jlab.org/pull_request_test/$repo^$branch/make_${branch}.log)\n \
+Build report: [$build_dir/$report_file](https://halldweb.jlab.org/pull_request_test/$repo^$branch/$report_file)\n \
 Location of build: $build_dir\n
 EOM
 fi

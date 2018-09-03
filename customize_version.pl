@@ -29,7 +29,7 @@ if (!$filename_in || !$filename_out ) {
     print_usage();
     exit 1;
 }
-if (!($halld_home || $halld_recon || $halld_sim || $hdds_home || $hdgeant4_home || $gluex_root_analysis_home)) {
+if (!($halld_home || $halld_recon_home || $halld_sim_home || $hdds_home || $hdgeant4_home || $gluex_root_analysis_home)) {
     print "\nError: no custom home directories specified, no action taken\n\n";
     print_usage();
     exit 2;
