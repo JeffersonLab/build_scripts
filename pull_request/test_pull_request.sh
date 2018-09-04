@@ -25,7 +25,7 @@ source ../$osrelease/setenv.sh
 EVIO=/cache/halld/RunPeriod-2017-01/rawdata/Run030858/hd_rawdata_030858_000.evio
 EVENTS=500
 THREADS=8
-TLIMIT=180
+TLIMIT=360
 echo LD_LIBRARY_PATH = $LD_LIBRARY_PATH
 echo "Test summary" > summary.txt
 for plugin in $(cat plugins.txt); do
