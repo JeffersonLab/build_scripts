@@ -5,12 +5,7 @@ TARFILE=lapack-$(LAPACK_VERSION).tgz
 PWD := $(shell pwd)
 export LAPACKROOT=$(PWD)/lapack-$(LAPACK_VERSION)
 
-all: $(LAPACKROOT)/.make_install_done
-
-$(LAPACKROOT)/.make_install_done: $(LAPACKROOT)/.make_done 
-	install $(LAPACKROOT)/liblapack.a $(CERN)/$(CERN_LEVEL)/lib/liblapack3.a
-	install $(LAPACKROOT)/librefblas.a $(CERN)/$(CERN_LEVEL)/lib/libblas.a
-	date > $@
+all: $(LAPACKROOT)/.make_done
 
 $(LAPACKROOT)/.make_done: $(LAPACKROOT)/make.inc $(LAPACKROOT)/.edit_makefile_done
 	ulimit -s 65000 ; $(MAKE) -C$(LAPACKROOT)

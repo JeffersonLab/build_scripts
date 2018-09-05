@@ -27,11 +27,11 @@ MCWRAPPER = ${ROOT_OF_ALL}/gluex_MCwrapper
 HALLD_SIM = ${ROOT_OF_ALL}/halld_sim
 HALLD_RECON = ${ROOT_OF_ALL}/halld_recon
 
-all: env xerces_build cernlib_build lapack_build root_build clhep_build geant4_build gsl_build evio_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build sqlite_build mcwrapper_build
+all: env xerces_build lapack_build cernlib_build root_build clhep_build geant4_build gsl_build evio_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build sqlite_build mcwrapper_build
 
-gluex: env xerces_build cernlib_build lapack_build root_build geant4_build evio_build sqlite_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build mcwrapper_build
+gluex: env xerces_build lapack_build cernlib_build root_build geant4_build evio_build sqlite_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build mcwrapper_build
 
-gluex2: env xerces_build cernlib_build lapack_build root_build geant4_build evio_build sqlite_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build halld_recon_build halld_sim_build hd_utilities_build hdgeant4_build gluex_root_analysis_build mcwrapper_build
+gluex2: env xerces_build lapack_build cernlib_build root_build geant4_build evio_build sqlite_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build halld_recon_build halld_sim_build hd_utilities_build hdgeant4_build gluex_root_analysis_build mcwrapper_build
 
 cernlib_build: cernlib_dir cernlib_make
 
