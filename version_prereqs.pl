@@ -31,7 +31,7 @@ eval $definitions;
 	    jana => ['evio', 'ccdb', 'xerces-c', 'root'],
 	    'sim-recon' => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb', 'rcdb', 'sqlitecpp'],
 	    hdds => ['xerces-c', 'root'],
-	    cernlib => [],
+	    cernlib => ['lapack'],
 	    'xerces-c' => [],
 	    geant4 => [],
 	    ccdb => [],
