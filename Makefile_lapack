@@ -1,5 +1,5 @@
 ifndef LAPACK_VERSION
-LAPACK_VERSION=3.6.0
+  LAPACK_VERSION=3.6.0
 endif
 TARFILE=lapack-$(LAPACK_VERSION).tgz
 PWD := $(shell pwd)

@@ -6,12 +6,6 @@ INSTALL_FILE = cernlib.2005.install.$(VERSION_DATE).tgz
 ALL_FILE = cernlib-2005-all-new.tgz
 DIST_FILES = $(ALL_FILE) $(CORR_FILE) $(INSTALL_FILE)
 
-ifndef LAPACK_VERSION
-  LAPACK_VERSION = 3.6.0
-endif
-PWD := $(shell pwd)
-LAPACKROOT = $(PWD)/../lapack/lapack-$(LAPACK_VERSION)
-
 all: .error_check_done
 
 $(DIST_FILES):
@@ -41,8 +35,8 @@ endif
 
 .install_lapack_done: .patch_done
 	mkdir -p 2005/src/lib
-	install $(LAPACKROOT)/liblapack.a $(CERN)/$(CERN_LEVEL)/src/lib/liblapack.a
-	install $(LAPACKROOT)/librefblas.a $(CERN)/$(CERN_LEVEL)/src/lib/libblas.a
+	install $(LAPACK_HOME)/liblapack.a $(CERN)/$(CERN_LEVEL)/src/lib/liblapack.a
+	install $(LAPACK_HOME)/librefblas.a $(CERN)/$(CERN_LEVEL)/src/lib/libblas.a
 	date > $@
 
 .build_done: .install_lapack_done
