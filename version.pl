@@ -11,7 +11,9 @@ use File::Basename;
 $ERROR_NO_FILE_ARG = 1;
 $ERROR_FILE_DOES_NOT_EXIST = 2;
 
+get_options();
 $shell_type = define_shell_type();
+set_debug_flags();
 
 $gluex_top_default = "/home/" . $ENV{USER} . "/gluex_top";
 
@@ -83,9 +85,14 @@ foreach $href (@b) {
 	    $package_home_dir = $home;
 	} else {
 	    if ($dirtag) {$sep = '^';} else {$sep = '';}
+	    if ($debug{$name}) {
+		$debugtag = ":debug";
+	    } else {
+		$debugtag = "";
+	    }
 	    if ($url) {
 		$basename = basename($url);
-		$package_home_dir = "$gluex_top/$name/$basename$sep$dirtag$dir_suffix{$name}";
+		$package_home_dir = "$gluex_top/$name/$basename$sep$dirtag$debugtag$dir_suffix{$name}";
 	    } else {
 		if ($version) {
 		    my $this_dir_prefix = $dir_prefix{$name};
@@ -96,9 +103,9 @@ foreach $href (@b) {
 			    $this_dir_prefix =~ s/\[_-\]/_/;
 			}
 		    }
-		    $package_home_dir = "$gluex_top/$name/$this_dir_prefix$version$sep$dirtag$dir_suffix{$name}";
+		    $package_home_dir = "$gluex_top/$name/$this_dir_prefix$version$sep$dirtag$debugtag$dir_suffix{$name}";
 		} else {
-		    $package_home_dir = "$gluex_top/$name/$name$sep$dirtag$dir_suffix{$name}";
+		    $package_home_dir = "$gluex_top/$name/$name$sep$dirtag$debugtag$dir_suffix{$name}";
 		}
 	    }
 	}
@@ -108,14 +115,19 @@ foreach $href (@b) {
 	if ($branch) {print_command("${name_in_caps}_BRANCH", $branch);}
 	if ($hash) {print_command("${name_in_caps}_HASH", $hash);}
 	if ($year) {print_command("${name_in_caps}_YEAR", $year);}
+	if ($debug{$name}) {print_command("${name_in_caps}_DEBUG", "true");}
     }
 }
 
 exit;
 
-sub define_shell_type {
+sub get_options {
     $opt_s = "";
-    getopts('s:');
+    $opt_d = "";
+    getopts('s:d:');
+}
+
+sub define_shell_type {
     $shell = $opt_s;
     my $shell_type = 'undefined';
     if ($shell eq 'sh') {
@@ -132,6 +144,26 @@ sub define_shell_type {
 	die 'shell not recognized, use bash, sh, csh, or tcsh';
     }
     return $shell_type;
+}
+
+sub set_debug_flags {
+    @dnames = ('hdds', 'halld_recon', 'halld_sim');
+    foreach $name (@dnames) {
+	$debug{$name} = 0;
+    }
+    if ($opt_d ne "") {
+	if ($opt_d eq "all") {
+	    foreach $name (@dnames) {
+		$debug{$name} = 1;
+	    }
+	} else {
+	    foreach $name (@dnames) {
+		if ($opt_d =~ /$name/) {
+		    $debug{$name} = 1;
+		}
+	    }
+	}
+    }
 }
 
 sub print_command {
