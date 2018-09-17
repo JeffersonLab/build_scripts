@@ -20,7 +20,7 @@ endif
 all: $(ROOTDIR)/.install_done
 
 $(TARFILE):
-	wget https://root.cern.ch/download/$@
+	wget --no-verbose https://root.cern.ch/download/$@
 
 $(ROOTDIR)/.untar_done: $(TARFILE)
 	$(RM) -r $(ROOTDIR)

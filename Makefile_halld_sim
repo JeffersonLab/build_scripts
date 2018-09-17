@@ -37,7 +37,7 @@ export HALLD_SIM_HOME = $(PWD)/$(HALLD_SIM_DIR)
 all: $(HALLD_SIM_HOME)/halld_sim_prereqs_version.xml
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/JeffersonLab/halld_sim/archive/$(HALLD_SIM_VERSION).tar.gz
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/JeffersonLab/halld_sim/archive/$(HALLD_SIM_VERSION).tar.gz
 
 $(HALLD_SIM_HOME)/.untar_done: $(TARFILE)
 	rm -rf untar_temp_dir

@@ -25,7 +25,7 @@ endif
 all: $(RCDB_DIR)/rcdb_prereqs_version.xml
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/rcdb/archive/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/jeffersonlab/rcdb/archive/$(TARFILE)
 
 $(RCDB_DIR)/.untar_done: $(TARFILE)
 	rm -rfv untar_temp_dir

@@ -8,7 +8,7 @@ GSLDIR=$(PWD)/gsl-$(GSL_VERSION)
 all: prod_link
 
 $(TARFILE):
-	wget ftp://ftp.gnu.org/gnu/gsl/$(TARFILE)
+	wget --no-verbose ftp://ftp.gnu.org/gnu/gsl/$(TARFILE)
 
 $(GSLDIR)/.untar_done: $(TARFILE)
 	tar zxvf $(TARFILE)

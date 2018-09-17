@@ -12,7 +12,7 @@ SQLITE_HOME = $(PWD)/$(SQLITE_DIR)
 all: $(SQLITE_HOME)/.install_done
 
 $(TARFILE):
-	wget --no-check-certificate https://www.sqlite.org/$(SQLITE_YEAR)/$(TARFILE)
+	wget --no-verbose --no-check-certificate https://www.sqlite.org/$(SQLITE_YEAR)/$(TARFILE)
 
 $(SQLITE_HOME)/.untar_done: $(TARFILE)
 	rm -rf untar_temp_dir

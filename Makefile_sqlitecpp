@@ -35,7 +35,7 @@ SQLITECPP_HOME = $(PWD)/$(SQLITECPP_DIR)
 all: $(SQLITECPP_HOME)/sqlitecpp_prereqs.xml
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/SRombauts/SQLiteCpp/archive/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/SRombauts/SQLiteCpp/archive/$(TARFILE)
 
 $(SQLITECPP_HOME)/.clone_done:
 	git clone -b $(SQLITECPP_BRANCH) $(SQLITECPP_URL) $(SQLITECPP_DIR)

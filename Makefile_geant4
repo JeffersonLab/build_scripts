@@ -20,8 +20,8 @@ $(TARFILE):
 # b) G4 folks have changed the distribution system so that a working tar file
 #    for this version does not exist.
 # So for now we will get an old version of the tar file from JLab
-#	wget http://geant4.web.cern.ch/geant4/support/source/$(TARFILE)
-	wget https://halldweb.jlab.org/dist/$(TARFILE)
+#	wget --no-verbose http://geant4.web.cern.ch/geant4/support/source/$(TARFILE)
+	wget --no-verbose https://halldweb.jlab.org/dist/$(TARFILE)
 
 $(G4DIR)/.untar_done: $(TARFILE)
 	tar zxf $(TARFILE)

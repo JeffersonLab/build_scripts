@@ -23,7 +23,7 @@ EVIO_DOWNLOAD_URL_BASE = https://coda.jlab.org/drupal/system/files/coda/evio
 all: $(EVIO_HOME)/.scons_done
 
 $(TARFILE):
-	wget --no-check-certificate $(EVIO_DOWNLOAD_URL_BASE)/evio-$(MAJOR_MINOR)/$(TARFILE)
+	wget --no-verbose --no-check-certificate $(EVIO_DOWNLOAD_URL_BASE)/evio-$(MAJOR_MINOR)/$(TARFILE)
 
 $(EVIO_HOME)/.untar_done: $(TARFILE)
 	mkdir -p temp
