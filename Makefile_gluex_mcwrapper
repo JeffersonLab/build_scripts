@@ -30,7 +30,7 @@ GLUEX_MCWRAPPER_HOME = $(PWD)/$(GLUEX_MCWRAPPER_DIR)
 all: $(GLUEX_MCWRAPPER_HOME)/gluex_mcwrapper_prereqs_version.xml
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/gluex_MCwrapper/archive/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/jeffersonlab/gluex_MCwrapper/archive/$(TARFILE)
 
 $(GLUEX_MCWRAPPER_HOME)/.clone_done:
 	git clone -b $(GLUEX_MCWRAPPER_BRANCH) $(GLUEX_MCWRAPPER_URL) $(GLUEX_MCWRAPPER_DIR)

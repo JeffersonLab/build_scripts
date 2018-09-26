@@ -47,7 +47,7 @@ else
 endif
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/hdds/archive/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/jeffersonlab/hdds/archive/$(TARFILE)
 
 $(HDDS_HOME)/.clone_done:
 	git clone -b $(HDDS_BRANCH) $(HDDS_URL) $(HDDS_DIR)

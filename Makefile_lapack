@@ -25,4 +25,4 @@ $(LAPACKROOT)/.untar_done: $(TARFILE)
 	date > $@
 
 $(TARFILE):
-	wget http://www.netlib.org/lapack/$(TARFILE)
+	wget --no-verbose http://www.netlib.org/lapack/$(TARFILE)

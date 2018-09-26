@@ -45,7 +45,7 @@ else
 endif
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/JeffersonLab/halld_recon/archive/$(HALLD_RECON_VERSION).tar.gz
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/JeffersonLab/halld_recon/archive/$(HALLD_RECON_VERSION).tar.gz
 
 $(HALLD_RECON_HOME)/.untar_done: $(TARFILE)
 	rm -rf untar_temp_dir

@@ -30,7 +30,7 @@ HD_UTILITIES_HOME = $(PWD)/$(HD_UTILITIES_DIR)
 all: $(HD_UTILITIES_HOME)/hd_utilities_prereqs_version.xml
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/hd_utilities/archive/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/jeffersonlab/hd_utilities/archive/$(TARFILE)
 
 $(HD_UTILITIES_HOME)/.clone_done:
 	git clone -b $(HD_UTILITIES_BRANCH) $(HD_UTILITIES_URL) $(HD_UTILITIES_DIR)

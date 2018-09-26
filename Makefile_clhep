@@ -13,7 +13,7 @@ endif
 all: $(CLHEPDIR)/.make_install_done
 
 $(TARFILE):
-	wget http://proj-clhep.web.cern.ch/proj-clhep/DISTRIBUTION/distributions/$(TARFILE)
+	wget --no-verbose http://proj-clhep.web.cern.ch/proj-clhep/DISTRIBUTION/distributions/$(TARFILE)
 
 $(CLHEPDIR)/.untar_done: $(TARFILE)
 	tar zxvf $(TARFILE)
