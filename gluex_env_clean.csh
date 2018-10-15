@@ -115,6 +115,7 @@ unsetenv MCWRAPPER_CENTRAL
 unsetenv ROOT_ANALYSIS_HOME
 unsetenv SQLITECPP_HOME
 unsetenv SQLITE_HOME
+unsetenv LAPACK_HOME
 # versions
 unsetenv SIM_RECON_VERSION
 unsetenv HALLD_RECON_VERSION
@@ -136,6 +137,7 @@ unsetenv AMPTOOLS_VERSION
 unsetenv SQLITECPP_VERSION
 unsetenv SQLITE_VERSION
 unsetenv GLUEX_MCWRAPPER_VERSION
+unsetenv LAPACK_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
 unsetenv HALLD_RECON_URL
