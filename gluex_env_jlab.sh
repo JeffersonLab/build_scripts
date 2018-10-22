@@ -5,6 +5,9 @@ if [ -z $1 ]
 else
     VERSION_XML=$1
 fi
+if [ `echo $PATH | grep -c /apps/bin` -eq 0 ]
+    then export PATH=/apps/bin:$PATH
+fi
 if [ -z "$BUILD_SCRIPTS" ]
     then export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 fi

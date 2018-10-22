@@ -4,6 +4,8 @@ if ( "x$1" == "x" ) then
 else
     set VERSION_XML=$1
 endif
+echo $PATH | grep /apps/bin > /dev/null
+if ($status) setenv PATH /apps/bin:$PATH
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 # farm-specific set-up
