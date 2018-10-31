@@ -42,8 +42,6 @@ force_rebuild_action:
 ifdef FORCE
 	@echo forcing rebuild
 	$(RM) $(GLUEX_ROOT_ANALYSIS_HOME)/.make_script_done
-else
-	@echo rebuild will not be forced
 endif
 
 $(TARFILE):
