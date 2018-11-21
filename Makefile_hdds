@@ -42,8 +42,6 @@ force_rebuild_action:
 ifdef FORCE
 	@echo forcing rebuild
 	$(RM) $(HDDS_HOME)/.sconstruct_done
-else
-	@echo rebuild will not be forced
 endif
 
 $(TARFILE):

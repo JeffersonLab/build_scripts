@@ -42,8 +42,6 @@ force_rebuild_action:
 ifdef FORCE
 	@echo forcing rebuild
 	$(RM) $(HDGEANT4_HOME)/.make_done
-else
-	@echo rebuild will not be forced
 endif
 
 $(TARFILE):
