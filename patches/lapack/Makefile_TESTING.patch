@@ -1,0 +1,11 @@
+--- Makefile.orginal	2018-11-26 14:39:50.184208003 -0500
++++ Makefile.patched	2018-11-26 14:40:46.664029901 -0500
+@@ -144,7 +144,7 @@
+ single:         $(SLINTST) $(SEIGTST)
+ complex:        $(CLINTST) $(CEIGTST)
+ double:         $(DLINTST) $(DEIGTST)
+-complex16:      $(ZLINTST) $(ZEIGTST)
++complex16:      $(ZLINTST)
+ singleproto:    $(SLINTSTPROTO)
+ complexproto:   $(CLINTSTPROTO)
+ doubleproto:    $(DLINTSTPROTO)
