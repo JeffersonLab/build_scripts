@@ -50,7 +50,7 @@ else
 endif
 
 %.tar.gz:
-	wget http://cernlib.web.cern.ch/cernlib/download/${CERN_LEVEL}_source/tar/$@
+	wget --no-verbose http://cernlib.web.cern.ch/cernlib/download/${CERN_LEVEL}_source/tar/$@
 
 $(CERN_ROOT)/cernlib_patch_file.txt:
 	cat $(BUILD_SCRIPTS)/patches/cernlib/*.txt > $@

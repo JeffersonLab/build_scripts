@@ -25,4 +25,4 @@ $(XERCESCROOT)/.configure_done: $(XERCESCROOT)/.untar_done
 	date > $@
 
 $(TARFILE):
-	wget http://archive.apache.org/dist/xerces/c/$(XERCES_SERIES)/sources/$(TARFILE)
+	wget --no-verbose http://archive.apache.org/dist/xerces/c/$(XERCES_SERIES)/sources/$(TARFILE)

@@ -49,4 +49,4 @@ $(JANA_HOME)/.untar_done: $(TARFILE)
 
 $(TARFILE):
 	@echo making $@
-	wget http://www.jlab.org/JANA/releases/$(TARFILE)
+	wget --no-verbose http://www.jlab.org/JANA/releases/$(TARFILE)

@@ -20,7 +20,7 @@ endif
 all: $(ROOTDIR)/.install_done
 
 $(TARFILE):
-	wget https://root.cern.ch/download/$@
+	wget --no-verbose https://root.cern.ch/download/$@
 
 $(ROOTDIR)/.untar_done: $(TARFILE)
 	$(RM) -r $(ROOTDIR)
@@ -37,7 +37,7 @@ $(ROOTDIR)/.cmake_done: $(ROOTDIR)/.untar_done
 	date > $@
 
 $(ROOTDIR)/.build_done: $(ROOTDIR)/.cmake_done
-	cd $(BUILD_DIR) ; $(CMAKE) --build . -- $(ROOT6_BUILD_OPTIONS)
+	cd $(BUILD_DIR) ; $(CMAKE) --build . $(ROOT6_CMAKE_BUILD_OPTIONS) -- $(ROOT6_BUILD_OPTIONS)
 	date > $@
 
 $(ROOTDIR)/.install_done: $(ROOTDIR)/.build_done

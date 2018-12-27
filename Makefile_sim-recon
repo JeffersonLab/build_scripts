@@ -40,12 +40,10 @@ force_rebuild_action:
 ifdef FORCE
 	@echo forcing rebuild
 	$(RM) $(HALLD_HOME)/.sconstruct_done
-else
-	@echo rebuild will not be forced
 endif
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/JeffersonLab/sim-recon/archive/$(SIM_RECON_VERSION).tar.gz
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/JeffersonLab/sim-recon/archive/$(SIM_RECON_VERSION).tar.gz
 
 $(HALLD_HOME)/.untar_done: $(TARFILE)
 	rm -rf untar_temp_dir

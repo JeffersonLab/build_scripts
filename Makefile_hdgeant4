@@ -42,12 +42,10 @@ force_rebuild_action:
 ifdef FORCE
 	@echo forcing rebuild
 	$(RM) $(HDGEANT4_HOME)/.make_done
-else
-	@echo rebuild will not be forced
 endif
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/hdgeant4/archive/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/jeffersonlab/hdgeant4/archive/$(TARFILE)
 
 $(HDGEANT4_HOME)/.clone_done:
 	git clone -b $(HDGEANT4_BRANCH) $(HDGEANT4_URL) $(HDGEANT4_DIR)

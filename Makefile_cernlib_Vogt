@@ -9,7 +9,7 @@ DIST_FILES = $(ALL_FILE) $(CORR_FILE) $(INSTALL_FILE)
 all: .error_check_done
 
 $(DIST_FILES):
-	wget --no-check-certificate http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
+	wget --no-verbose --no-check-certificate http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
 
 .untar_done: $(DIST_FILES)
 	tar zxvf $(ALL_FILE)
@@ -35,8 +35,11 @@ endif
 
 .install_lapack_done: .patch_done
 	mkdir -p 2005/src/lib
-	install $(LAPACK_HOME)/liblapack.a $(CERN)/$(CERN_LEVEL)/src/lib/liblapack.a
-	install $(LAPACK_HOME)/librefblas.a $(CERN)/$(CERN_LEVEL)/src/lib/libblas.a
+	install $(LAPACK_HOME)/liblapack.a 2005/src/lib/liblapack.a
+	install $(LAPACK_HOME)/librefblas.a 2005/src/lib/libblas.a
+	mkdir -p 2005/lib
+	install $(LAPACK_HOME)/liblapack.a 2005/lib/liblapack3.a
+	install $(LAPACK_HOME)/librefblas.a 2005/lib/libblas.a
 	date > $@
 
 .build_done: .install_lapack_done

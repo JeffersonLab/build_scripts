@@ -4,6 +4,8 @@ if ( "x$1" == "x" ) then
 else
     set VERSION_XML=$1
 endif
+echo $PATH | grep /apps/bin > /dev/null
+if ($status) setenv PATH /apps/bin:$PATH
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 # farm-specific set-up
@@ -28,7 +30,7 @@ setenv PATH /apps/perl/bin:$PATH
 # finish the rest of the gluex environment
 source $BUILD_SCRIPTS/gluex_env_version.csh $VERSION_XML
 if ($status) exit $status
-setenv JANA_CALIB_URL $CCDB_CONNECTION
+setenv JANA_CALIB_URL sqlite:////group/halld/www/halldweb/html/dist/ccdb.sqlite
 setenv JANA_RESOURCE_DIR /group/halld/www/halldweb/html/resources
 # cmake on the cue
 setenv PATH /apps/cmake/cmake-3.5.1/bin:$PATH
