@@ -12,25 +12,27 @@
 PWD = $(shell pwd)
 ifdef HALLD_SIM_VERSION
  SOURCE_CODE_TARGET = $(HALLD_SIM_HOME)/.untar_done
- ifdef HALLD_SIM_DIRTAG
-  HALLD_SIM_DIR = halld_sim-$(HALLD_SIM_VERSION)^$(HALLD_SIM_DIRTAG)
- else
-  HALLD_SIM_DIR = halld_sim-$(HALLD_SIM_VERSION)
- endif
+ HALLD_SIM_DIR = halld_sim-$(HALLD_SIM_VERSION)
  TARFILE = $(HALLD_SIM_VERSION).tar.gz
 else
  SOURCE_CODE_TARGET = $(HALLD_SIM_HOME)/.clone_done
  ifndef HALLD_SIM_URL
   HALLD_SIM_URL=https://github.com/jeffersonlab/halld_sim
  endif
- ifdef HALLD_SIM_DIRTAG
-  HALLD_SIM_DIR = $(notdir $(HALLD_SIM_URL))^$(HALLD_SIM_DIRTAG)
- else
-  HALLD_SIM_DIR = $(notdir $(HALLD_SIM_URL))
- endif
+ HALLD_SIM_DIR = $(notdir $(HALLD_SIM_URL))
  ifndef HALLD_SIM_BRANCH
   HALLD_SIM_BRANCH = master
  endif
+endif
+ifdef HALLD_SIM_DIRTAG
+ HALLD_SIM_DIR := $(HALLD_SIM_DIR)^$(HALLD_SIM_DIRTAG)
+endif
+ifeq ($(HALLD_SIM_DEBUG_LEVEL), 0)
+ HALLD_SIM_DIR := $(HALLD_SIM_DIR)+dbg
+ HALLD_SIM_SCONS_OPTIONS += DEBUG=1 OPTIMIZATION=0
+else ifeq ($(HALLD_SIM_DEBUG_LEVEL), 2)
+ HALLD_SIM_DIR := $(HALLD_SIM_DIR)+opt
+ HALLD_SIM_SCONS_OPTIONS += DEBUG=0 OPTIMIZATION=2
 endif
 export HALLD_SIM_HOME = $(PWD)/$(HALLD_SIM_DIR)
 

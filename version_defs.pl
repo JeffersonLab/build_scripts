@@ -73,3 +73,4 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
                halld_sim => '',
                halld_recon => '',
                lapack => '');
+@debug_type = ('opt', '', 'dbg');
