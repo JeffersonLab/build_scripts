@@ -128,8 +128,7 @@ exit;
 
 sub get_options {
     $opt_s = "";
-    $opt_d = "";
-    getopts('s:d:');
+    getopts('s:');
 }
 
 sub define_shell_type {
