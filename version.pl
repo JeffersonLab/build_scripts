@@ -65,6 +65,7 @@ foreach $href (@b) {
     $hash = $d{hash};
     $year = $d{year};
     $debug_level = $d{debug_level};
+    if ($debug_level eq '') {$debug_level = 1} # set a default level
     if ($version) {
 	print_command("${name_in_caps}_VERSION", $version);
     }
@@ -89,8 +90,9 @@ foreach $href (@b) {
 	    } else {
 		$dirtag_label = '';
 	    }
-	    if ($debug_level) {
-		$debug_level_label = '+' . $debug_type[$debug_level];
+	    $dtype = $debug_type[$debug_level];
+	    if ($dtype) { # if not null string
+		$debug_level_label = '+' . $dtype;
 	    } else {
 		$debug_level_label = '';
 	    }
@@ -118,7 +120,6 @@ foreach $href (@b) {
 	if ($hash) {print_command("${name_in_caps}_HASH", $hash);}
 	if ($year) {print_command("${name_in_caps}_YEAR", $year);}
 	if ($name eq 'halld_sim' || $name eq 'halld_recon') {
-	    if ($debug_level eq '') {$debug_level = 1} # set a default level
 	    print_command("${name_in_caps}_DEBUG_LEVEL", $debug_level);
 	}
     }
