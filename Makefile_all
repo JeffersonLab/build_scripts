@@ -28,10 +28,10 @@ HALLD_SIM = ${ROOT_OF_ALL}/halld_sim
 HALLD_RECON = ${ROOT_OF_ALL}/halld_recon
 
 ifdef NTHREADS
-  ROOT6_OPTIONS += -j$(NTHREADS)
-  SIM_RECON_OPTIONS += -j$(NTHREADS)
-  HALLD_RECON_OPTIONS += -j$(NTHREADS)
-  HALLD_SIM_OPTIONS += -j$(NTHREADS)
+  ROOT6_BUILD_OPTIONS += -j$(NTHREADS)
+  SIM_RECON_SCONS_OPTIONS += -j$(NTHREADS)
+  HALLD_RECON_SCONS_OPTIONS += -j$(NTHREADS)
+  HALLD_SIM_SCONS_OPTIONS += -j$(NTHREADS)
 endif
 
 all: env xerces_build lapack_build cernlib_build root_build clhep_build geant4_build gsl_build evio_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build sqlite_build mcwrapper_build
@@ -73,7 +73,7 @@ xerces_make:
 	$(MAKE) -C${XERCES} -f${BUILD_SCRIPTS}/Makefile_xercesc_3
 
 root_build: root_dir
-	    $(MAKE) -C${ROOT} -f${BUILD_SCRIPTS}/Makefile_root ROOT6_BUILD_OPTIONS=$(ROOT6_OPTIONS)
+	    $(MAKE) -C${ROOT} -f${BUILD_SCRIPTS}/Makefile_root ROOT6_BUILD_OPTIONS="$(ROOT6_BUILD_OPTIONS)"
 
 root_dir:
 	test -d ${ROOT} || mkdir -pv ${ROOT}
@@ -100,7 +100,7 @@ sim-recon_dir:
 	test -d ${SIM-RECON} || mkdir -pv ${SIM-RECON}
 
 sim-recon_make:
-	$(MAKE) -C${SIM-RECON} -f${BUILD_SCRIPTS}/Makefile_sim-recon SIM_RECON_SCONS_OPTIONS=$(SIM_RECON_OPTIONS)
+	$(MAKE) -C${SIM-RECON} -f${BUILD_SCRIPTS}/Makefile_sim-recon SIM_RECON_SCONS_OPTIONS="$(SIM_RECON_SCONS_OPTIONS)"
 
 halld_sim_build: halld_sim_dir halld_sim_make
 
@@ -108,7 +108,7 @@ halld_sim_dir:
 	test -d ${HALLD_SIM} || mkdir -pv ${HALLD_SIM}
 
 halld_sim_make:
-	$(MAKE) -C${HALLD_SIM} -f${BUILD_SCRIPTS}/Makefile_halld_sim HALLD_SIM_SCONS_OPTIONS=$(HALLD_SIM_OPTIONS)
+	$(MAKE) -C${HALLD_SIM} -f${BUILD_SCRIPTS}/Makefile_halld_sim HALLD_SIM_SCONS_OPTIONS="$(HALLD_SIM_SCONS_OPTIONS)"
 
 halld_recon_build: halld_recon_dir halld_recon_make
 
@@ -116,7 +116,7 @@ halld_recon_dir:
 	test -d ${HALLD_RECON} || mkdir -pv ${HALLD_RECON}
 
 halld_recon_make:
-	$(MAKE) -C${HALLD_RECON} -f${BUILD_SCRIPTS}/Makefile_halld_recon HALLD_RECON_SCONS_OPTIONS=$(HALLD_RECON_OPTIONS)
+	$(MAKE) -C${HALLD_RECON} -f${BUILD_SCRIPTS}/Makefile_halld_recon HALLD_RECON_SCONS_OPTIONS="$(HALLD_RECON_SCONS_OPTIONS)"
 
 clhep_build: clhep_dir clhep_make
 

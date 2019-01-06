@@ -26,85 +26,79 @@ foreach $package (@packages) {
     $home_value = $ENV{$home_variable};
     #print "$home_variable = $home_value\n";
     $home_value_hash{$package} = $home_value;
-    if (-e $home_value) {
-	$version = '';
-	$url = '';
-	$branch = '';
-	$dirtag = '';
-	if ($package eq 'cernlib') {
-	    $version_hash{$package} = $ENV{CERN_LEVEL}
-	} else {
-	    $svn_hidden_dir = $home_value . "/.svn";
-	    $git_hidden_dir = $home_value . "/.git";
-	    @token2 = split(/\//, $home_value); # split on slash
-	    $dirname_home = $token2[$#token2]; # last token is directory name
-	    if (-d $svn_hidden_dir) {
-		$url_raw = `svn info $home_value | grep URL:`;
-		chomp $url_raw;
-		#print "for $home_variable = $home_value, url_raw = $url_raw\n";
-		@t = split(/URL: /, $url_raw);
-		$url = $t[1];
-		@token3 = split(/^/, $dirname_home); # split on caret
-		if ($#token3 > 0) {$dirtag = $token3[$#token3];}
-	    } elsif (-d $git_hidden_dir) {
-
-		$url_raw = `cd $home_value ; git remote -v | grep \"\(fetch\)\"`;
-		chomp $url_raw;
-		#print "for $home_variable = $home_value, url_raw = $url_raw\n";
-		@t = split(/\s+/, $url_raw);
-		$url = $t[1];
-
-		$branch_raw = `cd $home_value ; git status | grep \" On branch \"`;
-		chomp $branch_raw;
-		#print "for $home_variable = $home_value, branch_raw = $branch_raw\n";
-		@t = split(/\s+/, $branch_raw);
-		$branch = $t[3];
-
-		@token3 = split(/^/, $dirname_home); # split on caret
-		if ($#token3 > 0) {$dirtag = $token3[$#token3];}
-
-	    } else {
-		# extract the version
-		#print "dir_prefix = $dir_prefix{$package}\n";
-		$dir_prefix_escaped = $dir_prefix{$package};
-		$dir_prefix_escaped =~ s/\./\\\./g;
-		@token0 = split(/$dir_prefix_escaped/, $home_value);
-		$home_value_tail = $token0[1];
-		#print "dir_suffix = $dir_suffix{$package}\n";
-		if ($dir_suffix{$package}) {
-		    @token1 = split(/$dir_suffix{$package}/, $home_value_tail);
-		    $version_field = $token1[0];
-		} else {
-		    $version_field = $token0[1];
-		}
-		#print "version_field = $version_field\n";
-		@token4 = split(/\^/, $version_field);
-		if ($#token4 > 0) {
-		    $dirtag = $token4[$#token4];
-		    $dirtag_string = "\\^" . $dirtag;
-		    @token5 = split (/$dirtag_string/, $version_field);
-		    $version = $token5[0];
-		} else {
-		    $version = $version_field;
-		}
-		$version_hash{$package} = $version;
-		#print "version from home dir name = $version_hash{$package}\n";
-	    }
-	}
-	if ($dirtag) {
-	    #print "dirtag found: \"$dirtag\"\n";
-	    $dirtag_hash{$package} = $dirtag;
-	}
-	if ($url) {
-	    #print "url found: \"$url\"\n";
-	    $url_hash{$package} = $url;
-	}
-	if ($branch) {
-	    #print "branch found: \"$branch\"\n";
-	    $branch_hash{$package} = $branch;
-	}
+    $version = '';
+    $url = '';
+    $branch = '';
+    $dirtag = '';
+    if ($package eq 'cernlib') {
+	$version_hash{$package} = $ENV{CERN_LEVEL}
     } else {
-	    #print "$home_variable not defined\n";
+	$svn_hidden_dir = $home_value . "/.svn";
+	$git_hidden_dir = $home_value . "/.git";
+	@token2 = split(/\//, $home_value); # split on slash
+	$dirname_home = $token2[$#token2]; # last token is directory name
+	if (-d $svn_hidden_dir) {
+	    $url_raw = `svn info $home_value | grep URL:`;
+	    chomp $url_raw;
+	    #print "for $home_variable = $home_value, url_raw = $url_raw\n";
+	    @t = split(/URL: /, $url_raw);
+	    $url = $t[1];
+	    @token3 = split(/^/, $dirname_home); # split on caret
+	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
+	} elsif (-d $git_hidden_dir) {
+	    $url_raw = `cd $home_value ; git remote -v | grep \"\(fetch\)\"`;
+	    chomp $url_raw;
+	    #print "for $home_variable = $home_value, url_raw = $url_raw\n";
+	    @t = split(/\s+/, $url_raw);
+	    $url = $t[1];
+	    $branch_raw = `cd $home_value ; git status | grep \" On branch \"`;
+	    chomp $branch_raw;
+	    #print "for $home_variable = $home_value, branch_raw = $branch_raw\n";
+	    @t = split(/\s+/, $branch_raw);
+	    $branch = $t[3];
+	    @token3 = split(/^/, $dirname_home); # split on caret
+	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
+	} else {
+	    # extract the version
+	    #print "dir_prefix = $dir_prefix{$package}\n";
+	    $dir_prefix_escaped = $dir_prefix{$package};
+	    $dir_prefix_escaped =~ s/\./\\\./g;
+	    @token0 = split(/$dir_prefix_escaped/, $home_value);
+	    $home_value_tail = $token0[1];
+	    #print "dir_suffix = $dir_suffix{$package}\n";
+	    if ($dir_suffix{$package}) {
+		@token1 = split(/$dir_suffix{$package}/, $home_value_tail);
+		$version_field = $token1[0];
+	    } else {
+		$version_field = $token0[1];
+	    }
+	    #print "version_field = $version_field\n";
+	    @token4 = split(/\^/, $version_field);
+	    if ($#token4 > 0) {
+		$dirtag = $token4[$#token4];
+		$dirtag_string = "\\^" . $dirtag;
+		@token5 = split (/$dirtag_string/, $version_field);
+		$version_field = $token5[0];
+	    }
+	    @token6 = split(/\+/, $version_field);
+	    if ($#token6 > 0) {
+		$version_field = $token6[0];
+	    }
+	    $version_hash{$package} = $version_field;
+	    #print "version from home dir name = $version_hash{$package}\n";
+	}
+    }
+    if ($dirtag) {
+	#print "dirtag found: \"$dirtag\"\n";
+	$dirtag_hash{$package} = $dirtag;
+    }
+    if ($url) {
+	#print "url found: \"$url\"\n";
+	$url_hash{$package} = $url;
+    }
+    if ($branch) {
+	#print "branch found: \"$branch\"\n";
+	$branch_hash{$package} = $branch;
     }
 }
 
