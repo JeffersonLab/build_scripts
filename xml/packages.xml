@@ -1,0 +1,23 @@
+<packages>
+<package name="root"/>
+<package name="clhep"/>
+<package name="jana"/>
+<package name="sim-recon"/>
+<package name="hdds"/>
+<package name="cernlib"/>
+<package name="xerces-c"/>
+<package name="ccdb"/>
+<package name="geant4"/>
+<package name="evio"/>
+<package name="rcdb"/>
+<package name="hdgeant4"/>
+<package name="hd_utilities"/>
+<package name="gluex_root_analysis"/>
+<package name="amptools"/>
+<package name="sqlitecpp"/>
+<package name="sqlite"/>
+<package name="gluex_MCwrapper"/>
+<package name="halld_sim"/>
+<package name="halld_recon"/>
+<package name="lapack"/>
+</packages>
