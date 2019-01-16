@@ -2,8 +2,11 @@
 #
 # delete element from path
 #
-$pathtype = "PATH";
-$shell = "C";
+$pathtype = "PATH"; # the default path type
+$shell = "C"; # the default shell
+#
+# process command line options
+#
 @token = ();
 $this = shift;
 while ($this) {
@@ -25,6 +28,12 @@ while ($this) {
 }
 $line=$ENV{$pathtype};
 #print STDERR "$line\n";
+#
+# escape special characters
+#
+$line =~ s/ /\\ /g; # blank
+$line =~ s/\(/\\\(/g; # open parenthesis
+$line =~ s/\)/\\\)/g; # close parenthesis
 @field = split(/:/,$line);
 #print STDERR "number of fields - 1 = $#field\n";
 #print STDERR "number of fields to delete - 1 = $#token\n";
