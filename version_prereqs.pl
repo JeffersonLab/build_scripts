@@ -111,6 +111,12 @@ foreach $prepackage (@prepackages) {
 		@token5 = split (/\^$dirtag/, $version);
 		$version = $token5[0];
 	    }
+	    @token6 = split(/\+/, $version);
+	    if ($#token6 > 0) {
+		$dbgtag = $token6[$#token6];
+		@token7 = split (/\+$dbgtag/, $version);
+		$version = $token7[0];
+	    }
 	}
     }
     if ($debug) {
