@@ -21,6 +21,12 @@ try:
 except:
     print "CAN'T CONNECT"
 
+def checkOasis(loc,afile):
+    print(afile)
+    if(afile == "version_cntr_mon.xml"  or afile == "version_cntr_thu.xml" or "_jlab" in afile):
+        return True
+    else:
+        return False
 
 def main(argv):
 #main loc="/group/halld/www/halldweb/html/dist/"
@@ -32,7 +38,7 @@ def main(argv):
    
     
     reconpackcmd="xsltproc ../xml/packages_sql.xslt ../xml/packages.xml | grep INSERT | "+"mysql -h "+dbhost+" -D "+dbname+" -u "+dbuser
-    print reconpackcmd
+    #print reconpackcmd
     
     ps = subprocess.Popen(reconpackcmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
     output = ps.communicate()[0]
@@ -57,7 +63,9 @@ def main(argv):
 
         directories=os.listdir(loc)
         for afile in directories:
-            if "_jlab" not in afile:
+            #if "_jlab" not in afile:
+            #    continue
+            if ".xml" not in afile:
                 continue
             if "~" in afile:
                 continue
@@ -74,8 +82,9 @@ def main(argv):
                 continue
 
 
-            #check for 
-            onOasis=1
+            #check for
+            
+            onOasis=checkOasis(loc,afile)
             insert_versionset="INSERT INTO versionSet (directoryId, filename, fileExists, onOasis) VALUES ("+str(locid)+", \""+afile.replace(" ","_")+"\", 1,"+str(onOasis) +");"
             #insert_versionset="INSERT INTO versionSet (directoryId, filename, fileExists) VALUES ("+str(locid)+", \""+afile.replace(" ","_")+"\", 1"+");"
             print insert_versionset
