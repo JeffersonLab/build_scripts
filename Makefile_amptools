@@ -8,9 +8,14 @@ else
   AMPTOOLS_LOCAL_DIR = AmpTools-$(AMPTOOLS_VERSION)
 endif
 AMPTOOLS_DIR = $(shell pwd)/$(AMPTOOLS_LOCAL_DIR)
-AMPTOOLS_PACKAGES = AmpTools AmpPlotter
 
-all: $(AMPTOOLS_DIR)/amptools_prereqs_version.xml
+all: force_rebuild_action $(AMPTOOLS_DIR)/amptools_prereqs_version.xml
+
+force_rebuild_action:
+ifdef FORCE
+	@echo forcing rebuild
+	$(RM) $(AMPTOOLS_DIR)/.make_done
+endif
 
 $(TARFILE):
 	wget --no-verbose https://github.com/mashephe/AmpTools/archive/$(TARFILE) -O $(TARFILE)
@@ -29,11 +34,16 @@ $(AMPTOOLS_DIR)/.patch: $(AMPTOOLS_DIR)/.unpack
 	date > $@
 
 ifeq ($(AMPTOOLS_VERSION),0.9.1)
-$(AMPTOOLS_PACKAGES): $(AMPTOOLS_DIR)/.patch
+$(AMPTOOLS_DIR)/.make_prep_done: $(AMPTOOLS_DIR)/.patch
 else
-$(AMPTOOLS_PACKAGES): $(AMPTOOLS_DIR)/.unpack
+$(AMPTOOLS_DIR)/.make_prep_done: $(AMPTOOLS_DIR)/.unpack
 endif
-	cd $(AMPTOOLS_DIR)/$@ ; make
+	date > $@
 
-$(AMPTOOLS_DIR)/amptools_prereqs_version.xml: $(AMPTOOLS_PACKAGES)
+$(AMPTOOLS_DIR)/.make_done: $(AMPTOOLS_DIR)/.make_prep_done
+	cd $(AMPTOOLS_DIR)/AmpTools ; make
+	cd $(AMPTOOLS_DIR)/AmpPlotter ; make
+	date > $@
+
+$(AMPTOOLS_DIR)/amptools_prereqs_version.xml: $(AMPTOOLS_DIR)/.make_done
 	cd $(AMPTOOLS_DIR) ; $(BUILD_SCRIPTS)/version_prereqs.pl amptools
