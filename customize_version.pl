@@ -63,6 +63,7 @@ foreach $href (@b) {
     $branch = $d{branch};
     $home = $d{home};
     $hash = $d{hash};
+    $debug_level = $d{debug_level};
     #print "package = $name, version = $version\n";
     if ($name eq "sim-recon" && $halld_home) {
 	if (uc($halld_home) ne "NONE") {
@@ -70,11 +71,19 @@ foreach $href (@b) {
 	}
     } elsif ($name eq "halld_recon" && $halld_recon_home) {
 	if (uc($halld_recon_home) ne "NONE") {
-	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_recon_home");
+	    if ($debug_level eq '') {
+		$writer->emptyTag("package", "name" => "$name", "home" => "$halld_recon_home");
+	    } else {
+		$writer->emptyTag("package", "name" => "$name", "home" => "$halld_recon_home", "debug_level" => "$debug_level");
+	    }
 	}
     } elsif ($name eq "halld_sim" && $halld_sim_home) {
 	if (uc($halld_sim_home) ne "NONE") {
-	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_sim_home");
+	    if ($debug_level eq '') {
+		$writer->emptyTag("package", "name" => "$name", "home" => "$halld_sim_home");
+	    } else {
+		$writer->emptyTag("package", "name" => "$name", "home" => "$halld_sim_home", "debug_level" => "$debug_level");
+	    }
 	}
     } elsif ($name eq "hdds" && $hdds_home) {
 	if (uc($hdds_home) ne "NONE") {
