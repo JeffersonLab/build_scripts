@@ -71,19 +71,11 @@ foreach $href (@b) {
 	}
     } elsif ($name eq "halld_recon" && $halld_recon_home) {
 	if (uc($halld_recon_home) ne "NONE") {
-	    if ($debug_level eq '') {
-		$writer->emptyTag("package", "name" => "$name", "home" => "$halld_recon_home");
-	    } else {
-		$writer->emptyTag("package", "name" => "$name", "home" => "$halld_recon_home", "debug_level" => "$debug_level");
-	    }
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_recon_home");
 	}
     } elsif ($name eq "halld_sim" && $halld_sim_home) {
 	if (uc($halld_sim_home) ne "NONE") {
-	    if ($debug_level eq '') {
-		$writer->emptyTag("package", "name" => "$name", "home" => "$halld_sim_home");
-	    } else {
-		$writer->emptyTag("package", "name" => "$name", "home" => "$halld_sim_home", "debug_level" => "$debug_level");
-	    }
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_sim_home");
 	}
     } elsif ($name eq "hdds" && $hdds_home) {
 	if (uc($hdds_home) ne "NONE") {
@@ -114,8 +106,11 @@ foreach $href (@b) {
 	if ($home) {
 	    $write_element_command .= ", \"home\" => \"$home\"";
 	}
+	if ($debug_level ne '') {
+	    $write_element_command .= ", \"debug_level\" => \"$debug_level\"";
+	}
 	$write_element_command .= ");";
-	#print "write_element_command = $write_element_command\n";
+	print "write_element_command = $write_element_command\n";
 	eval $write_element_command;
     }
 }
