@@ -35,7 +35,7 @@ export GLUEX_TOP=/group/halld/Software/builds/$BMS_OSNAME
 export PATH=/apps/perl/bin:$PATH
 # finish the rest of the environment
 . $BUILD_SCRIPTS/gluex_env_version.sh $VERSION_XML
-export JANA_CALIB_URL=sqlite:////group/halld/www/halldweb/html/dist/ccdb.sqlite
+export JANA_CALIB_URL=$CCDB_CONNECTION
 export JANA_RESOURCE_DIR=/group/halld/www/halldweb/html/resources
 # cmake on the cue
 export PATH=/apps/cmake/cmake-3.5.1/bin:$PATH
