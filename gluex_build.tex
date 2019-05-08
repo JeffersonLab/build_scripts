@@ -14,9 +14,9 @@
 \headsep=0in
 
 \title{A Version Management System for GlueX \\ \medskip \large
-  GlueX-Doc-2793-v15}
+  GlueX-Doc-2793-v16}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{December 7, 2016}
+\date{May 8, 2019}
 
 \begin{document}
 
@@ -208,7 +208,7 @@ will give different environments.
 
 The final step in {\tt gluex\_env.(c)sh} is to check the resulting
 environment for consistency using the prerequisites system. Each home
-directory is checked for a prerequisites version file. Those files
+directory is checked for a prerequisites version set file. Those files
 list versions of prerequisite packages used at build time. The
 build-time version are checked against the versions used in the
 just-set-up environment and warnings are printed when mismatches are
@@ -259,7 +259,7 @@ system to set home directory locations which in turn are respected by
 in Section~\ref{section:versioning}, but an example set-up script is
 shown in Fig.~\ref{figure:version-script}. In this example, package version
 information is contained in the XML file {\tt my\_versions.xml} in the
-user's home area. An example version file is shown in Fig.~\ref{figure:version-xml}. Alternate combinations of package versions can be tried by making alternate versions of the version file.
+user's home area. An example version set file is shown in Fig.~\ref{figure:version-xml}. Alternate combinations of package versions can be tried by making alternate versions of the version set file.
 
 \begin{figure}
 \begin{verbatim}
@@ -357,7 +357,7 @@ own package makefile, rather on 64-bit machines, it invokes {\tt
 appropriate debug compiler flags to be used.
 
 To use the resulting debug version of CERNLIB, the {\tt CERN} variable
-must be set to point to the {\tt cernlib\_debug} directory, either explicitly as an environment variable (as described in Section~\ref{section:custom-scripts} or by using the {\tt home} attribute in the {\tt package} element of a version file (as described in Section~\ref{section:versioning}.
+must be set to point to the {\tt cernlib\_debug} directory, either explicitly as an environment variable (as described in Section~\ref{section:custom-scripts} or by using the {\tt home} attribute in the {\tt package} element of a version set file (as described in Section~\ref{section:versioning}.
 
 \subsection{The Package Makefiles}\label{section:package-makefiles}
 
@@ -483,9 +483,9 @@ structure so we {\tt cd} to the standard directory.
 
 \section{The Versioning System}\label{section:versioning}
 
-\subsection{Version File Format: an XML}
+\subsection{Version Set File Format: an XML}
 
-The versioning system uses an XML-formatted version file to specify
+The versioning system uses an XML-formatted version set file to specify
 both package version information and package home directory definition
 in the shell environment. An example file is shown in
 Fig.~\ref{figure:version-xml}.
@@ -505,7 +505,7 @@ Fig.~\ref{figure:version-xml}.
   <package name="rcdb" version="0.00"/>
   </gversions>
 \end{verbatim}
-\caption{An example version file. {\tt version\_1.7.xml} is shown.}\label{figure:version-xml}
+\caption{An example version set file. {\tt version\_1.7.xml} is shown.}\label{figure:version-xml}
 \end{figure}
 
 There is only one type of element, the {\tt package}. Attributes are:
@@ -523,7 +523,7 @@ There is only one type of element, the {\tt package}. Attributes are:
 \item{\bf home}: Force the location of the package home directory when setting up the environment.
 \end{description}
 
-\subsection{Setting Up the Environment with a Version File}
+\subsection{Setting Up the Environment with a Version Set File}
 
 As we saw in Section~\ref{section:low-level-environment-setting},
 environment setting via {\tt gluex\_env.(c)sh} is sensitive to the
@@ -531,7 +531,7 @@ definition of the package home variables. In
 Section~\ref{section:package-makefiles}, we saw that the package
 makefiles are sensitive to either the version-defining environment
 variables or the URL-defining environment variables, using them to choose the
-version of code to build. The version file can be used to define both
+version of code to build. The version set file can be used to define both
 classes of variables. In this way it can be used to both build a
 consistent set of packages and to set-up the environment to use the
 build. Executing
@@ -594,7 +594,7 @@ Fig.~\ref{figure:version-script}. The script uses {\tt version.pl} as
 shown above to set the stage for an invocation of {\tt
   gluex\_env.(c)sh}.
 
-\subsection{Specifying Alternate Source Code Sources with a Version File}
+\subsection{Specifying Alternate Source Code Sources with a Version Set File}
 
 We saw in Section~\ref{section:package-makefiles} that a URL variable
 can be used to instructed the package makefiles to get the source code
@@ -640,7 +640,7 @@ after a caret symbol (\^{}), for example,
 \begin{verbatim}
   <package name="hdds" version="3.3" dirtag="xerces_test"\>
 \end{verbatim}
-in a version file would cause {\tt version.pl} to add an additional
+in a version set file would cause {\tt version.pl} to add an additional
 variable to the environment:
 \begin{verbatim}
   setenv HDDS_DIRTAG xerces_test
@@ -678,6 +678,38 @@ code should come from and (b) does not cause the build to be done in
 the named directory. It is useful when a pre-built package needs to be
 referenced for the current task.
 
+\subsection{Public Version Set Files}
+
+The public version set files are stored in a GitHub repository,
+JeffersonLab/halld\_versions, available at
+
+\begin{center} \tt
+\htmladdnormallink{https://github.com/JeffersonLab/halld\_versions}{https://github.com/JeffersonLab/halld_versions}
+\end{center}
+At JLab the repository is checked out in
+\begin{center} \tt
+/group/halld/www/halldweb/html/halld\_versions
+\end{center}
+and can be access on the web at
+\begin{center} \tt
+\htmladdnormallink{https://halldweb.jlab.org/halld\_versions/}{https://halldweb.jlab.org/halld_versions/}.
+\end{center}
+
+The names of the files are of two main types, (1) version sets that
+correspond to a periodic package update release and (2) version sets
+that correspond to a ``launch'' over GlueX data.
+\begin{enumerate}
+\item {\bf File names for package update releases} are of the form
+  {\tt version\_i.j.k.xml}, where {\tt i}, {\tt j}, and {\tt k} are a
+  major version number for the version set, a minor version number,
+  and a sub-minor version number. For example, {\tt
+    version\_4.1.0.xml}.
+\item {\bf File names for launches} are of the form {\tt
+  launch-name\_i.xml}, where {\tt launch-name} corresponds to the name
+  assigned to the launch and {\tt i} is a version number. For example
+  {\tt recon-2018\_08-ver00\_1}.xml
+\end{enumerate}
+
 \section{The Prerequisites System}\label{section:prerequisites-system}
 
 Each package may or may not have a build dependency on other packages
@@ -711,7 +743,7 @@ sim-recon. An example is shown in Fig.~\ref{figure:prereqs-xml-file}
 At set-up time, when {\tt gluex\_env.(c)sh} is invoked, if a version
 file with prerequisites is found in the package home directory, then
 each package in that file is checked for version consistency. A match
-is sought between the version number specified in the version file and
+is sought between the version number specified in the version set file and
 the version number encoded in the home directory for the prerequisite
 package, {\it i.~e.}, the directory defined as home in the environment
 being set-up. Here the version from the home directory is extracted in
