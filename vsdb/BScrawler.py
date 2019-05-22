@@ -21,6 +21,68 @@ try:
 except:
     print "CAN'T CONNECT"
 
+#def checkOasis(loc,afile):
+#    #print(afile)
+#    if(afile == "version_cntr_Mon.xml"  or afile == "version_cntr_Thu.xml" or afile == "version_cntr_Wed.xml" or afile == "version_cntr_Fri.xml" or afile == "version_offmon-2018_08-ver07_2.xml" or afile == "version_4.0.0_opt.xml" or afile == "version_4.1.0_opt.xml" or afile == "version_recon-ver03_7.xml" or afile == "version_2018_ver00.xml" or afile == "version_recon-2017_01-ver03_8.xml" or afile == "version_offmon-2018_08-ver07_3.xml" or afile == "version_4.1.1.xml" or afile == "version_recon-2018_01-ver02_1.xml" or afile == "version_recon-2017_01-ver03_9.xml" or afile == "recon-2018_08-ver00_1.xml" or afile == "version_4.1.1_1.xml" or "_jlab" in afile):
+#        return True
+#    else:
+#        return False
+
+def checkOasisCVMFS(packagename,version,dirtag):
+    rootdir="/group/halld/Software/builds/Linux_CentOS7-x86_64-gcc4.8.5-cntr/"
+    folder_name=packagename.replace("\"","")
+        #because of course it isn't the same!
+        #%dir_prefix = (root => 'root[_-]',
+	    #   clhep => '',
+	    #   jana => 'jana_',
+	    #   'sim-recon' => 'sim-recon-',
+	    #   hdds => 'hdds-',
+	    #   cernlib => 'special case', <<-------------
+	    #   'xerces-c' => 'xerces-c-',
+	    #   geant4 => 'geant4.',
+	    #   ccdb => 'ccdb_',
+	    #   evio => 'evio-',
+	    #   rcdb => 'rcdb_',
+        #   hdgeant4 => 'hdgeant4-',
+        #   hd_utilities => 'hd_utilities-',
+        #   gluex_root_analysis => 'gluex_root_analysis-',
+        #   amptools => 'AmpTools-',
+        #   sqlitecpp => 'SQLiteCpp-',
+        #   sqlite => 'sqlite-',
+        #   gluex_MCwrapper => 'gluex_MCwrapper-',
+        #   halld_sim => 'halld_sim-',
+        #   halld_recon => 'halld_recon-',
+	    #   lapack => 'lapack-');
+    if packagename.replace("\"","") == "clhep":
+        folder_name=folder_name+""
+    elif packagename.replace("\"","") == "cernlib":
+        folder_name=""
+    elif packagename.replace("\"","") == "jana" or packagename.replace("\"","") == "ccdb" or packagename.replace("\"","") == "rcdb":
+        folder_name=folder_name+"_"
+    elif packagename.replace("\"","") == "geant4":
+        folder_name=folder_name+"."
+    elif packagename.replace("\"","") == "amptools":
+        folder_name="AmpTools-"
+    elif packagename.replace("\"","") == "sqlitecpp":
+        folder_name="SQLiteCpp-"
+    else:
+        folder_name=folder_name+"-"
+
+    folder_name=folder_name+version.replace("\"","")
+
+    if(dirtag.replace("\"","") != "NULL"):
+        folder_name=folder_name+"^"+dirtag.replace("\"","")
+    locat=rootdir+packagename.replace("\"","")+"/"+folder_name+"/"
+
+   
+    if os.path.isdir(locat) or packagename.replace("\"","")=="root":
+        #print("!!!!!!!!!!!!!!!!!!!!!!!!!YAY!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        return 1
+    else:
+        if(packagename.replace("\"","") == "cernlib" and version.replace("\"","")=="2005"):
+            print(locat)
+            print("~~~~~~~~~~~~~~~~~~~~~~~~~BOO~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        return 0
 
 def main(argv):
 #main loc="/group/halld/www/halldweb/html/dist/"
@@ -28,11 +90,11 @@ def main(argv):
     pushcmd="mysql --host="+dbhost+" --database="+dbname+" --user="+dbuser#+"<tables.sql"
 
     p = subprocess.Popen(pushcmd.split(" "),stdin=subprocess.PIPE)
-    stdout,stderr = p.communicate(file("./tables.sql").read())
+    stdout,stderr = p.communicate(file("/work/halld2/home/tbritton/GlueX_Software/build_scripts/vsdb/tables.sql").read())
    
     
-    reconpackcmd="xsltproc ../xml/packages_sql.xslt ../xml/packages.xml | grep INSERT | "+"mysql -h "+dbhost+" -D "+dbname+" -u "+dbuser
-    print reconpackcmd
+    reconpackcmd="xsltproc /work/halld2/home/tbritton/GlueX_Software/build_scripts/xml/packages_sql.xslt /work/halld2/home/tbritton/GlueX_Software/build_scripts/xml/packages.xml | grep INSERT | "+"mysql -h "+dbhost+" -D "+dbname+" -u "+dbuser
+    #print reconpackcmd
     
     ps = subprocess.Popen(reconpackcmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
     output = ps.communicate()[0]
@@ -40,7 +102,7 @@ def main(argv):
 
     for loc in argv:
         locid=-1
-        print loc
+        #print loc
         check_for_loc="select id from directory where dirname=\""+loc+"\";"
         curs.execute(check_for_loc)
         locentry = curs.fetchall()
@@ -57,7 +119,9 @@ def main(argv):
 
         directories=os.listdir(loc)
         for afile in directories:
-            if "_jlab" not in afile:
+            #if "_jlab" not in afile:
+            #    continue
+            if ".xml" not in afile:
                 continue
             if "~" in afile:
                 continue
@@ -65,7 +129,7 @@ def main(argv):
                 continue
             # ADD afile to versionset.  Get that version set id
             check_for_file="SELECT id from versionSet where filename=\""+afile+"\";"
-            print check_for_file
+            #print check_for_file
             curs.execute(check_for_file)
             row = curs.fetchall()
 
@@ -74,9 +138,10 @@ def main(argv):
                 continue
 
 
-            #check for 
-            onOasis=1
-            insert_versionset="INSERT INTO versionSet (directoryId, filename, fileExists, onOasis) VALUES ("+str(locid)+", \""+afile.replace(" ","_")+"\", 1,"+str(onOasis) +");"
+            #check for
+            
+            #onOasis=checkOasis(loc,afile)
+            insert_versionset="INSERT INTO versionSet (directoryId, filename, fileExists) VALUES ("+str(locid)+", \""+afile.replace(" ","_")+"\", 1 );"
             #insert_versionset="INSERT INTO versionSet (directoryId, filename, fileExists) VALUES ("+str(locid)+", \""+afile.replace(" ","_")+"\", 1"+");"
             print insert_versionset
             curs.execute(insert_versionset)
@@ -85,6 +150,7 @@ def main(argv):
             curs.execute(check_for_file)
             row = curs.fetchall()
             versionsetID=0
+            
             if len(row) > 0:
                 versionsetID=row[0]['id']
                 #print row[0]['id']
@@ -102,8 +168,9 @@ def main(argv):
                     #print child
                     text=child.text
                     text=text.replace("\"","\\\"")
+                    print(text)
                     update_description="UPDATE versionSet SET description=\""+text+"\""+" WHERE id="+str(versionsetID)
-                    print update_description
+                    #print update_description
                     curs.execute(update_description)
                     conn.commit()
 
@@ -119,6 +186,7 @@ def main(argv):
 
                 ID=-1
                 #print num
+                #if len(num[0])
                 if num[0]['id']:
                     ID=num[0]['id']
                 #print ID
@@ -155,13 +223,39 @@ def main(argv):
                 if 'debug_level' in child.attrib:
                     debug_level="\""+child.attrib['debug_level']+"\""
 
-                insert_version="INSERT INTO version (versionSetId, packageId, version,dirtag, branch, hash, year, home, word_length, debug_level) VALUES ("+str(versionsetID)+","+str(num[0]['id'])+","+version+","+dirtag+","+branch+","+hashname+","+year+","+home+","+word_length+","+debug_level+");"
-                print insert_version
+
+                verOnOasis=checkOasisCVMFS(child.attrib['name'],version,dirtag)
+                insert_version="INSERT INTO version (versionSetId, packageId, version,dirtag, branch, hash, year, home, word_length, debug_level,onOasis) VALUES ("+str(versionsetID)+","+str(num[0]['id'])+","+version+","+dirtag+","+branch+","+hashname+","+year+","+home+","+word_length+","+debug_level+","+str(verOnOasis)+");"
+                #print insert_version
                 curs.execute(insert_version)
                 conn.commit()
 
-            print "============================="
-
+            #print "============================="
+        print("+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+")
+        for afile in directories:
+            #if "_jlab" not in afile:
+            #    continue
+            if ".xml" not in afile:
+                continue
+            if "~" in afile:
+                continue
+            if afile == "version_jlab.xml":
+                continue
+            
+            print(afile)
+            onOasisCheck_q="SELECT * from version where onOasis=0 and versionSetId in (SELECT id from versionSet where filename=\""+str(afile)+"\");"
+            curs.execute(onOasisCheck_q)
+            results= curs.fetchall()
+            #print(results)
+            setOnOasis=0
+            if(len(results)==0 or afile == "version_cntr_Mon.xml"  or afile == "version_cntr_Thu.xml" or afile == "version_cntr_Wed.xml" or afile == "version_cntr_Fri.xml"):
+                setOnOasis=1
+                update_onOasis="UPDATE versionSet SET onOasis=1 WHERE filename=\""+str(afile)+"\""
+                print(update_onOasis)
+                curs.execute(update_onOasis)
+                conn.commit()
+                print("OASIS!!!!!!!")
+            
         conn.close()
 
 

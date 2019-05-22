@@ -58,6 +58,7 @@ CREATE TABLE `version` (
   `home` varchar(256) DEFAULT NULL,
   `word_length` varchar(64) DEFAULT NULL,
   `debug_level` int(11) DEFAULT NULL,
+  `onOasis` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
