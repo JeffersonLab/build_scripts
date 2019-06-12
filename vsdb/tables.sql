@@ -64,6 +64,24 @@ CREATE TABLE `version` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `version`
+--
+
+DROP TABLE IF EXISTS `version_set_correlations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `version_set_correlations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `directoryId` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `reconSetId` int(11) DEFAULT NULL,
+  `analysisSetId` int(11) DEFAULT NULL,
+  
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `versionSet`
 --
 

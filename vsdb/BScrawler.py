@@ -21,13 +21,6 @@ try:
 except:
     print "CAN'T CONNECT"
 
-#def checkOasis(loc,afile):
-#    #print(afile)
-#    if(afile == "version_cntr_Mon.xml"  or afile == "version_cntr_Thu.xml" or afile == "version_cntr_Wed.xml" or afile == "version_cntr_Fri.xml" or afile == "version_offmon-2018_08-ver07_2.xml" or afile == "version_4.0.0_opt.xml" or afile == "version_4.1.0_opt.xml" or afile == "version_recon-ver03_7.xml" or afile == "version_2018_ver00.xml" or afile == "version_recon-2017_01-ver03_8.xml" or afile == "version_offmon-2018_08-ver07_3.xml" or afile == "version_4.1.1.xml" or afile == "version_recon-2018_01-ver02_1.xml" or afile == "version_recon-2017_01-ver03_9.xml" or afile == "recon-2018_08-ver00_1.xml" or afile == "version_4.1.1_1.xml" or "_jlab" in afile):
-#        return True
-#    else:
-#        return False
-
 def checkOasisCVMFS(packagename,version,dirtag):
     rootdir="/group/halld/Software/builds/Linux_CentOS7-x86_64-gcc4.8.5-cntr/"
     folder_name=packagename.replace("\"","")
@@ -125,7 +118,7 @@ def main(argv):
                 continue
             if "~" in afile:
                 continue
-            if afile == "version_jlab.xml":
+            if afile == "version_jlab.xml" or afile == "version_set_correlations.xml" :
                 continue
             # ADD afile to versionset.  Get that version set id
             check_for_file="SELECT id from versionSet where filename=\""+afile+"\";"
@@ -239,7 +232,7 @@ def main(argv):
                 continue
             if "~" in afile:
                 continue
-            if afile == "version_jlab.xml":
+            if afile == "version_jlab.xml" or afile == "version_set_correlations.xml":
                 continue
             
             print(afile)
@@ -255,7 +248,70 @@ def main(argv):
                 curs.execute(update_onOasis)
                 conn.commit()
                 print("OASIS!!!!!!!")
-            
+
+        print("BUILDING CORRELATION TABLE")
+        path=loc+"version_set_correlations.xml"
+        print(path)
+        if ( os.path.isfile(path) ):
+            print("=============================")
+            cortree = ET.parse(loc+"version_set_correlations.xml")
+            corroot = cortree.getroot()
+            for child in corroot:
+                print(child.attrib)
+                date="NULL"
+                if 'date' in child.attrib:
+                    date=child.attrib['date']
+                
+                recon_launch=-1
+                analysis_launch=-1
+                
+                
+                recon_stub_name=""
+                ana_launch_name=""
+                for verset in child.getchildren():
+                    if ( verset.tag == "recon_launch" and "version_set" in verset.attrib ):
+                        recon_stub_name=str(verset.attrib["version_set"])
+                #    #    id_sel="select id from versionSet where filename=\""+str(verset.attrib["version_set"])+"\" && directoryID="+str(locid)
+                #    #    print(id_sel)
+                #    #    curs.execute(id_sel)
+                #    #    results= curs.fetchall()
+                #    #    if (len(results) == 1 ):
+                #    #        recon_launch=results[0]['id']
+#
+                    if ( verset.tag == "analysis_launch" and "version_set" in verset.attrib ):
+                        ana_launch_name=str(verset.attrib["version_set"])
+                #        id_sel="select id from versionSet where filename=\""+str(verset.attrib["version_set"])+"\" && directoryID="+str(locid)
+                #        print(id_sel)
+                #        curs.execute(id_sel)
+                #        results= curs.fetchall()
+                #        if (len(results) == 1 ):
+                #            analysis_launch=results[0]['id']
+                print(recon_stub_name)
+                print(ana_launch_name)
+                id_sel="select id from versionSet where filename=\""+str(ana_launch_name)+"\" && directoryID="+str(locid)
+                print(id_sel)
+                curs.execute(id_sel)
+                results= curs.fetchall()
+                if (len(results) == 1 ):
+                    analysis_launch=results[0]['id']
+
+                for files in os.listdir(loc):
+                    if recon_stub_name in files:
+                        print(files)
+                        id_sel="select id from versionSet where filename=\""+str(files)+"\" && directoryID="+str(locid)
+                        print(id_sel)
+                        curs.execute(id_sel)
+                        results= curs.fetchall()
+                        if (len(results) == 1 ):
+                            recon_launch=results[0]['id']
+                
+                        print(recon_launch)
+                        print(analysis_launch)
+                        insert_set_correlation="INSERT INTO version_set_correlations (directoryId, date, reconSetID, analysisSetId) VALUES ("+str(locid)+", \""+str(date)+"\", "+str(recon_launch)+", "+str(analysis_launch)+" );"
+                        print(insert_set_correlation)
+                        curs.execute(insert_set_correlation)
+                        conn.commit()
+
         conn.close()
 
 
