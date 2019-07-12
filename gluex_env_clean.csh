@@ -46,7 +46,7 @@ if ($?BUILD_SCRIPTS) then
 endif
 # clean_environment
 unsetenv GLUEX_TOP
-unsetenv BUILD_SCRIPTS
+# leave BUILD_SCRIPTS alone, do not: unsetenv BUILD_SCRIPTS
 unsetenv XERCESCROOT
 unsetenv XERCES_INCLUDE
 unsetenv ROOTSYS

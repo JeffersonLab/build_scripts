@@ -49,7 +49,7 @@ if [ -n "$BUILD_SCRIPTS" ]; then
 fi
 # clean_environment
 unset GLUEX_TOP
-unset BUILD_SCRIPTS
+# leave BUILD_SCRIPTS alone, do not: unset BUILD_SCRIPTS
 unset XERCESCROOT
 unset XERCES_INCLUDE
 unset ROOTSYS
