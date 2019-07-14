@@ -110,7 +110,7 @@ foreach $href (@b) {
 	    $write_element_command .= ", \"debug_level\" => \"$debug_level\"";
 	}
 	$write_element_command .= ");";
-	print "write_element_command = $write_element_command\n";
+	#print "write_element_command = $write_element_command\n";
 	eval $write_element_command;
     }
 }
