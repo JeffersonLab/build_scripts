@@ -13,7 +13,13 @@
 \headheight=0in % no headers in this document
 \headsep=0in
 
-\title{A Version Management System for GlueX \\ \medskip \large
+% local macros
+
+\newcommand{\bs}{\textsc{Build Scripts}}
+\newcommand{\bcenter}{\begin{center}}
+\newcommand{\ecenter}{\end{center}}
+
+\title{\bs: A Version Management System for GlueX \\ \medskip \large
   GlueX-Doc-2793-v16}
 \author{Mark M.\ Ito \\ Jefferson Lab}
 \date{May 8, 2019}
@@ -22,7 +28,7 @@
 
 \maketitle
 
-\abstract{A system for building and managing GlueX software is
+\abstract{\bs, a system for building and managing GlueX software, is
   described. The goal is to insulate the user from the need to the
   master details of building each of several software packages as well
   as from the details of setting up a working environment. Multiple
@@ -48,6 +54,45 @@ They are all related, aspects of one affects aspects of each of the others.
 
 Having a standard system makes collaborative work more efficient,
 especially when one needs help from others to solve a problem.
+
+\section{Getting Started}
+
+This section give concise instructions for performing a few common tasks with \bs.
+
+\subsection{Getting a Copy of Build Scripts}
+
+There are several sources.
+
+\subsubsection{Pre-Installed at JLab}
+
+At JLab, \bs is installed in {\tt /group/halld/Software/build\_scripts}. You can start by defining an enviroment variable:
+\begin{center}
+{\tt export BUILD\_SCRIPTS=/group/halld/Software/build\_scripts}
+\end{center}
+for bash or
+\begin{center}
+{\tt setenv BUILD\_SCRIPTS\ /group/halld/Software/build\_scripts}
+\end{center}
+for tcsh.
+
+\subsubsection{Pre-Installed Outside JLab}
+
+Outside JLab, when the gluex\_install procedure has been followed (see section \ref{gluex-install}, \bs will be installed under \$GLUEX\_TOP/build\_scripts. You will have to contact the local expert to find the location of \$GLUEX\_TOP. Set your BUILD\_SCRIPTS environment to point to \$GLUEX\_TOP/build\_scripts.
+
+\subsubsection{Install via tar file}
+
+The latest version of \bs is available from GitHub at
+\bcenter
+\htmladdnormallink{\tt https://github.com/JeffersonLab/build\_scripts/archive/latest.tar.gz}{https://github.com/JeffersonLab/build\_scripts/archive/latest.tar.gz}
+\ecenter
+Set your BUILD\_SCRIPTS environment variable to the full path of the build\_scripts-latest directory that results from untar'ing the file.
+
+\subsubsection{Clone from GitHub}
+
+You can clone the Git repository:
+\bcenter
+  {\tt git clone \htmladdnormallink{https://github.com/jeffersonlab/build\_scripts}{https://github.com/jeffersonlab/build_scripts}}
+\ecenter
 
 \section{The Packages}
 
@@ -781,7 +826,7 @@ attribute defined in its (sim-recon's) prerequisite file. In that
 case, a warning will be issued noting the absence of both {\tt
   version} and {\tt url} attributes.
 
-\section{The gluex\_install System}
+\section{The gluex\_install System}\label{gluex-install}
 
 The {\tt gluex\_install} system uses {\tt build\_scripts} to create a
 complete install of GlueX software from scratch. This is especially
