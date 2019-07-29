@@ -18,7 +18,7 @@ ifdef FORCE
 endif
 
 $(TARFILE):
-	wget --no-verbose https://github.com/mashephe/AmpTools/archive/$(TARFILE) -O $(TARFILE)
+	wget --no-verbose --no-check-certificate https://github.com/mashephe/AmpTools/archive/$(TARFILE) -O $(TARFILE)
 
 $(AMPTOOLS_DIR)/.unpack: $(TARFILE)
 	rm -rfv untar_temp
