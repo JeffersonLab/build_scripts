@@ -1,41 +1,48 @@
 PWD = $(shell pwd)
+CMAKE3_BIN := $(shell which cmake3)
+ifneq ($(CMAKE3_BIN),)
+   CMAKE_BIN = cmake3
+else
+   CMAKE_BIN = cmake
+endif
+CMAKE = $(CMAKE_BIN) -E env CXXFLAGS="-I$(SQLITE_HOME)/include" $(CMAKE_BIN)
 
 SOURCE_CODE_TARGET = $(HEPMC_HOME)/.untar_done
 ifdef HEPMC_DIRTAG
- HEPMC_DIR = hepmc-$(HEPMC_VERSION)^$(HEPMC_DIRTAG)
+ HEPMC_DIR = HepMC-$(HEPMC_VERSION)^$(HEPMC_DIRTAG)
 else
- HEPMC_DIR = hepmc-$(HEPMC_VERSION)
+ HEPMC_DIR = HepMC-$(HEPMC_VERSION)
 endif
-TARFILE = Hepmc-$(HEPMC_VERSION).tar.gz
+TARFILE = hepmc$(HEPMC_VERSION).tgz
 
 HEPMC_HOME = $(PWD)/$(HEPMC_DIR)
+BUILD_DIR = $(PWD)/build_$(HEPMC_DIR)
 
 all: $(HEPMC_HOME)/hepmc_prereqs.xml
 
 $(TARFILE):
-	wget --no-verbose --no-check-certificate -O $@ https://hepmc.hepforge.org/downloads?f=$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ http://hepmc.web.cern.ch/hepmc/releases/$(TARFILE)
 
 $(HEPMC_HOME)/.untar_done: $(TARFILE)
 	rm -rf untar_temp_dir
 	mkdir untar_temp_dir
 	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/Hepmc/R$(subst .,-,$(HEPMC_VERSION)) $(HEPMC_DIR)
+	mv -v untar_temp_dir/* $(HEPMC_DIR)
 	rm -rv untar_temp_dir
 	date > $@
 
 $(HEPMC_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
-	cd $(HEPMC_HOME) ; mkdir -p build
-	cd $(HEPMC_HOME)/build; $(CMAKE) -DCMAKE_INSTALL_PREFIX=../ \
-	   -DHEPMC_PHOTOS=ON -DHEPMC2_ROOT_DIR=$HEPMC_HOME \
-	   -DPHOTOSPP_ROOT_DIR=$PHOTOS_HOME ..
+	mkdir -p $(BUILD_DIR)
+	cd $(BUILD_DIR); $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(HEPMC_HOME) \
+	   -Dmomentum:STRING=GEV -Dlength:STRING=CM $(HEPMC_HOME)
 	date > $@
 
 $(HEPMC_HOME)/.make_done: $(HEPMC_HOME)/.cmake_done
-	make -C $(HEPMC_HOME)/build
+	make -C $(BUILD_DIR)
 	date > $@
 
 $(HEPMC_HOME)/.install_done: $(HEPMC_HOME)/.make_done
-	make -C $(HEPMC_HOME)/build install
+	make -C $(BUILD_DIR) install
 	date > $@
 
 $(HEPMC_HOME)/hepmc_prereqs.xml: $(HEPMC_HOME)/.install_done

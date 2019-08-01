@@ -23,7 +23,8 @@
 		  gluex_MCwrapper => 'MCWRAPPER_CENTRAL',
                   halld_sim => 'HALLD_SIM_HOME',
                   halld_recon => 'HALLD_RECON_HOME',
-		  lapack => 'LAPACK_HOME');
+		  lapack => 'LAPACK_HOME',
+		  hepmc => 'HEPMC_HOME');
 
 %dir_prefix = (root => 'root[_-]',
 	       clhep => '',
@@ -45,7 +46,8 @@
                gluex_MCwrapper => 'gluex_MCwrapper-',
                halld_sim => 'halld_sim-',
                halld_recon => 'halld_recon-',
-	       lapack => 'lapack-');
+	       lapack => 'lapack-',
+	       hepmc => 'HepMC-');
 
 $unames = `uname -s`;
 chomp $unames;
@@ -72,5 +74,6 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
                gluex_MCwrapper => '',
                halld_sim => '',
                halld_recon => '',
-               lapack => '');
+               lapack => '',
+               hepmc => '');
 @debug_type = ('opt', '', 'dbg');
