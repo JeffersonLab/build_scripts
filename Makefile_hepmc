@@ -1,11 +1,15 @@
 PWD = $(shell pwd)
 CMAKE3_BIN := $(shell which cmake3)
 ifneq ($(CMAKE3_BIN),)
-   CMAKE_BIN = cmake3
+    ifeq ($(CMAKE3_BIN),/apps/bin/cmake3)
+	CMAKE_BIN = cmake # don't use cmake3 from /apps/bin
+    else
+	CMAKE_BIN = cmake3
+    endif
 else
    CMAKE_BIN = cmake
 endif
-CMAKE = $(CMAKE_BIN) -E env CXXFLAGS="-I$(SQLITE_HOME)/include" $(CMAKE_BIN)
+CMAKE = $(CMAKE_BIN)
 
 SOURCE_CODE_TARGET = $(HEPMC_HOME)/.untar_done
 ifdef HEPMC_DIRTAG
@@ -47,3 +51,7 @@ $(HEPMC_HOME)/.install_done: $(HEPMC_HOME)/.make_done
 
 $(HEPMC_HOME)/hepmc_prereqs.xml: $(HEPMC_HOME)/.install_done
 	cd $(HEPMC_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl hepmc
+
+debug:
+	@echo CMAKE3_BIN = $(CMAKE3_BIN)
+	@echo CMAKE = $(CMAKE)
