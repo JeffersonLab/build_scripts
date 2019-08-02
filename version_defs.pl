@@ -51,7 +51,7 @@
                halld_recon => 'halld_recon-',
 	       lapack => 'lapack-',
 	       hepmc => 'HepMC-',
-	       photos => 'photos-',
+	       photos => 'Photos-',
 	       evtgen => 'evtgen-');
 
 $unames = `uname -s`;
