@@ -27,7 +27,7 @@
 		  lapack => 'LAPACK_HOME',
 		  hepmc => 'HEPMCDIR',
 		  photos => 'PHOTOSDIR',
-		  evtgen => 'EVTGEN_HOME');
+		  evtgen => 'EVTGENDIR');
 
 %dir_prefix = (root => 'root[_-]',
 	       clhep => '',
