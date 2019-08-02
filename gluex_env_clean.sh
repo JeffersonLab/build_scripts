@@ -38,9 +38,9 @@ if [ -n "$BUILD_SCRIPTS" ]; then
         eval `$BUILD_SCRIPTS/delpath.pl -b -l /u$G4ROOT/lib64`
     fi
     if [ -n "$ROOT_ANALYSIS_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $ROOT_ANALYSIS_HOME/$BMS_OSNAME/lib`; fi
-    if [ -n "$HEPMCDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $HEPMCDIR/cpp/lib`; fi
-    if [ -n "$PHOTOSDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $PHOTOSDIR/cpp/lib`; fi
-    if [ -n "$EVTGENDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $EVTGENDIR/cpp/lib`; fi
+    if [ -n "$HEPMCDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $HEPMCDIR/lib`; fi
+    if [ -n "$PHOTOSDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $PHOTOSDIR/lib`; fi
+    if [ -n "$EVTGENDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $EVTGENDIR/lib`; fi
     eval `$BUILD_SCRIPTS/delpath.pl -b -l`
     # clean PYTHONPATH
     if [ -n "$CCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`; fi
