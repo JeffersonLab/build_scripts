@@ -35,6 +35,9 @@ if ($?BUILD_SCRIPTS) then
         eval `$BUILD_SCRIPTS/delpath.pl -l /u$G4ROOT/lib64`
     endif
     if ($?ROOT_ANALYSIS_HOME) eval `$BUILD_SCRIPTS/delpath.pl -l $ROOT_ANALYSIS_HOME/$BMS_OSNAME/lib/`
+    if ($?HEPMCDIR) eval `$BUILD_SCRIPTS/delpath.pl -l $HEPMCDIR/cpp/lib`
+    if ($?PHOTOSDIR) eval `$BUILD_SCRIPTS/delpath.pl -l $PHOTOSDIR/cpp/lib`
+    if ($?EVTGENDIR) eval `$BUILD_SCRIPTS/delpath.pl -l $EVTGENDIR/cpp/lib`
     eval `$BUILD_SCRIPTS/delpath.pl -l`
     # clean PYTHONPATH
     if ($?CCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`

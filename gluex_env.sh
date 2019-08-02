@@ -173,6 +173,21 @@ fi
 # SQLiteCpp
 #
 if [ -z "$SQLITECPP_HOME" ]; then export SQLITECPP_HOME=$GLUEX_TOP/sqlitecpp/prod; fi
+# hepmc
+if [ -z "$HEPMCDIR" ]; then export HEPMCDIR=$GLUEX_TOP/hepmc/prod; fi
+if [ `echo $LD_LIBRARY_PATH | grep -c $HEPMCDIR/lib` -eq 0 ]
+    then export LD_LIBRARY_PATH=$HEPMCDIR/lib:$LD_LIBRARY_PATH
+fi
+# photos
+if [ -z "$PHOTOSDIR" ]; then export PHOTOSDIR=$GLUEX_TOP/photos/prod; fi
+if [ `echo $LD_LIBRARY_PATH | grep -c $PHOTOSDIR/lib` -eq 0 ]
+    then export LD_LIBRARY_PATH=$PHOTOSDIR/lib:$LD_LIBRARY_PATH
+fi
+# evtgen
+if [ -z "$EVTGENDIR" ]; then export EVTGENDIR=$GLUEX_TOP/evtgen/prod; fi
+if [ `echo $LD_LIBRARY_PATH | grep -c $EVTGENDIR/lib` -eq 0 ]
+    then export LD_LIBRARY_PATH=$EVTGENDIR/lib:$LD_LIBRARY_PATH
+fi
 #
 if [ -z "$JANA_PLUGIN_PATH" ]
     then
