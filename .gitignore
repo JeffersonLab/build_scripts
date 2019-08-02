@@ -2,3 +2,4 @@
 *.tmp
 test.sh
 test.csh
+version.xml
