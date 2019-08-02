@@ -13,30 +13,26 @@ EVTGEN_HOME = $(PWD)/$(EVTGEN_DIR)
 all: $(EVTGEN_HOME)/evtgen_prereqs.xml
 
 $(TARFILE):
-	wget --no-verbose --no-check-certificate -O $@ https://evtgen.hepforge.org/downloads?f=$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ \
+	     https://evtgen.hepforge.org/downloads?f=$(TARFILE)
 
 $(EVTGEN_HOME)/.untar_done: $(TARFILE)
 	rm -rf untar_temp_dir
 	mkdir untar_temp_dir
 	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/EvtGen/R$(subst .,-,$(EVTGEN_VERSION)) $(EVTGEN_DIR)
+	mv -v untar_temp_dir/EvtGen/R$(subst .,-,$(EVTGEN_VERSION)) \
+	   $(EVTGEN_DIR)
 	rm -rv untar_temp_dir
 	date > $@
 
-$(EVTGEN_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
-	cd $(EVTGEN_HOME) ; mkdir -p build
-	cd $(EVTGEN_HOME)/build; $(CMAKE) -DCMAKE_INSTALL_PREFIX=../ \
-	   -DEVTGEN_PHOTOS=ON -DHEPMC2_ROOT_DIR=$HEPMC_HOME \
-	   -DPHOTOSPP_ROOT_DIR=$PHOTOS_HOME ..
+$(EVTGEN_HOME)/.configure: $(SOURCE_CODE_TARGET)
+	cd $(EVTGEN_HOME) ; ./configure --hepmcdir=$(HEPMCDIR) \
+	   --photosdir=$(PHOTOSDIR)
 	date > $@
 
-$(EVTGEN_HOME)/.make_done: $(EVTGEN_HOME)/.cmake_done
-	make -C $(EVTGEN_HOME)/build
+$(EVTGEN_HOME)/.make_done: $(EVTGEN_HOME)/.configure
+	make -C $(EVTGEN_HOME)
 	date > $@
 
-$(EVTGEN_HOME)/.install_done: $(EVTGEN_HOME)/.make_done
-	make -C $(EVTGEN_HOME)/build install
-	date > $@
-
-$(EVTGEN_HOME)/evtgen_prereqs.xml: $(EVTGEN_HOME)/.install_done
+$(EVTGEN_HOME)/evtgen_prereqs.xml: $(EVTGEN_HOME)/.make_done
 	cd $(EVTGEN_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl evtgen

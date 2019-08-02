@@ -24,7 +24,7 @@ $(PHOTOS_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(PHOTOS_HOME)/.configure_done: $(SOURCE_CODE_TARGET)
-	cd $(PHOTOS_HOME); ./configure --with-hepmc=$(HEPMC_HOME)
+	cd $(PHOTOS_HOME); ./configure --with-hepmc=$(HEPMCDIR)
 	date > $@
 
 $(PHOTOS_HOME)/.make_done: $(PHOTOS_HOME)/.configure_done

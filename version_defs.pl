@@ -25,8 +25,8 @@
                   halld_sim => 'HALLD_SIM_HOME',
                   halld_recon => 'HALLD_RECON_HOME',
 		  lapack => 'LAPACK_HOME',
-		  hepmc => 'HEPMC_HOME',
-		  photos => 'PHOTOS_HOME',
+		  hepmc => 'HEPMCDIR',
+		  photos => 'PHOTOSDIR',
 		  evtgen => 'EVTGEN_HOME');
 
 %dir_prefix = (root => 'root[_-]',
