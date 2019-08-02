@@ -116,6 +116,9 @@ unsetenv ROOT_ANALYSIS_HOME
 unsetenv SQLITECPP_HOME
 unsetenv SQLITE_HOME
 unsetenv LAPACK_HOME
+unsetenv HEPMCDIR
+unsetenv PHOTOSDIR
+unsetenv EVTGENDIR
 # versions
 unsetenv SIM_RECON_VERSION
 unsetenv HALLD_RECON_VERSION
@@ -138,6 +141,9 @@ unsetenv SQLITECPP_VERSION
 unsetenv SQLITE_VERSION
 unsetenv GLUEX_MCWRAPPER_VERSION
 unsetenv LAPACK_VERSION
+unsetenv HEPMC_VERSION
+unsetenv PHOTOS_VERSION
+unsetenv EVTGEN_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
 unsetenv HALLD_RECON_URL
@@ -154,6 +160,9 @@ unsetenv HDGEANT4_URL
 unsetenv HD_UTILITIES_URL
 unsetenv GLUEX_ROOT_ANALYSIS_URL
 unsetenv SQLITECPP_URL
+unsetenv HEPMC_URL
+unsetenv PHOTOS_URL
+unsetenv EVTGEN_URL
 # directory tags
 unsetenv SIM_RECON_DIRTAG
 unsetenv HALLD_RECON_DIRTAG
@@ -175,6 +184,9 @@ unsetenv AMPTOOLS_DIRTAG
 unsetenv SQLITECPP_DIRTAG
 unsetenv SQLITE_DIRTAG
 unsetenv GLUEX_MCWRAPPER_DIRTAG
+unsetenv HEPMC_DIRTAG
+unsetenv PHOTOS_DIRTAG
+unsetenv EVTGEN_DIRTAG
 # git branches
 unsetenv SIM_RECON_BRANCH
 unsetenv HALLD_RECON_BRANCH
@@ -193,6 +205,9 @@ unsetenv HD_UTILITIES_BRANCH
 unsetenv GLUEX_ROOT_ANALYSIS_BRANCH
 unsetenv SQLITECPP_BRANCH
 unsetenv GLUEX_MCWRAPPER_BRANCH
+unsetenv HEPMC_BRANCH
+unsetenv PHOTOS_BRANCH
+unsetenv EVTGEN_BRANCH
 # git hashes
 unsetenv SIM_RECON_HASH
 unsetenv HALLD_RECON_HASH
@@ -211,6 +226,9 @@ unsetenv HD_UTILITIES_HASH
 unsetenv GLUEX_ROOT_ANALYSIS_HASH
 unsetenv SQLITECPP_HASH
 unsetenv GLUEX_MCWRAPPER_HASH
+unsetenv HEPMC_HASH
+unsetenv PHOTOS_HASH
+unsetenv EVTGEN_HASH
 # misc
 unsetenv SQLITE_YEAR
 unsetenv HALLD_RECON_DEBUG_LEVEL
