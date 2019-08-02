@@ -28,7 +28,7 @@ HALLD_SIM = ${ROOT_OF_ALL}/halld_sim
 HALLD_RECON = ${ROOT_OF_ALL}/halld_recon
 HEPMC = ${ROOT_OF_ALL}/hepmc
 PHOTOS = ${ROOT_OF_ALL}/photos
-EVTGEN${ROOT_OF_ALL}/evtgen
+EVTGEN = ${ROOT_OF_ALL}/evtgen
 
 ifdef NTHREADS
   ROOT6_BUILD_OPTIONS += -j$(NTHREADS)
