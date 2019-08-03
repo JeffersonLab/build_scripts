@@ -137,19 +137,19 @@ if (! $?SQLITECPP_HOME) setenv SQLITECPP_HOME $GLUEX_TOP/sqlitecpp/prod
 #
 # hepmc
 #
-if (! $?HEPMCDIR) setenv SQLITECPP_HOME $GLUEX_TOP/hepmc/prod
+if (! $?HEPMCDIR) setenv HEPMCDIR $GLUEX_TOP/hepmc/prod
 echo $LD_LIBRARY_PATH | grep $HEPMCDIR/lib > /dev/null
 if ($status) setenv LD_LIBRARY_PATH $HEPMCDIR/lib:$LD_LIBRARY_PATH
 #
 # photos
 #
-if (! $?PHOTOSDIR) setenv SQLITECPP_HOME $GLUEX_TOP/photos/prod
+if (! $?PHOTOSDIR) setenv PHOTOSDIR $GLUEX_TOP/photos/prod
 echo $LD_LIBRARY_PATH | grep $PHOTOSDIR/lib > /dev/null
 if ($status) setenv LD_LIBRARY_PATH $PHOTOSDIR/lib:$LD_LIBRARY_PATH
 #
 # evtgen
 #
-if (! $?EVTGENDIR) setenv SQLITECPP_HOME $GLUEX_TOP/evtgen/prod
+if (! $?EVTGENDIR) setenv EVTGENDIR $GLUEX_TOP/evtgen/prod
 echo $LD_LIBRARY_PATH | grep $EVTGENDIR/lib > /dev/null
 if ($status) setenv LD_LIBRARY_PATH $EVTGENDIR/lib:$LD_LIBRARY_PATH
 #
