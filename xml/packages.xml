@@ -20,4 +20,7 @@
 <package name="halld_sim"/>
 <package name="halld_recon"/>
 <package name="lapack"/>
+<package name="hepmc"/>
+<package name="photos"/>
+<package name="evtgen"/>
 </packages>
