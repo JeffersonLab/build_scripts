@@ -13,8 +13,12 @@ pushd $target_dir
 ############################################
 #echo === warning: using hard-wired location of build_scripts for development ===
 # this is maybe redundant?
+# now start using the nightly build...
 export BUILD_SCRIPTS=/group/halld/Software/build_scripts  
-source $BUILD_SCRIPTS/gluex_env_jlab.sh /group/halld/www/halldweb/html/dist/version_jlab.xml
+#source $BUILD_SCRIPTS/gluex_env_jlab.sh /group/halld/www/halldweb/html/dist/version_jlab.xml
+datestring=`date +%Y-%m-%d`
+export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
+source $BUILD_SCRIPTS/gluex_env_jlab.sh  /u/scratch/gluex/nightly/$datestring/$BMS_OSNAME/version_$datestring.xml
 unset CPLUS_INCLUDE_PATH
 ############################################
 if [ -z "$REPO_URL" ]; then
