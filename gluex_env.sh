@@ -153,6 +153,9 @@ if [ -n "$HDGEANT4_HOME" ]; then
             export PATH=$HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
         fi
     fi
+    if [ `echo $PYTHONPATH | grep -c $HDGEANT4_HOME/g4py` -eq 0 ]; then
+	export PYTHONPATH=$HDGEANT4_HOME/g4py:$PYTHONPATH
+    fi
 fi
 #
 # hd_utilities

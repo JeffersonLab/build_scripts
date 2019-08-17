@@ -114,6 +114,8 @@ if ($?HDGEANT4_HOME) then
         echo $PATH | grep $HDGEANT4_HOME/bin/$G4SYSTEM > /dev/null
         if ($status) setenv PATH $HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
     endif
+    echo $PYTHONPATH | grep $HDGEANT4_HOME/g4py > /dev/null
+    if ($status) setenv PYTHONPATH $HDGEANT4_HOME/g4py:$PYTHONPATH
 endif
 #
 # hd_utilities
