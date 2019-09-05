@@ -19,7 +19,7 @@
 \newcommand{\bcenter}{\begin{center}}
 \newcommand{\ecenter}{\end{center}}
 
-\title{\bs: A Version Management System for GlueX \\ \medskip \large
+\title{\bs{}: A Version Management System for GlueX \\ \medskip \large
   GlueX-Doc-2793-v16}
 \author{Mark M.\ Ito \\ Jefferson Lab}
 \date{May 8, 2019}
@@ -28,7 +28,7 @@
 
 \maketitle
 
-\abstract{\bs, a system for building and managing GlueX software, is
+\abstract{\bs{}, a system for building and managing GlueX software, is
   described. The goal is to insulate the user from the need to the
   master details of building each of several software packages as well
   as from the details of setting up a working environment. Multiple
@@ -57,7 +57,7 @@ especially when one needs help from others to solve a problem.
 
 \section{Getting Started}
 
-This section give concise instructions for performing a few common tasks with \bs.
+This section give concise instructions for performing a few common tasks with \bs{}.
 
 \subsection{Getting a Copy of Build Scripts}
 
@@ -65,7 +65,7 @@ There are several sources.
 
 \subsubsection{Pre-Installed at JLab}
 
-At JLab, \bs is installed in {\tt /group/halld/Software/build\_scripts}. You can start by defining an enviroment variable:
+At JLab, \bs{} is installed in {\tt /group/halld/Software/build\_scripts}. You can start by defining an enviroment variable:
 \begin{center}
 {\tt export BUILD\_SCRIPTS=/group/halld/Software/build\_scripts}
 \end{center}
@@ -77,11 +77,11 @@ for tcsh.
 
 \subsubsection{Pre-Installed Outside JLab}
 
-Outside JLab, when the gluex\_install procedure has been followed (see section \ref{gluex-install}, \bs will be installed under \$GLUEX\_TOP/build\_scripts. You will have to contact the local expert to find the location of \$GLUEX\_TOP. Set your BUILD\_SCRIPTS environment to point to \$GLUEX\_TOP/build\_scripts.
+Outside JLab, when the gluex\_install procedure has been followed (see section \ref{gluex-install}), \bs{} will be installed under \$GLUEX\_TOP/build\_scripts. You will have to contact your local expert to find the location of \$GLUEX\_TOP. Once that is known the BUILD\_SCRIPTS environment variable to point to \$GLUEX\_TOP/build\_scripts.
 
 \subsubsection{Install via tar file}
 
-The latest version of \bs is available from GitHub at
+The latest version of \bs{} is available from GitHub at
 \bcenter
 \htmladdnormallink{\tt https://github.com/JeffersonLab/build\_scripts/archive/latest.tar.gz}{https://github.com/JeffersonLab/build\_scripts/archive/latest.tar.gz}
 \ecenter
@@ -126,10 +126,10 @@ files.
 
 \section{The Directory Structure}\label{section:directory}
 
-The VMS directory structure supports multiple versions of each
+The \bs{} directory structure supports multiple versions of each
 package. For an example see Fig.~\ref{fig:directory-tree}. In the
 figure, ``gluex\_top'' is a generic name, each installation may choose
-a different directory name. VMS looks for the name of this directory
+a different directory name. \bs{} looks for the name of this directory
 in the environment variable {\tt GLUEX\_TOP}.
 
 \begin{figure}
@@ -164,9 +164,9 @@ Under gluex\_top, each package has its own container directory ({\it
   e.~g.}, {\tt JANA, hdds, sim-recon}) and for each package container
 directory one or more specific versions of that package are built.
 
-\section{Scripts to Implement the VMS: \\ the {\tt BUILD\_SCRIPTS} Directory}
+\section{Scripts to Implement \bs{}}
 
-All scripts and makefiles to support VMS are found the in the {\tt
+All scripts and makefiles to support \bs{} are found the in the {\tt
   build\_scripts} directory. At JLab, the full path is
 $${\tt /group/halld/Software/build\_scripts}$$
 The directory can also be cloned from the Git repository at GitHub. The URL is
@@ -296,7 +296,7 @@ example. Here a version of sim-recon built in a non-standard location
 default.}\label{figure:custom-script}
 \end{figure}
 
-\subsubsection{Using the Versioning System}/label{section:env-use-versioning}
+\subsubsection{Using the Versioning System}\label{section:env-use-versioning}
 
 Another way to get a non-default environment is to use the versioning
 system to set home directory locations which in turn are respected by
@@ -335,12 +335,12 @@ Each of the packages have their own native build system and each build
 system has its own set of details that have to be understood. In
 addition, the technology used to do the build varies from system to
 system. It may be make, imake, cmake, SCons, or something else. The
-VMS system makes a choice of build options for each package so that
+\bs{} system makes a choice of build options for each package so that
 the user need not master these details.
 
 \subsection{The Makefiles}
 
-The VMS build system is implemented in GNU Make. These makefiles
+The \bs{} build system is implemented in GNU Make. These makefiles
 invoke the native package-specific build system. The top-level
 makefile builds packages into the standard directory structure
 described in Section~\ref{section:directory}. It in turn uses a
@@ -758,7 +758,7 @@ that correspond to a ``launch'' over GlueX data.
 \section{The Prerequisites System}\label{section:prerequisites-system}
 
 Each package may or may not have a build dependency on other packages
-under the VMS. For example a particular version of sim-recon can be
+managed by \bs{}. For example a particular version of sim-recon can be
 built against any of a number of versions of HDDS, including custom
 versions provided by the user. To insure that the environment being
 set-up has a consistent set of package versions, a facility is
