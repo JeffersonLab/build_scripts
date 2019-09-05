@@ -5,6 +5,6 @@
 *.toc
 *.out
 *.dvi
-gluex_build_web
-gluex_build_web.tar
-gluex_build_web.tex
+build_scripts_web
+build_scripts_web.tar
+build_scripts_web.tex
