@@ -20,9 +20,9 @@
 \newcommand{\ecenter}{\end{center}}
 
 \title{\bs{}: A Version Management System for GlueX \\ \medskip \large
-  GlueX-Doc-2793-v16}
+  GlueX-Doc-2793-v17}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{May 8, 2019}
+\date{September 6, 2019}
 
 \begin{document}
 
@@ -320,7 +320,11 @@ user's home area. An example version set file is shown in Fig.~\ref{figure:versi
 
 \subsubsection{Default Environment at JLab}
 
-At JLab there is script that packages the steps shown in Fig.~\ref{figure:version-script}, with the appropriate values of {\tt GLUEX\_TOP} and {\tt BUILD\_SCRIPTS}. It uses the latest version of {\tt version.xml}. It can also be used as an example for using a custom version of {\tt version.xml}. To use it, for bash:
+At JLab there is script that packages the steps shown in
+Fig.~\ref{figure:version-script}, with the appropriate values of {\tt
+  GLUEX\_TOP} and {\tt BUILD\_SCRIPTS}. It uses the latest version of
+{\tt version.xml}. It can also be used as an example for using a
+custom version of {\tt version.xml}. To use it, for bash:
 \begin{verbatim}
         source /group/halld/Software/build_scripts/gluex_env_jlab.sh
 \end{verbatim}
@@ -328,6 +332,64 @@ and for tcsh:
 \begin{verbatim}
         source /group/halld/Software/build_scripts/gluex_env_jlab.csh
 \end{verbatim}
+
+\subsubsection{Simple Environment Set Up}
+
+{\tt gluex\_env\_boot\_jlab.csh)}(?ref?) and {\tt
+  gluex\_env\_boot\_jlab.sh}(?ref?) are short scripts that provide two
+"commands" (aliases for tcsh, functions for bash) that facilitate
+setting up and tearing down the GlueX software environment at
+JLab. The commands are: ``` gxenv ``` and ``` gxclean ``` By defining
+these commands, the scripts "boot-up" environment setting.
+
+The scripts also provide an environment variable, `DIST,` that points
+to the directory containing all of the official version set files (the
+`version\_*.xml` files).
+
+\begin{description}
+\item{\bf How to use the scripts to define the commands.}
+
+For tcsh, include the following line in your `.cshrc,` `.login,` or `.tcshrc:`
+```
+source /group/halld/Software/build\_scripts/gluex\_env\_boot\_jlab.csh
+```
+For bash, include the following line in your `.bashrc` or `.profile:`
+```
+source /group/halld/Software/build\_scripts/gluex\_env\_boot\_jlab.sh
+```
+\item{\bf How to use the commands.}
+
+Usage is the same for both tcsh and bash.
+
+\begin{description}
+\item{\bf To Set-Up the Environment.}
+
+To get the default environment: ``` gxenv ``` To get the environment
+for a particular official version set, say `version\_3.5\_jlab.xml,`
+use the `DIST` environment variable: ``` gxenv
+\$DIST/version\_3.5\_jlab.xml ``` To get the environment for an
+arbitrary xml file, use its path: ``` gxenv /path/to/my\_version.xml
+```
+\item{\bf To Take-Down the Environment.}
+
+To clear all of the GlueX-specific parts of the environment, including
+GlueX-specific path elements (e. g., those in `PATH):` ``` gxclean ```
+This is not guaranteed to completely clean all gluexy things in all
+circumstances, but should work well when using `gxenv` to do the
+set-up.
+
+\end{description}
+\end{description}
+
+Why implement things this way and not just do the set-up in the `.*rc`
+file? The underlying set-up command, `gluex\_env\_jlab.(c)sh,` has
+become a bit heavy. You may not want to have it executed everytime you
+start a new sub-shell. Also having the version set hard-wired in your
+initial environment can be confusing if you change version sets
+depending on what you are working on. For these reasons, putting the
+set-up in the global shell set-up is not recommended. Sourcing these
+scripts is very fast and once sourced, it is easy to switch from one
+version set to another, even from the command line.
 
 \section{The Build System}
 
