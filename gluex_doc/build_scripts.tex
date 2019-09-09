@@ -345,6 +345,10 @@ environment. The commands provided are: {\tt gxenv} and {\tt
   gxclean}. By defining these commands, the scripts ``boot-up''
 environment setting.
 
+The scripts also provide an environment variable, DIST, that points to
+the directory containing all of the official version set files (the
+{\tt version\_*.xml} files).
+
 \begin{description}
 \item{\bf How to use the scripts to define the commands.}
 
@@ -368,30 +372,37 @@ at JLab and
 \end{verbatim}
 for gluex\_install builds.
 
-% got to here
-
 \item{\bf How to use the commands.}
 
 Usage is the same for both tcsh and bash, JLab and gluex\_install.
 
 \begin{description}
-\item{\bf To Set-Up the Environment.}
+\item{\bf To Set-Up the Environment: {\tt gxenv}}
 
-To get the default environment:
+\begin{itemize}
+\item To get the default environment:
 \begin{verbatim}
   gxenv
 \end{verbatim}
-To get the environment for a particular official version set, say `version\_3.5\_jlab.xml,`
-use the `DIST` environment variable: ``` gxenv
-\$DIST/version\_3.5\_jlab.xml ``` To get the environment for an
-arbitrary xml file, use its path: ``` gxenv /path/to/my\_version.xml
-```
-\item{\bf To Take-Down the Environment.}
+\item To get the environment for a particular official version set, say {\tt version\_3.5\_jlab.xml}, use the {DIST} environment variable:
+\begin{verbatim}
+  gxenv $DIST/version_3.5_jlab.xml
+\end{verbatim}
+\item To get the environment for an arbitrary xml file, use its path:
+\begin{verbatim}
+  gxenv /path/to/my\_version.xml
+\end{verbatim}
+\end{itemize}
+
+\item{\bf To Take-Down the Environment: {\tt gxclean}}
 
 To clear all of the GlueX-specific parts of the environment, including
-GlueX-specific path elements (e. g., those in `PATH):` ``` gxclean ```
+GlueX-specific path elements ({\it i.e.}, those in {\tt PATH}, {\tt LD\_LIBRARY\_PATH}, and {\tt PYTHONPATH}):
+\begin{verbatim}
+  gxclean
+\end{verbatim}
 This is not guaranteed to completely clean all gluexy things in all
-circumstances, but should work well when using `gxenv` to do the
+circumstances, but should work well when using {\tt gxenv} to do the
 set-up.
 
 \end{description}
