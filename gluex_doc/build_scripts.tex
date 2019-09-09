@@ -336,32 +336,43 @@ and for tcsh:
 
 \subsubsection{Simple Environment Set Up}
 
-The simplest and recommended form of environment under \bs{} is the \gxenv{} command.
-{\tt gluex\_env\_boot\_jlab.csh)}(?ref?) and {\tt
-  gluex\_env\_boot\_jlab.sh}(?ref?) are short scripts that provide two
-"commands" (aliases for tcsh, functions for bash) that facilitate
-setting up and tearing down the GlueX software environment at
-JLab. The commands are: ``` gxenv ``` and ``` gxclean ``` By defining
-these commands, the scripts "boot-up" environment setting.
-
-The scripts also provide an environment variable, `DIST,` that points
-to the directory containing all of the official version set files (the
-`version\_*.xml` files).
+The simplest (and recommended) form of environment set-up under \bs{}
+is the \gxenv{} command.  {\tt gluex\_env\_boot\_jlab.(c)sh} (at JLab)
+and {\tt gluex\_env\_boot.(c)sh} (for gluex\_install builds) are short
+scripts that provide two commands (aliases for tcsh, functions for
+bash) that facilitate setting up and tearing down the GlueX software
+environment. The commands provided are: {\tt gxenv} and {\tt
+  gxclean}. By defining these commands, the scripts ``boot-up''
+environment setting.
 
 \begin{description}
 \item{\bf How to use the scripts to define the commands.}
 
-For tcsh, include the following line in your `.cshrc,` `.login,` or `.tcshrc:`
-```
-source /group/halld/Software/build\_scripts/gluex\_env\_boot\_jlab.csh
-```
-For bash, include the following line in your `.bashrc` or `.profile:`
-```
-source /group/halld/Software/build\_scripts/gluex\_env\_boot\_jlab.sh
-```
+For tcsh, include the following line in your {\tt .cshrc}, {\tt .login}, or {\tt .tcshrc}:
+\begin{verbatim}
+  source /group/halld/Software/build\_scripts/gluex_env_boot_jlab.csh
+\end{verbatim}
+at JLab and
+\begin{verbatim}
+  source /path/to/gluex_top/gluex_env_boot.csh
+\end{verbatim}
+for gluex\_install builds.
+
+For bash, include the following line in your {\tt .bashrc}, {\tt .profile}, or {\tt .bash\_profile}:
+\begin{verbatim}
+  source /group/halld/Software/build\_scripts/gluex\_env\_boot\_jlab.sh
+\end{verbatim}
+at JLab and
+\begin{verbatim}
+  source /path/to/gluex_top/build\_scripts/gluex\_env\_boot.sh
+\end{verbatim}
+for gluex\_install builds.
+
+% got to here
+
 \item{\bf How to use the commands.}
 
-Usage is the same for both tcsh and bash.
+Usage is the same for both tcsh and bash, JLab and gluex\_install.
 
 \begin{description}
 \item{\bf To Set-Up the Environment.}
