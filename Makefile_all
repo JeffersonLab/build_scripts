@@ -37,11 +37,16 @@ ifdef NTHREADS
   HALLD_SIM_SCONS_OPTIONS += -j$(NTHREADS)
 endif
 
-all: env jana_build hdds_build halld_recon_build halld_sim_build hdgeant4_build gluex_root_analysis_build mcwrapper_build hd_utilities_build
+all: gluex_pass2
 
-gluex_pass1: env xerces_build lapack_build cernlib_build root_build geant4_build evio_build sqlite_build sqlitecpp_build rcdb_build ccdb_build
+gluex_pass1: xerces_build lapack_build cernlib_build root_build \
+	     geant4_build evio_build sqlite_build sqlitecpp_build \
+	     rcdb_build ccdb_build
 
-gluex_pass2: jana_build hdds_build amptools_build hepmc_build photos_build evtgen_build halld_recon_build halld_sim_build hd_utilities_build hdgeant4_build gluex_root_analysis_build mcwrapper_build
+gluex_pass2: gluex_pass1 jana_build hdds_build amptools_build \
+	     hepmc_build photos_build evtgen_build halld_recon_build \
+	     halld_sim_build hd_utilities_build hdgeant4_build \
+	     gluex_root_analysis_build mcwrapper_build
 
 cernlib_build: cernlib_dir cernlib_make
 

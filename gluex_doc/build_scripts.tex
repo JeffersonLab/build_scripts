@@ -447,23 +447,29 @@ Complete builds are orchestrated by {\tt Makefile\_all}. The highest-level
 targets of Makefile\_all, shown with their dependencies are:
 
 \begin{verbatim}
-all: env xerces_build cernlib_build lapack_build root_build \
-    clhep_build geant4_build gsl_build evio_build rcdb_build \
-    ccdb_build jana_build hdds_build sim-recon_build
+all: gluex_pass2
 
-gluex: env xerces_build cernlib_build lapack_build root_build \
-    clhep_build evio_build rcdb_build ccdb_build jana_build \
-    hdds_build sim-recon_build
+gluex_pass1: xerces_build lapack_build cernlib_build root_build \
+	     geant4_build evio_build sqlite_build sqlitecpp_build \
+	     rcdb_build ccdb_build
 
-gluex_jlab: env xerces_build root_build clhep_build evio_build \
-    rcdb_build ccdb_build jana_build hdds_build sim-recon_build
+gluex_pass2: gluex_pass1 jana_build hdds_build amptools_build \
+	     hepmc_build photos_build evtgen_build halld_recon_build \
+	     halld_sim_build hd_utilities_build hdgeant4_build \
+	     gluex_root_analysis_build mcwrapper_build
 \end{verbatim}
 
-The {\tt all} target builds every package that {\tt Makefile\_all} knows
-about. The {\tt gluex} target builds only the packages necessary for
-using GlueX software. The {\tt gluex\_jlab} target is the same as {\tt gluex}
-except that it does not include {\tt cernlib\_build} (useful for JLab public
-builds where we use the community-built versions of CERNLIB).
+The {\tt all} target builds all officially supported packages. These
+are broken into two sets, {\tt gluex\_pass1} and {\tt
+  gluex\_pass2}. In practice, when staring from scratch, the build
+must proceed in four steps.
+
+\begin{enumerate}
+\item Initial environment set-up.
+\item Build the {\tt gluex\_pass1} target.
+\item Final environment set-up using contents of packages built in pass 1.
+\item Build the {\tt gluex\_pass2} target.
+\end{enumerate}
 
 {{\tt Makefile\_all}} should always be invoked from the {\tt
   \$GLUEX\_TOP} directory.
