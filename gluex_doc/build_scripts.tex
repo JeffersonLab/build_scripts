@@ -474,6 +474,14 @@ must proceed in four steps.
 {{\tt Makefile\_all}} should always be invoked from the {\tt
   \$GLUEX\_TOP} directory.
 
+If you would like the build to proceed in parallel (for those packages that support parallel builds), set an environment variable (eight threads in this example):
+\begin{verbatim}
+  export NTHREADS=8
+\end{verbatim}
+or set the variable on the make commmand line:
+\begin{verbatim}
+  make -f $BUILD_SCRIPTS/Makefile_all NTHREADS=8
+\end{verbatim}
 \subsubsection{Individual Package Targets}
 
 Each of the individual package targets ({\it e.~g.}, {\tt evio\_build}
