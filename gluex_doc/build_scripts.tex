@@ -23,7 +23,7 @@
 \title{\bs{}: A Version Management System for GlueX \\ \medskip \large
   GlueX-Doc-2793-v17}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{September 6, 2019}
+\date{September 11, 2019}
 
 \begin{document}
 
@@ -108,12 +108,23 @@ built by the GlueX user. They are:
 \item CERNLIB: to support GEANT 3 simulations
 \item GEANT4: simulation engine
 \item ROOT: general purpose HENP toolkit
+\item Geant4: simulation of particle interactions with matter
 \item EVIO: CODA format data handling library
 \item CCDB: Calibration Constants Database
 \item RCDB: Run Conditions Database
 \item JANA: event-based analysis framework
-\item HDDS: detector geometry specification library 
-\item sim-recon: simulation and reconstruction for GlueX
+\item HDDS: detector geometry specification library
+\item halld\_recon: reconstruction for GlueX
+\item halld\_sim: simulation programs and utilities for GlueX
+\item HDGeant4: Geant4 implementation of GlueX detector simulation
+\item gluex\_root\_analysis: ROOT-based analysis of post-reconstruction data
+\item hd\_utilities: miscellaneous scripts and programs
+\item AmpTools: framework for amplitude-based physics analysis
+\item gluex\_MCwrapper: system for submitting simulation jobs
+\item lapack: old-school linear algebra package
+\item hepmc: utililty library for particle physics
+\item photos: package for simulating radiative effects
+\item EvtGen: handles particle decays in a user-configurable library
 \end{enumerate}
 
 Detailed description of these packages will not be given here; please
@@ -441,7 +452,7 @@ working directory. In other words, the package makefiles have no knowledge of
 the directory structure within which they are used; they just build
 locally. Only the top-level makefile knows about the directory structure.
 
-\subsubsection{The Top-Level: {\tt Makefile\_all}}
+\subsubsection{The Top-Level: {\tt Makefile\_all}}\label{section:makefile-all}
 
 Complete builds are orchestrated by {\tt Makefile\_all}. The highest-level
 targets of Makefile\_all, shown with their dependencies are:
@@ -460,15 +471,22 @@ gluex_pass2: gluex_pass1 jana_build hdds_build amptools_build \
 \end{verbatim}
 
 The {\tt all} target builds all officially supported packages. These
-are broken into two sets, {\tt gluex\_pass1} and {\tt
-  gluex\_pass2}. In practice, when staring from scratch, the build
-must proceed in four steps.
+are broken into two sets, {\tt gluex\_pass1} and {\tt gluex\_pass2} to
+solve the issue of packages that can only be set-up after they are
+built. This is a problem when starting from scratch. In that case the
+build must proceed in four steps.
 
 \begin{enumerate}
 \item Initial environment set-up.
 \item Build the {\tt gluex\_pass1} target.
+\begin{verbatim}
+  make -f $BUILD_SCRIPTS/Makefile_all gluex_pass1
+\end{verbatim}
 \item Final environment set-up using contents of packages built in pass 1.
 \item Build the {\tt gluex\_pass2} target.
+\begin{verbatim}
+  make -f $BUILD_SCRIPTS/Makefile_all gluex_pass2
+\end{verbatim}
 \end{enumerate}
 
 {{\tt Makefile\_all}} should always be invoked from the {\tt
@@ -478,9 +496,9 @@ If you would like the build to proceed in parallel (for those packages that supp
 \begin{verbatim}
   export NTHREADS=8
 \end{verbatim}
-or set the variable on the make commmand line:
+or set the variable on the make commmand line. For example:
 \begin{verbatim}
-  make -f $BUILD_SCRIPTS/Makefile_all NTHREADS=8
+  make -f $BUILD_SCRIPTS/Makefile_all gluex_pass2 NTHREADS=8
 \end{verbatim}
 \subsubsection{Individual Package Targets}
 
@@ -1002,6 +1020,12 @@ You can also do a git clone of the latest version:
   assumes a directory structure that accommodates multiple versions of
   the GlueX packages if they are needed later. The script is
   distribution independent.
+
+  Note that if parallel builds are desired (for the packages that
+  support them) set the NTHREADS environment to the number parallel
+  processes desired. Since {\tt gluex\_install.sh} invokes {\tt
+    Makefile\_all}, the value will be used. See
+  Section\ \ref{section:makefile-all}.
 
 \end{enumerate}
 

@@ -1,26 +1,50 @@
 <packages>
-<package name="root"/>
-<package name="clhep"/>
-<package name="jana"/>
-<package name="sim-recon"/>
-<package name="hdds"/>
-<package name="cernlib"/>
-<package name="xerces-c"/>
-<package name="ccdb"/>
-<package name="geant4"/>
-<package name="evio"/>
-<package name="rcdb"/>
-<package name="hdgeant4"/>
-<package name="hd_utilities"/>
-<package name="gluex_root_analysis"/>
-<package name="amptools"/>
+<package name="root" docname="ROOT" homevar="ROOTSYS"
+	 description="general purpose HENP toolkit"/>
+<package name="jana" docname="JANA" homevar="JANA_HOME"
+	 description="event-based analysis framework"/>
+<package name="sim-recon" docname="sim-recon" homevar="SIM_RECON_HOME"
+	 description="simulation and reconstruction for GlueX (deprecated)"/>
+<package name="hdds" docname="HDDS" homevar="HDDS_HOME"
+	 description="detector geometry specification library"/>
+<package name="cernlib" docname="CERNLIB" homevar="CERN_ROOT"
+	 description="to support FORTRAN-based HENP code programs"/>
+<package name="xerces-c" docname="Xerces-C" homevar="XERCESCROOT"
+	 description="for reading XML files"/>
+<package name="ccdb" docname="CCDB" homevar="CCDB_HOME"
+	 description="Calibration Constants Database"/>
+<package name="geant4" docname="Geant4" homevar="G4ROOT"
+	 description="simulation of particle interactions with matter"/>
+<package name="evio" docname="EVIO" homevar="EVIOROOT"
+	 description="CODA format data handling library"/>
+<package name="rcdb" docname="RCDB" homevar="RCDB_HOME"
+	 description="Run Conditions Database"/>
+<package name="hdgeant4" docname="HDGeant4" homevar="HDGEANT4_HOME"
+	 description="Geant4 implementation of the GlueX detector simulation"/>
+<package name="hd_utilities" docname="hd\_utilities" homevar="HD_UTILITIES_HOME"
+	 description="miscellaneous scripts and programs"/>
+<package name="gluex_root_analysis" docname="gluex\_root\_analysis"
+	 homevar="ROOT_ANALYSIS_HOME"
+	 description="ROOT-based analysis of post-reconstruction data"/>
+<package name="amptools" docname="AmpTools" homevar="AMPTOOLS_HOME"
+	 description="framework for amplitude-based physics analysis"/>
 <package name="sqlitecpp"/>
 <package name="sqlite"/>
-<package name="gluex_MCwrapper"/>
-<package name="halld_sim"/>
-<package name="halld_recon"/>
+<package name="gluex_MCwrapper" docname="gluex\_MCwrapper"
+	 homevar="MCWRAPPER_CENTRAL"
+	 description="system for submitting simulation jobs"/>
+<package name="halld_sim" docname="halld\_sim" homevar="HALLD_SIM_HOME"
+	 description="simulation programs and utilities for GlueX"/>
+<package name="halld_recon" docname="halld\_recon" homevar="HALLD_RECON_HOME"
+	 description="reconstruction for GlueX"/>
 <package name="lapack"/>
 <package name="hepmc"/>
 <package name="photos"/>
 <package name="evtgen"/>
 </packages>
+<!--
+\item lapack: old-school linear algebra package
+\item hepmc: utililty library for particle physics
+\item photos: package for simulating radiative effects
+\item EvtGen: handles particle decays in a user-configurable library
+-->
