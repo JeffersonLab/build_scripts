@@ -11,6 +11,7 @@ packages-doc-homevar.tex: ../xml/packages.xml ../xml/packages_doc_homevar.xslt
 $(basename).pdf: $(basename).tex packages-doc-list.tex packages-doc-homevar.tex
 	pdflatex $(basename)
 	pdflatex $(basename)
+	pdflatex $(basename)
 
 $(basename)_web.tar: $(basename)_web
 	tar cvf $@ $<
