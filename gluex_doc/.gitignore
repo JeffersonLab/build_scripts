@@ -8,3 +8,5 @@
 build_scripts_web
 build_scripts_web.tar
 build_scripts_web.tex
+packages-doc-homevar.tex
+packages-doc-list.tex

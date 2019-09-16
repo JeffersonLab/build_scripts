@@ -103,28 +103,7 @@ operating system or distribution, but there are some that have to be
 built by the GlueX user. They are:
 
 \begin{enumerate}
-\item build\_scripts: scripts to manage building and the shell environment
-\item Xerces-C: for reading XML files
-\item CERNLIB: to support GEANT 3 simulations
-\item GEANT4: simulation engine
-\item ROOT: general purpose HENP toolkit
-\item Geant4: simulation of particle interactions with matter
-\item EVIO: CODA format data handling library
-\item CCDB: Calibration Constants Database
-\item RCDB: Run Conditions Database
-\item JANA: event-based analysis framework
-\item HDDS: detector geometry specification library
-\item halld\_recon: reconstruction for GlueX
-\item halld\_sim: simulation programs and utilities for GlueX
-\item HDGeant4: Geant4 implementation of GlueX detector simulation
-\item gluex\_root\_analysis: ROOT-based analysis of post-reconstruction data
-\item hd\_utilities: miscellaneous scripts and programs
-\item AmpTools: framework for amplitude-based physics analysis
-\item gluex\_MCwrapper: system for submitting simulation jobs
-\item lapack: old-school linear algebra package
-\item hepmc: utililty library for particle physics
-\item photos: package for simulating radiative effects
-\item EvtGen: handles particle decays in a user-configurable library
+\input{packages-doc-list}
 \end{enumerate}
 
 Detailed description of these packages will not be given here; please
@@ -211,17 +190,8 @@ variables listed in Table~\ref{table:home-directories}.
 \begin{tabular}{|l|l|}
 \hline
 \bf Package & \bf Home Directory Variable \\
-\hline Xerces-C & {\tt XERCESCROOT} \\
-CERNLIB & {\tt CERN} \\
-LAPACK/BLAS & see Section~\ref{section:makefile-extras} \\
-Geant4 & {\tt GEANT4\_HOME} \\
-ROOT & {\tt ROOTSYS} \\
-EVIO & {\tt EVIOROOT} \\
-CCDB & {\tt CCDB\_HOME} \\
-RCDB & {\tt RCDB\_HOME} \\
-JANA & {\tt JANA\_HOME} \\
-HDDS & {\tt HDDS\_HOME} \\
-sim-recon & {\tt HALLD\_HOME} \\
+\hline
+\input{packages-doc-homevar}
 \hline
 \end{tabular}
 \end{center}
