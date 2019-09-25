@@ -14,13 +14,18 @@ $(basename).pdf: $(basename).tex packages-doc-list.tex packages-doc-homevar.tex
 	pdflatex $(basename)
 
 $(basename)_web.tar: $(basename)_web
-	tar cvf $@ $<
+	tar cf $@ $<
+	@echo ===============================================
+	@echo Make sure that the link on https://halldweb.jlab.org/wiki/index.php/Setting_Up_the_GlueX_Environment is still viable 
+	@echo ===============================================
 
 $(basename)_web: $(basename)_web.tex
-	 latex2html -local_icons -split 0 -show_section_numbers $(basename)_web
+	$(RM) -r $@
+	latex2html -local_icons -split 4 -show_section_numbers $(basename)_web
 
 $(basename)_web.tex: $(basename).tex
-	cp $(basename).tex $(basename)_web.tex
+	$(RM) $@
+	grep -v tableofcontents $< > $@
 
 clean:
 	$(RM) *.tmp *.aux *.log *.pdf *.toc *.out $(basename)_web.tar $(basename)_web.tex packages-doc-*.tex
