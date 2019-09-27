@@ -63,6 +63,9 @@ def checkOasisCVMFS(packagename,version,dirtag):
 
     folder_name=folder_name+version.replace("\"","")
 
+    if(folder_name=="halld_sim-4.6.0" or folder_name=="halld_sim-4.7.0"): #BLACKLIST FOR CCDB ISSUES
+        return 0
+
     if(dirtag.replace("\"","") != "NULL"):
         folder_name=folder_name+"^"+dirtag.replace("\"","")
     locat=rootdir+packagename.replace("\"","")+"/"+folder_name+"/"
