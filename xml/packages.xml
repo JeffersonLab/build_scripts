@@ -42,7 +42,7 @@
 <package name="lapack" docName="LAPACK" homeVar="none"
 	 description="old-school linear algebra package"/>
 <package name="hepmc" docName="HepMC" homeVar="HEPMCDIR"
-	 description="utililty library for particle physics"/>
+	 description="utility library for particle physics"/>
 <package name="photos" docName="PHOTOS" homeVar="PHOTOSDIR"
 	 description="package for simulating radiative effects"/>
 <package name="evtgen" docName="EvtGen" homeVar="EVTGENDIR"
