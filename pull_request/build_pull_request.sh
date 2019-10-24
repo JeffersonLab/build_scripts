@@ -23,12 +23,7 @@ if [ ! -d "$repo^$branch" ]; then
 fi
 
 # handle repo-specific options
-if [ "$repo" == "sim-recon" ]; then
-    unset SIM_RECON_VERSION
-    export SIM_RECON_BRANCH=$branch_git
-    export SIM_RECON_DIRTAG=$branch
-    export SIM_RECON_SCONS_OPTIONS="-j8 SHOWBUILD=1"
-elif [ "$repo" == "halld_recon" ]; then
+if [ "$repo" == "halld_recon" ]; then
     unset HALLD_RECON_VERSION
     export HALLD_RECON_BRANCH=$branch_git
     export HALLD_RECON_DIRTAG=$branch
@@ -42,7 +37,7 @@ fi
 
 # save environment
 printenv | sort >& env^$branch
-# make sim-recon
+# make the package
 rm -fv $logfile
 if [ -d "$repo^$branch" ]; then
     rm -rf $repo^$branch
