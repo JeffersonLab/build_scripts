@@ -9,7 +9,7 @@ DIST_FILES = $(ALL_FILE) $(CORR_FILE) $(INSTALL_FILE)
 all: .error_check_done
 
 $(DIST_FILES):
-	wget --no-verbose --no-check-certificate http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
+	wget --no-verbose --no-check-certificate https://halldweb.jlab.org/dist/cernlib/$@
 
 .untar_done: $(DIST_FILES)
 	tar zxvf $(ALL_FILE)
