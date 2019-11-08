@@ -48,5 +48,5 @@ endif
 	date > $@
 
 .error_check_done: .build_done
-	grep -v src/packlib/kuip/code_motif/kmdial.c 2005/build/log/make.???? | grep Error ; if [ $$? -eq 0 ] ; then exit 1 ; else exit 0 ; fi
+	grep -v src/packlib/kuip/code_motif/kmdial.c 2005/build/log/make.???? | grep -v "sprintf (cval, " | grep Error ; if [ $$? -eq 0 ] ; then exit 1 ; else exit 0 ; fi
 	date > $@
