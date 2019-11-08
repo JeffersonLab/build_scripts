@@ -25,7 +25,11 @@ $(EVTGEN_HOME)/.untar_done: $(TARFILE)
 	rm -rv untar_temp_dir
 	date > $@
 
-$(EVTGEN_HOME)/.configure: $(SOURCE_CODE_TARGET)
+$(EVTGEN_HOME)/.patch_done: $(SOURCE_CODE_TARGET)
+	cd $(EVTGEN_HOME) ; patch configure < $(BUILD_SCRIPTS)/patches/evtgen/configure.patch
+	date > $@
+
+$(EVTGEN_HOME)/.configure: $(EVTGEN_HOME)/.patch_done
 	cd $(EVTGEN_HOME) ; ./configure --hepmcdir=$(HEPMCDIR) \
 	   --photosdir=$(PHOTOSDIR)
 	date > $@
