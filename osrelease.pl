@@ -62,7 +62,6 @@ if ($uname eq 'Linux') {
 	    $release = '_CentOS6';
 	} elsif ($release_string =~ /^CentOS Linux release 7.7/) {
 	    $nodename = `uname -n`;
-	    print "nodename = $nodename\n";
 	    if ($nodename =~ /.jlab.org$/
 		&& ($nodename =~ /^farm/
 		|| $nodename =~ /^ifarm/
