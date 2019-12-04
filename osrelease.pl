@@ -60,18 +60,23 @@ if ($uname eq 'Linux') {
 	    $release = '_CentOS5';
 	} elsif ($release_string =~ /^CentOS release 6.*/) {
 	    $release = '_CentOS6';
-	} elsif ($release_string =~ /^CentOS Linux release 7.7/) {
-	    $nodename = `uname -n`;
-	    if ($nodename =~ /.jlab.org$/
-		&& ($nodename =~ /^farm/
-		|| $nodename =~ /^ifarm/
-		|| $nodename =~ /^qcd/)) {
-		$release = '_CentOS7.7';
+	} elsif ($release_string =~ /^CentOS Linux release 7\.*/) {
+	    if ($release_string !~ /^CentOS Linux release 7\.2/) {
+		$nodename = `uname -n`;
+		if ($nodename =~ /.jlab.org$/
+		    && ($nodename =~ /^farm/
+			|| $nodename =~ /^ifarm/
+			|| $nodename =~ /^qcd/)) {
+		    @token = split(/\s+/, $release_string);
+		    @version = split(/\./, $token[3]);
+		    $version_minor = $version[1];
+		    $release = "_CentOS7.$version_minor";
+		} else {
+		    $release = '_CentOS7';
+		}
 	    } else {
-		$release = '_CentOS7';
+		    $release = '_CentOS7';
 	    }
-	} elsif ($release_string =~ /^CentOS Linux release 7.*/) {
-	    $release = '_CentOS7';
 	} elsif ($release_string =~ /^Scientific Linux SL release 5.*/ ) {
 	    $release = '_SL5';
 	} elsif ($release_string =~ /^Scientific Linux release 6.*/ ) {
