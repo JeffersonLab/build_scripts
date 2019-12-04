@@ -60,14 +60,24 @@ if ($uname eq 'Linux') {
 	    $release = '_CentOS5';
 	} elsif ($release_string =~ /^CentOS release 6.*/) {
 	    $release = '_CentOS6';
+	} elsif ($release_string =~ /^CentOS Linux release 7.7/) {
+	    $nodename = `uname -n`;
+	    print "nodename = $nodename\n";
+	    if ($nodename =~ /.jlab.org$/
+		&& ($nodename =~ /^farm/
+		|| $nodename =~ /^ifarm/
+		|| $nodename =~ /^qcd/)) {
+		$release = '_CentOS7.7';
+	    } else {
+		$release = '_CentOS7';
+	    }
 	} elsif ($release_string =~ /^CentOS Linux release 7.*/) {
 	    $release = '_CentOS7';
 	} elsif ($release_string =~ /^Scientific Linux SL release 5.*/ ) {
 	    $release = '_SL5';
 	} elsif ($release_string =~ /^Scientific Linux release 6.*/ ) {
 	    $release = '_SL6';
-	  }
-	else {
+	} else {
 	    print STDERR "unrecognized Red Hat release\n";
 	    $release = '_RH';
 	}
