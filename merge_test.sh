@@ -1,6 +1,5 @@
 #!/bin/bash
-#cd /u/scratch/gluex
-cd /local/scratch
+cd /u/scratch/$USER
 rm -rfv merge_test
 mkdir merge_test
 cd merge_test
