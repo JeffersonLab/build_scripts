@@ -1,6 +1,6 @@
 #!/bin/tcsh
 if ( "x$1" == "x" ) then
-    set VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
+    set VERSION_XML=/group/halld/www/halldweb/html/halld_versions/version.xml
 else
     set VERSION_XML=$1
 endif

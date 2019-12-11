@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ -z $1 ]
     then
-    VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
+    VERSION_XML=/group/halld/www/halldweb/html/halld_versions/version.xml
 else
     VERSION_XML=$1
 fi
