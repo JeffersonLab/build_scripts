@@ -7,7 +7,7 @@ usage="$(basename "$0") [-h] [-x filename] [-n nthreads] [package_1] [package_2]
 where:
     -h        show this help text
     -x        set name of version set XML file
-              (default: /group/halld/www/halldweb/html/dist/version_jlab.xml)
+              (default: /group/halld/www/halldweb/html/halld_versions/version.xml)
     -n        set number of threads to use in builds (default: 1)
     -k        keep potentially inconsistent packages in environment
               (default: remove them from the environment)
@@ -104,7 +104,7 @@ esac
 done
 
 if [ -z "$xmlfile" ]
-    then xmlfile=/group/halld/www/halldweb/html/dist/version_jlab.xml
+    then xmlfile=/group/halld/www/halldweb/html/halld_versions/version.xml
 fi
 if [ -z "$list" ]
     then
