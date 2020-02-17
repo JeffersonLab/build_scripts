@@ -153,6 +153,9 @@ if [ -n "$HDGEANT4_HOME" ]; then
             export PATH=$HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
         fi
     fi
+    if [ `echo $PYTHONPATH | grep -c $HDGEANT4_HOME/g4py` -eq 0 ]; then
+	export PYTHONPATH=$HDGEANT4_HOME/g4py:$PYTHONPATH
+    fi
 fi
 #
 # hd_utilities
@@ -173,6 +176,24 @@ fi
 # SQLiteCpp
 #
 if [ -z "$SQLITECPP_HOME" ]; then export SQLITECPP_HOME=$GLUEX_TOP/sqlitecpp/prod; fi
+# hepmc
+if [ -n "$HEPMCDIR" ]; then
+    if [ `echo $LD_LIBRARY_PATH | grep -c $HEPMCDIR/lib` -eq 0 ]
+    then export LD_LIBRARY_PATH=$HEPMCDIR/lib:$LD_LIBRARY_PATH
+    fi
+fi
+# photos
+if [ -n "$PHOTOSDIR" ]; then
+    if [ `echo $LD_LIBRARY_PATH | grep -c $PHOTOSDIR/lib` -eq 0 ]
+    then export LD_LIBRARY_PATH=$PHOTOSDIR/lib:$LD_LIBRARY_PATH
+    fi
+fi
+# evtgen
+if [ -n "$EVTGENDIR" ]; then
+    if [ `echo $LD_LIBRARY_PATH | grep -c $EVTGENDIR/lib` -eq 0 ]
+    then export LD_LIBRARY_PATH=$EVTGENDIR/lib:$LD_LIBRARY_PATH
+    fi
+fi
 #
 if [ -z "$JANA_PLUGIN_PATH" ]
     then

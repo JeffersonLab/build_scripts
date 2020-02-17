@@ -42,12 +42,10 @@ force_rebuild_action:
 ifdef FORCE
 	@echo forcing rebuild
 	$(RM) $(GLUEX_ROOT_ANALYSIS_HOME)/.make_script_done
-else
-	@echo rebuild will not be forced
 endif
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/gluex_root_analysis/archive/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/jeffersonlab/gluex_root_analysis/archive/$(TARFILE)
 
 $(GLUEX_ROOT_ANALYSIS_HOME)/.clone_done:
 	git clone -b $(GLUEX_ROOT_ANALYSIS_BRANCH) $(GLUEX_ROOT_ANALYSIS_URL) $(GLUEX_ROOT_ANALYSIS_DIR)

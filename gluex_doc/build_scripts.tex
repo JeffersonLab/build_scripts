@@ -1,0 +1,1010 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{html}
+
+% global parameters
+\textwidth=6.5in
+\oddsidemargin=0in % use built-in offset of 1 inch for left margin
+\evensidemargin=0in % ditto for even pages
+\textheight=9in
+\topmargin=0in
+\headheight=0in % no headers in this document
+\headsep=0in
+
+% local macros
+
+\newcommand{\bs}{\textsc{Build Scripts}}
+\newcommand{\bcenter}{\begin{center}}
+\newcommand{\ecenter}{\end{center}}
+\newcommand{\gxenv}{{\tt gxenv}}
+
+\title{\bs{}: A Version Management System for GlueX \\ \medskip \large
+  GlueX-Doc-2793-v17}
+\author{Mark M.\ Ito \\ Jefferson Lab}
+\date{September 16, 2019}
+
+\begin{document}
+
+\maketitle
+
+\abstract{\bs{}, a system for building and managing GlueX software, is
+  described. The goal is to insulate the user from the need to the
+  master details of building each of several software packages as well
+  as from the details of setting up a working environment. Multiple
+  versions of each of several packages can be maintained
+  simultaneously. Particular combinations of package versions can be
+  specified succinctly in an XML configuration file and this file can
+  be used both to guide a complete build of all needed packages and to
+  set up the shell environment to use the resulting build.}
+
+\tableofcontents
+
+\section{Introduction}
+There are three fundamental areas of concern that make up all software
+systems. They are:
+
+\begin{enumerate}
+\item a directory structure
+\item a build system
+\item a version management system
+\end{enumerate}
+
+They are all related, aspects of one affects aspects of each of the others.
+
+Having a standard system makes collaborative work more efficient,
+especially when one needs help from others to solve a problem.
+
+\section{Getting Started}
+
+This section give concise instructions for performing a few common tasks with \bs{}.
+
+\subsection{Getting a Copy of Build Scripts}
+
+There are several sources.
+
+\subsubsection{Pre-Installed at JLab}
+
+At JLab, \bs{} is installed in {\tt /group/halld/Software/build\_scripts}. You can start by defining an enviroment variable:
+\begin{center}
+{\tt export BUILD\_SCRIPTS=/group/halld/Software/build\_scripts}
+\end{center}
+for bash or
+\begin{center}
+{\tt setenv BUILD\_SCRIPTS\ /group/halld/Software/build\_scripts}
+\end{center}
+for tcsh.
+
+\subsubsection{Pre-Installed Outside JLab}
+
+Outside JLab, when the gluex\_install procedure has been followed (see section \ref{gluex-install}), \bs{} will be installed under \$GLUEX\_TOP/build\_scripts. You will have to contact your local expert to find the location of \$GLUEX\_TOP. Once that is known the BUILD\_SCRIPTS environment variable to point to \$GLUEX\_TOP/build\_scripts.
+
+\subsubsection{Install via tar file}
+
+The latest version of \bs{} is available from GitHub at
+\bcenter
+\htmladdnormallink{\tt https://github.com/JeffersonLab/build\_scripts/archive/latest.tar.gz}{https://github.com/JeffersonLab/build\_scripts/archive/latest.tar.gz}
+\ecenter
+Set your BUILD\_SCRIPTS environment variable to the full path of the build\_scripts-latest directory that results from untar'ing the file.
+
+\subsubsection{Clone from GitHub}
+
+You can clone the Git repository:
+\bcenter
+  {\tt git clone \htmladdnormallink{https://github.com/jeffersonlab/build\_scripts}{https://github.com/jeffersonlab/build_scripts}}
+\ecenter
+
+\section{The Packages}
+
+There are several software components that are needed to build and use
+GlueX software. Most of them are assumed to be provided by the native
+operating system or distribution, but there are some that have to be
+built by the GlueX user. They are:
+
+\begin{enumerate}
+\input{packages-doc-list}
+\end{enumerate}
+
+Detailed description of these packages will not be given here; please
+see the GlueX Offline Software wiki page for more information.
+
+There are in general multiple versions (releases) of each of these
+packages and it is often convenient to have access to more that one
+version of a package built and available for use. In addition some
+packages depend on one or several others for libraries and include
+files.
+
+\section{The Directory Structure}\label{section:directory}
+
+The \bs{} directory structure supports multiple versions of each
+package. For an example see Fig.~\ref{fig:directory-tree}. In the
+figure, ``gluex\_top'' is a generic name, each installation may choose
+a different directory name. \bs{} looks for the name of this directory
+in the environment variable {\tt GLUEX\_TOP}.
+
+\begin{figure}
+\begin{verbatim}
+                    gluex_top
+                    |-- build_scripts
+                    |-- cernlib
+                    |   `-- 2005
+                    |-- evio
+                    |   |-- evio-4.2
+                    |   `-- evio-4.3.1
+                    |-- hdds
+                    |   |-- hdds-3.1
+                    |   `-- hdds-3.2
+                    |-- jana
+                    |   |-- jana_0.7.2
+                    |   `-- jana_0.7.3
+                    |-- root
+                    |   |-- root_5.34.04
+                    |   `-- root_5.34.26
+                    |-- sim-recon
+                    |   |-- sim-recon-1.2.0
+                    |   `-- sim-recon-1.3.0
+                    `-- xerces-c
+                        |-- xerces-c-3.1.1
+                        `-- xerces-c-3.1.2
+\end{verbatim}
+\caption{The directory structure.}\label{fig:directory-tree}
+\end{figure}
+
+Under gluex\_top, each package has its own container directory ({\it
+  e.~g.}, {\tt JANA, hdds, sim-recon}) and for each package container
+directory one or more specific versions of that package are built.
+
+\section{Scripts to Implement \bs{}}
+
+All scripts and makefiles to support \bs{} are found the in the {\tt
+  build\_scripts} directory. At JLab, the full path is
+$${\tt /group/halld/Software/build\_scripts}$$
+The directory can also be cloned from the Git repository at GitHub. The URL is
+\begin{center}\tt 
+  \htmladdnormallink{https://github.com/jeffersonlab/build\_scripts}{https://github.com/jeffersonlab/build_scripts}
+\end{center}
+Many of the scripts and makefiles described in this note require that
+the environment variable {\tt BUILD\_SCRIPTS} be defined and point to
+an instance of this directory.
+
+\section{Setting Up the Shell Environment}
+
+Facility is provided for setting environment variables necessary both
+for building the software and for using it. Both Bourne-shell-like and
+C-shell-like shells are supported, but real testing has only been done
+with bash and tcsh. In the following all examples will be appropriate
+for bash. Note that whenever a script like foo.sh is mentioned, there
+is also a foo.csh in the build-scripts directory.
+
+\subsection{Low-Level Environment Set-Up: {\tt gluex\_env.(c)sh}}
+\label{section:low-level-environment-setting}
+
+The {\tt gluex\_env.(c)sh} script will define all environment
+variables needed to run and build GlueX software. It takes as input
+the home directories of each package as found in the environment
+variables listed in Table~\ref{table:home-directories}.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\bf Package & \bf Home Directory Variable \\
+\hline
+\input{packages-doc-homevar}
+\hline
+\end{tabular}
+\end{center}
+\caption{Packages and their home directories.}\label{table:home-directories}
+\end{table}
+
+Given the home directory of a package, there may or may not be other
+environment variables that need to be set, those variables derived
+from the value of home. {\tt gluex\_env.(c)sh} takes care of this. For
+example, {\tt XERCES\_INCLUDE} is used in the build system and must be
+defined as {\tt \$XERCESCROOT/include}. Directories containing
+binaries must be added to the {\tt PATH} variable and similarly for
+{\tt LD\_LIBRARY\_PATH}, and {\tt PYTHONPATH}. For these path
+variables directories are always added at the front with any
+pre-existing directories maintained on the list.
+
+\subsubsection{Pre-Defined Home Variables and Defaults}
+
+If {\tt GLUEX\_TOP} is defined in advance, the pre-defined value will
+be used. If not it will be defined as {\tt /usr/local/gluex}.
+
+If {\tt BUILD\_SCRIPTS} is defined in advance, again the pre-defined
+value will be used. If not defined it will be defined as {\tt
+  \$GLUEX\_TOP/build\_scripts}.
+
+If any of the home directories are defined before sourcing {\tt
+  gluex\_env.(c)sh}, those values will be respected. If any are not
+defined, then a default will be provided, usually the {\tt prod}
+directory in the package container directory. Because of this
+behavior, the user can define as many or as few of the home
+directories as desired in advance of sourcing {\tt gluex\_env.(c)sh},
+letting the script finish the environment settings keying off of the
+user definitions (or lack thereof). The user is thus only responsible
+for setting the values of desired home directories. A side effect of
+this behavior is that the environment that results is
+non-deterministic in the sense that the result depend on the values
+of pre-existing home directory variables. Different initial conditions
+will give different environments.
+
+\subsubsection{Consistency Checking}
+
+The final step in {\tt gluex\_env.(c)sh} is to check the resulting
+environment for consistency using the prerequisites system. Each home
+directory is checked for a prerequisites version set file. Those files
+list versions of prerequisite packages used at build time. The
+build-time version are checked against the versions used in the
+just-set-up environment and warnings are printed when mismatches are
+detected. See Section~\ref{section:prerequisites-system} for the
+details.
+
+\subsubsection{Cleaning the Environment: {\tt gluex\_env\_clean.(c)sh}}
+
+Since {\tt gluex\_env.(c)sh} is sensitive to definitions hanging
+around in the environment, there is a script provided that will undo
+all GlueX-related definitions: \break {\tt gluex\_env\_clean.(c)sh}. Sourcing
+it will eliminate unintended consequences from previously made
+definitions. For the path variables the script only removes the
+GlueX-related elements leaving all others present in the path.
+
+\subsection{High-Level Environment Set-Up}
+
+\subsubsection{Custom Scripts}\label{section:custom-scripts}
+
+The most common reason to have a custom script is when you want to use
+a package that is outside the standard directory structure. Since {\tt
+  gluex\_env.(c)sh} will respect a pre-defined value of any of the
+home directories, this can be done without making a private version of
+{\tt gluex\_env.(c)sh}. See Fig.~\ref{figure:custom-script} for an
+example. Here a version of sim-recon built in a non-standard location
+(the user's home directory) will be used in the resulting environment.
+
+\begin{figure}
+\begin{verbatim}
+          export GLUEX_TOP=/home/gluex/gluex_top
+          export BUILD_SCRIPTS=$GLUEX_TOP/build_scripts
+          export HALLD_HOME=/home/username/sim-recon
+          source $BUILD_SCRIPTS/gluex_env.sh
+\end{verbatim}
+\caption{Example of a custom set-up script. The build of sim-recon in
+  the user's home directory will be used. All other packages be set up
+  to use with their default builds under {\tt
+    /home/gluex/gluex\_top}. Note that {\tt GLUEX\_TOP} and {\tt
+  BUILD\_SCRIPTS} are defined explicitly rather than letting them
+default.}\label{figure:custom-script}
+\end{figure}
+
+\subsubsection{Using the Versioning System}\label{section:env-use-versioning}
+
+Another way to get a non-default environment is to use the versioning
+system to set home directory locations which in turn are respected by
+{\tt gluex\_env.(c)sh}. The versioning system is described in detail
+in Section~\ref{section:versioning}, but an example set-up script is
+shown in Fig.~\ref{figure:version-script}. In this example, package version
+information is contained in the XML file {\tt my\_versions.xml} in the
+user's home area. An example version set file is shown in Fig.~\ref{figure:version-xml}. Alternate combinations of package versions can be tried by making alternate versions of the version set file.
+
+\begin{figure}
+\begin{verbatim}
+        export GLUEX_TOP=/home/gluex/gluex_top
+        export BUILD_SCRIPTS=$GLUEX_TOP/build_scripts
+        source $BUILD_SCRIPTS/gluex_env_version.sh \
+            /home/username/my_versions.xml
+\end{verbatim}
+\caption{Example of a set-up script driven by a private version
+  file. See Section~\ref{section:versioning} for the format of the
+  file.}\label{figure:version-script}
+\end{figure}
+
+\subsubsection{Default Environment at JLab}
+
+At JLab there is script that packages the steps shown in
+Fig.~\ref{figure:version-script}, with the appropriate values of {\tt
+  GLUEX\_TOP} and {\tt BUILD\_SCRIPTS}. It uses the latest version of
+{\tt version.xml}. It can also be used as an example for using a
+custom version of {\tt version.xml}. To use it, for bash:
+\begin{verbatim}
+        source /group/halld/Software/build_scripts/gluex_env_jlab.sh
+\end{verbatim}
+and for tcsh:
+\begin{verbatim}
+        source /group/halld/Software/build_scripts/gluex_env_jlab.csh
+\end{verbatim}
+
+\subsubsection{Simple Environment Set Up}
+
+The simplest (and recommended) form of environment set-up under \bs{}
+is the \gxenv{} command.  {\tt gluex\_env\_boot\_jlab.(c)sh} (at JLab)
+and {\tt gluex\_env\_boot.(c)sh} (for gluex\_install builds) are short
+scripts that provide two commands (aliases for tcsh, functions for
+bash) that facilitate setting up and tearing down the GlueX software
+environment. The commands provided are: {\tt gxenv} and {\tt
+  gxclean}. By defining these commands, the scripts ``boot-up''
+environment setting.
+
+The scripts also provide an environment variable, DIST, that points to
+the directory containing all of the official version set files (the
+{\tt version\_*.xml} files).
+
+\begin{description}
+\item{\bf How to use the scripts to define the commands.}
+
+For tcsh, include the following line in your {\tt .cshrc}, {\tt .login}, or {\tt .tcshrc}:
+\begin{verbatim}
+  source /group/halld/Software/build\_scripts/gluex_env_boot_jlab.csh
+\end{verbatim}
+at JLab and
+\begin{verbatim}
+  source /path/to/gluex_top/gluex_env_boot.csh
+\end{verbatim}
+for gluex\_install builds.
+
+For bash, include the following line in your {\tt .bashrc}, {\tt .profile}, or {\tt .bash\_profile}:
+\begin{verbatim}
+  source /group/halld/Software/build\_scripts/gluex\_env\_boot\_jlab.sh
+\end{verbatim}
+at JLab and
+\begin{verbatim}
+  source /path/to/gluex_top/build\_scripts/gluex\_env\_boot.sh
+\end{verbatim}
+for gluex\_install builds.
+
+\item{\bf How to use the commands.}
+
+Usage is the same for both tcsh and bash, JLab and gluex\_install.
+
+\begin{description}
+\item{\bf To Set-Up the Environment: {\tt gxenv}}
+
+\begin{itemize}
+\item To get the default environment:
+\begin{verbatim}
+  gxenv
+\end{verbatim}
+\item To get the environment for a particular official version set, say {\tt version\_3.5\_jlab.xml}, use the {DIST} environment variable:
+\begin{verbatim}
+  gxenv $DIST/version_3.5_jlab.xml
+\end{verbatim}
+\item To get the environment for an arbitrary xml file, use its path:
+\begin{verbatim}
+  gxenv /path/to/my\_version.xml
+\end{verbatim}
+\end{itemize}
+
+\item{\bf To Take-Down the Environment: {\tt gxclean}}
+
+To clear all of the GlueX-specific parts of the environment, including
+GlueX-specific path elements ({\it i.e.}, those in {\tt PATH}, {\tt LD\_LIBRARY\_PATH}, and {\tt PYTHONPATH}):
+\begin{verbatim}
+  gxclean
+\end{verbatim}
+This is not guaranteed to completely clean all gluexy things in all
+circumstances, but should work well when using {\tt gxenv} to do the
+set-up.
+
+\end{description}
+\end{description}
+
+Why implement things this way and not just do the set-up in the `.*rc`
+file? The underlying set-up command, `gluex\_env\_jlab.(c)sh,` has
+become a bit heavy. You may not want to have it executed everytime you
+start a new sub-shell. Also having the version set hard-wired in your
+initial environment can be confusing if you change version sets
+depending on what you are working on. For these reasons, putting the
+set-up in the global shell set-up is not recommended. Sourcing these
+scripts is very fast and once sourced, it is easy to switch from one
+version set to another, even from the command line.
+
+\section{The Build System}
+
+Each of the packages have their own native build system and each build
+system has its own set of details that have to be understood. In
+addition, the technology used to do the build varies from system to
+system. It may be make, imake, cmake, SCons, or something else. The
+\bs{} system makes a choice of build options for each package so that
+the user need not master these details.
+
+\subsection{The Makefiles}
+
+The \bs{} build system is implemented in GNU Make. These makefiles
+invoke the native package-specific build system. The top-level
+makefile builds packages into the standard directory structure
+described in Section~\ref{section:directory}. It in turn uses a
+``package
+makefile'' for each package ({\it e.~g.}, {\tt Makefile\_jana,
+  Makefile\_sim-recon}). Invoking make with a package makefile will
+build that package with the home directory placed in the current
+working directory. In other words, the package makefiles have no knowledge of
+the directory structure within which they are used; they just build
+locally. Only the top-level makefile knows about the directory structure.
+
+\subsubsection{The Top-Level: {\tt Makefile\_all}}\label{section:makefile-all}
+
+Complete builds are orchestrated by {\tt Makefile\_all}. The highest-level
+targets of Makefile\_all, shown with their dependencies are:
+
+\begin{verbatim}
+all: gluex_pass2
+
+gluex_pass1: xerces_build lapack_build cernlib_build root_build \
+	     geant4_build evio_build sqlite_build sqlitecpp_build \
+	     rcdb_build ccdb_build
+
+gluex_pass2: gluex_pass1 jana_build hdds_build amptools_build \
+	     hepmc_build photos_build evtgen_build halld_recon_build \
+	     halld_sim_build hd_utilities_build hdgeant4_build \
+	     gluex_root_analysis_build mcwrapper_build
+\end{verbatim}
+
+The {\tt all} target builds all officially supported packages. These
+are broken into two sets, {\tt gluex\_pass1} and {\tt gluex\_pass2} to
+solve the issue of packages that can only be set-up after they are
+built. This is a problem when starting from scratch. In that case the
+build must proceed in four steps.
+
+\begin{enumerate}
+\item Initial environment set-up.
+\item Build the {\tt gluex\_pass1} target.
+\begin{verbatim}
+  make -f $BUILD_SCRIPTS/Makefile_all gluex_pass1
+\end{verbatim}
+\item Final environment set-up using contents of packages built in pass 1.
+\item Build the {\tt gluex\_pass2} target.
+\begin{verbatim}
+  make -f $BUILD_SCRIPTS/Makefile_all gluex_pass2
+\end{verbatim}
+\end{enumerate}
+
+{{\tt Makefile\_all}} should always be invoked from the {\tt
+  \$GLUEX\_TOP} directory.
+
+If you would like the build to proceed in parallel (for those packages that support parallel builds), set an environment variable (eight threads in this example):
+\begin{verbatim}
+  export NTHREADS=8
+\end{verbatim}
+or set the variable on the make commmand line. For example:
+\begin{verbatim}
+  make -f $BUILD_SCRIPTS/Makefile_all gluex_pass2 NTHREADS=8
+\end{verbatim}
+\subsubsection{Individual Package Targets}
+
+Each of the individual package targets ({\it e.~g.}, {\tt evio\_build}
+and {\tt hdds\_build}) use the corresponding package
+makefile. Directories are created and the package makes are executed
+in way that gives the directory structure described in
+Section~\ref{section:directory}. To do this, the package container
+directory is created if it does not exist and the requested package
+makefile is invoked from within the package container directory.
+
+Of course, each individual package build target can be invoked
+directly. More on this in Section~\ref{section:adding-packages}
+
+\subsubsection{Special Package Target}
+
+The target {\tt cernlib\_debug} is non-standard. If this target is
+invoked, it well create a separate container directory {\tt
+  cernlib\_debug} for the debug versions. Also it does not have its
+own package makefile, rather on 64-bit machines, it invokes {\tt
+  Makefile\_cernlib\_Vogt} with command line options that cause
+appropriate debug compiler flags to be used.
+
+To use the resulting debug version of CERNLIB, the {\tt CERN} variable
+must be set to point to the {\tt cernlib\_debug} directory, either explicitly as an environment variable (as described in Section~\ref{section:custom-scripts} or by using the {\tt home} attribute in the {\tt package} element of a version set file (as described in Section~\ref{section:versioning}.
+
+\subsection{The Package Makefiles}\label{section:package-makefiles}
+
+Each of the package makefiles is sensitive to environment variables
+that control which version of the package to build. The makefiles
+themselves take care of obtaining the source code. In general, there
+are two ways to get the code: downloading a tarball or checking the
+code out from a version control repository, although the later option
+is not available for all packages.
+
+\subsubsection{Specifying the Version of a Tarball}
+
+Each packages respects a version-specifying environment variable. Here
+is an example of how they might be set in the C-shell:
+
+\begin{verbatim}
+setenv JANA_VERSION 0.7.2
+setenv SIM_RECON_VERSION 1.2.0
+setenv HDDS_VERSION 3.2
+setenv CERNLIB_VERSION 2005
+setenv XERCES_C_VERSION 3.1.1
+setenv CLHEP_VERSION 2.0.4.5
+setenv ROOT_VERSION 5.34.26
+setenv CCDB_VERSION 1.05
+setenv RCDB_VERSION 0.00
+setenv EVIO_VERSION 4.3.1
+\end{verbatim}
+
+In each case there is standard system for distributing tarballs marked
+with the version name. Each package has different conventions, but the
+package makefiles have that knowledge of the appropriate convention
+coded in. Also, the name of home directory created depends on the name
+that appears in the tarball (with exceptions as mentioned in
+Section~\ref{section:directory-tags}. Note that the version variable
+can be set on the make command line as well.
+
+\subsubsection{Checking-Out from a Repository}
+
+Some packages can be checked out from a Subversion or Git
+repository. If that is the desired source of the code, the version
+variable should not be set. Instead a URL variable should be used to
+specify the location of the repository. For example:
+
+\begin{verbatim}
+  setenv HDDS_URL https://github.com/jeffersonlab/hdds
+\end{verbatim}
+
+will cause the HDDS package makefile to check out the master branch of
+the HDDS Git repository at GitHub. The names of the variables for
+other packages are {\tt JANA\_URL} (Subversion), {\tt CCDB\_URL}
+(Git), {\tt RCDB\_URL} (Git), and {\tt SIM\_RECON\_URL} (Git)
+respectively.
+
+For packages that use a Git repository, there are two additional
+variables that can be used to control the checkout. {\tt
+  SIM\_RECON\_BRANCH} is used to check-out a specific branch and {\tt
+  SIM\_RECON\_HASH} is used to check-out a specific commit of
+sim-recon. If one is set, the other should not be. There are analogous
+variables for CCDB, RCDB, and HDDS.
+
+\subsubsection{Extra Features for Specific Packages}\label{section:makefile-extras}
+
+\begin{description}
+
+\item{\bf SCons Options for {\tt Makefile\_sim-recon}}
+
+For the sim-recon package, there is a variable, {\tt
+  SIM\_RECON\_SCONS\_OPTIONS} that can be defined, either in the shell
+environment on on the make command line, that will supply optional
+arguments to the {\tt scons} command invoked by make. For example,
+\begin{verbatim}
+        make -f $BUILD_SCRIPTS/Makefile_sim-recon \
+            SIM_RECON_SCONS_OPTIONS='SHOWBUILDS=1'
+\end{verbatim}
+will cause SCons to show the compiler commands explicitly.
+
+\item{\bf Building LAPACK/BLAS}
+
+The {\tt LAPACK} and {\tt BLAS} libraries are needed by CERNLIB. They
+are downloaded and build automatically, but rather than being
+installed in their own home directory, The ``install'' target of {\tt
+  Makefile\_lapack} adds them to the lib directory of your CERNLIB
+build.
+
+\end{description}
+
+\subsection{Adding New Package Builds to an Existing Tree}\label{section:adding-packages}
+
+There are two ways:
+
+\subsubsection{Use the Top-Level {\tt Makefile\_all}}
+
+After setting the desired values of the version environment variables
+and/or the URL environment variables (see
+Section~\ref{section:package-makefiles} you can invoke {\tt
+  Makefile\_all} with the target(s) needed or with a high-level target
+like {\tt gluex},
+\begin{verbatim}
+         cd $GLUEX_TOP
+         make -f $BUILD_SCRIPTS/Makefile_all gluex
+\end{verbatim}
+If some of the versions of individual packages requested already
+exist, then make will do the usual thing: try to remake them and find
+that there is nothing to do.
+
+\subsubsection{Use Individual Package Makefiles}
+
+Since the individual package makefiles build in the local directory,
+they can be used directly by going to the appropriate container
+directory. For example,
+\begin{verbatim}
+cd $GLUEX_TOP/sim-recon
+make -f $BUILD_SCRIPTS/Makefile_sim-recon SIM_RECON_VERSION=1.4.0
+\end{verbatim}
+Note that in this example the version is specified on the make command
+line rather than through an environment variable. That is not
+necessary; it is an option supported by make and defining {\tt
+  SIM\_RECON\_VERSION} in the environment would work as well. Also
+note that doing the build in the sim-recon container directory is not
+necessary for the build to succeed; any directory will work. In this
+example however we are adding to an existing standard directory
+structure so we {\tt cd} to the standard directory.
+
+\section{The Versioning System}\label{section:versioning}
+
+\subsection{Version Set File Format: an XML}
+
+The versioning system uses an XML-formatted version set file to specify
+both package version information and package home directory definition
+in the shell environment. An example file is shown in
+Fig.~\ref{figure:version-xml}.
+
+\begin{figure}
+\begin{verbatim}
+  <gversions>
+  <package name="jana" version="0.7.3"/>
+  <package name="sim-recon" version="1.4.0"/>
+  <package name="hdds" version="3.3"/>
+  <package name="cernlib" version="2005" word_length="64-bit"/>
+  <package name="xerces-c" version="3.1.1"/>
+  <package name="clhep" version="2.0.4.5"/>
+  <package name="root" version="5.34.26"/>
+  <package name="ccdb" version="1.05"/>
+  <package name="evio" version="4.3.1"/>
+  <package name="rcdb" version="0.00"/>
+  </gversions>
+\end{verbatim}
+\caption{An example version set file. {\tt version\_1.7.xml} is shown.}\label{figure:version-xml}
+\end{figure}
+
+There is only one type of element, the {\tt package}. Attributes are:
+
+\begin{description}
+\item{\bf name}: The name of the software package.
+\item{\bf version}: The version number of the package.
+\item{\bf url}: A URL to be used to checkout (Subversion) or clone
+  (Git) the code. The URL should point to an appropriate repository.
+\item{\bf branch}: When using a Git repository, the branch to be
+  checked-out.
+\item{\bf hash}: When using a Git repository, the hash of the commit to be checked-out.
+\item{\bf dirtag}: A string (directory tag) to be appended to the
+  standard directory name of the package when it is built.
+\item{\bf home}: Force the location of the package home directory when setting up the environment.
+\end{description}
+
+\subsection{Setting Up the Environment with a Version Set File}
+
+As we saw in Section~\ref{section:low-level-environment-setting},
+environment setting via {\tt gluex\_env.(c)sh} is sensitive to the
+definition of the package home variables. In
+Section~\ref{section:package-makefiles}, we saw that the package
+makefiles are sensitive to either the version-defining environment
+variables or the URL-defining environment variables, using them to choose the
+version of code to build. The version set file can be used to define both
+classes of variables. In this way it can be used to both build a
+consistent set of packages and to set-up the environment to use the
+build. Executing
+\begin{verbatim}
+           $BUILD_SCRIPTS/version.pl version_1.7.xml
+\end{verbatim}
+where for the purposes of this example {\tt version\_1.7.xml} is the
+file shown in Fig.~\ref{figure:version-xml} and {\tt GLUEX\_TOP} is
+{\tt /home/gluex/gluex\_top}, creates the output shown in
+Fig.~\ref{figure:version-pl-output}.
+\begin{figure}
+\small
+\begin{verbatim}
+setenv JANA_VERSION 0.7.3;
+setenv JANA_HOME \
+    /home/gluex/gluex_top/jana/jana_0.7.3/Linux_RHEL7-x86_64-gcc4.8.3;
+setenv SIM_RECON_VERSION 1.4.0;
+setenv HALLD_HOME /home/gluex/gluex_top/sim-recon/sim-recon-1.4.0;
+setenv HDDS_VERSION 3.3;
+setenv HDDS_HOME /home/gluex/gluex_top/hdds/hdds-3.3;
+setenv CERNLIB_VERSION 2005;
+setenv CERN /home/gluex/gluex_top/cernlib;
+setenv CERN_LEVEL 2005;
+setenv CERNLIB_WORD_LENGTH 64-bit;
+setenv XERCES_C_VERSION 3.1.1;
+setenv XERCESCROOT /home/gluex/gluex_top/xerces-c/xerces-c-3.1.1;
+setenv CLHEP_VERSION 2.0.4.5;
+setenv CLHEP /home/gluex/gluex_top/clhep/2.0.4.5;
+setenv ROOT_VERSION 5.34.26;
+setenv ROOTSYS /home/gluex/gluex_top/root/root_5.34.26;
+setenv CCDB_VERSION 1.05;
+setenv CCDB_HOME /home/gluex/gluex_top/ccdb/ccdb_1.05;
+setenv EVIO_VERSION 4.3.1;
+setenv EVIOROOT /home/gluex/gluex_top/evio/evio-4.3.1/Linux-x86_64;
+setenv RCDB_VERSION 0.00;
+setenv RCDB_HOME /home/gluex/gluex_top/rcdb/rcdb_0.00;
+\end{verbatim}
+\caption{Output of {\tt \$BUILD\_SCRIPTS/version.pl}.}\label{figure:version-pl-output}
+\end{figure}
+Since you would want these commands applied to the current shell level, in practice you use
+\begin{verbatim}
+       eval `$BUILD_SCRIPTS/version.pl version_1.7.xml`
+\end{verbatim}
+Following this step, one normally would invoke {\tt gluex\_env.(c)sh}
+to complete the set-up of the environment.
+
+In this example, the variable definitions come (mostly) in pairs, a
+version variable and a home directory variable. The version variable
+affects only the build process since the corresponding package
+makefile keys off it (see
+Section~\ref{section:package-makefiles}). The home directory variable
+affects the build as well in that it tells the package makefile where
+to find any prerequisite packages and in addition it affects use of a
+build via its effect on path variables.
+
+Finally, the script {\tt gluex\_env\_version.(c)sh} combines use of
+{\tt version.pl} and {\tt gluex\_env.(c)sh} to more conveniently set
+up the environment. We have already seen an example of its use in
+Fig.~\ref{figure:version-script}. The script uses {\tt version.pl} as
+shown above to set the stage for an invocation of {\tt
+  gluex\_env.(c)sh}.
+
+\subsection{Specifying Alternate Source Code Sources with a Version Set File}
+
+We saw in Section~\ref{section:package-makefiles} that a URL variable
+can be used to instructed the package makefiles to get the source code
+from a version control repository rather downloading a tarball. The
+{\tt url} attribute in the package element calls out the value of the
+URL to use directly. In a particular {\tt package} element, either the
+{\tt version} attribute or the {\tt url} attribute should
+appear; if both appear then the {\tt version} attribute will
+be used ({\it i.~e.}, tarball).
+If the {\tt url} attribute is used, each package makefile
+will interpret the URL as is appropriate for that package, either as a
+Subversion repository or a Git repository; there can be only one
+answer and it is coded into the package makefile. For Git
+repositories, the optional {\tt branch} attribute controls which
+branch is checked out. If it is absent, the master branch is
+used. For example, to clone sim-recon and checkout the branch
+{\tt test\_stuff}, use
+\begin{verbatim}
+     <package name="sim-recon"
+              url="https://github.com/jeffersonlab/sim-recon"
+              branch="test_stuff"/>
+\end{verbatim}
+This will cause the {\tt SIM\_RECON\_BRANCH} variable to be set in
+the environment. Similarly the {\tt hash} attribute can be used to
+specify the hash of the particular commit to be checked-out.
+\begin{verbatim}
+     <package name="sim-recon"
+              url="https://github.com/jeffersonlab/sim-recon"
+              hash="22fe917"/>
+\end{verbatim}
+
+Note that for Subversion repositories, the branch specification is
+encoded in the URL itself and the branch and hash attributes are ignored.
+
+\subsection{Directory Tags}\label{section:directory-tags}
+
+The {\tt dirtag} attribute can be used to distinguish different builds
+of a package where the only difference between them is the version(s)
+of one or more prerequisite packages. The string used is arbitrary. A
+directory tag can be attached to either a source directory made from a
+tarball or one from a source code repository. The tag name is appended
+after a caret symbol (\^{}), for example,
+\begin{verbatim}
+  <package name="hdds" version="3.3" dirtag="xerces_test"\>
+\end{verbatim}
+in a version set file would cause {\tt version.pl} to add an additional
+variable to the environment:
+\begin{verbatim}
+  setenv HDDS_DIRTAG xerces_test
+\end{verbatim}
+and {\tt Makefile\_hdds} would then produce a directory named
+{\tt hdds-3.3\^{}xerces\_test}, with source code obtained from the standard
+tarball, {\tt hdds-3.3-src.tar.gz} in this case.
+
+The corresponding home directory variable will also reflect the
+directory tag, of course.
+
+There are a lot possible meanings for the directory tag. It could mark
+different combinations of prerequisites as well as designating
+packages where the source code does {\bf not} come from a standard
+source (tarball or repository). Because of the large number of
+possibilities, the form of the tag string is left to the user; no
+assumption is made about it meaning.
+
+\subsection{Specifying Alternate Home Directory Locations}
+
+Often one wants to use a build of a specific package that lies outside
+of the standard directory structure. This can be put into the
+environment by setting the {\tt home} attribute of the corresponding
+{\tt package} element. For example
+\begin{center} \tt
+<package name="sim-recon" home="/home/my/sim-recon"/>
+\end{center}
+will cause {\tt version.pl} to generate
+\begin{center} \tt
+export HALLD\_HOME=/home/my/sim-recon
+\end{center}
+Note that this feature is mainly useful for creating an environment
+for use; when building it (a) gives no guidance on where the source
+code should come from and (b) does not cause the build to be done in
+the named directory. It is useful when a pre-built package needs to be
+referenced for the current task.
+
+\subsection{Public Version Set Files}
+
+The public version set files are stored in a GitHub repository,
+JeffersonLab/halld\_versions, available at
+
+\begin{center} \tt
+\htmladdnormallink{https://github.com/JeffersonLab/halld\_versions}{https://github.com/JeffersonLab/halld_versions}
+\end{center}
+At JLab the repository is checked out in
+\begin{center} \tt
+/group/halld/www/halldweb/html/halld\_versions
+\end{center}
+and can be access on the web at
+\begin{center} \tt
+\htmladdnormallink{https://halldweb.jlab.org/halld\_versions/}{https://halldweb.jlab.org/halld_versions/}.
+\end{center}
+
+The names of the files are of two main types, (1) version sets that
+correspond to a periodic package update release and (2) version sets
+that correspond to a ``launch'' over GlueX data.
+\begin{enumerate}
+\item {\bf File names for package update releases} are of the form
+  {\tt version\_i.j.k.xml}, where {\tt i}, {\tt j}, and {\tt k} are a
+  major version number for the version set, a minor version number,
+  and a sub-minor version number. For example, {\tt
+    version\_4.1.0.xml}.
+\item {\bf File names for launches} are of the form {\tt
+  launch-name\_i.xml}, where {\tt launch-name} corresponds to the name
+  assigned to the launch and {\tt i} is a version number. For example
+  {\tt recon-2018\_08-ver00\_1}.xml
+\end{enumerate}
+
+\section{The Prerequisites System}\label{section:prerequisites-system}
+
+Each package may or may not have a build dependency on other packages
+managed by \bs{}. For example a particular version of sim-recon can be
+built against any of a number of versions of HDDS, including custom
+versions provided by the user. To insure that the environment being
+set-up has a consistent set of package versions, a facility is
+provided to warn the user if possible inconsistencies are detected.
+
+At build time, a version xml file is created in the home directory of
+a package if that package has dependencies on others in the
+system. For example, \$HALLD\_HOME will have the file
+sim-recon\_prereqs\_version.xml, listing the versions used to build
+sim-recon. An example is shown in Fig.~\ref{figure:prereqs-xml-file}
+
+\begin{figure}
+\begin{verbatim}
+                <gversion version="1.0"
+                ><package name="evio" version="4.3.1"
+                 /><package name="cernlib" version="2005"
+                 /><package name="root" version="5.34.26"
+                 /><package name="jana" version="0.7.3"
+                 /><package name="hdds" version="3.3"
+                 /><package name="ccdb" version="1.05"
+                 /></gversion
+                >
+\end{verbatim}
+\caption{An example of sim-recon\_prereqs\_version.xml.}\label{figure:prereqs-xml-file}
+\end{figure}
+
+At set-up time, when {\tt gluex\_env.(c)sh} is invoked, if a version
+file with prerequisites is found in the package home directory, then
+each package in that file is checked for version consistency. A match
+is sought between the version number specified in the version set file and
+the version number encoded in the home directory for the prerequisite
+package, {\it i.~e.}, the directory defined as home in the environment
+being set-up. Here the version from the home directory is extracted in
+two ways depending on how the package was built:
+\begin{enumerate}
+
+\item {\bf Tar File}. If the source code came from a tar file, then
+  the version number is parsed out of the name of the home directory.
+
+\item {\bf Subversion Check-Out}. If the source was checked out of a
+  subversion repository, the {\tt svn info} command is used to get the
+  name of the subversion directory checked out and the version is
+  parsed from that directory name.
+
+\item {\bf Git Clone and Check-Out}. If the source code was
+  checked-out from a Git repository, the {\tt git remote -v} command
+  is issued and the URL is parsed from the ``fetch'' line. The branch
+  is obtained from the {\tt git status} command. If the prerequisite
+  file does not contain a branch specification, then the version check
+  will require the master branch to have been checked out. At this
+  writing, version checking for specific commit hashes has not been
+  implemented.
+
+\end{enumerate}
+If a version mismatch is found, a warning is written to the screen.
+
+There are cases where the home directory does not contain any
+information about the source of its source code. For example, the code
+could have come via the {\tt svn\ export} command or the {\tt
+  git\ archive} command. If a such a build (for example HDDS) is a
+prerequisite of another package (for example, sim-recon), then the
+dependent package (sim-recon) will usually have listed the
+prerequisite (HDDS) with neither a {\tt version} nor a {\tt url}
+attribute defined in its (sim-recon's) prerequisite file. In that
+case, a warning will be issued noting the absence of both {\tt
+  version} and {\tt url} attributes.
+
+\section{The gluex\_install System}\label{gluex-install}
+
+The {\tt gluex\_install} system uses {\tt build\_scripts} to create a
+complete install of GlueX software from scratch. This is especially
+useful for new machines.
+
+No interaction from the user should be required to get a successful
+build. The only assumption made is that the basic packages that come
+in a minimal install are present. The definition of minimal
+depends on the installation. In all cases, the distribution was tested
+by first installing from a DVD or CD ISO image. Typically, the ``live
+DVD'' version was chosen since that installs the smallest number of
+packages.
+
+The scripts have been tested on the following distributions listed in
+Table~\ref{table:tested-distributions}.
+
+\begin{table}
+$$
+\begin{tabular}{|l|l|}
+\hline
+\bf Distribution & \bf Package Type \\
+\hline
+CentOS & RedHat \\
+Scientific Linux & RedHat \\
+Ubuntu & Debian \\
+Fedora & RedHat \\
+LinuxMint & Debian \\
+openSUSE & RedHat \\
+RedHat Enterprise & RedHat \\
+\hline
+\end{tabular}
+$$
+\caption{Gluex\_install tested distributions.}\label{table:tested-distributions}
+\end{table}
+
+\subsection{Installation Steps}
+
+Root access is required for steps (1) and (3).
+
+\begin{enumerate}
+
+\item {\bf System Update}. It is recommended that you update your
+  system to the latest versions of of all system supplied
+  software. For RedHat-like distributions you do a ``yum update''. For
+  Debian-like systems you do a ``apt-get update''.
+
+\item {\bf Get the Scripts}. A tar file with the scripts described
+  here is available at
+  \begin{center}
+    \htmladdnormallink{\tt https://github.com/JeffersonLab/gluex\_install/archive/latest.tar.gz}{https://github.com/JeffersonLab/gluex_install/archive/latest.tar.gz}
+  \end{center}
+You can also do a git clone of the latest version:
+\begin{center}\tt
+  git clone \htmladdnormallink{https://github.com/jeffersonlab/gluex\_install}{https://github.com/jeffersonlab/gluex_install}
+\end{center}
+
+\item {\bf Prerequisites: gluex\_prereq\_$<$distribution$>$.sh}. The
+  prerequisites script installs packages from the distribution
+  repository necessary for the GlueX build. As such, it must be
+  executed by root. In addition it makes some symbolic links in system
+  directories that are necessary for the cernlib build. These scripts
+  are specific to particular distributions. You must run this
+  script from inside the ``gluex\_install'' directory created when you
+  get the scripts (see Get the Scripts, step 2).
+
+\item {\bf Install: gluex\_install.sh}. Creates a directory,
+  ``gluex\_top'', in the current working directory to house the build,
+  sets up an environment, downloads all source files, and builds all
+  libraries and executables needed to run GlueX software. The install
+  assumes a directory structure that accommodates multiple versions of
+  the GlueX packages if they are needed later. The script is
+  distribution independent.
+
+  Note that if parallel builds are desired (for the packages that
+  support them) set the NTHREADS environment to the number parallel
+  processes desired. Since {\tt gluex\_install.sh} invokes {\tt
+    Makefile\_all}, the value will be used. See
+  Section\ \ref{section:makefile-all}.
+
+\end{enumerate}
+
+\subsection{Using the Build}
+
+After the build is complete, there are two files in the gluex
+directory, setup.sh and setup.csh, that can be used to set-up the
+complete GlueX environment under Bourne-like shells or C-like shells
+respectively.
+
+\end{document}
+

@@ -22,10 +22,16 @@ else
   endif
 endif
 
-all: $(CCDB_DIR)/.scons_done
+all: force_rebuild_action $(CCDB_DIR)/.scons_done
+
+force_rebuild_action:
+ifdef FORCE
+	@echo forcing rebuild
+	$(RM) $(CCDB_DIR)/.scons_done
+endif
 
 $(TARFILE):
-	wget --no-check-certificate -O $@ https://github.com/jeffersonlab/ccdb/archive/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/jeffersonlab/ccdb/archive/$(TARFILE)
 
 $(CCDB_DIR)/.untar_done: $(TARFILE)
 	rm -rfv untar_temp_dir
@@ -51,7 +57,6 @@ $(CCDB_DIR)/.scons_done: $(CCDB_DIR)/.untar_local_scons
 	source $(CCDB_DIR)/environment.bash ; \
 	cd $(CCDB_DIR) ; \
 	python scripts/scons.py
-
-.PHONY: $(CCDB_DIR)/.scons_done
+	date > $@
 
 # end of makefile

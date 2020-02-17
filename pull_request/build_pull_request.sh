@@ -1,38 +1,25 @@
 #!/bin/bash
-# go to the target directory
 repo=$1
 branch_git=$2
 branch=$(echo $branch_git | sed -r 's/\//_/g')
-#target_dir=/u/scratch/$USER/pull_request_test
 target_dir=/work/halld/pull_request_test
 logfile=make_${branch}.log
+# go to the target directory
 mkdir -p -v $target_dir
 pushd $target_dir
 # setup environment
-#source /group/halld/Software/build_scripts/gluex_env_jlab.sh
-############################################
-#echo === warning: using hard-wired location of build_scripts for development ===
-# this is maybe redundant?
 export BUILD_SCRIPTS=/group/halld/Software/build_scripts  
-source $BUILD_SCRIPTS/gluex_env_jlab.sh /group/halld/www/halldweb/html/dist/version_jlab.xml
-unset CPLUS_INCLUDE_PATH
-############################################
-if [ -z "$REPO_URL" ]; then
-    export REPO_URL=https://github.com/JeffersonLab/$repo
+datestring=`date +%Y-%m-%d`
+export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
+source $BUILD_SCRIPTS/gluex_env_boot_jlab.sh
+gxenv /u/scratch/gluex/nightly/$datestring/$BMS_OSNAME/version_$datestring.xml
+
+export REPO_URL=https://github.com/JeffersonLab/$repo
+if [ -f "$repo^$branch" ]; then
+    rm "$repo^$branch"
 fi
-# only run tests from the main JLab repo, not forked repos for security
-echo COMPARE "$REPO_URL"
-echo TO "https://github.com/JeffersonLab/$repo"
-if [ "$REPO_URL" != "https://github.com/JeffersonLab/$repo" ]; then
-    # create notice where the build log would be
-    if [ -f "$repo^$branch" ]; then
-       rm "$repo^$branch"
-    fi
-    if [ ! -d "$repo^$branch" ]; then
-       mkdir "$repo^$branch"
-    fi
-    echo "Tests are not run on pull requests from forked repositories." > "$repo^$branch/$logfile"
-    exit 1
+if [ ! -d "$repo^$branch" ]; then
+    mkdir "$repo^$branch"
 fi
 
 # handle repo-specific options
@@ -53,8 +40,8 @@ elif [ "$repo" == "halld_sim" ]; then
     export HALLD_SIM_SCONS_OPTIONS="-j8 SHOWBUILD=1"
 fi
 
-# for testing
-printenv >& env^$branch
+# save environment
+printenv | sort >& env^$branch
 # make sim-recon
 rm -fv $logfile
 if [ -d "$repo^$branch" ]; then

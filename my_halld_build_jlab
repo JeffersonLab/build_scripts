@@ -7,7 +7,7 @@ usage="$(basename "$0") [-h] [-x filename] [-n nthreads] [package_1] [package_2]
 where:
     -h        show this help text
     -x        set name of version set XML file
-              (default: /group/halld/www/halldweb/html/dist/version_jlab.xml)
+              (default: /group/halld/www/halldweb/html/halld_versions/version.xml)
     -n        set number of threads to use in builds (default: 1)
     -k        keep potentially inconsistent packages in environment
               (default: remove them from the environment)
@@ -29,8 +29,16 @@ fi
 
 if [ -f version.xml ]
     then
-    echo error: version.xml already exists, move it out of the way or do the build in a different directory.
-    exit 2
+    prompt="version.xml already exists, overwrite it? "
+    while true; do
+	read -p "$prompt" yn
+	case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) exit 2;;
+            * ) echo "Please answer yes or no.";;
+	esac
+    done
+    rm -fv version.xml
 fi
 
 cmd="$BUILD_SCRIPTS/customize_version.pl -o version.xml"
@@ -96,7 +104,7 @@ esac
 done
 
 if [ -z "$xmlfile" ]
-    then xmlfile=/group/halld/www/halldweb/html/dist/version_jlab.xml
+    then xmlfile=/group/halld/www/halldweb/html/halld_versions/version.xml
 fi
 if [ -z "$list" ]
     then
@@ -153,6 +161,7 @@ echo source $BUILD_SCRIPTS/gluex_env_jlab.sh $mydir/version.xml \
     > setup_gluex.sh
 echo source $BUILD_SCRIPTS/gluex_env_jlab.csh $mydir/version.xml \
     > setup_gluex.csh
+source $BUILD_SCRIPTS/gluex_env_clean.sh
 source $BUILD_SCRIPTS/gluex_env_jlab.sh $mydir/version.xml
 
 set -e

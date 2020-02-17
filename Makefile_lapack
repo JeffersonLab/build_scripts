@@ -1,23 +1,19 @@
 ifndef LAPACK_VERSION
-LAPACK_VERSION=3.6.0
+  LAPACK_VERSION=3.6.0
 endif
 TARFILE=lapack-$(LAPACK_VERSION).tgz
 PWD := $(shell pwd)
 export LAPACKROOT=$(PWD)/lapack-$(LAPACK_VERSION)
 
-all: $(LAPACKROOT)/.make_install_done
-
-$(LAPACKROOT)/.make_install_done: $(LAPACKROOT)/.make_done 
-	install $(LAPACKROOT)/liblapack.a $(CERN)/$(CERN_LEVEL)/lib/liblapack3.a
-	install $(LAPACKROOT)/librefblas.a $(CERN)/$(CERN_LEVEL)/lib/libblas.a
-	date > $@
+all: $(LAPACKROOT)/.make_done
 
 $(LAPACKROOT)/.make_done: $(LAPACKROOT)/make.inc $(LAPACKROOT)/.edit_makefile_done
-	ulimit -s 65000 ; $(MAKE) -C$(LAPACKROOT)
+	$(MAKE) -C$(LAPACKROOT)
 	date > $@
 
 $(LAPACKROOT)/.edit_makefile_done: $(LAPACKROOT)/make.inc
 	cd $(LAPACKROOT); patch < $(BUILD_SCRIPTS)/patches/lapack/Makefile.patch
+	cd $(LAPACKROOT)/TESTING; patch Makefile < $(BUILD_SCRIPTS)/patches/lapack/Makefile_TESTING.patch
 	date > $@
 
 $(LAPACKROOT)/make.inc: $(LAPACKROOT)/make.inc.example
@@ -30,4 +26,4 @@ $(LAPACKROOT)/.untar_done: $(TARFILE)
 	date > $@
 
 $(TARFILE):
-	wget http://www.netlib.org/lapack/$(TARFILE)
+	wget --no-verbose http://www.netlib.org/lapack/$(TARFILE)

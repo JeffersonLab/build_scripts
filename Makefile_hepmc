@@ -1,0 +1,57 @@
+PWD = $(shell pwd)
+CMAKE3_BIN := $(shell which cmake3)
+ifneq ($(CMAKE3_BIN),)
+    ifeq ($(CMAKE3_BIN),/apps/bin/cmake3)
+	CMAKE_BIN = cmake # don't use cmake3 from /apps/bin
+    else
+	CMAKE_BIN = cmake3
+    endif
+else
+   CMAKE_BIN = cmake
+endif
+CMAKE = $(CMAKE_BIN)
+
+SOURCE_CODE_TARGET = $(HEPMC_HOME)/.untar_done
+ifdef HEPMC_DIRTAG
+ HEPMC_DIR = HepMC-$(HEPMC_VERSION)^$(HEPMC_DIRTAG)
+else
+ HEPMC_DIR = HepMC-$(HEPMC_VERSION)
+endif
+TARFILE = hepmc$(HEPMC_VERSION).tgz
+
+HEPMC_HOME = $(PWD)/$(HEPMC_DIR)
+BUILD_DIR = $(PWD)/build_$(HEPMC_DIR)
+
+all: $(HEPMC_HOME)/hepmc_prereqs.xml
+
+$(TARFILE):
+	wget --no-verbose --no-check-certificate -O $@ http://hepmc.web.cern.ch/hepmc/releases/$(TARFILE)
+
+$(HEPMC_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(HEPMC_DIR)
+	rm -rv untar_temp_dir
+	date > $@
+
+$(HEPMC_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
+	mkdir -p $(BUILD_DIR)
+	cd $(BUILD_DIR); $(CMAKE) -DCMAKE_INSTALL_PREFIX=$(HEPMC_HOME) \
+	   -Dmomentum:STRING=GEV -Dlength:STRING=CM $(HEPMC_HOME)
+	date > $@
+
+$(HEPMC_HOME)/.make_done: $(HEPMC_HOME)/.cmake_done
+	make -C $(BUILD_DIR)
+	date > $@
+
+$(HEPMC_HOME)/.install_done: $(HEPMC_HOME)/.make_done
+	make -C $(BUILD_DIR) install
+	date > $@
+
+$(HEPMC_HOME)/hepmc_prereqs.xml: $(HEPMC_HOME)/.install_done
+	cd $(HEPMC_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl hepmc
+
+debug:
+	@echo CMAKE3_BIN = $(CMAKE3_BIN)
+	@echo CMAKE = $(CMAKE)

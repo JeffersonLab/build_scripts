@@ -13,6 +13,7 @@ $XML::Simple::PREFERRED_PARSER = 'XML::Parser';
 $ERROR_NO_FILE_ARG = 1;
 $ERROR_FILE_DOES_NOT_EXIST = 2;
 
+get_options();
 $shell_type = define_shell_type();
 
 $gluex_top_default = "/home/" . $ENV{USER} . "/gluex_top";
@@ -65,6 +66,8 @@ foreach $href (@b) {
     $home = $d{home};
     $hash = $d{hash};
     $year = $d{year};
+    $debug_level = $d{debug_level};
+    if ($debug_level eq '') {$debug_level = 1} # set a default level
     if ($version) {
 	print_command("${name_in_caps}_VERSION", $version);
     }
@@ -84,25 +87,33 @@ foreach $href (@b) {
 	if ($home) {
 	    $package_home_dir = $home;
 	} else {
-	    if ($dirtag) {$sep = '^';} else {$sep = '';}
-	    if ($url) {
-		$basename = basename($url);
-		$package_home_dir = "$gluex_top/$name/$basename$sep$dirtag$dir_suffix{$name}";
+	    if ($dirtag) {
+		$dirtag_label = '^' . $dirtag;
 	    } else {
-		if ($version) {
-		    my $this_dir_prefix = $dir_prefix{$name};
-		    if ($name == 'root') { # prefix depends on root version
-			if ($version =~ /^6./) {
-			    $this_dir_prefix =~ s/\[_-\]/-/;
-			} else {
-			    $this_dir_prefix =~ s/\[_-\]/_/;
-			}
-		    }
-		    $package_home_dir = "$gluex_top/$name/$this_dir_prefix$version$sep$dirtag$dir_suffix{$name}";
-		} else {
-		    $package_home_dir = "$gluex_top/$name/$name$sep$dirtag$dir_suffix{$name}";
-		}
+		$dirtag_label = '';
 	    }
+	    $dtype = $debug_type[$debug_level];
+	    if ($dtype) { # if not null string
+		$debug_level_label = '+' . $dtype;
+	    } else {
+		$debug_level_label = '';
+	    }
+	    if ($version) {
+		my $this_dir_prefix = $dir_prefix{$name};
+		if ($name == 'root') { # prefix depends on root version
+		    if ($version =~ /^6./) {
+			$this_dir_prefix =~ s/\[_-\]/-/;
+		    } else {
+			$this_dir_prefix =~ s/\[_-\]/_/;
+		    }
+		}
+		$package_label = $this_dir_prefix . $version;
+	    } elsif ($url) {
+		$package_label = basename($url);
+	    } else {
+		$package_label = $name;
+	    }
+	    $package_home_dir = "$gluex_top/$name/$package_label$dirtag_label$debug_level_label$dir_suffix{$name}";
 	}
 	print_command($package_home_var, $package_home_dir);
 	if ($dirtag) {print_command("${name_in_caps}_DIRTAG", $dirtag);}
@@ -110,14 +121,20 @@ foreach $href (@b) {
 	if ($branch) {print_command("${name_in_caps}_BRANCH", $branch);}
 	if ($hash) {print_command("${name_in_caps}_HASH", $hash);}
 	if ($year) {print_command("${name_in_caps}_YEAR", $year);}
+	if ($name eq 'halld_sim' || $name eq 'halld_recon') {
+	    print_command("${name_in_caps}_DEBUG_LEVEL", $debug_level);
+	}
     }
 }
 
 exit;
 
-sub define_shell_type {
+sub get_options {
     $opt_s = "";
     getopts('s:');
+}
+
+sub define_shell_type {
     $shell = $opt_s;
     my $shell_type = 'undefined';
     if ($shell eq 'sh') {

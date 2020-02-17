@@ -35,6 +35,9 @@ if ($?BUILD_SCRIPTS) then
         eval `$BUILD_SCRIPTS/delpath.pl -l /u$G4ROOT/lib64`
     endif
     if ($?ROOT_ANALYSIS_HOME) eval `$BUILD_SCRIPTS/delpath.pl -l $ROOT_ANALYSIS_HOME/$BMS_OSNAME/lib/`
+    if ($?HEPMCDIR) eval `$BUILD_SCRIPTS/delpath.pl -l $HEPMCDIR/lib`
+    if ($?PHOTOSDIR) eval `$BUILD_SCRIPTS/delpath.pl -l $PHOTOSDIR/lib`
+    if ($?EVTGENDIR) eval `$BUILD_SCRIPTS/delpath.pl -l $EVTGENDIR/lib`
     eval `$BUILD_SCRIPTS/delpath.pl -l`
     # clean PYTHONPATH
     if ($?CCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`
@@ -42,11 +45,12 @@ if ($?BUILD_SCRIPTS) then
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl -p $ROOTSYS/lib`
     if ($?HALLD_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_HOME/$BMS_OSNAME/python2`
     if ($?HALLD_RECON_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_RECON_HOME/$BMS_OSNAME/python2`
+    if ($?HDGEANT4_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HDGEANT4_HOME/g4py`
     eval `$BUILD_SCRIPTS/delpath.pl -p`
 endif
 # clean_environment
 unsetenv GLUEX_TOP
-unsetenv BUILD_SCRIPTS
+# leave BUILD_SCRIPTS alone, do not: unsetenv BUILD_SCRIPTS
 unsetenv XERCESCROOT
 unsetenv XERCES_INCLUDE
 unsetenv ROOTSYS
@@ -115,6 +119,10 @@ unsetenv MCWRAPPER_CENTRAL
 unsetenv ROOT_ANALYSIS_HOME
 unsetenv SQLITECPP_HOME
 unsetenv SQLITE_HOME
+unsetenv LAPACK_HOME
+unsetenv HEPMCDIR
+unsetenv PHOTOSDIR
+unsetenv EVTGENDIR
 # versions
 unsetenv SIM_RECON_VERSION
 unsetenv HALLD_RECON_VERSION
@@ -136,6 +144,10 @@ unsetenv AMPTOOLS_VERSION
 unsetenv SQLITECPP_VERSION
 unsetenv SQLITE_VERSION
 unsetenv GLUEX_MCWRAPPER_VERSION
+unsetenv LAPACK_VERSION
+unsetenv HEPMC_VERSION
+unsetenv PHOTOS_VERSION
+unsetenv EVTGEN_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
 unsetenv HALLD_RECON_URL
@@ -152,6 +164,9 @@ unsetenv HDGEANT4_URL
 unsetenv HD_UTILITIES_URL
 unsetenv GLUEX_ROOT_ANALYSIS_URL
 unsetenv SQLITECPP_URL
+unsetenv HEPMC_URL
+unsetenv PHOTOS_URL
+unsetenv EVTGEN_URL
 # directory tags
 unsetenv SIM_RECON_DIRTAG
 unsetenv HALLD_RECON_DIRTAG
@@ -173,6 +188,9 @@ unsetenv AMPTOOLS_DIRTAG
 unsetenv SQLITECPP_DIRTAG
 unsetenv SQLITE_DIRTAG
 unsetenv GLUEX_MCWRAPPER_DIRTAG
+unsetenv HEPMC_DIRTAG
+unsetenv PHOTOS_DIRTAG
+unsetenv EVTGEN_DIRTAG
 # git branches
 unsetenv SIM_RECON_BRANCH
 unsetenv HALLD_RECON_BRANCH
@@ -191,6 +209,9 @@ unsetenv HD_UTILITIES_BRANCH
 unsetenv GLUEX_ROOT_ANALYSIS_BRANCH
 unsetenv SQLITECPP_BRANCH
 unsetenv GLUEX_MCWRAPPER_BRANCH
+unsetenv HEPMC_BRANCH
+unsetenv PHOTOS_BRANCH
+unsetenv EVTGEN_BRANCH
 # git hashes
 unsetenv SIM_RECON_HASH
 unsetenv HALLD_RECON_HASH
@@ -209,5 +230,10 @@ unsetenv HD_UTILITIES_HASH
 unsetenv GLUEX_ROOT_ANALYSIS_HASH
 unsetenv SQLITECPP_HASH
 unsetenv GLUEX_MCWRAPPER_HASH
+unsetenv HEPMC_HASH
+unsetenv PHOTOS_HASH
+unsetenv EVTGEN_HASH
 # misc
 unsetenv SQLITE_YEAR
+unsetenv HALLD_RECON_DEBUG_LEVEL
+unsetenv HALLD_SIM_DEBUG_LEVEL

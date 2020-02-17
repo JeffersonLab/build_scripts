@@ -6,19 +6,16 @@ INSTALL_FILE = cernlib.2005.install.$(VERSION_DATE).tgz
 ALL_FILE = cernlib-2005-all-new.tgz
 DIST_FILES = $(ALL_FILE) $(CORR_FILE) $(INSTALL_FILE)
 
-ifndef GVMS_TEST
-all: .build_done
-else
-all: .unpack_done
-endif
+all: .error_check_done
 
 $(DIST_FILES):
-	wget --no-check-certificate http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
+	wget --no-verbose --no-check-certificate http://www-zeuthen.desy.de/linear_collider/cernlib/new/$@
 
 .untar_done: $(DIST_FILES)
 	tar zxvf $(ALL_FILE)
 	cp -v $(CORR_FILE) cernlib.2005.corr.tgz
 	tar zxvf $(INSTALL_FILE)
+	chmod -v a+r lapack.tar.gz
 	date > $@
 
 .install_src_done: .untar_done
@@ -37,10 +34,19 @@ endif
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_old_patchy4.patch
 	date > $@
 
-.build_done: .patch_done
+.install_lapack_done: .patch_done
+	mkdir -p 2005/src/lib
+	install $(LAPACK_HOME)/liblapack.a 2005/src/lib/liblapack.a
+	install $(LAPACK_HOME)/librefblas.a 2005/src/lib/libblas.a
+	mkdir -p 2005/lib
+	install $(LAPACK_HOME)/liblapack.a 2005/lib/liblapack3.a
+	install $(LAPACK_HOME)/librefblas.a 2005/lib/libblas.a
+	date > $@
+
+.build_done: .install_lapack_done
 	./Install_cernlib
 	date > $@
 
 .error_check_done: .build_done
-	grep Error 2005/build/log/make.???? ; if [ $$? -eq 0 ] ; then exit 1 ; else exit 0 ; fi
+	grep -v src/packlib/kuip/code_motif/kmdial.c 2005/build/log/make.???? | grep -v "sprintf (cval, " | grep Error ; if [ $$? -eq 0 ] ; then exit 1 ; else exit 0 ; fi
 	date > $@
