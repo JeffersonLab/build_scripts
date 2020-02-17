@@ -32,6 +32,7 @@ EVTGEN = ${ROOT_OF_ALL}/evtgen
 
 ifdef NTHREADS
   ROOT6_BUILD_OPTIONS += -j$(NTHREADS)
+  GEANT4_MAKE_OPTIONS += -j$(NTHREADS)
   SIM_RECON_SCONS_OPTIONS += -j$(NTHREADS)
   HALLD_RECON_SCONS_OPTIONS += -j$(NTHREADS)
   HALLD_SIM_SCONS_OPTIONS += -j$(NTHREADS)
@@ -143,7 +144,7 @@ geant4_dir:
 	test -d ${GEANT4} || mkdir -pv ${GEANT4}
 
 geant4_make:
-	$(MAKE) -C$(GEANT4) -f$(BUILD_SCRIPTS)/Makefile_geant4
+	$(MAKE) -C$(GEANT4) -f$(BUILD_SCRIPTS)/Makefile_geant4 GEANT4_MAKE_OPTIONS="$(GEANT4_MAKE_OPTIONS)"
 
 gsl_build: gsl_dir gsl_make
 
