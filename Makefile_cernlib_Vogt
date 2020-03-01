@@ -31,8 +31,8 @@ endif
 	cd 2005/src/packlib/kuip/kuip ; \
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/kstring.h.patch
 	cd 2005/src/config ; \
-	patch < $(BUILD_SCRIPTS)/patches/cernlib/Imake.cf.patch	
-	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_old_patchy4.patch	
+	patch < $(BUILD_SCRIPTS)/patches/cernlib/Imake.cf.patch
+	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_old_patchy4.patch
 	date > $@
 
 .install_lapack_done: .patch_done
