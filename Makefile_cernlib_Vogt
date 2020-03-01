@@ -27,12 +27,12 @@ $(DIST_FILES):
 ifdef DEBUG
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_cernlib.debug.patch
 endif
+	sed '/SAVE/d' 2005/src/geant321/miface/gmicap.F > 2005/src/geant321/miface/gmicap.F ; \
 	cd 2005/src/packlib/kuip/kuip ; \
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/kstring.h.patch
 	cd 2005/src/config ; \
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/Imake.cf.patch	
-	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_old_patchy4.patch
-	cd 2005/src/geant321/miface ; sed '/SAVE/d' gmicap.F > gmicap.F
+	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_old_patchy4.patch	
 	date > $@
 
 .install_lapack_done: .patch_done
