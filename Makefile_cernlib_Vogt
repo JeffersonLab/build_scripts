@@ -30,10 +30,9 @@ endif
 	cd 2005/src/packlib/kuip/kuip ; \
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/kstring.h.patch
 	cd 2005/src/config ; \
-	patch < $(BUILD_SCRIPTS)/patches/cernlib/Imake.cf.patch
-	cd 2005/src/geant321/miface ; \
-	sed '/SAVE/d' gmicap.F > gmicap.F
+	patch < $(BUILD_SCRIPTS)/patches/cernlib/Imake.cf.patch	
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_old_patchy4.patch
+	cd 2005/src/geant321/miface ; sed '/SAVE/d' gmicap.F > gmicap.F
 	date > $@
 
 .install_lapack_done: .patch_done
