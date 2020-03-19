@@ -21,9 +21,9 @@
 \newcommand{\gxenv}{{\tt gxenv}}
 
 \title{\bs{}: A Version Management System for GlueX \\ \medskip \large
-  GlueX-Doc-2793-v17}
+  GlueX-Doc-2793-v18}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{September 16, 2019}
+\date{March 18, 2020}
 
 \begin{document}
 
@@ -318,24 +318,21 @@ and for tcsh:
 \subsubsection{Simple Environment Set Up}
 
 The simplest (and recommended) form of environment set-up under \bs{}
-is the \gxenv{} command.  {\tt gluex\_env\_boot\_jlab.(c)sh} (at JLab)
-and {\tt gluex\_env\_boot.(c)sh} (for gluex\_install builds) are short
-scripts that provide two commands (aliases for tcsh, functions for
-bash) that facilitate setting up and tearing down the GlueX software
-environment. The commands provided are: {\tt gxenv} and {\tt
-  gxclean}. By defining these commands, the scripts ``boot-up''
-environment setting.
-
-The scripts also provide an environment variable, DIST, that points to
-the directory containing all of the official version set files (the
-{\tt version\_*.xml} files).
+is the \gxenv{} command. To define this command, use {\tt
+  gluex\_env\_boot\_jlab.(c)sh} (at JLab) and {\tt
+  gluex\_env\_boot.(c)sh} (for gluex\_install builds). These scripts
+also define the {\tt gxclean} command. {\tt gxenv} is used to set up
+the GlueX environment and {\tt gxclean} is used to reverse the set
+up. The scripts also provide an environment variable, {\tt
+  HALLD\_VERSIONS}, that points to the directory containing all of the
+official version set files (the {\tt version\_*.xml} files).
 
 \begin{description}
 \item{\bf How to use the scripts to define the commands.}
 
 For tcsh, include the following line in your {\tt .cshrc}, {\tt .login}, or {\tt .tcshrc}:
 \begin{verbatim}
-  source /group/halld/Software/build\_scripts/gluex_env_boot_jlab.csh
+  source /group/halld/Software/build_scripts/gluex_env_boot_jlab.csh
 \end{verbatim}
 at JLab and
 \begin{verbatim}
@@ -349,9 +346,11 @@ For bash, include the following line in your {\tt .bashrc}, {\tt .profile}, or {
 \end{verbatim}
 at JLab and
 \begin{verbatim}
-  source /path/to/gluex_top/build\_scripts/gluex\_env\_boot.sh
+  source /path/to/gluex_top/build_scripts/gluex_env_boot.sh
 \end{verbatim}
 for gluex\_install builds.
+
+Note that these ``boot'' scripts {\it do not} set up the GlueX environment. They merely define the command that will do the set up.
 
 \item{\bf How to use the commands.}
 
@@ -371,7 +370,7 @@ Usage is the same for both tcsh and bash, JLab and gluex\_install.
 \end{verbatim}
 \item To get the environment for an arbitrary xml file, use its path:
 \begin{verbatim}
-  gxenv /path/to/my\_version.xml
+  gxenv /path/to/my_version.xml
 \end{verbatim}
 \end{itemize}
 
