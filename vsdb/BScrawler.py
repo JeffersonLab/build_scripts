@@ -30,22 +30,25 @@ def checkOasisCVMFS(packagename,version,dirtag):
 	    #   jana => 'jana_',
 	    #   'sim-recon' => 'sim-recon-',
 	    #   hdds => 'hdds-',
-	    #   cernlib => 'special case', <<-------------
+	    #   cernlib => 'special case',
 	    #   'xerces-c' => 'xerces-c-',
 	    #   geant4 => 'geant4.',
 	    #   ccdb => 'ccdb_',
 	    #   evio => 'evio-',
 	    #   rcdb => 'rcdb_',
-        #   hdgeant4 => 'hdgeant4-',
-        #   hd_utilities => 'hd_utilities-',
-        #   gluex_root_analysis => 'gluex_root_analysis-',
-        #   amptools => 'AmpTools-',
-        #   sqlitecpp => 'SQLiteCpp-',
-        #   sqlite => 'sqlite-',
-        #   gluex_MCwrapper => 'gluex_MCwrapper-',
-        #   halld_sim => 'halld_sim-',
-        #   halld_recon => 'halld_recon-',
-	    #   lapack => 'lapack-');
+        #       hdgeant4 => 'hdgeant4-',
+        #       hd_utilities => 'hd_utilities-',
+        #       gluex_root_analysis => 'gluex_root_analysis-',
+        #       amptools => 'AmpTools-',
+        #       sqlitecpp => 'SQLiteCpp-',
+        #       sqlite => 'sqlite-',
+        #       gluex_MCwrapper => 'gluex_MCwrapper-',
+        #       halld_sim => 'halld_sim-',
+        #       halld_recon => 'halld_recon-',
+	    #   lapack => 'lapack-',
+	    #   hepmc => 'HepMC-',
+	    #   photos => 'Photos-',
+	    #   evtgen => 'evtgen-'
     if packagename.replace("\"","") == "clhep":
         folder_name=folder_name+""
     elif packagename.replace("\"","") == "cernlib":
@@ -58,6 +61,12 @@ def checkOasisCVMFS(packagename,version,dirtag):
         folder_name="AmpTools-"
     elif packagename.replace("\"","") == "sqlitecpp":
         folder_name="SQLiteCpp-"
+    elif packagename.replace("\"","") == "photos":
+        folder_name="Photos-"
+    elif packagename.replace("\"","") == "evtgen":
+        folder_name="evtgen-"
+    elif packagename.replace("\"","") == "hepmc":
+        folder_name="HepMC-"
     else:
         folder_name=folder_name+"-"
 
@@ -121,7 +130,7 @@ def main(argv):
                 continue
             if "~" in afile:
                 continue
-            if afile == "version_jlab.xml" or afile == "version_set_correlations.xml" :
+            if afile == "version_jlab.xml" or afile == "version_set_correlations.xml" or afile=="version.xml":
                 continue
             # ADD afile to versionset.  Get that version set id
             check_for_file="SELECT id from versionSet where filename=\""+afile+"\";"
