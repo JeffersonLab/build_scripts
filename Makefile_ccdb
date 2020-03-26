@@ -6,6 +6,7 @@ ifdef CCDB_VERSION
   else
     CCDB_DIR = ccdb_$(CCDB_VERSION)
   endif
+  MAJOR_VERSION := $(shell echo $(CCDB_VERSION) | cut -d. -f1)
 else
   CCDB_DIR = ccdb
   GET_SOURCE_TARGET = $(CCDB_DIR)/.clone_done
@@ -20,9 +21,16 @@ else
   ifndef CCDB_BRANCH
     CCDB_BRANCH = master
   endif
+  MAJOR_VERSION := 1
 endif
 
-all: force_rebuild_action $(CCDB_DIR)/.scons_done
+ifeq '$(MAJOR_VERSION)' '1'
+  BUILD_TARGET = $(CCDB_DIR)/.scons_done
+else
+  BUILD_TARGET = $(CCDB_DIR)/.make_install_done
+endif
+
+all: force_rebuild_action $(BUILD_TARGET)
 
 force_rebuild_action:
 ifdef FORCE
@@ -57,6 +65,21 @@ $(CCDB_DIR)/.scons_done: $(CCDB_DIR)/.untar_local_scons
 	source $(CCDB_DIR)/environment.bash ; \
 	cd $(CCDB_DIR) ; \
 	python scripts/scons.py
+	date > $@
+
+$(CCDB_DIR)/.cmake_done: $(GET_SOURCE_TARGET)
+	cd $(CCDB_DIR)/cpp; mkdir -pv build
+	cd $(CCDB_DIR)/cpp/build; cmake ..
+	date > $@
+
+$(CCDB_DIR)/.make_done: $(CCDB_DIR)/.cmake_done
+	cd $(CCDB_DIR)/cpp/build; make
+	date > $@
+
+$(CCDB_DIR)/.make_install_done: $(CCDB_DIR)/.make_done
+	@echo fake install target!!!
+	cd $(CCDB_DIR); mkdir -pv lib
+	install $(CCDB_DIR)/cpp/build/src/CCDB/libCCDB_lib.a $(CCDB_DIR)/lib/libccdb.a
 	date > $@
 
 # end of makefile
