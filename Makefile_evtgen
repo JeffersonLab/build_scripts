@@ -1,0 +1,42 @@
+PWD = $(shell pwd)
+
+SOURCE_CODE_TARGET = $(EVTGEN_HOME)/.untar_done
+ifdef EVTGEN_DIRTAG
+ EVTGEN_DIR = evtgen-$(EVTGEN_VERSION)^$(EVTGEN_DIRTAG)
+else
+ EVTGEN_DIR = evtgen-$(EVTGEN_VERSION)
+endif
+TARFILE = EvtGen-$(EVTGEN_VERSION).tar.gz
+
+EVTGEN_HOME = $(PWD)/$(EVTGEN_DIR)
+
+all: $(EVTGEN_HOME)/evtgen_prereqs.xml
+
+$(TARFILE):
+	wget --no-verbose --no-check-certificate -O $@ \
+	     https://evtgen.hepforge.org/downloads?f=$(TARFILE)
+
+$(EVTGEN_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/EvtGen/R$(subst .,-,$(EVTGEN_VERSION)) \
+	   $(EVTGEN_DIR)
+	rm -rv untar_temp_dir
+	date > $@
+
+$(EVTGEN_HOME)/.patch_done: $(SOURCE_CODE_TARGET)
+	cd $(EVTGEN_HOME) ; patch configure < $(BUILD_SCRIPTS)/patches/evtgen/configure.patch
+	date > $@
+
+$(EVTGEN_HOME)/.configure: $(EVTGEN_HOME)/.patch_done
+	cd $(EVTGEN_HOME) ; ./configure --hepmcdir=$(HEPMCDIR) \
+	   --photosdir=$(PHOTOSDIR)
+	date > $@
+
+$(EVTGEN_HOME)/.make_done: $(EVTGEN_HOME)/.configure
+	make -C $(EVTGEN_HOME)
+	date > $@
+
+$(EVTGEN_HOME)/evtgen_prereqs.xml: $(EVTGEN_HOME)/.make_done
+	cd $(EVTGEN_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl evtgen

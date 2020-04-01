@@ -26,19 +26,28 @@ SQLITE = ${ROOT_OF_ALL}/sqlite
 MCWRAPPER = ${ROOT_OF_ALL}/gluex_MCwrapper
 HALLD_SIM = ${ROOT_OF_ALL}/halld_sim
 HALLD_RECON = ${ROOT_OF_ALL}/halld_recon
+HEPMC = ${ROOT_OF_ALL}/hepmc
+PHOTOS = ${ROOT_OF_ALL}/photos
+EVTGEN = ${ROOT_OF_ALL}/evtgen
 
 ifdef NTHREADS
   ROOT6_BUILD_OPTIONS += -j$(NTHREADS)
+  GEANT4_MAKE_OPTIONS += -j$(NTHREADS)
   SIM_RECON_SCONS_OPTIONS += -j$(NTHREADS)
   HALLD_RECON_SCONS_OPTIONS += -j$(NTHREADS)
   HALLD_SIM_SCONS_OPTIONS += -j$(NTHREADS)
 endif
 
-all: env xerces_build lapack_build cernlib_build root_build clhep_build geant4_build gsl_build evio_build sqlitecpp_build rcdb_build ccdb_build jana_build hdds_build amptools_build sim-recon_build hd_utilities_build hdgeant4_build gluex_root_analysis_build sqlite_build mcwrapper_build
+all: gluex_pass2
 
-gluex_pass1: env xerces_build lapack_build cernlib_build root_build geant4_build evio_build sqlite_build sqlitecpp_build rcdb_build ccdb_build
+gluex_pass1: xerces_build lapack_build cernlib_build root_build \
+	     geant4_build evio_build sqlite_build sqlitecpp_build \
+	     rcdb_build ccdb_build
 
-gluex_pass2: jana_build hdds_build amptools_build halld_recon_build halld_sim_build hd_utilities_build hdgeant4_build gluex_root_analysis_build mcwrapper_build
+gluex_pass2: gluex_pass1 jana_build hdds_build amptools_build \
+	     hepmc_build photos_build evtgen_build halld_recon_build \
+	     halld_sim_build hd_utilities_build hdgeant4_build \
+	     gluex_root_analysis_build mcwrapper_build
 
 cernlib_build: cernlib_dir cernlib_make
 
@@ -135,7 +144,7 @@ geant4_dir:
 	test -d ${GEANT4} || mkdir -pv ${GEANT4}
 
 geant4_make:
-	$(MAKE) -C$(GEANT4) -f$(BUILD_SCRIPTS)/Makefile_geant4
+	$(MAKE) -C$(GEANT4) -f$(BUILD_SCRIPTS)/Makefile_geant4 GEANT4_MAKE_OPTIONS="$(GEANT4_MAKE_OPTIONS)"
 
 gsl_build: gsl_dir gsl_make
 
@@ -232,6 +241,30 @@ mcwrapper_dir:
 
 mcwrapper_make:
 	$(MAKE) -C${MCWRAPPER} -f${BUILD_SCRIPTS}/Makefile_gluex_mcwrapper
+
+hepmc_build: hepmc_dir hepmc_make
+
+hepmc_dir:
+	test -d ${HEPMC} || mkdir -pv ${HEPMC}
+
+hepmc_make:
+	$(MAKE) -C${HEPMC} -f${BUILD_SCRIPTS}/Makefile_hepmc
+
+photos_build: photos_dir photos_make
+
+photos_dir:
+	test -d ${PHOTOS} || mkdir -pv ${PHOTOS}
+
+photos_make:
+	$(MAKE) -C${PHOTOS} -f${BUILD_SCRIPTS}/Makefile_photos
+
+evtgen_build: evtgen_dir evtgen_make
+
+evtgen_dir:
+	test -d ${EVTGEN} || mkdir -pv ${EVTGEN}
+
+evtgen_make:
+	$(MAKE) -C${EVTGEN} -f${BUILD_SCRIPTS}/Makefile_evtgen
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}

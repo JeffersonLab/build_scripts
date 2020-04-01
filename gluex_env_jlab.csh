@@ -1,13 +1,15 @@
 #!/bin/tcsh
 if ( "x$1" == "x" ) then
-    set VERSION_XML=/group/halld/www/halldweb/html/dist/version_jlab.xml
+    set VERSION_XML=/group/halld/www/halldweb/html/halld_versions/version.xml
 else
     set VERSION_XML=$1
 endif
-echo $PATH | grep /apps/bin > /dev/null
-if ($status) setenv PATH /apps/bin:$PATH
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
+if ( $BMS_OSNAME !~ *CentOS7.7* ) then
+    echo $PATH | grep /apps/bin > /dev/null
+    if ($status) setenv PATH /apps/bin:$PATH
+endif
 # farm-specific set-up
 set nodename=`uname -n`
 if ( $nodename =~ farm* || $nodename =~ ifarm* || $nodename =~ qcd* || $nodename =~ gluon* ) then
@@ -30,7 +32,9 @@ setenv PATH /apps/perl/bin:$PATH
 # finish the rest of the gluex environment
 source $BUILD_SCRIPTS/gluex_env_version.csh $VERSION_XML
 if ($status) exit $status
-setenv JANA_CALIB_URL sqlite:////group/halld/www/halldweb/html/dist/ccdb.sqlite
+setenv JANA_CALIB_URL `$BUILD_SCRIPTS/calib_url_chooser.sh`
 setenv JANA_RESOURCE_DIR /group/halld/www/halldweb/html/resources
 # cmake on the cue
-setenv PATH /apps/cmake/cmake-3.5.1/bin:$PATH
+if ( $BMS_OSNAME !~ *CentOS7.7* ) then
+    setenv PATH /apps/cmake/cmake-3.5.1/bin:$PATH
+endif

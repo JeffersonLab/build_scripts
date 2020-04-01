@@ -114,6 +114,8 @@ if ($?HDGEANT4_HOME) then
         echo $PATH | grep $HDGEANT4_HOME/bin/$G4SYSTEM > /dev/null
         if ($status) setenv PATH $HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
     endif
+    echo $PYTHONPATH | grep $HDGEANT4_HOME/g4py > /dev/null
+    if ($status) setenv PYTHONPATH $HDGEANT4_HOME/g4py:$PYTHONPATH
 endif
 #
 # hd_utilities
@@ -134,6 +136,27 @@ endif
 # sqlitecpp
 #
 if (! $?SQLITECPP_HOME) setenv SQLITECPP_HOME $GLUEX_TOP/sqlitecpp/prod
+#
+# hepmc
+#
+if ($?HEPMCDIR) then
+    echo $LD_LIBRARY_PATH | grep $HEPMCDIR/lib > /dev/null
+    if ($status) setenv LD_LIBRARY_PATH $HEPMCDIR/lib:$LD_LIBRARY_PATH
+endif
+#
+# photos
+#
+if ($?PHOTOSDIR) then
+    echo $LD_LIBRARY_PATH | grep $PHOTOSDIR/lib > /dev/null
+    if ($status) setenv LD_LIBRARY_PATH $PHOTOSDIR/lib:$LD_LIBRARY_PATH
+endif
+#
+# evtgen
+#
+if ($?EVTGENDIR) then
+    echo $LD_LIBRARY_PATH | grep $EVTGENDIR/lib > /dev/null
+    if ($status) setenv LD_LIBRARY_PATH $EVTGENDIR/lib:$LD_LIBRARY_PATH
+endif
 #
 if (! $?JANA_PLUGIN_PATH) then
     set jpp_save=""

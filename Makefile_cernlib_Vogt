@@ -15,6 +15,7 @@ $(DIST_FILES):
 	tar zxvf $(ALL_FILE)
 	cp -v $(CORR_FILE) cernlib.2005.corr.tgz
 	tar zxvf $(INSTALL_FILE)
+	chmod -v a+r lapack.tar.gz
 	date > $@
 
 .install_src_done: .untar_done
@@ -47,5 +48,5 @@ endif
 	date > $@
 
 .error_check_done: .build_done
-	grep Error 2005/build/log/make.???? ; if [ $$? -eq 0 ] ; then exit 1 ; else exit 0 ; fi
+	grep -v src/packlib/kuip/code_motif/kmdial.c 2005/build/log/make.???? | grep -v "sprintf (cval, " | grep Error ; if [ $$? -eq 0 ] ; then exit 1 ; else exit 0 ; fi
 	date > $@

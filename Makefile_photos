@@ -1,0 +1,35 @@
+PWD = $(shell pwd)
+
+SOURCE_CODE_TARGET = $(PHOTOS_HOME)/.untar_done
+ifdef PHOTOS_DIRTAG
+ PHOTOS_DIR = Photos-$(PHOTOS_VERSION)^$(PHOTOS_DIRTAG)
+else
+ PHOTOS_DIR = Photos-$(PHOTOS_VERSION)
+endif
+TARFILE = PHOTOS.$(PHOTOS_VERSION).tar.gz
+
+PHOTOS_HOME = $(PWD)/$(PHOTOS_DIR)
+
+all: $(PHOTOS_HOME)/photos_prereqs.xml
+
+$(TARFILE):
+	wget --no-verbose --no-check-certificate -O $@ http://photospp.web.cern.ch/photospp/resources/PHOTOS.$(PHOTOS_VERSION)/$(TARFILE)
+
+$(PHOTOS_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(PHOTOS_DIR)
+	rm -rv untar_temp_dir
+	date > $@
+
+$(PHOTOS_HOME)/.configure_done: $(SOURCE_CODE_TARGET)
+	cd $(PHOTOS_HOME); ./configure --with-hepmc=$(HEPMCDIR)
+	date > $@
+
+$(PHOTOS_HOME)/.make_done: $(PHOTOS_HOME)/.configure_done
+	make -C $(PHOTOS_HOME)
+	date > $@
+
+$(PHOTOS_HOME)/photos_prereqs.xml: $(PHOTOS_HOME)/.make_done
+	cd $(PHOTOS_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl photos

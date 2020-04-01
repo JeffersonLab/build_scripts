@@ -38,6 +38,9 @@ if [ -n "$BUILD_SCRIPTS" ]; then
         eval `$BUILD_SCRIPTS/delpath.pl -b -l /u$G4ROOT/lib64`
     fi
     if [ -n "$ROOT_ANALYSIS_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $ROOT_ANALYSIS_HOME/$BMS_OSNAME/lib`; fi
+    if [ -n "$HEPMCDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $HEPMCDIR/lib`; fi
+    if [ -n "$PHOTOSDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $PHOTOSDIR/lib`; fi
+    if [ -n "$EVTGENDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $EVTGENDIR/lib`; fi
     eval `$BUILD_SCRIPTS/delpath.pl -b -l`
     # clean PYTHONPATH
     if [ -n "$CCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`; fi
@@ -45,11 +48,12 @@ if [ -n "$BUILD_SCRIPTS" ]; then
     if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $ROOTSYS/lib`; fi
     if [ -n "$HALLD_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $HALLD_HOME/$BMS_OSNAME/python2`; fi
     if [ -n "$HALLD_RECON_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $HALLD_RECON_HOME/$BMS_OSNAME/python2`; fi
+    if [ -n "$HDGEANT4_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $HDGEANT4_HOME/g4py`; fi
     eval `$BUILD_SCRIPTS/delpath.pl -b -p`
 fi
 # clean_environment
 unset GLUEX_TOP
-unset BUILD_SCRIPTS
+# leave BUILD_SCRIPTS alone, do not: unset BUILD_SCRIPTS
 unset XERCESCROOT
 unset XERCES_INCLUDE
 unset ROOTSYS
@@ -119,6 +123,9 @@ unset ROOT_ANALYSIS_HOME
 unset SQLITECPP_HOME
 unset SQLITE_HOME
 unset LAPACK_HOME
+unset HEPMCDIR
+unset PHOTOSDIR
+unset EVTGENDIR
 # versions
 unset SIM_RECON_VERSION
 unset HALLD_RECON_VERSION
@@ -141,6 +148,9 @@ unset AMPTOOLS_VERSION
 unset SQLITE_VERSION
 unset GLUEX_MCWRAPPER_VERSION
 unset LAPACK_VERSION
+unset HEPMC_VERSION
+unset PHOTOS_VERSION
+unset EVTGEN_VERSION
 # urls for checkout
 unset SIM_RECON_URL
 unset HALLD_RECON_URL
@@ -159,6 +169,9 @@ unset HD_UTILITIES_URL
 unset GLUEX_ROOT_ANALYSIS_URL
 unset SQLITECPP_URL
 unset GLUEX_MCWRAPPER_URL
+unset HEPMC_URL
+unset PHOTOS_URL
+unset EVTGEN_URL
 # directory tags
 unset SIM_RECON_DIRTAG
 unset HALLD_RECON_DIRTAG
@@ -180,6 +193,9 @@ unset SQLITECPP_DIRTAG
 unset AMPTOOLS_DIRTAG
 unset SQLITE_DIRTAG
 unset GLUEX_MCWRAPPER_DIRTAG
+unset HEPMC_DIRTAG
+unset PHOTOS_DIRTAG
+unset EVTGEN_DIRTAG
 # git branches
 unset SIM_RECON_BRANCH
 unset HALLD_RECON_BRANCH
@@ -198,6 +214,9 @@ unset HD_UTILITIES_BRANCH
 unset GLUEX_ROOT_ANALYSIS_BRANCH
 unset SQLITECPP_BRANCH
 unset GLUEX_MCWRAPPER_BRANCH
+unset HEPMC_BRANCH
+unset PHOTOS_BRANCH
+unset EVTGEN_BRANCH
 # git hashes
 unset SIM_RECON_HASH
 unset HALLD_RECON_HASH
@@ -216,6 +235,9 @@ unset HD_UTILITIES_HASH
 unset GLUEX_ROOT_ANALYSIS_HASH
 unset SQLITECPP_HASH
 unset GLUEX_MCWRAPPER_HASH
+unset HEPMC_HASH
+unset PHOTOS_HASH
+unset EVTGEN_HASH
 # misc
 unset SQLITE_YEAR
 unset HALLD_RECON_DEBUG_LEVEL

@@ -63,6 +63,7 @@ foreach $href (@b) {
     $branch = $d{branch};
     $home = $d{home};
     $hash = $d{hash};
+    $debug_level = $d{debug_level};
     #print "package = $name, version = $version\n";
     if ($name eq "sim-recon" && $halld_home) {
 	if (uc($halld_home) ne "NONE") {
@@ -104,6 +105,9 @@ foreach $href (@b) {
 	}
 	if ($home) {
 	    $write_element_command .= ", \"home\" => \"$home\"";
+	}
+	if ($debug_level ne '') {
+	    $write_element_command .= ", \"debug_level\" => \"$debug_level\"";
 	}
 	$write_element_command .= ");";
 	#print "write_element_command = $write_element_command\n";

@@ -37,7 +37,9 @@ eval $definitions;
 	    ccdb => [],
 	    halld_recon => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb', 'rcdb', 'sqlitecpp'],
 	    halld_sim => ['halld_recon'],
-	    amptools => ['root']);
+	    amptools => ['root'],
+	    photos => ['hepmc'],
+	    evtgen => ['photos', 'hepmc'],);
 
 # add a prerequisite for sqlitecpp only if SQLITE_HOME is defined
 if (defined $ENV{SQLITE_HOME}) {
@@ -110,6 +112,12 @@ foreach $prepackage (@prepackages) {
 		$dirtag = $token4[$#token4];
 		@token5 = split (/\^$dirtag/, $version);
 		$version = $token5[0];
+	    }
+	    @token6 = split(/\+/, $version);
+	    if ($#token6 > 0) {
+		$dbgtag = $token6[$#token6];
+		@token7 = split (/\+$dbgtag/, $version);
+		$version = $token7[0];
 	    }
 	}
     }
