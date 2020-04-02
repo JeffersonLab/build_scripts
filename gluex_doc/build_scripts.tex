@@ -21,9 +21,9 @@
 \newcommand{\gxenv}{{\tt gxenv}}
 
 \title{\bs{}: A Version Management System for GlueX \\ \medskip \large
-  GlueX-Doc-2793-v18}
+  GlueX-Doc-2793-v19}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{March 18, 2020}
+\date{March 30, 2020}
 
 \begin{document}
 
@@ -342,7 +342,7 @@ for gluex\_install builds.
 
 For bash, include the following line in your {\tt .bashrc}, {\tt .profile}, or {\tt .bash\_profile}:
 \begin{verbatim}
-  source /group/halld/Software/build\_scripts/gluex\_env\_boot\_jlab.sh
+  source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 \end{verbatim}
 at JLab and
 \begin{verbatim}
@@ -364,9 +364,9 @@ Usage is the same for both tcsh and bash, JLab and gluex\_install.
 \begin{verbatim}
   gxenv
 \end{verbatim}
-\item To get the environment for a particular official version set, say {\tt version\_3.5\_jlab.xml}, use the {DIST} environment variable:
+\item To get the environment for a particular official version set, say {\tt version\_3.5\_jlab.xml}, use the {\tt HALLD\_VERSIONS} environment variable:
 \begin{verbatim}
-  gxenv $DIST/version_3.5_jlab.xml
+  gxenv $HALLD_VERSIONS/version_3.5_jlab.xml
 \end{verbatim}
 \item To get the environment for an arbitrary xml file, use its path:
 \begin{verbatim}
