@@ -24,9 +24,9 @@
 
 # container tag
 $container_tag = "";
-	if (-d "/.singularity.d" || -f "/.dockerenv") {
-	    $container_tag = "-cntr";
-	}
+if (-d "/.singularity.d" || -f "/.dockerenv") {
+    $container_tag = "-cntr";
+}
 
 # This first section sets the uname and release variables
 # which hold the "OS" and "_flavor##" parts of the string.
@@ -70,11 +70,10 @@ if ($uname eq 'Linux') {
 	    if ($release_string !~ /^CentOS Linux release 7\.2/) {
 		$nodename = `uname -n`;
 		if ($nodename =~ /.jlab.org$/
+		    && $container_tag eq ""
 		    && ($nodename =~ /^farm/
 			|| $nodename =~ /^ifarm/
-			|| $nodename =~ /^qcd/) && $container_tag =~ "" ) {
 			|| $nodename =~ /^qcd/)) {
-
 		    @token = split(/\s+/, $release_string);
 		    @version = split(/\./, $token[3]);
 		    $version_minor = $version[1];
@@ -220,8 +219,6 @@ if ($processor eq 'unknown') {
 	$processor = `uname -m`;
 	chomp $processor;
 }
-
-
 
 # Finally, form and print the complete string to stdout
 print "${uname}${release}-${processor}-${compiler_version}${container_tag}\n";
