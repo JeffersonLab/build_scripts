@@ -21,7 +21,7 @@
 \newcommand{\gxenv}{{\tt gxenv}}
 
 \title{\bs{}: A Version Management System for GlueX \\ \medskip \large
-  GlueX-Doc-2793-v20}
+  GlueX-Doc-2793-v21}
 \author{Mark M.\ Ito \\ Jefferson Lab}
 \date{April 9, 2020}
 
@@ -304,7 +304,8 @@ user's home area. An example version set file is shown in Fig.~\ref{figure:versi
 
 At JLab there is script that packages the steps shown in
 Fig.~\ref{figure:version-script}, with the appropriate values of {\tt
-  GLUEX\_TOP} and {\tt BUILD\_SCRIPTS}. It uses the latest version of
+  GLUEX\_TOP} and {\tt BUILD\_SCRIPTS}. It uses the current default version
+set file,
 {\tt version.xml}. It can also be used as an example for using a
 custom version of {\tt version.xml}. To use it, for bash:
 \begin{verbatim}
@@ -313,6 +314,11 @@ custom version of {\tt version.xml}. To use it, for bash:
 and for tcsh:
 \begin{verbatim}
         source /group/halld/Software/build_scripts/gluex_env_jlab.csh
+\end{verbatim}
+Optionally, these commands will take an argument naming a version set file to use rather than the current default. For example, for bash:
+\begin{verbatim}
+        source /group/halld/Software/build_scripts/gluex_env_jlab.sh \
+            /home/username/my_versions.xml
 \end{verbatim}
 
 \subsubsection{Simple Environment Set Up}
