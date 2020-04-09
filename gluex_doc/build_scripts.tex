@@ -21,9 +21,9 @@
 \newcommand{\gxenv}{{\tt gxenv}}
 
 \title{\bs{}: A Version Management System for GlueX \\ \medskip \large
-  GlueX-Doc-2793-v19}
+  GlueX-Doc-2793-v20}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{March 30, 2020}
+\date{April 9, 2020}
 
 \begin{document}
 
@@ -557,17 +557,22 @@ variables for CCDB, RCDB, and HDDS.
 
 \begin{description}
 
-\item{\bf SCons Options for {\tt Makefile\_sim-recon}}
+\item{\bf SCons options for halld\_recon, halld\_sim, and sim-recon}
 
-For the sim-recon package, there is a variable, {\tt
-  SIM\_RECON\_SCONS\_OPTIONS} that can be defined, either in the shell
+For the halld\_recon, halld\_sim, and sim-recon packages, there are variables, one per packages, that can be defined, either in the shell
 environment on on the make command line, that will supply optional
-arguments to the {\tt scons} command invoked by make. For example,
+arguments to the native {\tt scons} command invoked by make. They are
 \begin{verbatim}
-        make -f $BUILD_SCRIPTS/Makefile_sim-recon \
-            SIM_RECON_SCONS_OPTIONS='SHOWBUILDS=1'
+    HALLD_RECON_SCONS_OPTIONS
+    HALLD_SIM_SCONS_OPTIONS
+    SIM_RECON_SCONS_OPTIONS
 \end{verbatim}
-will cause SCons to show the compiler commands explicitly.
+respectively. For example,
+\begin{verbatim}
+        make -f $BUILD_SCRIPTS/Makefile_halld_recon \
+            HALLD_RECON_SCONS_OPTIONS='SHOWBUILDS=1 -j4'
+\end{verbatim}
+will cause SCons to show the compiler commands explicitly and build halld\_recon with four threads.
 
 \item{\bf Building LAPACK/BLAS}
 
@@ -576,6 +581,10 @@ are downloaded and build automatically, but rather than being
 installed in their own home directory, The ``install'' target of {\tt
   Makefile\_lapack} adds them to the lib directory of your CERNLIB
 build.
+
+\item{\bf Forcing use of Python 2 for HDGeant4}
+
+For systems that do not have Python 2 as the default, setting the make variable {\tt PYTHON2\_EXPLICIT} will force the use of Python-2-specific versions of the boost-python library and the python-config command in {\tt Makefile\_hdgeant4}.
 
 \end{description}
 
