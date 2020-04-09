@@ -1,3 +1,5 @@
+# To Do: use the tree command to make the directory structure figure.
+
 basename = build_scripts
 
 all: $(basename).pdf $(basename)_web.tar
