@@ -1,5 +1,5 @@
 --- Install_cernlib	2010-07-31 17:16:59.000000000 -0400
-+++ Install_cernlib.new	2017-07-23 20:46:41.329778000 -0400
++++ Install_cernlib.patched	2020-05-19 08:25:47.521537100 -0400
 @@ -1,4 +1,4 @@
 -#!/bin/sh
 +#!/bin/bash
@@ -21,7 +21,12 @@
  
  
  # Define the cernlib version
-@@ -31,6 +33,11 @@
+@@ -27,10 +29,18 @@
+       a = 0
+       end
+ EOF
+-GCCVSN=`cpp -dM comptest.F | grep __VERSION__ | cut -d" " -f3 | cut -c 2`
++GCCVSN=`cpp -dM comptest.F | grep __VERSION__ | cut -d\" -f2 | cut -d. -f1`
  FC=" "
  [ "$GCCVSN" = "3" ]&&FC=g77
  [ "$GCCVSN" = "4" ]&&FC=gfortran
@@ -30,6 +35,9 @@
 +[ "$GCCVSN" = "7" ]&&FC=gfortran
 +[ "$GCCVSN" = "8" ]&&FC=gfortran
 +[ "$GCCVSN" = "9" ]&&FC=gfortran
++[ "$GCCVSN" = "10" ]&&FC=gfortran
++[ "$GCCVSN" = "11" ]&&FC=gfortran
++[ "$GCCVSN" = "12" ]&&FC=gfortran
  if [ "$GCCVSN" = " " ]; then
    echo " "
    echo "====================================="
