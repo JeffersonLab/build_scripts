@@ -11,9 +11,9 @@ $(LAPACKROOT)/.make_done: $(LAPACKROOT)/make.inc $(LAPACKROOT)/.edit_makefile_do
 	$(MAKE) -C$(LAPACKROOT)
 	date > $@
 
-$(LAPACKROOT)/.edit_makefile_done: $(LAPACKROOT)/make.inc
+$(LAPACKROOT)/.patch_done: $(LAPACKROOT)/make.inc
 	cd $(LAPACKROOT); patch < $(BUILD_SCRIPTS)/patches/lapack/Makefile.patch
-	cd $(LAPACKROOT)/TESTING; patch Makefile < $(BUILD_SCRIPTS)/patches/lapack/Makefile_TESTING.patch
+	cd $(LAPACKROOT)/TESTING; patch Makefile < $(BUILD_SCRIPTS)/patches/lapack/Makefile_TESTING_3.9.0.patch
 	date > $@
 
 $(LAPACKROOT)/make.inc: $(LAPACKROOT)/make.inc.example
