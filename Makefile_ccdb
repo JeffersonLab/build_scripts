@@ -56,7 +56,9 @@ $(CCDB_DIR)/.untar_local_scons: $(GET_SOURCE_TARGET)
 $(CCDB_DIR)/.scons_done: $(CCDB_DIR)/.untar_local_scons
 	source $(CCDB_DIR)/environment.bash ; \
 	cd $(CCDB_DIR) ; \
-	python scripts/scons.py
+	which python2; \
+	python2 --version ; \
+	python2 scripts/scons.py
 	date > $@
 
 # end of makefile

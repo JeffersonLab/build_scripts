@@ -1,6 +1,6 @@
---- configure	2017-12-13 11:02:54.000000000 -0500
-+++ /local/scratch/disco/gluex_top/evtgen/configure	2019-11-02 19:03:34.839777106 -0400
-@@ -190,6 +190,12 @@
+--- configure.original	2020-04-01 18:57:39.981295494 -0400
++++ configure.patched_twice	2020-04-01 18:56:10.237967790 -0400
+@@ -190,6 +190,15 @@
  if [ ${theGcc} = 6 ]; then
    ARCH=${ARCH}-gcc6
  fi
@@ -10,10 +10,13 @@
 +if [ ${theGcc} = 8 ]; then
 +  ARCH=${ARCH}-gcc8
 +fi
++if [ ${theGcc} = 9 ]; then
++  ARCH=${ARCH}-gcc9
++fi
  echo "Platform is $ARCH"
  
  #default platform settings:
-@@ -263,6 +269,38 @@
+@@ -263,6 +272,54 @@
    FFLAGS="${FFLAGS_OPT}"
    CFLAGS="${CFLAGS_OPT}"
    CXXFLAGS="${CXXFLAGS_OPT}"
@@ -46,6 +49,22 @@
 +  fi
 +fi
 +if [ $ARCH = Linux-gcc8 ]; then
++  FFLAGS="${FFLAGS_OPT}"
++  CFLAGS="${CFLAGS_OPT}"
++  CXXFLAGS="${CXXFLAGS_OPT}"
++  FLIBS="-lgfortran"
++  if [ ${COMPMODE} = OPT ]; then
++    FFLAGS="${FFLAGS_OPT}"
++    CFLAGS="${CFLAGS_OPT}"
++    CXXFLAGS="${CXXFLAGS_OPT}"
++  fi
++  if [ ${COMPMODE} = DBG ]; then
++    FFLAGS="${FFLAGS_DBG}"
++    CFLAGS="${CFLAGS_DBG}"
++    CXXFLAGS="${CXXFLAGS_DBG}"
++  fi
++fi
++if [ $ARCH = Linux-gcc9 ]; then
 +  FFLAGS="${FFLAGS_OPT}"
 +  CFLAGS="${CFLAGS_OPT}"
 +  CXXFLAGS="${CXXFLAGS_OPT}"
