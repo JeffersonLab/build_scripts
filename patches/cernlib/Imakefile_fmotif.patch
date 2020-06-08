@@ -1,0 +1,11 @@
+--- Imakefile_fmotif.original	2020-06-08 12:22:00.817318700 -0400
++++ Imakefile_fmotif.patched	2020-06-08 12:26:12.534322500 -0400
+@@ -3,7 +3,7 @@
+ 	plotisto.F pmhist.F pminit.F show_chain.F
+ 
+ #ifdef CERNLIB_LINUX
+-FORTRANOPTIONS = -fno-backslash  $(FORTRANSAVEOPTION) -fno-second-underscore
++FORTRANOPTIONS = -fno-backslash  $(FORTRANSAVEOPTION) -fno-second-underscore -fallow-argument-mismatch
+ #endif
+ 
+ SubdirLibraryTarget(NullParameter,NullParameter)
