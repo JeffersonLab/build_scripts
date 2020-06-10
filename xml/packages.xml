@@ -47,4 +47,5 @@
 	 description="package for simulating radiative effects"/>
 <package name="evtgen" docName="EvtGen" homeVar="EVTGENDIR"
 	 description="handles particle decays in a user-configurable library"/>
+<package name="clhep" docName="CLHEP" homeVar="CLHEP" description="CLHEP"/>
 </packages>
