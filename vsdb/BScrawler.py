@@ -185,12 +185,12 @@ def main(argv):
                 #if 'name' not in child.attrib:
                 #    continue
                 check_package_num="SELECT id from package where name=\""+child.attrib['name']+"\";"
-                #print check_package_num
+                print check_package_num
                 curs.execute(check_package_num)
                 num = curs.fetchall()
 
                 ID=-1
-                #print num
+                print num
                 #if len(num[0])
                 if num[0]['id']:
                     ID=num[0]['id']
