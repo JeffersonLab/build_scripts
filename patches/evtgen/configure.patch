@@ -1,6 +1,6 @@
---- configure.original	2020-04-01 18:57:39.981295494 -0400
-+++ configure.patched_twice	2020-04-01 18:56:10.237967790 -0400
-@@ -190,6 +190,15 @@
+--- configure_original	2020-06-29 14:40:37.981544200 -0400
++++ configure_patched	2020-06-29 14:42:46.583373400 -0400
+@@ -190,6 +190,18 @@
  if [ ${theGcc} = 6 ]; then
    ARCH=${ARCH}-gcc6
  fi
@@ -13,10 +13,13 @@
 +if [ ${theGcc} = 9 ]; then
 +  ARCH=${ARCH}-gcc9
 +fi
++if [ ${theGcc} = 10 ]; then
++  ARCH=${ARCH}-gcc10
++fi
  echo "Platform is $ARCH"
  
  #default platform settings:
-@@ -263,6 +272,54 @@
+@@ -263,6 +275,70 @@
    FFLAGS="${FFLAGS_OPT}"
    CFLAGS="${CFLAGS_OPT}"
    CXXFLAGS="${CXXFLAGS_OPT}"
@@ -65,6 +68,22 @@
 +  fi
 +fi
 +if [ $ARCH = Linux-gcc9 ]; then
++  FFLAGS="${FFLAGS_OPT}"
++  CFLAGS="${CFLAGS_OPT}"
++  CXXFLAGS="${CXXFLAGS_OPT}"
++  FLIBS="-lgfortran"
++  if [ ${COMPMODE} = OPT ]; then
++    FFLAGS="${FFLAGS_OPT}"
++    CFLAGS="${CFLAGS_OPT}"
++    CXXFLAGS="${CXXFLAGS_OPT}"
++  fi
++  if [ ${COMPMODE} = DBG ]; then
++    FFLAGS="${FFLAGS_DBG}"
++    CFLAGS="${CFLAGS_DBG}"
++    CXXFLAGS="${CXXFLAGS_DBG}"
++  fi
++fi
++if [ $ARCH = Linux-gcc10 ]; then
 +  FFLAGS="${FFLAGS_OPT}"
 +  CFLAGS="${CFLAGS_OPT}"
 +  CXXFLAGS="${CXXFLAGS_OPT}"
