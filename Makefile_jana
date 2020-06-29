@@ -47,6 +47,7 @@ $(JANA_HOME)/.patches_done: $(JANA_HOME)/.untar_done
 	    < $(BUILD_SCRIPTS)/patches/jana/sbms_config.py.patch
 	patch $(JANA_HOME)/SConstruct \
 	    < $(BUILD_SCRIPTS)/patches/jana/SConstruct.patch
+	date > $@
 
 $(JANA_HOME)/.untar_done: $(TARFILE)
 	rm -rf untar_temp_dir
