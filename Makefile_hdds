@@ -63,7 +63,7 @@ $(HDDS_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(HDDS_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
-	cd $(HDDS_HOME) ; scons-2 install $(HDDS_SCONS_OPTIONS)
+	cd $(HDDS_HOME) ; scons install $(HDDS_SCONS_OPTIONS)
 	date > $@
 
 ifndef GVMS_TEST
