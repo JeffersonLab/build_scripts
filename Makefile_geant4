@@ -7,6 +7,7 @@ SUBMINOR_VERSION = $(shell echo $(GEANT4_VERSION) | awk -F. '{print $$3}' | sed 
 TARFILE = v$(MAJOR_VERSION).$(MINOR_VERSION).$(SUBMINOR_VERSION).tar.gz
 G4DIR = geant4.$(GEANT4_VERSION)
 
+
 which_cmake3 := $(shell which cmake3)
 find_cmake3 := $(findstring cmake3, $(which_cmake3))
 ifeq (,$(find_cmake3))
@@ -30,8 +31,10 @@ $(G4DIR)/.patch_done: $(G4DIR)/.untar_done
 	patch geant4make-skeleton.in \
 	    < $(BUILD_SCRIPTS)/patches/geant4/geant4make-skeleton.in.patch
 	cd $(G4DIR)/cmake/Modules ; \
-	patch Geant4ToolchainBackwardCompatibility.cmake \
-	    < $(BUILD_SCRIPTS)/patches/geant4/Geant4ToolchainBackwardCompatibility.cmake.patch
+	if [[ $(MAJOR_VERSION) -le 9 || $(MAJOR_VERSION) -eq 10 && $(MINOR_VERSION) -lt 4 ]]; \
+	    then patch Geant4ToolchainBackwardCompatibility.cmake \
+	        < $(BUILD_SCRIPTS)/patches/geant4/Geant4ToolchainBackwardCompatibility.cmake.patch; \
+	fi
 	date > $@
 
 $(G4DIR)/.configure_done: $(G4DIR)/.patch_done
