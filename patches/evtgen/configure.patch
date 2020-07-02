@@ -1,5 +1,14 @@
 --- configure_original	2020-06-29 14:40:37.981544200 -0400
-+++ configure_patched	2020-06-29 14:42:46.583373400 -0400
++++ configure_patched	2020-06-29 15:05:58.459645900 -0400
+@@ -180,7 +180,7 @@
+ # Find platform.
+ #
+ ARCH=`uname`
+-theGcc=`g++ --version | grep '[0-9]\.[0-9]\.[0-9]' -o | head -1 | awk -F . '{print $1}'`
++theGcc=`g++ --version | grep '[0-9]\+\.[0-9]\+\.[0-9]\+' -o | head -1 | awk -F . '{print $1}'`
+ if [ ${theGcc} = 4 ]; then
+   ARCH=${ARCH}-gcc4
+ fi
 @@ -190,6 +190,18 @@
  if [ ${theGcc} = 6 ]; then
    ARCH=${ARCH}-gcc6

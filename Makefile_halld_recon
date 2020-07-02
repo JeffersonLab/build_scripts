@@ -70,7 +70,7 @@ endif
 	date > $@
 
 $(HALLD_RECON_HOME)/.sconstruct_done: $(HALLD_RECON_HOME)/.patches_done
-	cd $(HALLD_RECON_HOME)/src ; scons-2 install $(HALLD_RECON_SCONS_OPTIONS)
+	cd $(HALLD_RECON_HOME)/src ; scons install $(HALLD_RECON_SCONS_OPTIONS)
 	date > $@
 
 ifndef GVMS_TEST
