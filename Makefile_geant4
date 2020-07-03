@@ -4,9 +4,8 @@ endif
 MAJOR_VERSION = $(shell echo $(GEANT4_VERSION) | awk -F. '{print $$1}')
 MINOR_VERSION = $(shell echo $(GEANT4_VERSION) | awk -F. '{print $$2}' | sed 's/^0*//')
 SUBMINOR_VERSION = $(shell echo $(GEANT4_VERSION) | awk -F. '{print $$3}' | sed 's/p//' | sed 's/^0*//')
-TARFILE = v$(MAJOR_VERSION).$(MINOR_VERSION).$(SUBMINOR_VERSION).tar.gz
+TARFILE = geant4.$(GEANT4_VERSION).tar.gz
 G4DIR = geant4.$(GEANT4_VERSION)
-
 
 which_cmake3 := $(shell which cmake3)
 find_cmake3 := $(findstring cmake3, $(which_cmake3))
@@ -19,11 +18,10 @@ endif
 all: $(G4DIR)/.make_install_done
 
 $(TARFILE):
-	wget --no-verbose http://github.com/Geant4/geant4/archive/$(TARFILE)
+	wget --no-verbose http://cern.ch/geant4-data/releases/$(TARFILE)
 
 $(G4DIR)/.untar_done: $(TARFILE)
 	tar zxf $(TARFILE)
-	mv -v geant4-$(MAJOR_VERSION).$(MINOR_VERSION).$(SUBMINOR_VERSION) $(G4DIR)
 	date > $@
 
 $(G4DIR)/.patch_done: $(G4DIR)/.untar_done
