@@ -1,3 +1,5 @@
+include $(BUILD_SCRIPTS)/gcc_version.mk
+
 # build in the current working directory
 
 VERSION_DATE=2014.04.17
@@ -32,9 +34,13 @@ endif
 	cd 2005/src/config ; \
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/Imake.cf.patch
 	patch < $(BUILD_SCRIPTS)/patches/cernlib/Install_old_patchy4.patch
+ifeq ($(GCC_GE_10), true)
 	cd 2005/src/config ; \
 	patch linux-lp64.cf < $(BUILD_SCRIPTS)/patches/cernlib/linux-lp64.cf.patch
+endif
+ifeq ($(GCC_GE_9), true)
 	patch 2005/src/pawlib/paw/fmotif/Imakefile < $(BUILD_SCRIPTS)/patches/cernlib/Imakefile_fmotif.patch
+endif
 	date > $@
 
 .install_lapack_done: .patch_done
@@ -53,3 +59,9 @@ endif
 .error_check_done: .build_done
 	grep -v src/packlib/kuip/code_motif/kmdial.c 2005/build/log/make.???? | grep -v "sprintf (cval, " | grep Error ; if [ $$? -eq 0 ] ; then exit 1 ; else exit 0 ; fi
 	date > $@
+
+show_var:
+	@echo GCC_VERSION = $(GCC_VERSION)
+	@echo GCC_MAJOR_VERSION = $(GCC_MAJOR_VERSION)
+	@echo GCC_GE_9 = $(GCC_GE_9)
+	@echo GCC_GE_10 = $(GCC_GE_10)

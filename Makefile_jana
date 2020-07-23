@@ -1,3 +1,5 @@
+include $(BUILD_SCRIPTS)/python_version.mk
+
 PWD = $(shell pwd)
 
 ifdef JANA_VERSION
@@ -41,12 +43,14 @@ $(JANA_HOME)/.checkout_done:
 
 $(JANA_HOME)/.patches_done: $(JANA_HOME)/.untar_done
 	@echo info: applying patches
+ifeq ($(PYTHON_GE_3), "true")
 	patch $(JANA_HOME)/SBMS/sbms.py \
 	    < $(BUILD_SCRIPTS)/patches/jana/sbms.py.patch
 	patch $(JANA_HOME)/SBMS/sbms_config.py \
 	    < $(BUILD_SCRIPTS)/patches/jana/sbms_config.py.patch
 	patch $(JANA_HOME)/SConstruct \
 	    < $(BUILD_SCRIPTS)/patches/jana/SConstruct.patch
+endif
 	date > $@
 
 $(JANA_HOME)/.untar_done: $(TARFILE)
