@@ -13,17 +13,24 @@ if [[ $osrelease == *CentOS6* || $osrelease == *RHEL6* ]]
     export LD_LIBRARY_PATH=${GCC_HOME}/lib64:${GCC_HOME}/lib
     osrelease=$(perl $BUILD_SCRIPTS/osrelease.pl)
 fi
-branch=$1
-target_dir=/work/halld/pull_request_test/sim-recon^$branch/tests
+repo=$1
+branch=$2
+target_dir=/work/halld/pull_request_test/$repo^$branch/tests
 rm -rf $target_dir && mkdir $target_dir
 pushd $target_dir
+cd $target_dir
 cp $BUILD_SCRIPTS/pull_request/plugins.txt .
 cp $BUILD_SCRIPTS/pull_request/control.in .
 LOG=log; mkdir $LOG
+# software configuration
 source ../$osrelease/setenv.sh
+export JANA_GEOMETRY_URL=ccdb:///GEOMETRY/main_HDDS.xml
+export JANA_RESOURCE_DIR=/group/halld/www/halldweb/html/resources
+# job configuration
 #EVIO=/work/halld/pull_request_test/hd_rawdata_030858_8k.evio
-EVIO=/cache/halld/RunPeriod-2017-01/rawdata/Run030858/hd_rawdata_030858_000.evio
-EVENTS=500
+EVIO=/work/halld/pull_request_test/hd_rawdata_030858_000.evio
+#EVIO=/cache/halld/RunPeriod-2017-01/rawdata/Run030858/hd_rawdata_030858_000.evio
+EVENTS=1000
 THREADS=8
 TLIMIT=360
 echo LD_LIBRARY_PATH = $LD_LIBRARY_PATH
