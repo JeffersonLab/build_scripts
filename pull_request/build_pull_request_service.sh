@@ -3,7 +3,7 @@ repo=$1
 branch_git=$2
 comment_url=$3
 branch=$(echo $branch_git | sed -r 's/\//_/g')
-if [ ! -z "$4" ]; then
+if [[ ! -z "$4" ]]; then
     export REPO_URL=$4
 fi
 #
@@ -14,7 +14,7 @@ echo build_pull_request_service.sh: using BUILD_SCRIPTS = $BUILD_SCRIPTS
 command="$BUILD_SCRIPTS/pull_request/build_pull_request.sh $repo $branch_git"
 echo build_pull_request_service.sh: executing $command
 $command
-if [ $? -eq 0 ]; then
+if [[ $? -eq 0 ]]; then
     status="SUCCESS"
 else
     status="FAILURE"
@@ -26,9 +26,9 @@ cd $build_dir
 rm -f $report_file
 echo build_pull_request_service.sh: create $report_file
 $BUILD_SCRIPTS/pull_request/build_pull_request_report.sh make_${branch}.log > $report_file
-if [ $status == "SUCCESS" ]; then
+if [[ $status == "SUCCESS" ]]; then
     # Test for runtime errors and form overall status
-    command="$BUILD_SCRIPTS/pull_request/test_pull_request.sh $branch"
+    command="$BUILD_SCRIPTS/pull_request/test_pull_request.sh $repo $branch"
     echo build_pull_request_service.sh: executing $command
     $command
     echo "Failure list" > $build_dir/tests/failures.txt
@@ -36,14 +36,21 @@ if [ $status == "SUCCESS" ]; then
     grep 'plugin failed' $build_dir/tests/summary.txt >> $build_dir/tests/failures.txt
     # Check for failure of the multiple plugins test and use result in overall status
     grep 'plugins test failed' $build_dir/tests/summary.txt >> $build_dir/tests/failures.txt
+    # note that grep returns non-zero on failure (usually "1")
+    # we are checking to see if we find any failures, so 0 is actually bad - we want this grep command to fail
     code=$?
+    echo ==return code $code==
     # Check if the hdgeant test failed and use in overall status
     grep 'hdgeant failed' $build_dir/tests/summary.txt >> $build_dir/tests/failures.txt
+    # same comments as above
     code2=$?
-    if [ $code -ne 0 ]; then
+    echo ==return code2 $code2==
+    # if the first set of checks were passed, decide success/failure based on second set of checks
+    if [[ $code -ne 0 ]]; then
         code=$code2
     fi
-    if [ $code -ne 0 ]; then
+    # remember we are grepping to see if it failed, so if the test passed, grep will return 1
+    if [[ $code -ne 0 ]]; then
         test_status="SUCCESS"
         failure_comment=""
     else
