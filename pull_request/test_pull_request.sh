@@ -3,8 +3,6 @@
 # nonzero exit code signals runtime error or mistake in env. setup
 # EVIO: path to evio file to process
 # plugins.txt: list of plugins to test
-# farm-specific set-up - from gluex_env_jlab.sh
-BUILD_SCRIPTS=/group/halld/Software/build_scripts
 osrelease=$(perl $BUILD_SCRIPTS/osrelease.pl)
 if [[ $osrelease == *CentOS6* || $osrelease == *RHEL6* ]]
     then
@@ -23,7 +21,6 @@ cp $BUILD_SCRIPTS/pull_request/plugins.txt .
 cp $BUILD_SCRIPTS/pull_request/control.in .
 LOG=log; mkdir $LOG
 # software configuration
-source ../$osrelease/setenv.sh
 export JANA_GEOMETRY_URL=ccdb:///GEOMETRY/main_HDDS.xml
 export JANA_RESOURCE_DIR=/group/halld/www/halldweb/html/resources
 # job configuration

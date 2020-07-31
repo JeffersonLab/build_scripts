@@ -7,19 +7,14 @@ use File::Slurp;
 use XML::Writer;
 use IO::File;
 
-$repo = $1;
-$branch = $2;
-$bms_osname = $3;
-$date = `date +%f`;
+$repo = $ARGV[0];
+$branch_to_test = $ARGV[1];
+$bms_osname = $ARGV[2];
+$date = `date +%F`;
+chomp $date;
 
-$filename_in = "/u/scratch/gluex/nightly/$date/$bms_osname/version.xml";
-$filename_out = "version_$repo_$branch.xml";
-$halld_home = $opt_s;
-$halld_recon_home = $opt_r;
-$halld_sim_home = $opt_m;
-$hdds_home = $opt_g;
-$hdgeant4_home = $opt_4;
-$gluex_root_analysis_home = $opt_a;
+$filename_in = "/u/scratch/gluex/nightly/$date/$bms_osname/version_$date.xml";
+$filename_out = "version_$repo_$branch_to_test.xml";
 
 # slurp in the xml file
 $ref = XMLin($filename_in, KeyAttr=>[]);
@@ -49,85 +44,40 @@ foreach $href (@b) {
     $hash = $d{hash};
     $debug_level = $d{debug_level};
     #print "package = $name, version = $version\n";
-    if ($name eq "sim-recon" && $halld_home) {
-	if (uc($halld_home) ne "NONE") {
-	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_home");
-	}
-    } elsif ($name eq "halld_recon" && $halld_recon_home) {
-	if (uc($halld_recon_home) ne "NONE") {
-	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_recon_home");
-	}
-    } elsif ($name eq "halld_sim" && $halld_sim_home) {
-	if (uc($halld_sim_home) ne "NONE") {
-	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_sim_home");
-	}
-    } elsif ($name eq "hdds" && $hdds_home) {
-	if (uc($hdds_home) ne "NONE") {
-	    $writer->emptyTag("package", "name" => "$name", "home" => "$hdds_home");
-	}
-    } elsif ($name eq "hdgeant4" && $hdgeant4_home) {
-	if (uc($hdgeant4_home) ne "NONE") {
-	    $writer->emptyTag("package", "name" => "$name", "home" => "$hdgeant4_home");
-	}
-    } elsif ($name eq "gluex_root_analysis" && $gluex_root_analysis_home) {
-	if (uc($gluex_root_analysis_home) ne "NONE") {
-	    $writer->emptyTag("package", "name" => "$name", "home" => "$gluex_root_analysis_home");
-	}
-    } else {
-	$write_element_command = "\$writer->emptyTag(\"package\", \"name\" => \"$name\"";
-	if ($version) {
-	    $write_element_command .= ", \"version\" => \"$version\"";
-	}
-	if ($dirtag) {
-	    $write_element_command .= ", \"dirtag\" => \"$dirtag\"";
-	}
-	if ($url) {
-	    $write_element_command .= ", \"url\" => \"$url\"";
-	}
-	if ($branch) {
-	    $write_element_command .= ", \"branch\" => \"$branch\"";
-	}
-	if ($home) {
-	    $write_element_command .= ", \"home\" => \"$home\"";
-	}
-	if ($debug_level ne '') {
-	    $write_element_command .= ", \"debug_level\" => \"$debug_level\"";
-	}
-	$write_element_command .= ");";
-	#print "write_element_command = $write_element_command\n";
-	eval $write_element_command;
+    if ($name eq $repo) {
+	$version = '';
+	$dirtag = $branch_to_test;
+	$url = '';
+	$branch = $branch_to_test;
+	$home = "/work/halld/pull_request_test/$repo^$branch_to_test";
+	$debug_level = '';
     }
+    $write_element_command = "\$writer->emptyTag(\"package\", \"name\" => \"$name\"";
+    if ($version) {
+	$write_element_command .= ", \"version\" => \"$version\"";
+    }
+    if ($dirtag) {
+	$write_element_command .= ", \"dirtag\" => \"$dirtag\"";
+    }
+    if ($url) {
+	$write_element_command .= ", \"url\" => \"$url\"";
+    }
+    if ($branch) {
+	$write_element_command .= ", \"branch\" => \"$branch\"";
+    }
+    if ($home) {
+	$write_element_command .= ", \"home\" => \"$home\"";
+    }
+    if ($debug_level ne '') {
+	$write_element_command .= ", \"debug_level\" => \"$debug_level\"";
+    }
+    $write_element_command .= ");";
+    #print "write_element_command = $write_element_command\n";
+    eval $write_element_command;
 }
 
 $writer->endTag("gversion");
 $writer->end();
 $output->close();
 
-print "\nInfo: contents of $filename_out:\n";
-print "----------------------------------------\n";
-system("cat $filename_out");
-print "----------------------------------------\n";
-
 exit;
-
-sub print_usage {
-    my $usage = <<'EOM';
-custom_sim_recon.pl: creates a version xml file with custom sim-recon home directory.
-
-Options:
-    -i <input XML file name> (required)
-    -o <output XML file name> (required)
-    -s <custom sim-recon home directory> (optional, s for sim-recon)
-    -r <custom halld_recon home directory> (optional, r for recon)
-    -m <custom halld_sim home directory> (optional, m for Monte Carlo)
-    -g <custom HDDS home directory> (optional, g for geometry)
-    -4 <custom HDGeant4 home directory> (optional, 4 for 4)
-    -a <custom gluex_root_analysis home directory> (optional, a for analysis)
-    -h print this usage message
-
-Note: if custom home directory name = "none", corresponding package element
-will be omitted in output XML file.
-EOM
-
-    print $usage;
-}
