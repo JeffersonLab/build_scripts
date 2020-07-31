@@ -9,6 +9,8 @@
 # directory of the repository. If left undefined, the latest version
 # will be checked out from the repos/trunk.
 
+include $(BUILD_SCRIPTS)/python_version.mk
+
 PWD = $(shell pwd)
 ifdef HALLD_SIM_VERSION
  SOURCE_CODE_TARGET = $(HALLD_SIM_HOME)/.untar_done
@@ -63,7 +65,14 @@ ifdef APPLY_GETARG_PATCH
 endif
 	date > $@
 
-$(HALLD_SIM_HOME)/.sconstruct_done: $(HALLD_SIM_HOME)/.patches_done
+$(HALLD_SIM_HOME)/.python_adjustment: $(HALLD_SIM_HOME)/.patches_done
+ifeq ($(PYTHON_GE_3), true)
+	cd $(HALLD_SIM_HOME)/src/SBMS ; $(RM) sbms.py ; ln -s sbms3.py sbms.py
+	cd $(HALLD_SIM_HOME)/src ; $(RM) SConstruct ; ln -s SConstruct3 SConstruct
+endif
+	date > $@
+
+$(HALLD_SIM_HOME)/.sconstruct_done: $(HALLD_SIM_HOME)/.python_adjustment
 	cd $(HALLD_SIM_HOME)/src ; scons install $(HALLD_SIM_SCONS_OPTIONS)
 	date > $@
 
