@@ -7,9 +7,19 @@ if [[ ! -z "$4" ]]; then
     export REPO_URL=$4
 fi
 #
+# set up the environment
+export BUILD_SCRIPTS=/group/halld/Software/build_scripts
+bms_osname=$($BUILD_SCRIPTS/osrelease.pl)
+test_dir=/work/halld/pull_request_test
+cd $test_dir
+version_file="version_${repo}_${branch}.xml"
+rm -f $version_file
+/apps/perl/bin/perl $BUILD_SCRIPTS/pull_request/pull_request_test_version.pl $repo $branch $bms_osname
+source $BUILD_SCRIPTS/gluex_env_boot_jlab.sh
+gxenv $version_file
+#
 echo build_pull_request_service.sh: building branch $branch
 report_file=report_${branch}.txt
-export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 echo build_pull_request_service.sh: using BUILD_SCRIPTS = $BUILD_SCRIPTS
 command="$BUILD_SCRIPTS/pull_request/build_pull_request.sh $repo $branch_git"
 echo build_pull_request_service.sh: executing $command
@@ -19,7 +29,7 @@ if [[ $? -eq 0 ]]; then
 else
     status="FAILURE"
 fi
-build_dir=/work/halld/pull_request_test/$repo^$branch
+build_dir=$test_dir/$repo^$branch
 web_dir=/work/halld2/pull_request_test/$repo^$branch
 rm -rf $web_dir && mkdir -p $web_dir
 cd $build_dir
