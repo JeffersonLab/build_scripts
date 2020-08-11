@@ -72,7 +72,7 @@ endif
 	date > $@
 
 $(HALLD_RECON_HOME)/.python_adjustment: $(HALLD_RECON_HOME)/.patches_done
-ifeq ($(PYTHON_GE_3), true)
+ifeq ($(SCONS_USES_PYTHON_3), true)
 	cd $(HALLD_RECON_HOME)/src/SBMS ; $(RM) sbms.py ; ln -s sbms3.py sbms.py
 	cd $(HALLD_RECON_HOME)/src ; $(RM) SConstruct ; ln -s SConstruct3 SConstruct
 endif

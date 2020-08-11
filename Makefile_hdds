@@ -66,7 +66,7 @@ $(HDDS_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(HDDS_HOME)/.python_adjustment: $(SOURCE_CODE_TARGET)
-ifeq ($(PYTHON_GE_3), true)
+ifeq ($(SCONS_USES_PYTHON_3), true)
 	cd $(HDDS_HOME) ; $(RM) SConstruct ; ln -s SConstruct3 SConstruct
 endif
 	date > $@
