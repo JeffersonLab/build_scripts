@@ -74,7 +74,7 @@ $(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.link_to_fixes_done
 	    . `find $(G4ROOT)/share/ -name geant4make.sh` ; \
 	fi ; \
 	echo executing make ; \
-	make
+	make $(HDGEANT4_MAKE_OPTIONS)
 	date > $@
 
 $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(HDGEANT4_HOME)/.make_done
