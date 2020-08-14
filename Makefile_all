@@ -37,6 +37,7 @@ ifdef NTHREADS
   HALLD_RECON_SCONS_OPTIONS += -j$(NTHREADS)
   HALLD_SIM_SCONS_OPTIONS += -j$(NTHREADS)
   XERCES_MAKE_OPTIONS += -j$(NTHREADS)
+  LAPACK_MAKE_OPTIONS += -j$(NTHREADS)
 endif
 
 all: gluex_pass2
@@ -186,7 +187,7 @@ lapack_dir:
 	test -d ${LAPACK} || mkdir -pv ${LAPACK}
 
 lapack_make:
-	$(MAKE) -C${LAPACK} -f${BUILD_SCRIPTS}/Makefile_lapack
+	$(MAKE) -C${LAPACK} -f${BUILD_SCRIPTS}/Makefile_lapack LAPACK_MAKE_OPTIONS="$(LAPACK_MAKE_OPTIONS)"
 
 hd_utilities_build: hd_utilities_dir hd_utilities_make
 
