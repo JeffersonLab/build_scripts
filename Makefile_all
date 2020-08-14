@@ -83,7 +83,6 @@ xerces_dir:
 xerces_make:
 	$(MAKE) -C${XERCES} -f${BUILD_SCRIPTS}/Makefile_xercesc_3  XERCES_MAKE_OPTIONS="$(XERCES_MAKE_OPTIONS)"
 
-
 root_build: root_dir
 	    $(MAKE) -C${ROOT} -f${BUILD_SCRIPTS}/Makefile_root ROOT6_BUILD_OPTIONS="$(ROOT6_BUILD_OPTIONS)"
 
