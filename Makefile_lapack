@@ -11,7 +11,7 @@ VERSION_CUT = $(shell if [[ "$(MAJOR)" -eq "3" && "$(MINOR)" -ge "9" ]] || [[ "$
 all: $(LAPACKROOT)/.make_done
 
 $(LAPACKROOT)/.make_done: $(LAPACKROOT)/make.inc $(LAPACKROOT)/.patch_done
-	$(MAKE) -C$(LAPACKROOT)
+	$(MAKE) -C$(LAPACKROOT) $(LAPACK_MAKE_OPTIONS)
 	date > $@
 
 $(LAPACKROOT)/.patch_done: $(LAPACKROOT)/make.inc
