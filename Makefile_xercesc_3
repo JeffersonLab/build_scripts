@@ -13,7 +13,7 @@ $(XERCESCROOT)/.make_install_done: $(XERCESCROOT)/.make_done
 	date > $@
 
 $(XERCESCROOT)/.make_done: $(XERCESCROOT)/.configure_done 
-	$(MAKE) -C$(XERCESCROOT)
+	$(MAKE) -C$(XERCESCROOT) $(XERCES_MAKE_OPTIONS)
 	date > $@
 
 $(XERCESCROOT)/.untar_done: $(TARFILE)

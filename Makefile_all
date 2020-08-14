@@ -36,6 +36,7 @@ ifdef NTHREADS
   SIM_RECON_SCONS_OPTIONS += -j$(NTHREADS)
   HALLD_RECON_SCONS_OPTIONS += -j$(NTHREADS)
   HALLD_SIM_SCONS_OPTIONS += -j$(NTHREADS)
+  XERCES_MAKE_OPTIONS += -j$(NTHREADS)
 endif
 
 all: gluex_pass2
@@ -79,7 +80,8 @@ xerces_dir:
 	test -d ${XERCES} || mkdir -pv ${XERCES}
 
 xerces_make:
-	$(MAKE) -C${XERCES} -f${BUILD_SCRIPTS}/Makefile_xercesc_3
+	$(MAKE) -C${XERCES} -f${BUILD_SCRIPTS}/Makefile_xercesc_3  XERCES_MAKE_OPTIONS="$(XERCES_MAKE_OPTIONS)"
+
 
 root_build: root_dir
 	    $(MAKE) -C${ROOT} -f${BUILD_SCRIPTS}/Makefile_root ROOT6_BUILD_OPTIONS="$(ROOT6_BUILD_OPTIONS)"
