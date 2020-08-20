@@ -241,6 +241,6 @@ if [ $gluex_env_verbose -eq 1 ]
     echo CCDB_HOME = $CCDB_HOME
 fi
 # check consistency of environment
-if [ $BUILD_SCRIPTS_CONSISTENCY_CHECK == "false" ]
+if [ "$BUILD_SCRIPTS_CONSISTENCY_CHECK" != "false" ]
 then $BUILD_SCRIPTS/version_check.pl
 fi
