@@ -21,9 +21,9 @@
 \newcommand{\gxenv}{{\tt gxenv}}
 
 \title{\bs{}: A Version Management System for GlueX \\ \medskip \large
-  GlueX-Doc-2793-v21}
+  GlueX-Doc-2793-v22}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{April 9, 2020}
+\date{August 21, 2020}
 
 \begin{document}
 
@@ -918,7 +918,11 @@ two ways depending on how the package was built:
   implemented.
 
 \end{enumerate}
-If a version mismatch is found, a warning is written to the screen.
+If a version mismatch is found, a warning is written to the screen. To stop the version check from being performed, set the environment variable
+\begin{center} \tt
+BUILD\_SCRIPTS\_CONSISTENCY\_CHECK
+\end{center}
+to the value {\tt "false"}. 
 
 There are cases where the home directory does not contain any
 information about the source of its source code. For example, the code
