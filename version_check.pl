@@ -102,6 +102,8 @@ foreach $package (@packages) {
     }
 }
 
+$problem_found = 0;
+
 foreach $package (@packages) {
     if (-e $home_value_hash{$package}) {
 	#print "== look for prereqs file for $package ==\n";
@@ -109,7 +111,6 @@ foreach $package (@packages) {
 	$filename = $home_value . "/" . $package . "_prereqs_version.xml";
 	if (-e $filename) {
 	    $consistent = 1;
-	    $problem_found = 0;
 	    #print "found $filename\n";
 	    # slurp in the xml file
 	    $ref = XMLin($filename, KeyAttr => [], ForceArray => 1);
@@ -248,7 +249,7 @@ foreach $package (@packages) {
 }
 
 if ($problem_found) {
-    print "info: to turn off version warnings, set BUILD_SCRIPTS_CONSISTENCY_CHECK = \"false\" in the environment
+    print "info: to turn off version warnings, set BUILD_SCRIPTS_CONSISTENCY_CHECK equal to \"false\" in the environment\n";
 }
 
 exit;
