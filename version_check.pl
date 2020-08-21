@@ -109,6 +109,7 @@ foreach $package (@packages) {
 	$filename = $home_value . "/" . $package . "_prereqs_version.xml";
 	if (-e $filename) {
 	    $consistent = 1;
+	    $problem_found = 0;
 	    #print "found $filename\n";
 	    # slurp in the xml file
 	    $ref = XMLin($filename, KeyAttr => [], ForceArray => 1);
@@ -137,6 +138,7 @@ foreach $package (@packages) {
 			$message .= "== ${package}'s prerequisite xml file = $filename\n";
 			$message .= "== $d{name} version recorded in prerequisite xml file = $d{version}\n";
 			print $message;
+			$problem_found = 1;
 		    }
 		} elsif ($d{url}) {
 		    #print "url from prereq xml = $d{url}\n";
@@ -153,6 +155,7 @@ foreach $package (@packages) {
 			$message .= "== ${package}'s prerequisite xml file = $filename\n";
 			$message .= "== $d{name} url recorded in prerequisite xml file = $d{url}\n";
 			print $message;
+			$problem_found = 1;
 		    }
 		} else {
 		    print "info: no version and no url for prereq $d{name} of $package\n";
@@ -171,6 +174,7 @@ foreach $package (@packages) {
 			    $message .= "== ${package}'s prerequisite xml file = $filename\n";
 			    $message .= "== branch in prerequisite xml file for $d{name} = $d{branch}\n";
 			    print $message;
+			    $problem_found = 1;
 			}
 		    } else { # no branch in prereq spec
 			if ($branch_repo ne "master") {
@@ -183,6 +187,7 @@ foreach $package (@packages) {
 			    $message .= "== ${package}'s prerequisite xml file = $filename\n";
 			    $message .= "== no branch specified in prerequisite xml file for $d{name}\n";
 			    print $message;
+			    $problem_found = 1;
 			}
 		    }
 		}
@@ -202,6 +207,7 @@ foreach $package (@packages) {
 		    $message .= "== ${package}'s prerequisite xml file = $filename\n";
 		    $message .= "== no directory tag in prerequisite xml file for $d{name}\n";
 		    print $message;
+		    $problem_found = 1;
 		} elsif (! $dirtag_dirname && $dirtag_xmlfile) {
 		    $consistent = 0;
 		    $message = "======= directory tag mismatch found =======\n";
@@ -212,6 +218,7 @@ foreach $package (@packages) {
 		    $message .= "== ${package}'s prerequisite xml file = $filename\n";
 		    $message .= "== directory tag for $d{name} in prerequisite xml file = $dirtag_xmlfile\n";
 		    print $message;
+		    $problem_found = 1;
 		} elsif ($dirtag_dirname && $dirtag_xmlfile) {
 		    if ($dirtag_dirname eq $dirtag_xmlfile) {
 			#print "dirtags agree\n";
@@ -225,6 +232,7 @@ foreach $package (@packages) {
 			$message .= "== ${package}'s prerequisite xml file = $filename\n";
 			$message .= "== directory tag for $d{name} in prerequisite xml file = $dirtag_xmlfile\n";
 			print $message;
+			$problem_found = 1;
 		    }
 		} else {
 		    print "major error, this cannot happen\n";
@@ -237,6 +245,10 @@ foreach $package (@packages) {
 	    #print "warning: no prerequisite version file found for $package\n";
 	}
     }
+}
+
+if ($problem_found) {
+    print "info: to turn off version warnings, set BUILD_SCRIPTS_CONSISTENCY_CHECK = \"false\" in the environment
 }
 
 exit;
