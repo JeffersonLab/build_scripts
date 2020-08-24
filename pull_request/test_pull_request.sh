@@ -57,8 +57,8 @@ else
     echo "Multiple-plugins test passed."
 fi >> summary.txt
 echo -e "\nTesting hdgeant ..." >> summary.txt
-export JANA_CALIB_CONTEXT="variation=mc_sim1"
-timeout $TLIMIT hdgeant >& $LOG/hdgeant.txt
+export JANA_CALIB_CONTEXT="variation=mc"
+timeout $TLIMIT hdgeant4 >& $LOG/hdgeant.txt
 code=$?
 if [ $code -eq 124 ]; then
     echo "hdgeant failed with $TLIMIT seconds timeout (status=124)."
