@@ -1,0 +1,101 @@
+--- configure_original	2020-06-29 14:40:37.981544200 -0400
++++ configure_patched	2020-06-29 15:05:58.459645900 -0400
+@@ -180,7 +180,7 @@
+ # Find platform.
+ #
+ ARCH=`uname`
+-theGcc=`g++ --version | grep '[0-9]\.[0-9]\.[0-9]' -o | head -1 | awk -F . '{print $1}'`
++theGcc=`g++ --version | grep '[0-9]\+\.[0-9]\+\.[0-9]\+' -o | head -1 | awk -F . '{print $1}'`
+ if [ ${theGcc} = 4 ]; then
+   ARCH=${ARCH}-gcc4
+ fi
+@@ -190,6 +190,18 @@
+ if [ ${theGcc} = 6 ]; then
+   ARCH=${ARCH}-gcc6
+ fi
++if [ ${theGcc} = 7 ]; then
++  ARCH=${ARCH}-gcc7
++fi
++if [ ${theGcc} = 8 ]; then
++  ARCH=${ARCH}-gcc8
++fi
++if [ ${theGcc} = 9 ]; then
++  ARCH=${ARCH}-gcc9
++fi
++if [ ${theGcc} = 10 ]; then
++  ARCH=${ARCH}-gcc10
++fi
+ echo "Platform is $ARCH"
+ 
+ #default platform settings:
+@@ -263,6 +275,70 @@
+   FFLAGS="${FFLAGS_OPT}"
+   CFLAGS="${CFLAGS_OPT}"
+   CXXFLAGS="${CXXFLAGS_OPT}"
++  FLIBS="-lgfortran"
++  if [ ${COMPMODE} = OPT ]; then
++    FFLAGS="${FFLAGS_OPT}"
++    CFLAGS="${CFLAGS_OPT}"
++    CXXFLAGS="${CXXFLAGS_OPT}"
++  fi
++  if [ ${COMPMODE} = DBG ]; then
++    FFLAGS="${FFLAGS_DBG}"
++    CFLAGS="${CFLAGS_DBG}"
++    CXXFLAGS="${CXXFLAGS_DBG}"
++  fi
++fi
++if [ $ARCH = Linux-gcc7 ]; then
++  FFLAGS="${FFLAGS_OPT}"
++  CFLAGS="${CFLAGS_OPT}"
++  CXXFLAGS="${CXXFLAGS_OPT}"
++  FLIBS="-lgfortran"
++  if [ ${COMPMODE} = OPT ]; then
++    FFLAGS="${FFLAGS_OPT}"
++    CFLAGS="${CFLAGS_OPT}"
++    CXXFLAGS="${CXXFLAGS_OPT}"
++  fi
++  if [ ${COMPMODE} = DBG ]; then
++    FFLAGS="${FFLAGS_DBG}"
++    CFLAGS="${CFLAGS_DBG}"
++    CXXFLAGS="${CXXFLAGS_DBG}"
++  fi
++fi
++if [ $ARCH = Linux-gcc8 ]; then
++  FFLAGS="${FFLAGS_OPT}"
++  CFLAGS="${CFLAGS_OPT}"
++  CXXFLAGS="${CXXFLAGS_OPT}"
++  FLIBS="-lgfortran"
++  if [ ${COMPMODE} = OPT ]; then
++    FFLAGS="${FFLAGS_OPT}"
++    CFLAGS="${CFLAGS_OPT}"
++    CXXFLAGS="${CXXFLAGS_OPT}"
++  fi
++  if [ ${COMPMODE} = DBG ]; then
++    FFLAGS="${FFLAGS_DBG}"
++    CFLAGS="${CFLAGS_DBG}"
++    CXXFLAGS="${CXXFLAGS_DBG}"
++  fi
++fi
++if [ $ARCH = Linux-gcc9 ]; then
++  FFLAGS="${FFLAGS_OPT}"
++  CFLAGS="${CFLAGS_OPT}"
++  CXXFLAGS="${CXXFLAGS_OPT}"
++  FLIBS="-lgfortran"
++  if [ ${COMPMODE} = OPT ]; then
++    FFLAGS="${FFLAGS_OPT}"
++    CFLAGS="${CFLAGS_OPT}"
++    CXXFLAGS="${CXXFLAGS_OPT}"
++  fi
++  if [ ${COMPMODE} = DBG ]; then
++    FFLAGS="${FFLAGS_DBG}"
++    CFLAGS="${CFLAGS_DBG}"
++    CXXFLAGS="${CXXFLAGS_DBG}"
++  fi
++fi
++if [ $ARCH = Linux-gcc10 ]; then
++  FFLAGS="${FFLAGS_OPT}"
++  CFLAGS="${CFLAGS_OPT}"
++  CXXFLAGS="${CXXFLAGS_OPT}"
+   FLIBS="-lgfortran"
+   if [ ${COMPMODE} = OPT ]; then
+     FFLAGS="${FFLAGS_OPT}"

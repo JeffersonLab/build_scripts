@@ -1,7 +1,9 @@
+include $(BUILD_SCRIPTS)/python_version.mk
+
 PWD = $(shell pwd)
 
 ifdef JANA_VERSION
- SOURCE_CODE_TARGET = $(JANA_HOME)/.untar_done
+ SOURCE_CODE_TARGET = $(JANA_HOME)/.patches_done
  ifdef JANA_DIRTAG
   JANA_DIR = jana_$(JANA_VERSION)^$(JANA_DIRTAG)
  else
@@ -39,6 +41,21 @@ $(JANA_HOME)/.checkout_done:
 	rmdir -v checkout_temp_dir
 	date > $@
 
+$(JANA_HOME)/.patches_done: $(JANA_HOME)/.untar_done
+	@echo info: PYTHON_GE_3 = $(PYTHON_GE_3)
+ifeq ($(PYTHON_GE_3), true)
+	@echo info: applying patches
+	patch $(JANA_HOME)/SBMS/sbms.py \
+	    < $(BUILD_SCRIPTS)/patches/jana/sbms.py.patch
+	patch $(JANA_HOME)/SBMS/sbms_config.py \
+	    < $(BUILD_SCRIPTS)/patches/jana/sbms_config.py.patch
+	patch $(JANA_HOME)/SConstruct \
+	    < $(BUILD_SCRIPTS)/patches/jana/SConstruct.patch
+else
+	@echo info: no patches needed
+endif
+	date > $@
+
 $(JANA_HOME)/.untar_done: $(TARFILE)
 	rm -rf untar_temp_dir
 	mkdir untar_temp_dir
@@ -50,3 +67,7 @@ $(JANA_HOME)/.untar_done: $(TARFILE)
 $(TARFILE):
 	@echo making $@
 	wget --no-verbose http://www.jlab.org/JANA/releases/$(TARFILE)
+
+show_env:
+	@echo PYTHON_MAJOR_VERSION = $(PYTHON_MAJOR_VERSION)
+	@echo PYTHON_GE_3 = $(PYTHON_GE_3)

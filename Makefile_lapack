@@ -4,16 +4,32 @@ endif
 TARFILE=lapack-$(LAPACK_VERSION).tgz
 PWD := $(shell pwd)
 export LAPACKROOT=$(PWD)/lapack-$(LAPACK_VERSION)
+MAJOR = $(shell echo $(LAPACK_VERSION) | awk -F. '{print $$1}')
+MINOR = $(shell echo $(LAPACK_VERSION) | awk -F. '{print $$2}')
+VERSION_CUT = $(shell if [[ "$(MAJOR)" -eq "3" && "$(MINOR)" -ge "9" ]] || [[ "$(MAJOR)" -gt "3" ]]; then echo ge_three_nine; else echo lt_three_nine; fi)
 
-all: $(LAPACKROOT)/.make_done
+all: fix_patch_target_rename $(LAPACKROOT)/.make_done
 
-$(LAPACKROOT)/.make_done: $(LAPACKROOT)/make.inc $(LAPACKROOT)/.edit_makefile_done
-	$(MAKE) -C$(LAPACKROOT)
+# This step is to fix legacy builds from before the misguided renaming
+# of the target ".edit_makefile_done" to ".patch_done". If
+# ".edit_makefile_done" is found rename it to ".patch_done".
+fix_patch_target_rename:
+	cd $(LAPACKROOT) ; \
+	if [ -f .edit_makefile_done ] ; \
+	then mv -v .edit_makefile_done .patch_done ; \
+	fi
+
+$(LAPACKROOT)/.make_done: $(LAPACKROOT)/make.inc $(LAPACKROOT)/.patch_done
+	$(MAKE) -C$(LAPACKROOT) $(LAPACK_MAKE_OPTIONS)
 	date > $@
 
-$(LAPACKROOT)/.edit_makefile_done: $(LAPACKROOT)/make.inc
+$(LAPACKROOT)/.patch_done: $(LAPACKROOT)/make.inc
+ifeq ($(VERSION_CUT), lt_three_nine)
 	cd $(LAPACKROOT); patch < $(BUILD_SCRIPTS)/patches/lapack/Makefile.patch
 	cd $(LAPACKROOT)/TESTING; patch Makefile < $(BUILD_SCRIPTS)/patches/lapack/Makefile_TESTING.patch
+else
+	cd $(LAPACKROOT)/TESTING; patch Makefile < $(BUILD_SCRIPTS)/patches/lapack/Makefile_TESTING_3.9.0.patch
+endif
 	date > $@
 
 $(LAPACKROOT)/make.inc: $(LAPACKROOT)/make.inc.example
@@ -27,3 +43,8 @@ $(LAPACKROOT)/.untar_done: $(TARFILE)
 
 $(TARFILE):
 	wget --no-verbose http://www.netlib.org/lapack/$(TARFILE)
+
+show_env:
+	@echo MAJOR = $(MAJOR)
+	@echo MINOR = $(MINOR)
+	@echo VERSION_CUT = $(VERSION_CUT)

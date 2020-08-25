@@ -1,0 +1,132 @@
+--- coda.py.old	2015-04-13 10:57:06.000000000 -0400
++++ coda.py.new	2019-12-21 16:01:47.589939400 -0500
+@@ -101,7 +101,7 @@
+         ret = conf.CheckBits(ccflags)
+         env = conf.Finish()
+         if ret < 1:
+-            print 'Cannot run test, assume 64 bit system'
++            print('Cannot run test, assume 64 bit system')
+             return True
+         elif ret == 64:
+             # Test shows 64 bit system'
+@@ -149,7 +149,7 @@
+         #try:
+             #vxVersion = int(matchResult.group(1))
+         #except IndexError:
+-            #print 'ERROR finding vxworks version, set to 6 by default\n'
++            #print('ERROR finding vxworks version, set to 6 by default\n')
+     
+     vxInc = ''
+ 
+@@ -163,7 +163,7 @@
+                   '/site/vxworks/6.0/ppc/vxworks-6.0/target/h/wrn/coreip']
+         env.Append(CPPDEFINES = ['VXWORKS_6'])
+     else:
+-        print 'Unknown version of vxWorks, exiting'
++        print('Unknown version of vxWorks, exiting')
+         return 0
+ 
+ 
+@@ -174,14 +174,14 @@
+             vxbin = vxbase + '/x86-linux2/bin/'
+     elif platform == 'SunOS':
+         if vxVersion >= 6:
+-            print '\nVxworks 6.x compilation not allowed on solaris'
++            print('\nVxworks 6.x compilation not allowed on solaris')
+             return 0
+         vxbin = vxbase + '/host/sun4-solaris2/bin/'
+         if machine == 'i86pc':
+-            print '\nVxworks compilation not allowed on x86 solaris'
++            print('\nVxworks compilation not allowed on x86 solaris')
+             return 0
+     else:
+-        print '\nVxworks compilation not allowed on ' + platform
++        print('\nVxworks compilation not allowed on ' + platform)
+         return 0
+         
+                     
+@@ -229,8 +229,8 @@
+         # prefix not defined try CODA env var
+         if codaHomeEnv == "":
+             if (incdir == None) or (libdir == None) or (bindir == None):
+-                print "\nNeed to define CODA, or use the --prefix option,"
+-                print "or all the --incdir, --libdir, and --bindir options.\n"
++                print("\nNeed to define CODA, or use the --prefix option,")
++                print("or all the --incdir, --libdir, and --bindir options.\n")
+                 raise SystemExit
+         else:
+             prefix = codaHomeEnv
+@@ -278,9 +278,9 @@
+         os.makedirs(includeDir)
+     # Make sure it's a directory (if we didn't create it)
+     elif not os.path.isdir(includeDir):
+-        print
+-        print "Error:", includeDir, "is NOT a directory"
+-        print
++        print()
++        print("Error:", includeDir, "is NOT a directory")
++        print()
+         raise SystemExit
+ 
+     if includeDir == archIncludeDir:
+@@ -296,9 +296,9 @@
+         except OSError:
+             return
+     elif not os.path.isdir(archDir):
+-        print
+-        print "Error:", archDir, "is NOT a directory"
+-        print
++        print()
++        print("Error:", archDir, "is NOT a directory")
++        print()
+         raise SystemExit
+ 
+     #
+@@ -308,18 +308,18 @@
+     if not os.path.exists(archIncludeDir):
+         # Create symbolic link: symlink(source, linkname)
+         try:
+-    	    if (archIncLocalLink == None) or (archIncLocalLink == ''):
+-	    	symlink(includeDir, archIncludeDir)
++            if (archIncLocalLink == None) or (archIncLocalLink == ''):
++                symlink(includeDir, archIncludeDir)
+             else:
+-	    	symlink(archIncLocalLink, archIncludeDir)
++                symlink(archIncLocalLink, archIncludeDir)
+         except OSError:
+             # Failed to create symbolic link, so
+             # just make it a regular directory
+             os.makedirs(archIncludeDir)
+     elif not os.path.isdir(archIncludeDir):
+-        print
+-        print "Error:", archIncludeDir, "is NOT a directory"
+-        print
++        print()
++        print("Error:", archIncludeDir, "is NOT a directory")
++        print()
+         raise SystemExit
+ 
+     return
+@@ -342,18 +342,18 @@
+             java_base = '/System/Library/Frameworks/JavaVM.framework'
+         else:
+             # Search for the java compiler
+-            print "JAVA_HOME environment variable not set. Searching for javac to find jni.h ..."
++            print("JAVA_HOME environment variable not set. Searching for javac to find jni.h ...")
+             if not env.get('JAVAC'):
+-                print "The Java compiler must be installed and in the current path, exiting"
++                print("The Java compiler must be installed and in the current path, exiting")
+                 return 0
+             jcdir = os.path.dirname(env.WhereIs('javac'))
+             if not jcdir:
+-                print "   not found, exiting"
++                print("   not found, exiting")
+                 return 0
+             # assuming the compiler found is in some directory like
+             # /usr/jdkX.X/bin/javac, java's home directory is /usr/jdkX.X
+             java_base = os.path.join(jcdir, "..")
+-            print "  found, dir = " + java_base        
++            print("  found, dir = " + java_base        )
+         
+     if sys.platform == 'darwin':
+         # Apple does not use Sun's naming convention

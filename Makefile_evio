@@ -36,6 +36,8 @@ $(EVIO_HOME)/.patch_done: $(EVIO_HOME)/.untar_done
 ifeq ($(MAJOR_MINOR),4.3)
 	cd $(EVIO_HOME) ; patch -p1 < $(BUILD_SCRIPTS)/patches/evio/evio-4.3.patch
 endif
+	cd $(EVIO_HOME) ; patch SConstruct < $(BUILD_SCRIPTS)/patches/evio/SConstruct.patch
+	cd $(EVIO_HOME) ; patch coda.py < $(BUILD_SCRIPTS)/patches/evio/coda.py.patch
 	date > $@
 
 $(EVIO_HOME)/.scons_done: $(EVIO_HOME)/.patch_done
