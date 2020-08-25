@@ -41,5 +41,5 @@ endif
 	date > $@
 
 $(EVIO_HOME)/.scons_done: $(EVIO_HOME)/.patch_done
-	cd $(EVIO_HOME) ; scons --prefix=. install
+	cd $(EVIO_HOME) ; scons-3 --prefix=. install
 	date > $@

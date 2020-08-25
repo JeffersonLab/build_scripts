@@ -21,6 +21,7 @@ ifeq ($(VERSION_CUT), lt_three_nine)
 else
 	cd $(LAPACKROOT)/TESTING; patch Makefile < $(BUILD_SCRIPTS)/patches/lapack/Makefile_TESTING_3.9.0.patch
 endif
+	cd $(LAPACKROOT); patch lapack_testing.py < $(BUILD_SCRIPTS)/patches/lapack/lapack_testing.py.patch
 	date > $@
 
 $(LAPACKROOT)/make.inc: $(LAPACKROOT)/make.inc.example

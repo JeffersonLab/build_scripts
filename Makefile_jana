@@ -30,7 +30,7 @@ $(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: $(JANA_HOME)/.sconstruct_do
 	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(BUILD_SCRIPTS)/version_prereqs.pl jana
 
 $(JANA_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
-	cd $(JANA_HOME); scons
+	cd $(JANA_HOME); scons-3
 	date > $@
 
 $(JANA_HOME)/.checkout_done:

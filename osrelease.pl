@@ -84,6 +84,8 @@ if ($uname eq 'Linux') {
 	    } else {
 		    $release = '_CentOS7';
 	    }
+	} elsif ($release_string =~ /^CentOS Linux release 8\.*/) {
+	    $release = '_CentOS8';
 	} elsif ($release_string =~ /^Scientific Linux SL release 5.*/ ) {
 	    $release = '_SL5';
 	} elsif ($release_string =~ /^Scientific Linux release 6.*/ ) {

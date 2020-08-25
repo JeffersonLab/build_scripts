@@ -72,7 +72,7 @@ endif
 	date > $@
 
 $(HDDS_HOME)/.sconstruct_done: $(HDDS_HOME)/.python_adjustment
-	cd $(HDDS_HOME) ; scons install $(HDDS_SCONS_OPTIONS)
+	cd $(HDDS_HOME) ; scons-3 install $(HDDS_SCONS_OPTIONS)
 	date > $@
 
 ifndef GVMS_TEST
