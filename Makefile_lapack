@@ -8,10 +8,19 @@ MAJOR = $(shell echo $(LAPACK_VERSION) | awk -F. '{print $$1}')
 MINOR = $(shell echo $(LAPACK_VERSION) | awk -F. '{print $$2}')
 VERSION_CUT = $(shell if [[ "$(MAJOR)" -eq "3" && "$(MINOR)" -ge "9" ]] || [[ "$(MAJOR)" -gt "3" ]]; then echo ge_three_nine; else echo lt_three_nine; fi)
 
-all: $(LAPACKROOT)/.make_done
+all: fix_patch_target_rename $(LAPACKROOT)/.make_done
+
+# This step is to fix legacy builds from before the misguided renaming
+# of the target ".edit_makefile_done" to ".patch_done". If
+# ".edit_makefile_done" is found rename it to ".patch_done".
+fix_patch_target_rename:
+	cd $(LAPACKROOT) ; \
+	if [ -f .edit_makefile_done ] ; \
+	then mv -v .edit_makefile_done .patch_done ; \
+	fi
 
 $(LAPACKROOT)/.make_done: $(LAPACKROOT)/make.inc $(LAPACKROOT)/.patch_done
-	$(MAKE) -C$(LAPACKROOT)
+	$(MAKE) -C$(LAPACKROOT) $(LAPACK_MAKE_OPTIONS)
 	date > $@
 
 $(LAPACKROOT)/.patch_done: $(LAPACKROOT)/make.inc
