@@ -68,7 +68,7 @@ $(HDGEANT4_HOME)/.link_to_fixes_done: $(SOURCE_CODE_TARGET)
 	date > $@
 
 $(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.link_to_fixes_done
-	@cd $(HDGEANT4_HOME) ; \
+	cd $(HDGEANT4_HOME) ; \
 	if [ -z "$$G4SYSTEM" ] ; \
 	    then echo Geant4 setup not complete, sourcing geant4make.sh ; \
 	    . `find $(G4ROOT)/share/ -name geant4make.sh` ; \
