@@ -15,10 +15,11 @@ then
 	fedora_version=`awk '{print $3}' < /etc/fedora-release`
 	echo fedora_version = $fedora_version
 	distribution=fedora$fedora_version
-    elif [ -e /etc/redhat-release]
+    elif [ -e /etc/redhat-release ]
     then
 	redhat_version=`awk -F 'release' '{print $2}' < /etc/redhat-release | awk '{print $1}' | awk -F. '{print $1}'`
 	echo redhat_version = $redhat_version
+	distribution=redhat$redhat_version
     fi
 fi
 echo distribution = $distribution
