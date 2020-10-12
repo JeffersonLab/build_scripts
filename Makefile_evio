@@ -19,6 +19,7 @@ DIR_NAME = evio-$(EVIO_VERSION)
 TARFILE = evio-$(EVIO_VERSION).tgz
 EVIO_HOME = $(PWD)/$(DIR_NAME)
 EVIO_DOWNLOAD_URL_BASE = https://coda.jlab.org/drupal/system/files/coda/evio
+SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
 
 all: $(EVIO_HOME)/.scons_done
 
@@ -41,5 +42,6 @@ endif
 	date > $@
 
 $(EVIO_HOME)/.scons_done: $(EVIO_HOME)/.patch_done
-	cd $(EVIO_HOME) ; scons --prefix=. install
+	@echo Makefile_evio info: SCONS = $(SCONS)
+	cd $(EVIO_HOME) ; $(SCONS) --prefix=. install
 	date > $@

@@ -50,7 +50,7 @@ then
     else
 	pycommand[version]=3
     fi
-elif [ $dist_name == RedHat || $dist_name == CentOS ]
+elif [[ $dist_name == RedHat || $dist_name == CentOS ]]
 then
     if [ $dist_version -le 7 ]
     then

@@ -7,6 +7,7 @@ export LAPACKROOT=$(PWD)/lapack-$(LAPACK_VERSION)
 MAJOR = $(shell echo $(LAPACK_VERSION) | awk -F. '{print $$1}')
 MINOR = $(shell echo $(LAPACK_VERSION) | awk -F. '{print $$2}')
 VERSION_CUT = $(shell if [[ "$(MAJOR)" -eq "3" && "$(MINOR)" -ge "9" ]] || [[ "$(MAJOR)" -gt "3" ]]; then echo ge_three_nine; else echo lt_three_nine; fi)
+PYTHON2_EXISTS = $(shell if [ -f /usr/bin/python2 ]; then echo true; else echo false; fi)
 
 all: fix_patch_target_rename $(LAPACKROOT)/.make_done
 
@@ -30,6 +31,9 @@ ifeq ($(VERSION_CUT), lt_three_nine)
 else
 	cd $(LAPACKROOT)/TESTING; patch Makefile < $(BUILD_SCRIPTS)/patches/lapack/Makefile_TESTING_3.9.0.patch
 endif
+ifeq ($(PYTHON2_EXISTS), true)
+	cd $(LAPACKROOT); patch lapack_testing.py < $(BUILD_SCRIPTS)/patches/lapack/lapack_testing.py.patch
+endif
 	date > $@
 
 $(LAPACKROOT)/make.inc: $(LAPACKROOT)/make.inc.example
@@ -48,3 +52,4 @@ show_env:
 	@echo MAJOR = $(MAJOR)
 	@echo MINOR = $(MINOR)
 	@echo VERSION_CUT = $(VERSION_CUT)
+	@echo PYTHON2_EXISTS = $(PYTHON2_EXISTS)
