@@ -15,7 +15,6 @@ arg=$1
 # get OS-related information
 #
 uname=`uname`
-echo uname = $uname
 if [ $uname == "Linux" ]
 then
     if [ -e /etc/fedora-release ]
@@ -34,10 +33,7 @@ then
 	| awk -F= '{print $2}' | awk -F. '{print $1}'`
     fi
 fi
-echo dist_name = $dist_name
-echo dist_version = $dist_version
 distribution=$dist_name$dist_version
-echo distribution = $distribution
 #
 # encode the data on which command to use on which OS
 ## start with old versions and work your way up
@@ -45,27 +41,28 @@ echo distribution = $distribution
 declare -A pycommand
 if [ $dist_name == Fedora ]
 then
+    pycommand[command]=python
+    pycommand[config]=python-config
+    pycommand[scons]=scons
     if [ $dist_version -le 31 ]
     then
-	pycommand[command]=python
-	pycommand[config]=python-config
-	pycommand[scons]=scons
+	pycommand[version]=2
     else
-	pycommand[command]=python
-	pycommand[config]=python-config
-	pycommand[scons]=scons
+	pycommand[version]=3
     fi
-elif [ $dist_name = RedHat || $dist_name = CentOS ]
+elif [ $dist_name == RedHat || $dist_name == CentOS ]
 then
     if [ $dist_version -le 7 ]
     then
 	pycommand[command]=python
 	pycommand[config]=python-config
 	pycommand[scons]=scons
+	pycommand[version]=2
     else
-	pycommand[command]=python
-	pycommand[config]=python-config
+	pycommand[command]=python3
+	pycommand[config]=python3-config
 	pycommand[scons]=scons-3
+	pycommand[version]=3
     fi
 fi
 #
@@ -73,18 +70,29 @@ fi
 #
 case $arg in
     command)
-	echo asking for command
 	echo ${pycommand[command]}
 	;;
     config)
-	echo asking for config
 	echo ${pycommand[config]}
 	;;
+    info)
+	echo uname = $uname
+	echo dist_name = $dist_name
+	echo dist_version = $dist_version
+	echo distribution = $distribution
+	echo python command = ${pycommand[command]}
+	echo config command = ${pycommand[config]}
+	echo scons command = ${pycommand[scons]}
+	echo version command = ${pycommand[version]}
+	;;
     scons)
-	echo asking for scons
 	echo ${pycommand[scons]}
 	;;
+    version)
+	echo ${pycommand[version]}
+	;;	
     *)
-	echo unknown ask
+	echo python_chooser.sh error: unknown argument = \"$arg\"
+	exit 1
 	;;
 esac
