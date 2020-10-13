@@ -21,6 +21,7 @@ else
     RCDB_BRANCH = master
   endif
 endif
+SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
 
 all: force_rebuild_action $(RCDB_DIR)/rcdb_prereqs_version.xml
 
@@ -49,9 +50,10 @@ endif
 	date > $@
 
 $(RCDB_DIR)/.scons_done: $(GET_SOURCE_TARGET)
+	@echo Makefile_rcdb info: SCONS = $(SCONS)
 	source $(RCDB_DIR)/environment.bash ; \
 	cd $(RCDB_DIR)/cpp ; \
-	scons
+	$(SCONS)
 	date > $@
 
 $(RCDB_DIR)/rcdb_prereqs_version.xml: $(RCDB_DIR)/.scons_done

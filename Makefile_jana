@@ -1,5 +1,3 @@
-include $(BUILD_SCRIPTS)/python_version.mk
-
 PWD = $(shell pwd)
 
 ifdef JANA_VERSION
@@ -21,6 +19,8 @@ else
   JANA_DIR = $(notdir $(JANA_URL))
  endif
 endif
+SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
+PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
 
 export JANA_HOME = $(PWD)/$(JANA_DIR)
 
@@ -30,7 +30,8 @@ $(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: $(JANA_HOME)/.sconstruct_do
 	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(BUILD_SCRIPTS)/version_prereqs.pl jana
 
 $(JANA_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
-	cd $(JANA_HOME); scons
+	@echo Makefile_jana info: SCONS = $(SCONS)
+	cd $(JANA_HOME); $(SCONS)
 	date > $@
 
 $(JANA_HOME)/.checkout_done:
@@ -42,8 +43,8 @@ $(JANA_HOME)/.checkout_done:
 	date > $@
 
 $(JANA_HOME)/.patches_done: $(JANA_HOME)/.untar_done
-	@echo info: PYTHON_GE_3 = $(PYTHON_GE_3)
-ifeq ($(PYTHON_GE_3), true)
+#	@echo info: PYTHON_GE_3 = $(PYTHON_GE_3)
+ifeq ($(PYVERSION), 3)
 	@echo info: applying patches
 	patch $(JANA_HOME)/SBMS/sbms.py \
 	    < $(BUILD_SCRIPTS)/patches/jana/sbms.py.patch
