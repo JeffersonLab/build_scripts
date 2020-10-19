@@ -66,13 +66,7 @@ $(HDDS_HOME)/.untar_done: $(TARFILE)
 	rmdir -v untar_temp_dir
 	date > $@
 
-$(HDDS_HOME)/.python_adjustment: $(SOURCE_CODE_TARGET)
-ifeq ($(PYVERSION), 3)
-	cd $(HDDS_HOME) ; $(RM) SConstruct ; ln -s SConstruct3 SConstruct
-endif
-	date > $@
-
-$(HDDS_HOME)/.sconstruct_done: $(HDDS_HOME)/.python_adjustment
+$(HDDS_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
 	cd $(HDDS_HOME) ; $(SCONS) install $(HDDS_SCONS_OPTIONS)
 	date > $@
 
