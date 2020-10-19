@@ -56,14 +56,7 @@ ifdef APPLY_GETARG_PATCH
 endif
 	date > $@
 
-$(HALLD_SIM_HOME)/.python_adjustment: $(HALLD_SIM_HOME)/.patches_done
-ifeq ($(PYVERSION), 3)
-	cd $(HALLD_SIM_HOME)/src/SBMS ; $(RM) sbms.py ; ln -s sbms3.py sbms.py
-	cd $(HALLD_SIM_HOME)/src ; $(RM) SConstruct ; ln -s SConstruct3 SConstruct
-endif
-	date > $@
-
-$(HALLD_SIM_HOME)/.sconstruct_done: $(HALLD_SIM_HOME)/.python_adjustment
+$(HALLD_SIM_HOME)/.sconstruct_done: $(HALLD_SIM_HOME)/.patches_done
 	cd $(HALLD_SIM_HOME)/src ; $(SCONS) install $(HALLD_SIM_SCONS_OPTIONS)
 	date > $@
 
