@@ -48,8 +48,7 @@ ifeq ($(PYVERSION), 3)
 	@echo info: applying patches
 	patch $(JANA_HOME)/SBMS/sbms.py \
 	    < $(BUILD_SCRIPTS)/patches/jana/sbms.py.patch
-	patch $(JANA_HOME)/SBMS/sbms_config.py \
-	    < $(BUILD_SCRIPTS)/patches/jana/sbms_config.py.patch
+	futurize -w $(JANA_HOME)/SBMS/sbms_config.py
 	patch $(JANA_HOME)/SConstruct \
 	    < $(BUILD_SCRIPTS)/patches/jana/SConstruct.patch
 else
