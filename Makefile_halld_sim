@@ -27,6 +27,7 @@ else ifeq ($(HALLD_SIM_DEBUG_LEVEL), 2)
 endif
 export HALLD_SIM_HOME = $(PWD)/$(HALLD_SIM_DIR)
 SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
+PYTHONCONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
 PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
 
 all: $(HALLD_SIM_HOME)/halld_sim_prereqs_version.xml
@@ -57,7 +58,7 @@ endif
 	date > $@
 
 $(HALLD_SIM_HOME)/.sconstruct_done: $(HALLD_SIM_HOME)/.patches_done
-	cd $(HALLD_SIM_HOME)/src ; $(SCONS) install $(HALLD_SIM_SCONS_OPTIONS)
+	cd $(HALLD_SIM_HOME)/src ; $(SCONS) install PYTHONCONFIG=$(PYTHONCONFIG) $(HALLD_SIM_SCONS_OPTIONS)
 	date > $@
 
 ifndef GVMS_TEST
