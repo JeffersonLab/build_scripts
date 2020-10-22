@@ -26,6 +26,8 @@ else
 endif
 
 HDGEANT4_HOME = $(PWD)/$(HDGEANT4_DIR)
+PYTHON_CONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
+PYTHON_BOOST = $(shell $(BUILD_SCRIPTS)/python_chooser.sh boost)
 
 all: force_rebuild_action $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml
 
@@ -54,18 +56,18 @@ $(HDGEANT4_HOME)/.untar_done: $(TARFILE)
 	date > $@
 
 $(HDGEANT4_HOME)/.link_to_fixes_done: $(SOURCE_CODE_TARGET)
-	test -d $(HDGEANT4_HOME)/src/G4.$(GEANT4_VERSION)fixes || (echo G4fixes directory does not exist. GEANT4_VERSION must be defined. GEANT4_VERSION = $(GEANT4_VERSION) ; exit 1)
+	@test -d $(HDGEANT4_HOME)/src/G4.$(GEANT4_VERSION)fixes || (echo G4fixes directory does not exist. GEANT4_VERSION must be defined. GEANT4_VERSION = $(GEANT4_VERSION) ; exit 1)
 	cd $(HDGEANT4_HOME)/src ; ln -s G4.$(GEANT4_VERSION)fixes G4fixes 
 	date > $@
 
 $(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.link_to_fixes_done
-	@cd $(HDGEANT4_HOME) ; \
+	cd $(HDGEANT4_HOME) ; \
 	if [ -z "$$G4SYSTEM" ] ; \
 	    then echo Geant4 setup not complete, sourcing geant4make.sh ; \
 	    . `find $(G4ROOT)/share/ -name geant4make.sh` ; \
 	fi ; \
 	echo executing make ; \
-	make $(HDGEANT4_MAKE_OPTIONS)
+	make PYTHON_CONFIG=$(PYTHON_CONFIG) BOOST_PYTHON_LIB=$(PYTHON_BOOST) $(HDGEANT4_MAKE_OPTIONS)
 	date > $@
 
 $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(HDGEANT4_HOME)/.make_done
