@@ -1,3 +1,4 @@
+SHELL = /bin/bash
 PWD = $(shell pwd)
 
 ifdef JANA_VERSION
@@ -51,7 +52,6 @@ $(JANA_HOME)/.checkout_done:
 	date > $@
 
 $(JANA_HOME)/.patches_done: $(JANA_HOME)/.untar_done
-#	@echo info: PYTHON_GE_3 = $(PYTHON_GE_3)
 ifeq ($(PYVERSION), 3)
 	@echo info: applying patches
 	patch $(JANA_HOME)/SBMS/sbms.py \
