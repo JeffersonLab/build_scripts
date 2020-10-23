@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 #
 # python_command.sh: looks at OS-related quantities and reports
 # correct python-related command to use
@@ -74,6 +74,13 @@ then
 	pycommand[boost]=boost_python$version_major
     fi
     pycommand[version]=$version_major
+elif [ $dist_name == Ubuntu ]
+then
+    pycommand[command]=python
+    get_python_version
+    pycommand[config]=python-config
+    pycommand[scons]=scons
+    pycommand[boost]=boost_python
 fi
 #
 # report the answer
