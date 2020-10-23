@@ -82,6 +82,13 @@ then
 	pycommand[boost]=boost_python$version_major
     fi
     pycommand[version]=$version_major
+elif [ $dist_name == Ubuntu ]
+then
+    pycommand[command]=python
+    get_python_version
+    pycommand[config]=python-config
+    pycommand[scons]=scons
+    pycommand[boost]=boost_python
 fi
 #
 # report the answer
