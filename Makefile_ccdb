@@ -21,7 +21,7 @@ else
   ifndef CCDB_BRANCH
     CCDB_BRANCH = master
   endif
-  MAJOR_VERSION := 1
+  MAJOR_VERSION := 2
 endif
 UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
