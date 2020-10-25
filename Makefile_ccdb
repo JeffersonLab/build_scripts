@@ -21,7 +21,7 @@ else
   ifndef CCDB_BRANCH
     CCDB_BRANCH = master
   endif
-  MAJOR_VERSION := 1
+  MAJOR_VERSION := 2
 endif
 
 ifeq '$(MAJOR_VERSION)' '1'
