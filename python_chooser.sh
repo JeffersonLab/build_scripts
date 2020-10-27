@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 #
 # python_command.sh: looks at OS-related quantities and reports
 # correct python-related command to use
@@ -23,7 +23,15 @@ then
 	dist_version=`awk '{print $3}' < /etc/fedora-release`
     elif [ -e /etc/redhat-release ]
     then
-	dist_name=`awk '{print $1}' < /etc/redhat-release`
+	if grep -l 'Red Hat' /etc/redhat-release
+	then
+	    dist_name=RedHat
+	elif grep -l CentOS /etc/redhat-release
+	then
+	    dist_name=CentOS
+	else
+	    dist_name=unknown_redhat_like
+	fi
 	dist_version=`awk -F 'release' '{print $2}' < /etc/redhat-release \
 	| awk '{print $1}' | awk -F. '{print $1}'`
     elif [ -e /etc/lsb-release ] # Ubuntu-like
