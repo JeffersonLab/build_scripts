@@ -23,10 +23,10 @@ then
 	dist_version=`awk '{print $3}' < /etc/fedora-release`
     elif [ -e /etc/redhat-release ]
     then
-	if grep -l 'Red Hat' /etc/redhat-release
+	if grep -lq 'Red Hat' /etc/redhat-release
 	then
 	    dist_name=RedHat
-	elif grep -l CentOS /etc/redhat-release
+	elif grep -lq CentOS /etc/redhat-release
 	then
 	    dist_name=CentOS
 	else
