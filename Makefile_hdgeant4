@@ -1,14 +1,5 @@
 # Makefile_hdgeant4
 
-# Builds HDGEANT4 under a new directory rooted in the current working
-# directory. The new directory (DIR_NAME) has a name that depends on
-# the version being built.
-
-# HDGEANT4_VERSION defines which tagged version to build. It should
-# correspond to the name of the desired directory in the repos/tags
-# directory of the repository. If left undefined, the latest version
-# will be checked out from the repos/trunk.
-
 PWD = $(shell pwd)
 
 ifdef HDGEANT4_VERSION
