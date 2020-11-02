@@ -57,14 +57,29 @@ distribution=$dist_name$dist_version
 ## start with old versions and work your way up
 #
 declare -A pycommand
+pycommand[lib]=''
 if [ $dist_name == Fedora ]
 then
-    pycommand[command]=python
-    pycommand[config]=python-config
-    pycommand[scons]=scons
-    get_python_version
-    pycommand[version]=$version_major
-    pycommand[boost]=boost_python
+    if [ $dist_version -ge 32 ]
+    then
+	pycommand[command]=python
+	pycommand[config]=python-config
+	pycommand[scons]=scons
+	get_python_version
+	pycommand[version]=$version_major
+	pycommand[boost]=boost_python$version_major$version_minor
+    else
+	pycommand[command]=python
+	pycommand[config]=python-config
+	pycommand[scons]=scons
+	get_python_version
+	pycommand[version]=$version_major
+	pycommand[boost]=boost_python
+    fi
+    if  [ $dist_version -ge 33 ]
+    then
+	pycommand[lib]=-lpython$version_major.$version_minor
+    fi
 elif [[ $dist_name == RedHat || $dist_name == CentOS ]]
 then
     if [ $dist_version -le 7 ]
@@ -125,6 +140,10 @@ case $arg in
 	echo scons command = ${pycommand[scons]}
 	echo version command = ${pycommand[version]}
 	echo boost command = ${pycommand[boost]}
+	echo lib command = ${pycommand[lib]}
+	;;
+    lib)
+	echo ${pycommand[lib]}
 	;;
     scons)
 	echo ${pycommand[scons]}
