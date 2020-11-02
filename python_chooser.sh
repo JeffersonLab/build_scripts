@@ -4,13 +4,23 @@
 # correct python-related command to use
 #
 ## accepts one positional argument
-## argument can have one of three values: command, config, or scons
+## argument can have one of four values: command, config, scons, version, or
+##     boost
 ### command: python command to use
 ### config: python-config command use
 ### scon: scons command to use
+### version: Python major version
+### boost: name of the python-boost library, without the file extension and
+###    without the initial "lib"
 ## writes output to stdout
 #
 arg=$1
+get_python_version() {
+    version_full=`${pycommand[command]} --version 2>&1 | awk '{print $2}'`
+    version_major=`echo $version_full | awk -F. '{print $1}'`
+    version_minor=`echo $version_full | awk -F. '{print $2}'`
+    version_subminor=`echo $version_full | awk -F. '{print $3}'`
+}
 #
 # get OS-related information
 #
@@ -47,36 +57,69 @@ distribution=$dist_name$dist_version
 ## start with old versions and work your way up
 #
 declare -A pycommand
+pycommand[lib]=''
 if [ $dist_name == Fedora ]
 then
-    pycommand[command]=python
-    pycommand[config]=python-config
-    pycommand[scons]=scons
-    if [ $dist_version -le 31 ]
+    if [ $dist_version -ge 32 ]
     then
-	pycommand[version]=2
+	pycommand[command]=python
+	pycommand[config]=python-config
+	pycommand[scons]=scons
+	get_python_version
+	pycommand[version]=$version_major
+	pycommand[boost]=boost_python$version_major$version_minor
     else
-	pycommand[version]=3
+	pycommand[command]=python
+	pycommand[config]=python-config
+	pycommand[scons]=scons
+	get_python_version
+	pycommand[version]=$version_major
+	pycommand[boost]=boost_python
+    fi
+    if  [ $dist_version -ge 33 ]
+    then
+	pycommand[lib]=-lpython$version_major.$version_minor
     fi
 elif [[ $dist_name == RedHat || $dist_name == CentOS ]]
 then
     if [ $dist_version -le 7 ]
     then
 	pycommand[command]=python
+	get_python_version
 	pycommand[config]=python-config
 	pycommand[scons]=scons
-	pycommand[version]=2
+	pycommand[boost]=boost_python
     else
 	pycommand[command]=python3
-	pycommand[config]=python3-config
-	pycommand[scons]=scons-3
-	pycommand[version]=3
+	get_python_version
+	pycommand[config]=python$version_major-config
+	pycommand[scons]=scons-$version_major
+	pycommand[boost]=boost_python$version_major
     fi
+    pycommand[version]=$version_major
+elif [ $dist_name == Ubuntu ]
+then
+    pycommand[command]=python3
+    get_python_version
+    pycommand[config]=python-config
+    pycommand[scons]=scons
+    pycommand[version]=$version_major
+    pycommand[boost]=boost_python
+else
+    pycommand[command]=python
+    get_python_version
+    pycommand[config]=python-config
+    pycommand[scons]=scons
+    pycommand[version]=$version_major
+    pycommand[boost]=boost_python
 fi
 #
 # report the answer
 #
 case $arg in
+    boost)
+	echo ${pycommand[boost]}
+	;;
     command)
 	echo ${pycommand[command]}
 	;;
@@ -88,10 +131,19 @@ case $arg in
 	echo dist_name = $dist_name
 	echo dist_version = $dist_version
 	echo distribution = $distribution
+	echo version_full = $version_full
+	echo version_major = $version_major
+	echo version_minor = $version_minor
+	echo version_subminor = $version_subminor
 	echo python command = ${pycommand[command]}
 	echo config command = ${pycommand[config]}
 	echo scons command = ${pycommand[scons]}
 	echo version command = ${pycommand[version]}
+	echo boost command = ${pycommand[boost]}
+	echo lib command = ${pycommand[lib]}
+	;;
+    lib)
+	echo ${pycommand[lib]}
 	;;
     scons)
 	echo ${pycommand[scons]}
