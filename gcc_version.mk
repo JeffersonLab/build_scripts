@@ -1,4 +1,4 @@
-GCC_VERSION := $(shell gcc --version | head -1 | awk '{print $$3}')
+GCC_VERSION := $(shell gcc -v 2>&1 | tail -1 | awk '{print $$3}')
 GCC_MAJOR_VERSION := $(shell echo $(GCC_VERSION) | awk -F. '{print $$1}')
 GCC_MINOR_VERSION := $(shell echo $(GCC_VERSION) | awk -F. '{print $$2}')
 GCC_SUBMINOR_VERSION := $(shell echo $(GCC_VERSION) | awk -F. '{print $$3}')
