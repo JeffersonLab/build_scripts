@@ -9,6 +9,8 @@
 # directory of the repository. If left undefined, the latest version
 # will be checked out from the repos/trunk.
 
+SHELL = /bin/bash
+
 include $(BUILD_SCRIPTS)/gcc_version.mk
 
 PWD = $(shell pwd)
