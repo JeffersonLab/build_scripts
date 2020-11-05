@@ -41,7 +41,7 @@ ifeq ($(GCC_GE_10), true)
 	cd 2005/src/packlib/cspack/sysreq ; patch socket.c < $(BUILD_SCRIPTS)/patches/cernlib/socket.c.patch
 	cd 2005/src/packlib/kernlib/kernbit/z268 ; patch systems.c < $(BUILD_SCRIPTS)/patches/cernlib/systems.c.patch
 endif
-ifeq ($(GCC_GE_9), true)
+ifeq ($(GCC_GE_10), true)
 	patch 2005/src/pawlib/paw/fmotif/Imakefile < $(BUILD_SCRIPTS)/patches/cernlib/Imakefile_fmotif.patch
 endif
 	date > $@
