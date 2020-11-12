@@ -9,13 +9,6 @@ if [ -z "$BUILD_SCRIPTS" ]
     then export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 fi
 export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
-if [[ $BMS_OSNAME != *CentOS7.7* ]]
-    then
-    if [ `echo $PATH | grep -c /apps/bin` -eq 0 ]
-        then
-	export PATH=/apps/bin:$PATH
-    fi
-fi
 # farm-specific set-up
 nodename=`uname -n`
 if [[ $nodename =~ ^farm* || $nodename =~ ^ifarm* || $nodename =~ ^qcd* || $nodename =~ ^gluon* ]]

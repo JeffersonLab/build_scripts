@@ -6,10 +6,6 @@ else
 endif
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
-if ( $BMS_OSNAME !~ *CentOS7.7* ) then
-    echo $PATH | grep /apps/bin > /dev/null
-    if ($status) setenv PATH /apps/bin:$PATH
-endif
 # farm-specific set-up
 set nodename=`uname -n`
 if ( $nodename =~ farm* || $nodename =~ ifarm* || $nodename =~ qcd* || $nodename =~ gluon* ) then
