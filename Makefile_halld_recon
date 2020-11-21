@@ -29,6 +29,9 @@ export HALLD_RECON_HOME = $(PWD)/$(HALLD_RECON_DIR)
 PYTHON = $(shell $(BUILD_SCRIPTS)/python_chooser.sh command)
 SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
 PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
+ifeq ($(HALLD_RECON_PROFILE), true)
+ HALLD_RECON_SCONS_OPTIONS += PROFILE=1
+endif
 
 all: force_rebuild_action $(HALLD_RECON_HOME)/halld_recon_prereqs_version.xml
 
