@@ -30,6 +30,9 @@ ifeq ($(VERSION_GE_08), true)
 else
  SBMS_CONFIG_PATCH = sbms_config.py.patch
 endif
+ifeq ($(HALLD_RECON_PROFILE), true)
+ JANA_SCONS_OPTIONS += PROFILE=1
+endif
 
 export JANA_HOME = $(PWD)/$(JANA_DIR)
 
@@ -40,7 +43,7 @@ $(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: $(JANA_HOME)/.sconstruct_do
 
 $(JANA_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
 	@echo Makefile_jana info: SCONS = $(SCONS)
-	cd $(JANA_HOME); $(SCONS)
+	cd $(JANA_HOME); $(SCONS) $(JANA_SCONS_OPTIONS)
 	date > $@
 
 $(JANA_HOME)/.checkout_done:

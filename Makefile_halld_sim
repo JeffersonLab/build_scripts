@@ -29,7 +29,10 @@ export HALLD_SIM_HOME = $(PWD)/$(HALLD_SIM_DIR)
 SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
 PYTHONCONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
 PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
-
+ifeq ($(HALLD_SIM_PROFILE), true)
+ HALLD_SIM_SCONS_OPTIONS += PROFILE=1
+endif
+ 
 all: $(HALLD_SIM_HOME)/halld_sim_prereqs_version.xml
 
 $(TARFILE):
