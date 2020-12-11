@@ -55,7 +55,7 @@ foreach $href (@b) {
     %d = %{$c}; # a hash
     #print "d{name} = $d{name}\n";
     #print "d{version} = $d{version}\n";
-    #print "d{profile} = $d{profile}\n";
+    #print "d{profiling} = $d{profiling}\n";
     $name = $d{name};
     $name_in_caps = uc($name);
     $name_in_caps =~ s/-/_/g;
@@ -67,7 +67,7 @@ foreach $href (@b) {
     $hash = $d{hash};
     $year = $d{year};
     $debug_level = $d{debug_level};
-    $profile = $d{profile};
+    $profiling = $d{profiling};
     if ($debug_level eq '') {$debug_level = 1} # set a default level
     if ($version) {
 	print_command("${name_in_caps}_VERSION", $version);
@@ -125,7 +125,7 @@ foreach $href (@b) {
 	if ($name eq 'halld_sim' || $name eq 'halld_recon') {
 	    print_command("${name_in_caps}_DEBUG_LEVEL", $debug_level);
 	}
-	if ($profile) {print_command("${name_in_caps}_PROFILE", $profile);}
+	if ($profiling) {print_command("${name_in_caps}_PROFILING", $profiling);}
     }
 }
 
