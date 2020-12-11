@@ -144,6 +144,7 @@ Options:
     -g <custom HDDS home directory> (optional, g for geometry)
     -4 <custom HDGeant4 home directory> (optional, 4 for 4)
     -a <custom gluex_root_analysis home directory> (optional, a for analysis)
+    -p if present, turn on profiling attribute for halld_recon and halld_sim
     -h print this usage message
 
 Note: if custom home directory name = "none", corresponding package element
