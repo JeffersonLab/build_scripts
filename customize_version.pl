@@ -8,7 +8,7 @@ use XML::Writer;
 use IO::File;
 
 # get the file name
-$status=getopts("i:o:s:g:4:a:r:m:h");
+$status=getopts("i:o:s:g:4:a:r:m:ph");
 $filename_in = $opt_i;
 $filename_out = $opt_o;
 $halld_home = $opt_s;
@@ -17,11 +17,16 @@ $halld_sim_home = $opt_m;
 $hdds_home = $opt_g;
 $hdgeant4_home = $opt_4;
 $gluex_root_analysis_home = $opt_a;
-
 if ($opt_h) {
     print_usage();
     exit;
 }
+if ($opt_p) {
+    $profiling = "true";
+} else {
+    $profiling = "false";
+}
+
 if (!$filename_in || !$filename_out ) {
     print "\nError: required command-line option missing\n\n";
     print_usage();
@@ -71,11 +76,11 @@ foreach $href (@b) {
 	}
     } elsif ($name eq "halld_recon" && $halld_recon_home) {
 	if (uc($halld_recon_home) ne "NONE") {
-	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_recon_home");
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_recon_home", "profiling" => $profiling);
 	}
     } elsif ($name eq "halld_sim" && $halld_sim_home) {
 	if (uc($halld_sim_home) ne "NONE") {
-	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_sim_home");
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$halld_sim_home", "profiling" => $profiling);
 	}
     } elsif ($name eq "hdds" && $hdds_home) {
 	if (uc($hdds_home) ne "NONE") {

@@ -30,7 +30,7 @@ ifeq ($(VERSION_GE_08), true)
 else
  SBMS_CONFIG_PATCH = sbms_config.py.patch
 endif
-ifeq ($(HALLD_RECON_PROFILE), true)
+ifeq ($(HALLD_RECON_PROFILING), true)
  JANA_SCONS_OPTIONS += PROFILE=1
 endif
 
