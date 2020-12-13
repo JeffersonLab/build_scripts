@@ -31,7 +31,7 @@ else
  SBMS_CONFIG_PATCH = sbms_config.py.patch
 endif
 ifeq ($(HALLD_RECON_PROFILING), true)
- JANA_SCONS_OPTIONS += PROFILE=1
+ override JANA_SCONS_OPTIONS += PROFILE=1
 endif
 
 export JANA_HOME = $(PWD)/$(JANA_DIR)
