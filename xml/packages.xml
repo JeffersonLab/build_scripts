@@ -47,4 +47,6 @@
 	 description="package for simulating radiative effects"/>
 <package name="evtgen" docName="EvtGen" homeVar="EVTGENDIR"
 	 description="handles particle decays in a user-configurable library"/>
+<package name="diracxx" docName="Diracxx" homeVar="DIRACXX_HOME"
+	 description="general root/c++ toolkit for computing Feynman amplitudes"/>
 </packages>
