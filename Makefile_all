@@ -36,6 +36,8 @@ ifdef NTHREADS
   SIM_RECON_SCONS_OPTIONS += -j$(NTHREADS)
   HALLD_RECON_SCONS_OPTIONS += -j$(NTHREADS)
   HALLD_SIM_SCONS_OPTIONS += -j$(NTHREADS)
+  XERCES_MAKE_OPTIONS += -j$(NTHREADS)
+  HDGEANT4_MAKE_OPTIONS += -j$(NTHREADS)
 endif
 
 all: gluex_pass2
@@ -79,7 +81,7 @@ xerces_dir:
 	test -d ${XERCES} || mkdir -pv ${XERCES}
 
 xerces_make:
-	$(MAKE) -C${XERCES} -f${BUILD_SCRIPTS}/Makefile_xercesc_3
+	$(MAKE) -C${XERCES} -f${BUILD_SCRIPTS}/Makefile_xercesc_3  XERCES_MAKE_OPTIONS="$(XERCES_MAKE_OPTIONS)"
 
 root_build: root_dir
 	    $(MAKE) -C${ROOT} -f${BUILD_SCRIPTS}/Makefile_root ROOT6_BUILD_OPTIONS="$(ROOT6_BUILD_OPTIONS)"
@@ -184,7 +186,7 @@ lapack_dir:
 	test -d ${LAPACK} || mkdir -pv ${LAPACK}
 
 lapack_make:
-	$(MAKE) -C${LAPACK} -f${BUILD_SCRIPTS}/Makefile_lapack
+	$(MAKE) -C${LAPACK} -f${BUILD_SCRIPTS}/Makefile_lapack LAPACK_MAKE_OPTIONS="$(LAPACK_MAKE_OPTIONS)"
 
 hd_utilities_build: hd_utilities_dir hd_utilities_make
 
@@ -200,7 +202,7 @@ hdgeant4_dir:
 	test -d ${HDGEANT4} || mkdir -pv ${HDGEANT4}
 
 hdgeant4_make:
-	$(MAKE) -C${HDGEANT4} -f${BUILD_SCRIPTS}/Makefile_hdgeant4
+	$(MAKE) -C${HDGEANT4} -f${BUILD_SCRIPTS}/Makefile_hdgeant4 HDGEANT4_MAKE_OPTIONS="$(HDGEANT4_MAKE_OPTIONS)"
 
 gluex_root_analysis_build: gluex_root_analysis_dir gluex_root_analysis_make
 

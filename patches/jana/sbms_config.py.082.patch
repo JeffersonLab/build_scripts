@@ -1,0 +1,39 @@
+--- sbms_config.py.original	2020-10-21 16:56:45.153504000 -0400
++++ sbms_config.py.patched	2020-10-21 16:57:46.512910600 -0400
+@@ -55,7 +55,7 @@
+ 	ofdirname = '%s/JANA' % env['variant_dir']
+ 	ofdir = '%s' % env.Dir(ofdirname)
+ 	ofname = '%s/jana_config.h' % ofdir
+-	print 'sbms : Making jana_config.h in %s' % ofdir
++	print('sbms : Making jana_config.h in %s' % ofdir)
+ 	
+ 	# ROOT
+ 	HAVE_ROOT = 0
+@@ -92,12 +92,12 @@
+ 
+ 	# If showing build, print config. results
+ 	if(env['SHOWBUILD']>0):
+-		print '--- Configuration results ----'
+-		print '    HAVE_ROOT = %d' % HAVE_ROOT
+-		print '  HAVE_XERCES = %d' % HAVE_XERCES
+-		print '      XERCES3 = %d' % XERCES3
+-		print '    HAVE_CCDB = %d' % HAVE_CCDB
+-		print '------------------------------'
++		print('--- Configuration results ----')
++		print('    HAVE_ROOT = %d' % HAVE_ROOT)
++		print('  HAVE_XERCES = %d' % HAVE_XERCES)
++		print('      XERCES3 = %d' % XERCES3)
++		print('    HAVE_CCDB = %d' % HAVE_CCDB)
++		print('------------------------------')
+ 		
+ 	str = ''
+ 	
+@@ -147,7 +147,7 @@
+ 	ofdir = '%s' % env.Dir(ofdirname)
+ 	ofname = '%s/jana-config' % ofdir
+ 
+-	print 'sbms : Making jana-config in %s' % ofdir
++	print('sbms : Making jana-config in %s' % ofdir)
+ 	
+ 	# ROOT
+ 	HAVE_ROOT = 0

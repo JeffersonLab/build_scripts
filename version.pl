@@ -19,6 +19,7 @@ $gluex_top_default = "/home/" . $ENV{USER} . "/gluex_top";
 $this_file_with_full_path = abs_path(__FILE__);
 $build_scripts = dirname($this_file_with_full_path);
 $bms_osname = `$build_scripts/osrelease.pl`;
+chomp $bms_osname;
 $definitions = read_file("$build_scripts/version_defs.pl");
 eval $definitions;
 
@@ -54,6 +55,7 @@ foreach $href (@b) {
     %d = %{$c}; # a hash
     #print "d{name} = $d{name}\n";
     #print "d{version} = $d{version}\n";
+    #print "d{profiling} = $d{profiling}\n";
     $name = $d{name};
     $name_in_caps = uc($name);
     $name_in_caps =~ s/-/_/g;
@@ -65,6 +67,7 @@ foreach $href (@b) {
     $hash = $d{hash};
     $year = $d{year};
     $debug_level = $d{debug_level};
+    $profiling = $d{profiling};
     if ($debug_level eq '') {$debug_level = 1} # set a default level
     if ($version) {
 	print_command("${name_in_caps}_VERSION", $version);
@@ -122,6 +125,7 @@ foreach $href (@b) {
 	if ($name eq 'halld_sim' || $name eq 'halld_recon') {
 	    print_command("${name_in_caps}_DEBUG_LEVEL", $debug_level);
 	}
+	if ($profiling) {print_command("${name_in_caps}_PROFILING", $profiling);}
     }
 }
 
