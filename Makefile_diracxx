@@ -1,0 +1,65 @@
+# Makefile_diracxx
+
+PWD = $(shell pwd)
+
+ifdef DIRACXX_VERSION
+ SOURCE_CODE_TARGET = $(DIRACXX_HOME)/.untar_done
+ ifdef DIRACXX_DIRTAG
+  DIRACXX_DIR = Diracxx-$(DIRACXX_VERSION)^$(DIRACXX_DIRTAG)
+ else
+  DIRACXX_DIR = Diracxx-$(DIRACXX_VERSION)
+ endif
+ TARFILE = $(DIRACXX_VERSION).tar.gz
+else
+ SOURCE_CODE_TARGET = $(DIRACXX_HOME)/.clone_done
+ ifndef DIRACXX_URL
+  DIRACXX_URL=https://github.com/jeffersonlab/Diracxx
+ endif
+ ifdef DIRACXX_DIRTAG
+  DIRACXX_DIR = $(notdir $(DIRACXX_URL))^$(DIRACXX_DIRTAG)
+ else
+  DIRACXX_DIR = $(notdir $(DIRACXX_URL))
+ endif
+ ifndef DIRACXX_BRANCH
+  DIRACXX_BRANCH = master
+ endif
+endif
+
+DIRACXX_HOME = $(PWD)/$(DIRACXX_DIR)
+PYTHON_CONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
+PYTHON_BOOST = $(shell $(BUILD_SCRIPTS)/python_chooser.sh boost)
+PYTHON_LIB_OPTION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh lib)
+
+all: force_rebuild_action $(DIRACXX_HOME)/diracxx_prereqs_version.xml
+
+force_rebuild_action:
+ifdef FORCE
+	@echo forcing rebuild
+	$(RM) $(DIRACXX_HOME)/.make_done
+endif
+
+$(TARFILE):
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/jeffersonlab/diracxx/archive/$(TARFILE)
+
+$(DIRACXX_HOME)/.clone_done:
+	git clone -b $(DIRACXX_BRANCH) $(DIRACXX_URL) $(DIRACXX_DIR)
+ifdef DIRACXX_HASH
+	cd $(DIRACXX_DIR) ; git checkout $(DIRACXX_HASH)
+endif
+	date > $@
+
+$(DIRACXX_HOME)/.untar_done: $(TARFILE)
+	rm -rf untar_temp_dir
+	mkdir untar_temp_dir
+	cd untar_temp_dir ; tar zxf ../$(TARFILE)
+	mv -v untar_temp_dir/* $(DIRACXX_DIR)
+	rmdir -v untar_temp_dir
+	date > $@
+
+$(DIRACXX_HOME)/.make_done: $(SOURCE_CODE_TARGET)
+	cd $(DIRACXX_HOME) ; \
+	make PYTHON_CONFIG=$(PYTHON_CONFIG) BOOST_PYTHON_LIB=$(PYTHON_BOOST) PYTHON_LIB_OPTION=$(PYTHON_LIB_OPTION) $(DIRACXX_MAKE_OPTIONS)
+	date > $@
+
+$(DIRACXX_HOME)/diracxx_prereqs_version.xml: $(DIRACXX_HOME)/.make_done
+	cd $(DIRACXX_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl diracxx

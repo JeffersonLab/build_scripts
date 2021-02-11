@@ -36,10 +36,12 @@ eval $definitions;
 	    geant4 => [],
 	    ccdb => [],
 	    halld_recon => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb', 'rcdb', 'sqlitecpp'],
-	    halld_sim => ['halld_recon'],
+	    halld_sim => ['diracxx', 'halld_recon'],
 	    amptools => ['root'],
 	    photos => ['hepmc'],
-	    evtgen => ['photos', 'hepmc'],);
+	    evtgen => ['photos', 'hepmc'],
+	    diracxx => ['root'],
+    );
 
 # add a prerequisite for sqlitecpp only if SQLITE_HOME is defined
 if (defined $ENV{SQLITE_HOME}) {
@@ -50,10 +52,10 @@ if (defined $ENV{SQLITE_HOME}) {
 # set prerequisites for hdgeant4 and gluex_root_analysis according to whether
 # HALLD_HOME is set
 if (defined $ENV{HALLD_HOME}) {
-    $prereqs{hdgeant4} = ['geant4', 'sim-recon', 'jana', 'ccdb'];
+    $prereqs{hdgeant4} = ['geant4', 'sim-recon', 'jana', 'ccdb', 'root'];
     $prereqs{gluex_root_analysis} = ['sim-recon', 'root'];
 } else {
-    $prereqs{hdgeant4} = ['geant4', 'halld_recon', 'jana', 'ccdb'];
+    $prereqs{hdgeant4} = ['geant4', 'halld_recon', 'jana', 'ccdb', 'root'];
     $prereqs{gluex_root_analysis} = ['halld_recon', 'root'];
 }
 
