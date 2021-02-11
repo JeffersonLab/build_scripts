@@ -29,6 +29,7 @@ HALLD_RECON = ${ROOT_OF_ALL}/halld_recon
 HEPMC = ${ROOT_OF_ALL}/hepmc
 PHOTOS = ${ROOT_OF_ALL}/photos
 EVTGEN = ${ROOT_OF_ALL}/evtgen
+DIRACXX = ${ROOT_OF_ALL}/diracxx
 
 ifdef NTHREADS
   ROOT6_BUILD_OPTIONS += -j$(NTHREADS)
@@ -48,7 +49,7 @@ gluex_pass1: xerces_build lapack_build cernlib_build root_build \
 
 gluex_pass2: gluex_pass1 jana_build hdds_build amptools_build \
 	     hepmc_build photos_build evtgen_build halld_recon_build \
-	     halld_sim_build hd_utilities_build hdgeant4_build \
+	     diracxx_build halld_sim_build hd_utilities_build hdgeant4_build \
 	     gluex_root_analysis_build mcwrapper_build
 
 cernlib_build: cernlib_dir cernlib_make
@@ -267,6 +268,14 @@ evtgen_dir:
 
 evtgen_make:
 	$(MAKE) -C${EVTGEN} -f${BUILD_SCRIPTS}/Makefile_evtgen
+
+diracxx_build: diracxx_dir diracxx_make
+
+diracxx_dir:
+	test -d ${DIRACXX} || mkdir -pv ${DIRACXX}
+
+diracxx_make:
+	$(MAKE) -C${DIRACXX} -f${BUILD_SCRIPTS}/Makefile_diracxx
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
