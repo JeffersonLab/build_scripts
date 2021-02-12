@@ -107,6 +107,13 @@ if (! $?HALLD_MY) then
     if ($status) setenv PATH $HALLD_MY/${BMS_OSNAME}/bin:$PATH
 endif
 #
+# Diracxx
+#
+if ($?DIRACXX_HOME) then
+    echo $LD_LIBRARY_PATH | grep $DIRACXX_HOME > /dev/null
+    if ($status) setenv LD_LIBRARY_PATH ${DIRACXX_HOME}:$LD_LIBRARY_PATH
+endif
+#
 # HDGeant4
 #
 if ($?HDGEANT4_HOME) then
