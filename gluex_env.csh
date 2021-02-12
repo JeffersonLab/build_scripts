@@ -109,9 +109,9 @@ endif
 #
 # Diracxx
 #
-if ($DIRACXX_HOME) then
+if ($?DIRACXX_HOME) then
     echo $LD_LIBRARY_PATH | grep $DIRACXX_HOME > /dev/null
-    if ($status) setenv LD_LIBRARY_PATH $DIRACXX_HOME:$LD_LIBRARY_PATH
+    if ($status) setenv LD_LIBRARY_PATH ${DIRACXX_HOME}:$LD_LIBRARY_PATH
 endif
 #
 # HDGeant4
