@@ -10,7 +10,13 @@ BUILD_DIR = $(CERNLIB_DIR)_build
 
 all: make_cernlib_dir
 
-make_build_dir:
+.check_for_old_style_build:
+	@if [[ -e $(CERNLIB_DIR) && ! -L $(CERNLIB_DIR) ]] ; \
+	then echo Makefile_cernlib: old-style CERNLIB build found, `pwd`/$(CERNLIB_DIR) is not a symbolic link, exiting ; \
+	exit 1 ; \
+	fi
+
+make_build_dir: .check_for_old_style_build
 	mkdir -p $(BUILD_DIR)
 
 $(BUILD_DIR)/.make_done: make_build_dir
