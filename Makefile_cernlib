@@ -1,85 +1,25 @@
-export CERN=$(shell pwd)
-ifdef CERNLIB_VERSION
-export CERN_LEVEL=$(CERNLIB_VERSION)
+ifeq ($(CERNLIB_WORD_LENGTH), 64-bit)
+    MAKEFILE = Makefile_cernlib_Vogt
 else
-export CERN_LEVEL=2006
-endif
-export CERN_ROOT=$(CERN)/$(CERN_LEVEL)
-export CVSCOSRC=$(CERN_ROOT)/src
-export PATH:=$(CERN_ROOT)/bin:$(PATH)
-
-WHICH_GFORTRAN = $(shell which gfortran)
-ifneq (,$(findstring gfortran,$(WHICH_GFORTRAN)))
-      FC=gfortran
-      PATCH_PACKLIB = $(shell $(BUILD_SCRIPTS)/patches/cernlib/packlib_patch.pl)
-else
-      FC=g77
-      PATCH_PACKLIB = false
+    MAKEFILE = Makefile_cernlib_32bit
 endif
 
-UBUNTU_MARKER := $(shell ls /etc/lsb-release)
-
-all: info make_cernlib make_links final_patches
-
-info:
-	@echo FC = $(FC)
-	@echo PATCH_PACKLIB = $(PATCH_PACKLIB)
-	@echo WHICH_GFORTRAN = $(WHICH_GFORTRAN)
-
-$(CERN_ROOT)/.untar_src_done: $(CERN_LEVEL)_src.tar.gz
-	tar zxf $<
-	date > $@
-
-$(CERN_ROOT)/.untar_include_done: include.tar.gz
-	tar zxf $<
-	date > $@
-
-make_cernlib: $(CERN_ROOT)/build/scripts/install.bin
-	$(MAKE) -C$(CERN_ROOT)/build FC=$(FC)
-
-$(CERN_ROOT)/build/scripts/Makefile:
-	$(MAKE) -C$(CERN_ROOT)/build scripts/Makefile
-
-make_links:
-ifneq ($(UBUNTU_MARKER),/etc/lsb-release)
-	cd $(CERN_ROOT)/lib ; test -L libblas.a || ln -s /usr/lib/libblas.a libblas.a
-	cd $(CERN_ROOT)/lib ; test -L liblapack3.a || ln -s /usr/lib/liblapack.a liblapack3.a
+ifdef CERNLIB_DIRTAG
+    CERNLIB_DIR = $(CERN_LEVEL)^$(CERNLIB_DIRTAG)
 else
-	cd $(CERN_ROOT)/lib ; test -L libblas.a || ln -s /usr/lib/atlas-base/atlas/libblas.a libblas.a
-	cd $(CERN_ROOT)/lib ; test -L liblapack3.a || ln -s /usr/lib/atlas-base/atlas/liblapack.a liblapack3.a
+    CERNLIB_DIR = $(CERN_LEVEL)
 endif
 
-%.tar.gz:
-	wget --no-verbose http://cernlib.web.cern.ch/cernlib/download/${CERN_LEVEL}_source/tar/$@
+BUILD_DIR = $(CERNLIB_DIR)_build
 
-$(CERN_ROOT)/cernlib_patch_file.txt:
-	cat $(BUILD_SCRIPTS)/patches/cernlib/*.txt > $@
+all: make_cernlib_dir
 
-$(CERN_ROOT)/.patch_done: $(CERN_ROOT)/.untar_src_done $(CERN_ROOT)/.untar_include_done $(CERN_ROOT)/cernlib_patch_file.txt
-	cd $(CERN_ROOT); patch -p1 < $(CERN_ROOT)/cernlib_patch_file.txt
-	cd $(CERN_ROOT)/src/packlib/kuip/kuip ; patch < $(BUILD_SCRIPTS)/patches/cernlib/kstring.h.patch	
+make_build_dir:
+	mkdir -p $(BUILD_DIR)
+
+$(BUILD_DIR)/.make_done: make_build_dir
+	make -C $(BUILD_DIR) -f $(BUILD_SCRIPTS)/$(MAKEFILE)
 	date > $@
 
-$(CERN_ROOT)/.dirs_done:
-	cd $(CERN_ROOT); mkdir -p build bin lib
-	date > $@
-
-$(CERN_ROOT)/.imake_boot_done: $(CERN_ROOT)/.patch_done $(CERN_ROOT)/.dirs_done
-	cd $(CERN_ROOT)/build; $(CVSCOSRC)/config/imake_boot
-	date > $@
-
-$(CERN_ROOT)/bin/kuipc: $(CERN_ROOT)/.imake_boot_done
-	$(MAKE) -C$(CERN_ROOT)/build bin/kuipc
-
-$(CERN_ROOT)/scripts/Makefile: $(CERN_ROOT)/bin/kuipc
-	$(MAKE) -C$(CERN_ROOT)/build scripts/Makefile
-
-$(CERN_ROOT)/build/scripts/install.bin: $(CERN_ROOT)/scripts/Makefile
-	$(MAKE) -C$(CERN_ROOT)/build/scripts install.bin
-
-final_patches: $(CERN_ROOT)/.packlib_patch_done
-
-$(CERN_ROOT)/.packlib_patch_done:
-	gcc -c $(BUILD_SCRIPTS)/patches/cernlib/lshift.c
-	ar rv $(CERN_ROOT)/lib/libpacklib.a lshift.o
-	date > $@
+make_cernlib_dir: $(BUILD_DIR)/.make_done
+	test -L $(CERNLIB_DIR) || ln -s $(BUILD_DIR)/$(CERN_LEVEL) $(CERNLIB_DIR)
