@@ -12,7 +12,7 @@ all: make_cernlib_dir
 
 .check_for_old_style_build:
 	@if [[ -e $(CERNLIB_DIR) && ! -L $(CERNLIB_DIR) ]] ; \
-	then echo Makefile_cernlib: old-style CERNLIB build found, `pwd`/$(CERNLIB_DIR) is not a symbolic link, exiting ; \
+	then echo Error in Makefile_cernlib: old-style CERNLIB build found. `pwd`/$(CERNLIB_DIR) is not a symbolic link. To fix try $$\BUILD_SCRIPTS/fix_cernlib_build.sh. Exiting ; \
 	exit 1 ; \
 	fi
 
