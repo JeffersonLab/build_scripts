@@ -58,11 +58,7 @@ cernlib_dir:
 	test -d ${CERNLIB} || mkdir -pv ${CERNLIB}
 
 cernlib_make:
-ifneq ($(MACHINE_NAME),x86_64)
 	$(MAKE) -C${CERNLIB} -f${BUILD_SCRIPTS}/Makefile_cernlib
-else
-	$(MAKE) -C${CERNLIB} -f${BUILD_SCRIPTS}/Makefile_cernlib_Vogt
-endif
 
 cernlib_debug_build: cernlib_debug_dir cernlib_debug_make
 

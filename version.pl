@@ -78,10 +78,15 @@ foreach $href (@b) {
 	} else {
 	    print_command('CERN', "$gluex_top/cernlib");
 	}
-	print_command('CERN_LEVEL', $version);
 	$word_length = $d{word_length};
 	if ($word_length) {
 	    print_command('CERNLIB_WORD_LENGTH', $word_length);
+	}
+	if ($dirtag) {
+	    print_command('CERNLIB_DIRTAG', $dirtag);
+	    print_command('CERN_LEVEL', "$version^$dirtag");
+	} else {
+	    print_command('CERN_LEVEL', $version);
 	}
     } else {
 	$package_home_var = $home_variable{$name};

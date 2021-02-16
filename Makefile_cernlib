@@ -4,11 +4,7 @@ else
     MAKEFILE = Makefile_cernlib_32bit
 endif
 
-ifdef CERNLIB_DIRTAG
-    CERNLIB_DIR = $(CERN_LEVEL)^$(CERNLIB_DIRTAG)
-else
-    CERNLIB_DIR = $(CERN_LEVEL)
-endif
+CERNLIB_DIR = $(CERN_LEVEL)
 
 BUILD_DIR = $(CERNLIB_DIR)_build
 
@@ -22,4 +18,4 @@ $(BUILD_DIR)/.make_done: make_build_dir
 	date > $@
 
 make_cernlib_dir: $(BUILD_DIR)/.make_done
-	test -L $(CERNLIB_DIR) || ln -s $(BUILD_DIR)/$(CERN_LEVEL) $(CERNLIB_DIR)
+	test -L $(CERNLIB_DIR) || ln -s $(BUILD_DIR)/$(CERNLIB_VERSION) $(CERNLIB_DIR)
