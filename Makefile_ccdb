@@ -85,8 +85,8 @@ $(CCDB_DIR)/.make_install_done: $(CCDB_DIR)/.make_done
 	install $(CCDB_DIR)/cpp/build/src/CCDB/libCCDB_lib.a $(CCDB_DIR)/lib/libccdb.a
 	cd $(CCDB_DIR); mkdir -pv include/CCDB
 	install -v $(CCDB_DIR)/cpp/src/CCDB/*.h $(CCDB_DIR)/include/CCDB
-	cd $(CCDB_DIR); mkdir -pv include/Providers
-	install -v $(CCDB_DIR)/cpp/src/CCDB/Providers/*.h $(CCDB_DIR)/include/Providers
+	cd $(CCDB_DIR); mkdir -pv include/CCDB/Providers
+	install -v $(CCDB_DIR)/cpp/src/CCDB/Providers/*.h $(CCDB_DIR)/include/CCDB/Providers
 	cd $(CCDB_DIR); mkdir -pv include/CCDB/Model
 	install -v $(CCDB_DIR)/cpp/src/CCDB/Model/*.h $(CCDB_DIR)/include/CCDB/Model
 	cd $(CCDB_DIR); mkdir -pv include/CCDB/Helpers
