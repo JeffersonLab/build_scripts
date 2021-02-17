@@ -41,7 +41,7 @@ if (! -e $filename) {
     exit $ERROR_FILE_DOES_NOT_EXIST;
 }
 # slurp in the xml file
-$ref = XMLin($filename, KeyAttr=>[]);
+$ref = XMLin($filename, KeyAttr=>[], ForceArray=>1);
 # dump it to the screen for debugging only
 #print Dumper($ref);
 
