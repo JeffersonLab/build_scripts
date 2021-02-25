@@ -46,10 +46,6 @@ $(JANA_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
 	cd $(JANA_HOME); $(SCONS) $(JANA_SCONS_OPTIONS)
 	date > $@
 
-$(JANA_HOME)/.patches_done: $(SOURCE_CODE_TARGET)
-	cd $(JANA_HOME)/SBMS; patch sbms.py < $(BUILD_SCRIPTS)/patches/jana/sbms.py.patch
-	date > $@
-
 $(JANA_HOME)/.checkout_done:
 	rm -rf checkout_temp_dir
 	mkdir checkout_temp_dir
