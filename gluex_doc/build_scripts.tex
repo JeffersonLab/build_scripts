@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[12pt, letterpaper]{article}
 
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -698,6 +698,47 @@ my_halld_build_jlab -n 4 halld_sim
 
 \begin{verbatim}
 my_halld_build_jlab -k halld_recon
+\end{verbatim}
+
+\end{enumerate}
+
+\subsubsection{my\_halld\_update.py}
+
+Usage message:
+
+\begin{verbatim}
+usage: my_halld_update.py [-h] [-x XML] [-n NTHREADS]
+                          [inputPackages [inputPackages ...]]
+
+positional arguments:
+  inputPackages         list of packages to update
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -x XML, --xml XML     version set xml file name (default: version.xml)
+  -n NTHREADS, --nthreads NTHREADS
+                        number of threads to use in rebuild (default: 1)
+\end{verbatim}
+
+Examples:
+
+\begin{enumerate}
+\item Update all private packages as identified by version.xml in the current working directory. Private packages contain a "home" attribute:
+
+\begin{verbatim}
+my_halld_update.py
+\end{verbatim}
+
+\item Update halld\_sim only:
+
+\begin{verbatim}
+my_halld_update.py halld_sim
+\end{verbatim}
+
+\item Update all private packages as identified by {\tt /home/user/project/version\_special.xml}:
+
+\begin{verbatim}
+my_halld_update.py -x /home/user/project/version_special.xml
 \end{verbatim}
 
 \end{enumerate}
