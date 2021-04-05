@@ -1,13 +1,14 @@
-\documentclass[12pt]{article}
+\documentclass[12pt, letterpaper]{article}
 
+%\usepackage[margin=0.5in]{geometry}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{html}
 
 % global parameters
-\textwidth=6.5in
-\oddsidemargin=0in % use built-in offset of 1 inch for left margin
-\evensidemargin=0in % ditto for even pages
+\textwidth=7.375in
+\oddsidemargin=-.375in % use built-in offset of 1 inch for left margin
+\evensidemargin=-.375in % ditto for even pages
 \textheight=9in
 \topmargin=0in
 \headheight=0in % no headers in this document
@@ -21,9 +22,9 @@
 \newcommand{\gxenv}{{\tt gxenv}}
 
 \title{\bs{}: A Version Management System for GlueX \\ \medskip \large
-  GlueX-Doc-2793-v21}
+  GlueX-Doc-2793-v22}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{April 9, 2020}
+\date{April 4, 2021}
 
 \begin{document}
 
@@ -80,13 +81,16 @@ for tcsh.
 
 Outside JLab, when the gluex\_install procedure has been followed (see section \ref{gluex-install}), \bs{} will be installed under \$GLUEX\_TOP/build\_scripts. You will have to contact your local expert to find the location of \$GLUEX\_TOP. Once that is known the BUILD\_SCRIPTS environment variable to point to \$GLUEX\_TOP/build\_scripts.
 
-\subsubsection{Install via tar file}
+\subsubsection{Install via zip or tar file}
 
-The latest version of \bs{} is available from GitHub at
+All of the releases of \bs{} are available from GitHub at
 \bcenter
-\htmladdnormallink{\tt https://github.com/JeffersonLab/build\_scripts/archive/latest.tar.gz}{https://github.com/JeffersonLab/build\_scripts/archive/latest.tar.gz}
+\htmladdnormallink{\tt https://github.com/JeffersonLab/build\_scripts/releases}{https://github.com/JeffersonLab/build\_scripts/releases}
 \ecenter
-Set your BUILD\_SCRIPTS environment variable to the full path of the build\_scripts-latest directory that results from untar'ing the file.
+The latest release will be listed first. You will see links for downloading
+the files in zip and tar format. After unpacking the files, set your
+BUILD\_SCRIPTS environment variable to the full path of the resulting
+top-level directory.
 
 \subsubsection{Clone from GitHub}
 
@@ -630,6 +634,115 @@ note that doing the build in the sim-recon container directory is not
 necessary for the build to succeed; any directory will work. In this
 example however we are adding to an existing standard directory
 structure so we {\tt cd} to the standard directory.
+
+\subsection{Building Custom Versions of Packages}
+
+\subsubsection{my\_halld\_build\_jlab}
+
+Script location at JLab:
+
+{\tt /group/halld/Software/build\_scripts/my\_halld\_build\_jlab}
+
+Usage message:
+
+\begin{verbatim}
+my_halld_build_jlab [-h] [-x filename] [-n nthreads] [package_1] [package_2] ...
+
+where:
+    -h        show this help text
+    -x        set name of version set XML file
+              (default: /group/halld/www/halldweb/html/dist/version_jlab.xml)
+    -n        set number of threads to use in builds (default: 1)
+    -k        keep potentially inconsistent packages in environment
+              (default: remove them from the environment)
+    package_n package name, choose from:
+                  hdds
+                  sim-recon
+                  halld_recon
+                  halld_sim
+                  hdgeant4
+                  gluex_root_analysis
+              if no package name supplied all except sim-recon will be built
+\end{verbatim}
+
+Examples:
+
+\begin{enumerate}
+
+\item Build all GlueX packages (hdds, halld\_recon, halld\_sim, hdgeant4, and gluex\_root\_analysis):
+
+\begin{verbatim}
+my_halld_build_jlab
+\end{verbatim}
+  
+\item Build halld\_recon only, using hdds from the default global build:
+
+\begin{verbatim}
+my_halld_build_jlab halld_recon
+\end{verbatim}
+
+\item Build halld\_recon, halld\_sim, and hdgeant4, use hdds from the global build defined in version\_3.1\_jlab.xml:
+
+\begin{verbatim}
+DIST=group/halld/www/halldweb/html/dist
+my_halld_build_jlab -x $DIST/version_3.1_jlab.xml \
+  halld_recon halld_sim hdgeant4
+\end{verbatim}
+  
+\item Build halld\_sim, using halld\_recon from the default global build, using 4 threads:
+
+\begin{verbatim}
+my_halld_build_jlab -n 4 halld_sim
+\end{verbatim}
+
+\item Build halld\_recon, using hdds from the default global build, and retaining environment set-up of halld\_sim, hdgeant4, and gluex\_root\_analysis from the default global build even though the latter three were built against a different version of halld\_recon
+
+\begin{verbatim}
+my_halld_build_jlab -k halld_recon
+\end{verbatim}
+
+\end{enumerate}
+
+\subsubsection{my\_halld\_update.py}
+
+Usage message:
+
+\begin{verbatim}
+usage: my_halld_update.py [-h] [-x XML] [-n NTHREADS]
+                          [inputPackages [inputPackages ...]]
+
+positional arguments:
+  inputPackages         list of packages to update
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -x XML, --xml XML     version set xml file name (default: version.xml)
+  -n NTHREADS, --nthreads NTHREADS
+                        number of threads to use in rebuild (default: 1)
+\end{verbatim}
+
+Examples:
+
+\begin{enumerate}
+\item Update all private packages as identified by version.xml in the current working directory. Private packages contain a "home" attribute:
+
+\begin{verbatim}
+my_halld_update.py
+\end{verbatim}
+
+\item Update halld\_sim only:
+
+\begin{verbatim}
+my_halld_update.py halld_sim
+\end{verbatim}
+
+\item Update all private packages as identified by {\tt /home/user/project/version\_special.xml}:
+
+\begin{verbatim}
+my_halld_update.py -x /home/user/project/version_special.xml
+\end{verbatim}
+
+\end{enumerate}
 
 \section{The Versioning System}\label{section:versioning}
 
