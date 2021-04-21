@@ -36,7 +36,7 @@ eval $definitions;
 	    geant4 => [],
 	    ccdb => [],
 	    halld_recon => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb', 'rcdb', 'sqlitecpp'],
-	    halld_sim => ['diracxx', 'halld_recon'],
+	    halld_sim => ['halld_recon'],
 	    amptools => ['root'],
 	    photos => ['hepmc'],
 	    evtgen => ['photos', 'hepmc'],
@@ -55,7 +55,8 @@ if (defined $ENV{HALLD_HOME}) {
     $prereqs{hdgeant4} = ['geant4', 'sim-recon', 'jana', 'ccdb', 'root'];
     $prereqs{gluex_root_analysis} = ['sim-recon', 'root'];
 } else {
-    $prereqs{hdgeant4} = ['geant4', 'halld_recon', 'jana', 'ccdb', 'root'];
+    $prereqs{hdgeant4} = ['geant4', 'halld_recon', 'jana', 'ccdb', 'root',
+			  'diracxx'];
     $prereqs{gluex_root_analysis} = ['halld_recon', 'root'];
 }
 
