@@ -73,7 +73,8 @@ if ($uname eq 'Linux') {
 		    && $container_tag eq ""
 		    && ($nodename =~ /^farm/
 			|| $nodename =~ /^ifarm/
-			|| $nodename =~ /^qcd/)) {
+			|| $nodename =~ /^qcd/
+			|| $nodename =~ /^sciml/)) {
 		    @token = split(/\s+/, $release_string);
 		    @version = split(/\./, $token[3]);
 		    $version_minor = $version[1];
