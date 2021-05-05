@@ -205,4 +205,12 @@ if ($gluex_env_verbose) then
     echo CCDB_HOME = $CCDB_HOME
 endif
 # check consistency of environment
-$BUILD_SCRIPTS/version_check.pl
+set check_versions="true"
+if($?BUILD_SCRIPTS_CONSISTENCY_CHECK) then
+    if ($BUILD_SCRIPTS_CONSISTENCY_CHECK == "false") then
+	set check_versions="false" 
+    endif
+endif
+if ($check_versions == "true") then
+    $BUILD_SCRIPTS/version_check.pl
+endif
