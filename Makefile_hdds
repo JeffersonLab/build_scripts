@@ -9,8 +9,9 @@
 # directory of the repository. If left undefined, the latest version
 # will be checked out from the repos/trunk.
 
+SHELL = /bin/bash
+
 include $(BUILD_SCRIPTS)/gcc_version.mk
-include $(BUILD_SCRIPTS)/python_version.mk
 
 PWD = $(shell pwd)
 
@@ -36,6 +37,8 @@ else
   HDDS_BRANCH = master
  endif
 endif
+SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
+PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
 
 HDDS_HOME = $(PWD)/$(HDDS_DIR)
 
@@ -65,14 +68,8 @@ $(HDDS_HOME)/.untar_done: $(TARFILE)
 	rmdir -v untar_temp_dir
 	date > $@
 
-$(HDDS_HOME)/.python_adjustment: $(SOURCE_CODE_TARGET)
-ifeq ($(PYTHON_GE_3), true)
-	cd $(HDDS_HOME) ; $(RM) SConstruct ; ln -s SConstruct3 SConstruct
-endif
-	date > $@
-
-$(HDDS_HOME)/.sconstruct_done: $(HDDS_HOME)/.python_adjustment
-	cd $(HDDS_HOME) ; scons install $(HDDS_SCONS_OPTIONS)
+$(HDDS_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
+	cd $(HDDS_HOME) ; $(SCONS) install $(HDDS_SCONS_OPTIONS)
 	date > $@
 
 ifndef GVMS_TEST

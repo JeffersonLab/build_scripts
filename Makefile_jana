@@ -1,5 +1,4 @@
-include $(BUILD_SCRIPTS)/python_version.mk
-
+SHELL = /bin/bash
 PWD = $(shell pwd)
 
 ifdef JANA_VERSION
@@ -10,6 +9,9 @@ ifdef JANA_VERSION
   JANA_DIR = jana_$(JANA_VERSION)
  endif
  TARFILE = jana_$(JANA_VERSION).tgz
+ VERSION_MAJOR = $(shell echo $(JANA_VERSION) | awk -F. '{print $$1}')
+ VERSION_MINOR = $(shell echo $(JANA_VERSION) | awk -F. '{print $$2}')
+ VERSION_GE_08 = $(shell if [[ $(VERSION_MAJOR) -eq 0 && $(VERSION_MINOR) -ge 8 ]]; then echo true; else echo false; fi)
 else
  SOURCE_CODE_TARGET = $(JANA_HOME)/.checkout_done
  ifndef JANA_URL
@@ -21,6 +23,16 @@ else
   JANA_DIR = $(notdir $(JANA_URL))
  endif
 endif
+SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
+PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
+ifeq ($(VERSION_GE_08), true)
+ SBMS_CONFIG_PATCH = sbms_config.py.082.patch
+else
+ SBMS_CONFIG_PATCH = sbms_config.py.patch
+endif
+ifeq ($(HALLD_RECON_PROFILING), true)
+ override JANA_SCONS_OPTIONS += PROFILE=1
+endif
 
 export JANA_HOME = $(PWD)/$(JANA_DIR)
 
@@ -30,7 +42,8 @@ $(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: $(JANA_HOME)/.sconstruct_do
 	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(BUILD_SCRIPTS)/version_prereqs.pl jana
 
 $(JANA_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
-	cd $(JANA_HOME); scons
+	@echo Makefile_jana info: SCONS = $(SCONS)
+	cd $(JANA_HOME); $(SCONS) $(JANA_SCONS_OPTIONS)
 	date > $@
 
 $(JANA_HOME)/.checkout_done:
@@ -42,13 +55,12 @@ $(JANA_HOME)/.checkout_done:
 	date > $@
 
 $(JANA_HOME)/.patches_done: $(JANA_HOME)/.untar_done
-	@echo info: PYTHON_GE_3 = $(PYTHON_GE_3)
-ifeq ($(PYTHON_GE_3), true)
+ifeq ($(PYVERSION), 3)
 	@echo info: applying patches
 	patch $(JANA_HOME)/SBMS/sbms.py \
 	    < $(BUILD_SCRIPTS)/patches/jana/sbms.py.patch
 	patch $(JANA_HOME)/SBMS/sbms_config.py \
-	    < $(BUILD_SCRIPTS)/patches/jana/sbms_config.py.patch
+	    < $(BUILD_SCRIPTS)/patches/jana/$(SBMS_CONFIG_PATCH)
 	patch $(JANA_HOME)/SConstruct \
 	    < $(BUILD_SCRIPTS)/patches/jana/SConstruct.patch
 else
@@ -71,3 +83,7 @@ $(TARFILE):
 show_env:
 	@echo PYTHON_MAJOR_VERSION = $(PYTHON_MAJOR_VERSION)
 	@echo PYTHON_GE_3 = $(PYTHON_GE_3)
+	@echo VERSION_MAJOR = $(VERSION_MAJOR)
+	@echo VERSION_MINOR = $(VERSION_MINOR)
+	@echo VERSION_GE_08 = $(VERSION_GE_08)
+	@echo SBMS_CONFIG_PATCH = $(SBMS_CONFIG_PATCH)

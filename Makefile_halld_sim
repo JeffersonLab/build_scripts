@@ -1,16 +1,5 @@
 # Makefile_halld_sim
 
-# Builds halld_sim under a new directory (HALLD_SIM_DIR) rooted in the current
-# working directory. The new directory has a name that depends on the
-# version being built.
-
-# HALLD_SIM_VERSION defines which tagged version to build. It should
-# correspond to the name of the desired directory in the repos/tags
-# directory of the repository. If left undefined, the latest version
-# will be checked out from the repos/trunk.
-
-include $(BUILD_SCRIPTS)/python_version.mk
-
 PWD = $(shell pwd)
 ifdef HALLD_SIM_VERSION
  SOURCE_CODE_TARGET = $(HALLD_SIM_HOME)/.untar_done
@@ -37,7 +26,13 @@ else ifeq ($(HALLD_SIM_DEBUG_LEVEL), 2)
  override HALLD_SIM_SCONS_OPTIONS += DEBUG=1 OPTIMIZATION=0
 endif
 export HALLD_SIM_HOME = $(PWD)/$(HALLD_SIM_DIR)
-
+SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
+PYTHONCONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
+PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
+ifeq ($(HALLD_SIM_PROFILING), true)
+ override HALLD_SIM_SCONS_OPTIONS += PROFILE=1
+endif
+ 
 all: $(HALLD_SIM_HOME)/halld_sim_prereqs_version.xml
 
 $(TARFILE):
@@ -65,15 +60,8 @@ ifdef APPLY_GETARG_PATCH
 endif
 	date > $@
 
-$(HALLD_SIM_HOME)/.python_adjustment: $(HALLD_SIM_HOME)/.patches_done
-ifeq ($(PYTHON_GE_3), true)
-	cd $(HALLD_SIM_HOME)/src/SBMS ; $(RM) sbms.py ; ln -s sbms3.py sbms.py
-	cd $(HALLD_SIM_HOME)/src ; $(RM) SConstruct ; ln -s SConstruct3 SConstruct
-endif
-	date > $@
-
-$(HALLD_SIM_HOME)/.sconstruct_done: $(HALLD_SIM_HOME)/.python_adjustment
-	cd $(HALLD_SIM_HOME)/src ; scons install $(HALLD_SIM_SCONS_OPTIONS)
+$(HALLD_SIM_HOME)/.sconstruct_done: $(HALLD_SIM_HOME)/.patches_done
+	cd $(HALLD_SIM_HOME)/src ; $(SCONS) install PYTHONCONFIG=$(PYTHONCONFIG) $(HALLD_SIM_SCONS_OPTIONS)
 	date > $@
 
 ifndef GVMS_TEST
