@@ -1,5 +1,5 @@
---- SConstruct.old	2019-12-21 15:50:16.496571600 -0500
-+++ SConstruct.new	2019-12-21 15:55:01.951769100 -0500
+--- SConstruct.original	2021-05-20 17:14:48.840939192 -0400
++++ SConstruct.patched	2021-05-20 17:05:50.380715923 -0400
 @@ -22,7 +22,7 @@
  import coda
  
@@ -51,7 +51,15 @@
  Help('--32bits            compile 32bit libs & executables on 64bit system\n')
  
  # install directory option
-@@ -153,7 +153,7 @@
+@@ -133,6 +133,7 @@
+ 
+ else:
+     env.Append(CCFLAGS = '-O3')
++    env.Append(CCFLAGS = '-std=c++98')
+ 
+ 
+ # Take care of 64/32 bit issues
+@@ -153,7 +154,7 @@
      osname = 'vxworks'+ str(vxVersion) + '-ppc'
  
      if not coda.configureVxworks(env, vxVersion, platform):
@@ -60,7 +68,7 @@
          Exit(0)
  
  else:
-@@ -175,7 +175,7 @@
+@@ -175,7 +176,7 @@
  if is64bits and use32bits and not useVxworks:
      osname = osname + '-32'
  
@@ -69,7 +77,7 @@
  
  # hidden sub directory into which variant builds go
  archDir = '.' + osname + debugSuffix
-@@ -212,15 +212,15 @@
+@@ -212,15 +213,15 @@
      # Create the include directories (make symbolic link if possible)
      coda.makeIncludeDirs(incInstallDir, archIncInstallDir, osDir, archIncLocalLink)
  
@@ -91,7 +99,7 @@
  
  # use "install" on command line to install libs & headers
  Help('install             install libs, headers, and binaries\n')
-@@ -253,7 +253,7 @@
+@@ -253,7 +254,7 @@
  
  if 'tar' in COMMAND_LINE_TARGETS:
      if platform == 'SunOS':
