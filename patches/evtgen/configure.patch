@@ -1,5 +1,5 @@
---- configure_original	2020-06-29 14:40:37.981544200 -0400
-+++ configure_patched	2020-06-29 15:05:58.459645900 -0400
+--- configure.original	2021-05-21 10:40:49.506470086 -0400
++++ configure.patched	2021-05-21 10:43:41.008002890 -0400
 @@ -180,7 +180,7 @@
  # Find platform.
  #
@@ -9,7 +9,7 @@
  if [ ${theGcc} = 4 ]; then
    ARCH=${ARCH}-gcc4
  fi
-@@ -190,6 +190,18 @@
+@@ -190,6 +190,24 @@
  if [ ${theGcc} = 6 ]; then
    ARCH=${ARCH}-gcc6
  fi
@@ -25,10 +25,16 @@
 +if [ ${theGcc} = 10 ]; then
 +  ARCH=${ARCH}-gcc10
 +fi
++if [ ${theGcc} = 11 ]; then
++  ARCH=${ARCH}-gcc10
++fi
++if [ ${theGcc} = 12 ]; then
++  ARCH=${ARCH}-gcc10
++fi
  echo "Platform is $ARCH"
  
  #default platform settings:
-@@ -263,6 +275,70 @@
+@@ -263,6 +281,118 @@
    FFLAGS="${FFLAGS_OPT}"
    CFLAGS="${CFLAGS_OPT}"
    CXXFLAGS="${CXXFLAGS_OPT}"
@@ -93,6 +99,54 @@
 +  fi
 +fi
 +if [ $ARCH = Linux-gcc10 ]; then
++  FFLAGS="${FFLAGS_OPT}"
++  CFLAGS="${CFLAGS_OPT}"
++  CXXFLAGS="${CXXFLAGS_OPT}"
++  FLIBS="-lgfortran"
++  if [ ${COMPMODE} = OPT ]; then
++    FFLAGS="${FFLAGS_OPT}"
++    CFLAGS="${CFLAGS_OPT}"
++    CXXFLAGS="${CXXFLAGS_OPT}"
++  fi
++  if [ ${COMPMODE} = DBG ]; then
++    FFLAGS="${FFLAGS_DBG}"
++    CFLAGS="${CFLAGS_DBG}"
++    CXXFLAGS="${CXXFLAGS_DBG}"
++  fi
++fi
++if [ $ARCH = Linux-gcc10 ]; then
++  FFLAGS="${FFLAGS_OPT}"
++  CFLAGS="${CFLAGS_OPT}"
++  CXXFLAGS="${CXXFLAGS_OPT}"
++  FLIBS="-lgfortran"
++  if [ ${COMPMODE} = OPT ]; then
++    FFLAGS="${FFLAGS_OPT}"
++    CFLAGS="${CFLAGS_OPT}"
++    CXXFLAGS="${CXXFLAGS_OPT}"
++  fi
++  if [ ${COMPMODE} = DBG ]; then
++    FFLAGS="${FFLAGS_DBG}"
++    CFLAGS="${CFLAGS_DBG}"
++    CXXFLAGS="${CXXFLAGS_DBG}"
++  fi
++fi
++if [ $ARCH = Linux-gcc11 ]; then
++  FFLAGS="${FFLAGS_OPT}"
++  CFLAGS="${CFLAGS_OPT}"
++  CXXFLAGS="${CXXFLAGS_OPT}"
++  FLIBS="-lgfortran"
++  if [ ${COMPMODE} = OPT ]; then
++    FFLAGS="${FFLAGS_OPT}"
++    CFLAGS="${CFLAGS_OPT}"
++    CXXFLAGS="${CXXFLAGS_OPT}"
++  fi
++  if [ ${COMPMODE} = DBG ]; then
++    FFLAGS="${FFLAGS_DBG}"
++    CFLAGS="${CFLAGS_DBG}"
++    CXXFLAGS="${CXXFLAGS_DBG}"
++  fi
++fi
++if [ $ARCH = Linux-gcc12 ]; then
 +  FFLAGS="${FFLAGS_OPT}"
 +  CFLAGS="${CFLAGS_OPT}"
 +  CXXFLAGS="${CXXFLAGS_OPT}"
