@@ -55,11 +55,11 @@ endif
 	date > $@
 
 $(GLUEX_ROOT_ANALYSIS_HOME)/.untar_done: $(TARFILE)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(GLUEX_ROOT_ANALYSIS_DIR)
-	rmdir -v untar_temp_dir
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(GLUEX_ROOT_ANALYSIS_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(GLUEX_ROOT_ANALYSIS_HOME)/.make_script_done: $(SOURCE_CODE_TARGET)

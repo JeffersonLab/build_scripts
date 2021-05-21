@@ -17,12 +17,12 @@ $(TARFILE):
 	     https://evtgen.hepforge.org/downloads?f=$(TARFILE)
 
 $(EVTGEN_HOME)/.untar_done: $(TARFILE)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/EvtGen/R$(subst .,-,$(EVTGEN_VERSION)) \
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/EvtGen/R$(subst .,-,$(EVTGEN_VERSION)) \
 	   $(EVTGEN_DIR)
-	rm -rv untar_temp_dir
+	rm -rv $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(EVTGEN_HOME)/.patch_done: $(SOURCE_CODE_TARGET)

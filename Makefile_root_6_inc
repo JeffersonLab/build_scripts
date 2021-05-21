@@ -24,11 +24,11 @@ $(TARFILE):
 
 $(ROOTDIR)/.untar_done: $(TARFILE)
 	$(RM) -r $(ROOTDIR)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(ROOTDIR)
-	rmdir -v untar_temp_dir
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(ROOTDIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(ROOTDIR)/.cmake_done: $(ROOTDIR)/.untar_done

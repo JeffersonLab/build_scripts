@@ -46,11 +46,11 @@ $(TARFILE):
 	wget --no-verbose --no-check-certificate -O $@ https://github.com/JeffersonLab/sim-recon/archive/$(SIM_RECON_VERSION).tar.gz
 
 $(HALLD_HOME)/.untar_done: $(TARFILE)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(SIM_RECON_DIR)
-	rmdir -v untar_temp_dir
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(SIM_RECON_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(HALLD_HOME)/.clone_done:

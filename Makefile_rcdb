@@ -35,11 +35,11 @@ $(TARFILE):
 	wget --no-verbose --no-check-certificate -O $@ https://github.com/jeffersonlab/rcdb/archive/$(TARFILE)
 
 $(RCDB_DIR)/.untar_done: $(TARFILE)
-	rm -rfv untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(RCDB_DIR)
-	rmdir -v untar_temp_dir
+	rm -rfv $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(RCDB_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(RCDB_DIR)/.clone_done:
