@@ -24,6 +24,7 @@ else
   DIRACXX_BRANCH = master
  endif
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 DIRACXX_HOME = $(PWD)/$(DIRACXX_DIR)
 PYTHON_CONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)

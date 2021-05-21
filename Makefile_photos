@@ -7,6 +7,7 @@ else
  PHOTOS_DIR = Photos-$(PHOTOS_VERSION)
 endif
 TARFILE = PHOTOS.$(PHOTOS_VERSION).tar.gz
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 PHOTOS_HOME = $(PWD)/$(PHOTOS_DIR)
 

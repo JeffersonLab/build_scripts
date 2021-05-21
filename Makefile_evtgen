@@ -9,6 +9,7 @@ endif
 TARFILE = EvtGen-$(EVTGEN_VERSION).tar.gz
 
 EVTGEN_HOME = $(PWD)/$(EVTGEN_DIR)
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 all: $(EVTGEN_HOME)/evtgen_prereqs.xml
 

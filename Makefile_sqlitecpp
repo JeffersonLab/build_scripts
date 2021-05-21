@@ -29,6 +29,7 @@ else
   SQLITECPP_BRANCH = master
  endif
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 SQLITECPP_HOME = $(PWD)/$(SQLITECPP_DIR)
 

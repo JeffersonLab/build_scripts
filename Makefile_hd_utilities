@@ -24,6 +24,7 @@ else
   HD_UTILITIES_BRANCH = master
  endif
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 HD_UTILITIES_HOME = $(PWD)/$(HD_UTILITIES_DIR)
 

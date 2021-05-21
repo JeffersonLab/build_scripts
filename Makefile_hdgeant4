@@ -24,6 +24,7 @@ else
   HDGEANT4_BRANCH = master
  endif
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 HDGEANT4_HOME = $(PWD)/$(HDGEANT4_DIR)
 PYTHON_CONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)

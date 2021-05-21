@@ -21,6 +21,7 @@ else
     CCDB_BRANCH = master
   endif
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 all: force_rebuild_action $(CCDB_DIR)/.scons_done
 

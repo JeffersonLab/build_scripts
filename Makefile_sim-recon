@@ -32,6 +32,8 @@ else
   SIM_RECON_BRANCH = master
  endif
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
+
 export HALLD_HOME = $(PWD)/$(SIM_RECON_DIR)
 
 all: force_rebuild_action $(HALLD_HOME)/sim-recon_prereqs_version.xml

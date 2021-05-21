@@ -18,6 +18,7 @@ else
  HEPMC_DIR = HepMC-$(HEPMC_VERSION)
 endif
 TARFILE = hepmc$(HEPMC_VERSION).tgz
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 HEPMC_HOME = $(PWD)/$(HEPMC_DIR)
 BUILD_DIR = $(PWD)/build_$(HEPMC_DIR)

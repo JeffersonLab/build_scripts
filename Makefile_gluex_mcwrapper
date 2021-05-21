@@ -26,6 +26,7 @@ else
 endif
 
 GLUEX_MCWRAPPER_HOME = $(PWD)/$(GLUEX_MCWRAPPER_DIR)
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 all: $(GLUEX_MCWRAPPER_HOME)/gluex_mcwrapper_prereqs_version.xml
 

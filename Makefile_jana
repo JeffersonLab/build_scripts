@@ -33,6 +33,7 @@ endif
 ifeq ($(HALLD_RECON_PROFILING), true)
  override JANA_SCONS_OPTIONS += PROFILE=1
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 export JANA_HOME = $(PWD)/$(JANA_DIR)
 

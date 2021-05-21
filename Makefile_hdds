@@ -41,6 +41,7 @@ SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
 PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
 
 HDDS_HOME = $(PWD)/$(HDDS_DIR)
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 all: force_rebuild_action $(HDDS_HOME)/hdds_prereqs_version.xml
 

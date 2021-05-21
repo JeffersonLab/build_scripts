@@ -21,6 +21,7 @@ else
     RCDB_BRANCH = master
   endif
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
 
 all: force_rebuild_action $(RCDB_DIR)/rcdb_prereqs_version.xml

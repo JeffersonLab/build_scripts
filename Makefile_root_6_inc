@@ -16,6 +16,7 @@ ifeq (,$(find_cmake3))
 else
     CMAKE = cmake3
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 all: $(ROOTDIR)/.install_done
 

@@ -32,6 +32,7 @@ PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
 ifeq ($(HALLD_RECON_PROFILING), true)
  override HALLD_RECON_SCONS_OPTIONS += PROFILE=1
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 all: force_rebuild_action $(HALLD_RECON_HOME)/halld_recon_prereqs_version.xml
 

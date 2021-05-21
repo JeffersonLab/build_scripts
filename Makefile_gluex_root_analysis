@@ -35,6 +35,7 @@ else
 endif
 
 GLUEX_ROOT_ANALYSIS_HOME = $(PWD)/$(GLUEX_ROOT_ANALYSIS_DIR)
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 all: force_rebuild_action $(GLUEX_ROOT_ANALYSIS_HOME)/gluex_root_analysis_prereqs_version.xml
 
