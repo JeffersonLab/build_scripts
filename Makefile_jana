@@ -33,6 +33,7 @@ endif
 ifeq ($(HALLD_RECON_PROFILING), true)
  override JANA_SCONS_OPTIONS += PROFILE=1
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 export JANA_HOME = $(PWD)/$(JANA_DIR)
 
@@ -69,11 +70,11 @@ endif
 	date > $@
 
 $(JANA_HOME)/.untar_done: $(TARFILE)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(JANA_DIR)
-	rmdir -v untar_temp_dir
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(JANA_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(TARFILE):

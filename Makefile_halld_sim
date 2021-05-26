@@ -32,6 +32,7 @@ PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
 ifeq ($(HALLD_SIM_PROFILING), true)
  override HALLD_SIM_SCONS_OPTIONS += PROFILE=1
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
  
 all: $(HALLD_SIM_HOME)/halld_sim_prereqs_version.xml
 
@@ -39,11 +40,11 @@ $(TARFILE):
 	wget --no-verbose --no-check-certificate -O $@ https://github.com/JeffersonLab/halld_sim/archive/$(HALLD_SIM_VERSION).tar.gz
 
 $(HALLD_SIM_HOME)/.untar_done: $(TARFILE)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(HALLD_SIM_DIR)
-	rmdir -v untar_temp_dir
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(HALLD_SIM_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(HALLD_SIM_HOME)/.clone_done:
