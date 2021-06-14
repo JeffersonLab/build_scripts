@@ -30,8 +30,10 @@ if [ -z "$GLUEX_TOP" ]; then export GLUEX_TOP=$(readlink -m $SCRIPT_PATH/..); fi
 if [ -z "$BUILD_SCRIPTS" ]
     then export BUILD_SCRIPTS=$GLUEX_TOP/build_scripts
 fi
+if [ -z "$BMS_OSNAME" ]
+then export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
+fi
 if [ -z "$LD_LIBRARY_PATH" ]; then export LD_LIBRARY_PATH=''; fi
-export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
 # xerces-c++
 if [ -z "$XERCESCROOT" ]; then export XERCESCROOT=$GLUEX_TOP/xerces-c/prod; fi
 export XERCES_INCLUDE=$XERCESCROOT/include
