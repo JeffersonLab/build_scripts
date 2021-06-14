@@ -7,9 +7,9 @@ endif
 # general stuff
 if (! $?GLUEX_TOP) setenv GLUEX_TOP $HOME/gluex_top
 if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS $GLUEX_TOP/build_scripts
+if (! $?BMS_OSNAME) setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
 if (! $?PYTHONPATH) setenv PYTHONPATH ''
-setenv BMS_OSNAME `$BUILD_SCRIPTS/osrelease.pl`
 set machine_type=`uname -m`
 # xerces-c++
 if (! $?XERCESCROOT) setenv XERCESCROOT $GLUEX_TOP/xerces-c/prod
