@@ -33,10 +33,12 @@ $(ROOTDIR)/.untar_done: $(TARFILE)
 	date > $@
 
 $(ROOTDIR)/.patch_done: $(ROOTDIR)/.untar_done
-ifeq(ROOT_LE_6_08, true)
+	@echo Makefile_root_6_inc: applying patches, if any
+ifeq ($(ROOT_LE_6_08), true)
 	cd $(ROOTDIR)/cmake/modules; \
-	patch SearchInstalledSoftware < $(BUILD_SCRIPTS)/patches/root/SearchInstalledSoftware.cmake.patch
+	patch SearchInstalledSoftware.cmake < $(BUILD_SCRIPTS)/patches/root/SearchInstalledSoftware.cmake.patch
 endif
+	date > $@
 
 $(ROOTDIR)/.cmake_done: $(ROOTDIR)/.patch_done
 	mkdir -p $(BUILD_DIR)
