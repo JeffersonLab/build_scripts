@@ -2,14 +2,22 @@ ifndef ROOT_VERSION
     ROOT_VERSION=5.34.26
 endif
 
+include $(BUILD_SCRIPTS)/root_version.mk
+
 TARFILE=root_v$(ROOT_VERSION).source.tar.gz
 PWD := $(shell pwd)
 ROOTSYS=$(PWD)/$(ROOTDIR)
-
-ROOT_MAJOR_VERSION := $(shell $(BUILD_SCRIPTS)/extract_version_numbers.pl major $(ROOT_VERSION))
 
 ifeq ($(ROOT_MAJOR_VERSION), 6)
 include $(BUILD_SCRIPTS)/Makefile_root_6_inc
 else
 include $(BUILD_SCRIPTS)/Makefile_root_5_inc
 endif
+
+test:
+	@echo which_cmake3 = $(which_cmake3)
+	@echo find_cmake3 = $(find_cmake3)
+	@echo CMAKE = $(CMAKE)
+	@echo ROOT_MAJOR_VERSION = $(ROOT_MAJOR_VERSION)
+	@echo ROOT_MINOR_VERSION = $(ROOT_MINOR_VERSION)
+	@echo ROOT_LE_6_08 = $(ROOT_LE_6_08)

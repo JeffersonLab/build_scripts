@@ -32,7 +32,15 @@ $(ROOTDIR)/.untar_done: $(TARFILE)
 	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
-$(ROOTDIR)/.cmake_done: $(ROOTDIR)/.untar_done
+$(ROOTDIR)/.patch_done: $(ROOTDIR)/.untar_done
+	@echo Makefile_root_6_inc: applying patches, if any
+ifeq ($(ROOT_LE_6_08), true)
+	cd $(ROOTDIR)/cmake/modules; \
+	patch SearchInstalledSoftware.cmake < $(BUILD_SCRIPTS)/patches/root/SearchInstalledSoftware.cmake.patch
+endif
+	date > $@
+
+$(ROOTDIR)/.cmake_done: $(ROOTDIR)/.patch_done
 	mkdir -p $(BUILD_DIR)
 	cd $(BUILD_DIR) ; $(CMAKE) .. -DCMAKE_INSTALL_PREFIX=.. $(CMAKE_VERBOSE_OPTION) -Dgdml=ON -Droofit=ON -Dmysql=OFF -Ddavix=OFF -Dbuiltin_tbb=ON
 	date > $@
@@ -44,8 +52,3 @@ $(ROOTDIR)/.build_done: $(ROOTDIR)/.cmake_done
 $(ROOTDIR)/.install_done: $(ROOTDIR)/.build_done
 	cd $(BUILD_DIR) ; $(CMAKE) --build . --target install
 	date > $@
-
-test:
-	@echo which_cmake3 = $(which_cmake3)
-	@echo find_cmake3 = $(find_cmake3)
-	@echo CMAKE = $(CMAKE)
