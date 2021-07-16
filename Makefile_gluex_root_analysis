@@ -63,9 +63,9 @@ $(GLUEX_ROOT_ANALYSIS_HOME)/.untar_done: $(TARFILE)
 	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
-$(GLUEX_ROOT_ANALYSIS_HOME)/.make_script_done: $(SOURCE_CODE_TARGET)
-	cd $(GLUEX_ROOT_ANALYSIS_HOME) ; ./make_all.sh
+$(GLUEX_ROOT_ANALYSIS_HOME)/.make_done: $(SOURCE_CODE_TARGET)
+	make -C $(GLUEX_ROOT_ANALYSIS_HOME)
 	date > $@
 
-$(GLUEX_ROOT_ANALYSIS_HOME)/gluex_root_analysis_prereqs_version.xml: $(GLUEX_ROOT_ANALYSIS_HOME)/.make_script_done
+$(GLUEX_ROOT_ANALYSIS_HOME)/gluex_root_analysis_prereqs_version.xml: $(GLUEX_ROOT_ANALYSIS_HOME)/.make_done
 	cd $(GLUEX_ROOT_ANALYSIS_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl gluex_root_analysis
