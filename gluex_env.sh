@@ -80,6 +80,7 @@ if [ -e "$G4ROOT" ]
     then
     g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.sh`
     if [ -f "$g4setup" ]; then source $g4setup; fi
+    eval `$BUILD_SCRIPTS/delpath.pl -b -l /usr/lib64`
     unset g4setup
 fi
 # amptools
