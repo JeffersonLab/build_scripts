@@ -49,7 +49,7 @@ if ( -e $G4ROOT) then
     if ( -f $g4setup) then
 	set g4dir=`dirname $g4setup`
 	source $g4setup $g4dir
-	eval `delpath.pl -l /usr/lib64`
+	eval `$BUILD_SCRIPTS/delpath.pl -l /usr/lib64`
 	unset g4setup g4dir
     endif
     unset g4setup
