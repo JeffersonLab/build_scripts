@@ -30,12 +30,6 @@ if (defined $ENV{'BMS_OSNAME_OVERRIDE'}) {
     exit;
 }
 
-# container tag
-$container_tag = "";
-if (-d "/.singularity.d" || -f "/.dockerenv") {
-    $container_tag = "-cntr";
-}
-
 # This first section sets the uname and release variables
 # which hold the "OS" and "_flavor##" parts of the string.
 $uname = `uname`;
@@ -77,27 +71,7 @@ if ($uname eq 'Linux') {
 	} elsif ($release_string =~ /^CentOS release 6.*/) {
 	    $release = '_CentOS6';
 	} elsif ($release_string =~ /^CentOS Linux release 7\.*/) {
-	    if ($release_string !~ /^CentOS Linux release 7\.2/) {
-		$nodename = `uname -n`;
-		if ($nodename =~ /.jlab.org$/
-		    && $container_tag eq ""
-		    && ($nodename =~ /^farm/
-			|| $nodename =~ /^ifarm/
-			|| $nodename =~ /^qcd/
-			|| $nodename =~ /^sciml/)) {
-		    @token = split(/\s+/, $release_string);
-		    @version = split(/\./, $token[3]);
-		    $version_minor = $version[1];
-		    if ($version_minor == 9) {
-			$version_minor = 7;
-		    }
-		    $release = "_CentOS7.$version_minor";
-		} else {
-		    $release = '_CentOS7';
-		}
-	    } else {
-		    $release = '_CentOS7';
-	    }
+	    $release = '_CentOS7';
 	} elsif ($release_string =~ /^CentOS Linux release 8\.*/) {
 	    $release = '_CentOS8';
 	} elsif ($release_string =~ /^CentOS Stream release 8\.*/) {
@@ -172,12 +146,15 @@ $compiler_version_str = `cc -v 2>&1`;
 if ($compiler_version_str =~ /\sgcc version\s/) {
 
 	$compiler_type = "gcc";
-	$ccversion = `gcc -dumpversion`;
-	if (! ($ccversion =~ /\./)) { # if there are no periods in the gcc
+	$gccdump = `gcc -dumpversion`;
+	if (! ($gccdump =~ /\./)) { # if there are no periods in the gcc
 	                              # version number
-	    $ccversion = `gcc -dumpfullversion`
+	    $gccdump = `gcc -dumpfullversion`
 	}
-	chomp $ccversion;
+	chomp $gccdump;
+	@versions = split(/\./, $gccdump);
+	$ccversion = $versions[0] . "." . $versions[1];
+	
 
 } elsif ($compiler_version_str =~ /clang version\s+/) {
 	
@@ -239,5 +216,5 @@ if ($processor eq 'unknown') {
 }
 
 # Finally, form and print the complete string to stdout
-print "${uname}${release}-${processor}-${compiler_version}${container_tag}\n";
+print "${uname}${release}-${processor}-${compiler_version}\n";
 exit;
