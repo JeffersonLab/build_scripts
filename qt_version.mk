@@ -1,1 +1,1 @@
-QT_VERSION := $(shell if [ -f  "/usr/lib64/libQt5Core.so" ]; then echo 5; else echo 4; fi)
+QT_VERSION := $(shell if [ -f  "/usr/lib64/libQtCore.so" ]; then echo 4; else echo 5; fi)
