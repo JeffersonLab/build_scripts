@@ -31,6 +31,9 @@ PYTHON_CONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
 PYTHON_BOOST = $(shell $(BUILD_SCRIPTS)/python_chooser.sh boost)
 PYTHON_LIB_OPTION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh lib)
 
+#BUILD_TARGET = $(DIRACXX_HOME)/.make_done
+BUILD_TARGET = $(DIRACXX_HOME)/.cmake_install_done
+
 all: force_rebuild_action $(DIRACXX_HOME)/diracxx_prereqs_version.xml
 
 force_rebuild_action:
@@ -62,5 +65,22 @@ $(DIRACXX_HOME)/.make_done: $(SOURCE_CODE_TARGET)
 	make PYTHON_CONFIG=$(PYTHON_CONFIG) BOOST_PYTHON_LIB=$(PYTHON_BOOST) PYTHON_LIB_OPTION=$(PYTHON_LIB_OPTION) $(DIRACXX_MAKE_OPTIONS)
 	date > $@
 
-$(DIRACXX_HOME)/diracxx_prereqs_version.xml: $(DIRACXX_HOME)/.make_done
+$(DIRACXX_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
+	cd $(DIRACXX_HOME); \
+	mkdir -p build; \
+	cd build; \
+	cmake3 -DCMAKE_INSTALL_PREFIX=$(DIRACXX_HOME) ..
+	date > $@
+
+$(DIRACXX_HOME)/.cmake_build_done: $(DIRACXX_HOME)/.cmake_done
+	cd $(DIRACXX_HOME)/build; \
+	cmake3 --build .
+	date > $@
+
+$(DIRACXX_HOME)/.cmake_install_done: $(DIRACXX_HOME)/.cmake_build_done
+	cd $(DIRACXX_HOME)/build; \
+	cmake3 --install .
+	date > $@
+
+$(DIRACXX_HOME)/diracxx_prereqs_version.xml: $(BUILD_TARGET)
 	cd $(DIRACXX_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl diracxx
