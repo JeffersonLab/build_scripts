@@ -41,6 +41,11 @@ if [ -n "$BUILD_SCRIPTS" ]; then
     if [ -n "$HEPMCDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $HEPMCDIR/lib`; fi
     if [ -n "$PHOTOSDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $PHOTOSDIR/lib`; fi
     if [ -n "$EVTGENDIR" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -l $EVTGENDIR/lib`; fi
+    if [ -n "$DIRACXX_HOME" ]
+    then
+	eval `$BUILD_SCRIPTS/delpath.pl -b -l $DIRACXX_HOME/lib`
+	eval `$BUILD_SCRIPTS/delpath.pl -b -l $DIRACXX_HOME`
+    fi
     eval `$BUILD_SCRIPTS/delpath.pl -b -l`
     # clean PYTHONPATH
     if [ -n "$CCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`; fi
@@ -126,6 +131,7 @@ unset LAPACK_HOME
 unset HEPMCDIR
 unset PHOTOSDIR
 unset EVTGENDIR
+unset DIRACXX_HOME
 # versions
 unset SIM_RECON_VERSION
 unset HALLD_RECON_VERSION
@@ -151,6 +157,7 @@ unset LAPACK_VERSION
 unset HEPMC_VERSION
 unset PHOTOS_VERSION
 unset EVTGEN_VERSION
+unset DIRACXX_VERSION
 # urls for checkout
 unset SIM_RECON_URL
 unset HALLD_RECON_URL
@@ -172,6 +179,7 @@ unset GLUEX_MCWRAPPER_URL
 unset HEPMC_URL
 unset PHOTOS_URL
 unset EVTGEN_URL
+unset DIRACXX_URL
 # directory tags
 unset SIM_RECON_DIRTAG
 unset HALLD_RECON_DIRTAG
@@ -196,6 +204,7 @@ unset GLUEX_MCWRAPPER_DIRTAG
 unset HEPMC_DIRTAG
 unset PHOTOS_DIRTAG
 unset EVTGEN_DIRTAG
+unset DIRACXX_DIRTAG
 # git branches
 unset SIM_RECON_BRANCH
 unset HALLD_RECON_BRANCH
@@ -217,6 +226,7 @@ unset GLUEX_MCWRAPPER_BRANCH
 unset HEPMC_BRANCH
 unset PHOTOS_BRANCH
 unset EVTGEN_BRANCH
+unset DIRACXX_BRANCH
 # git hashes
 unset SIM_RECON_HASH
 unset HALLD_RECON_HASH
@@ -238,7 +248,9 @@ unset GLUEX_MCWRAPPER_HASH
 unset HEPMC_HASH
 unset PHOTOS_HASH
 unset EVTGEN_HASH
+unset DIRACXX_HASH
 # misc
 unset SQLITE_YEAR
 unset HALLD_RECON_DEBUG_LEVEL
 unset HALLD_SIM_DEBUG_LEVEL
+unset HALLD_VERSIONS
