@@ -82,9 +82,10 @@ $(DIRACXX_HOME)/.cmake_build_done: $(DIRACXX_HOME)/.cmake_done
 	cmake3 --build .
 	date > $@
 
+# use "make install" rather than "cmake3 --install ." because ifarm does not like the latter
 $(DIRACXX_HOME)/.cmake_install_done: $(DIRACXX_HOME)/.cmake_build_done
 	cd $(DIRACXX_HOME)/build; \
-	cmake3 --install .
+	make install
 	date > $@
 
 $(DIRACXX_HOME)/diracxx_prereqs_version.xml: $(BUILD_TARGET)
