@@ -2,11 +2,24 @@ ifdef DEBUG
  CMAKE_VERBOSE_OPTION = -DCMAKE_VERBOSE_MAKEFILE=ON
 endif
 
+# Note: if directory tags exist in LD_LIBRARY_PATH cmake seems to add
+# extraneous double quotes in the build.make for hsimple, probably
+# keying off the ^ character in the directory name. Those double
+# quotes have to be removed. This is done by setting PREBUILD_TARGET
+# so that removal only occurs when ^ is found in  LD_LIBRARY_PATH.
+DIRTAG_IN_PATH = $(shell if echo $(LD_LIBRARY_PATH) | grep -q '\^'; then echo yes; else echo no; fi)
+ifeq ($(DIRTAG_IN_PATH), yes)
+ PREBUILD_TARGET = $(ROOTDIR)/.sed_makefile_done
+else
+ PREBUILD_TARGET = $(ROOTDIR)/.cmake_done
+endif
+
 ifdef ROOT_DIRTAG
  ROOTDIR = root-$(ROOT_VERSION)^$(ROOT_DIRTAG)
 else
  ROOTDIR = root-$(ROOT_VERSION)
 endif
+
 BUILD_DIR = $(ROOTDIR)/build_dir
 
 which_cmake3 := $(shell which cmake3)
@@ -17,6 +30,7 @@ else
     CMAKE = cmake3
 endif
 UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
+buildmake = $(BUILD_DIR)/CMakeFiles/hsimple.dir/build.make
 
 all: $(ROOTDIR)/.install_done
 
@@ -45,7 +59,13 @@ $(ROOTDIR)/.cmake_done: $(ROOTDIR)/.patch_done
 	cd $(BUILD_DIR) ; $(CMAKE) .. -DCMAKE_INSTALL_PREFIX=.. $(CMAKE_VERBOSE_OPTION) -Dgdml=ON -Droofit=ON -Dmysql=OFF -Ddavix=OFF -Dbuiltin_tbb=ON -DCMAKE_CXX_STANDARD=11
 	date > $@
 
-$(ROOTDIR)/.build_done: $(ROOTDIR)/.cmake_done
+$(ROOTDIR)/.sed_makefile_done: $(ROOTDIR)/.cmake_done
+	@echo buildmake = $(buildmake)
+	mv -v $(buildmake) $(buildmake).orginal
+	sed -e /LD_LIBRARY_PATH/s/\ \"/\ /g < $(buildmake).orginal | sed -e /LD_LIBRARY_PATH/s/\"\ /\ /g > $(buildmake)
+	date > $@
+
+$(ROOTDIR)/.build_done: $(PREBUILD_TARGET)
 	cd $(BUILD_DIR) ; $(CMAKE) --build . $(ROOT6_CMAKE_BUILD_OPTIONS) -- $(ROOT6_BUILD_OPTIONS)
 	date > $@
 
