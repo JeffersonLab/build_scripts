@@ -36,7 +36,7 @@ $(G4DIR)/.patch_done: $(G4DIR)/.untar_done
 	        < $(BUILD_SCRIPTS)/patches/geant4/Geant4ToolchainBackwardCompatibility.cmake.patch; \
 	fi
 ifeq ($(GEANT4_EQ_10_04), true)
-	patch $(G4DIR)/config/config/sys/Linux-g++.gmk \
+	patch $(G4DIR)/config/sys/Linux-g++.gmk \
 	    < $(BUILD_SCRIPTS)/patches/geant4/Linux-g++.gmk.patch
 endif	
 	date > $@
