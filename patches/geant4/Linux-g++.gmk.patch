@@ -1,0 +1,49 @@
+--- Linux-g++.gmk.original	2021-09-22 14:45:22.608148649 -0400
++++ Linux-g++.gmk.patched	2021-09-22 16:22:16.414406962 -0400
+@@ -92,19 +92,15 @@
+     QTHOME     := /usr
+   endif
+   ifndef QTMOC
+-    QTMOC      := $(QTHOME)/bin/moc
++#    QTMOC      := $(shell if [ -f  "$(QTHOME)/bin/moc-qt5" ]; then echo $(QTHOME)/bin/moc-qt5; elif [ -f  "$(QTHOME)/bin/moc-qt4" ]; then echo $(QTHOME)/bin/moc-qt4; else echo $(QTHOME)/bin/moc; fi)
++    QTMOC      := dummy_value
+   endif
+ 
+-  QT_VERSION := $(shell $(QTMOC) 2>&1 -v | sed 's/.* .Qt \([0-9]\)\..*/\1/' )
++  QT_VERSION := $(shell $(QTMOC) -v | awk '{print $$2}' | awk -F. '{print $$1}')
+ 
+   ifeq ($(QT_VERSION),5)
+     ifndef QTFLAGS              # Qt5
+-      QTFLAGS   := -I $(QTHOME)/include -I$(QTHOME)/include/Qt
+-      QTFLAGS   += -I $(QTHOME)/include/QtCore
+-      QTFLAGS   += -I $(QTHOME)/include/QtGui
+-      QTFLAGS   += -I $(QTHOME)/include/QtWidgets
+-      QTFLAGS   += -I $(QTHOME)/include/QtOpenGL
+-      QTFLAGS   += -I $(QTHOME)/include/QtPrintSupport
++      QTFLAGS   := -I $(QTHOME)/include -I$(QTHOME)/include/Qt5
+     endif
+   else                          # Qt4
+     ifndef QTFLAGS
+@@ -115,18 +111,18 @@
+     endif
+   endif
+   ifndef QTLIBPATH
+-    QTLIBPATH := $(QTHOME)/lib
++    QTLIBPATH := $(QTHOME)/lib64
+     QT_SEARCH_LIB := $(shell ls  $(QTLIBPATH)/qt$(QT_VERSION)/libq* 2>/dev/null | wc -l )
+     ifneq ($(QT_SEARCH_LIB),0)
+-      QTLIBPATH := $(QTHOME)/lib/qt$(QT_VERSION)
++      QTLIBPATH := $(QTHOME)/lib64/qt$(QT_VERSION)
+     endif
+   endif
+   ifeq ($(QT_VERSION),5)
+     ifndef QTLIBS              # Qt5
+-      QTLIBS   := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtWidgets -lQtPrintSupport
++      QTLIBS   := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt5PrintSupport
+     endif
+     ifndef GLQTLIBS
+-      GLQTLIBS := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtWidgets  -lQtOpenGL -lQtPrintSupport
++      GLQTLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets  -lQt5OpenGL -lQt5PrintSupport
+     endif
+   else                         # Qt4
+     ifndef QTLIBS
