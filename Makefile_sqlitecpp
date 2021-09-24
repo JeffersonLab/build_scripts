@@ -33,6 +33,13 @@ UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 SQLITECPP_HOME = $(PWD)/$(SQLITECPP_DIR)
 
+include $(BUILD_SCRIPTS)/sqlite_version.mk
+ifeq ($(SQLITE_LT_3_19), true)
+    LEGACY_ON_OR_OFF = ON
+else
+    LEGACY_ON_OR_OFF = OFF
+endif
+
 all: $(SQLITECPP_HOME)/sqlitecpp_prereqs.xml
 
 $(TARFILE):
@@ -58,7 +65,11 @@ $(SQLITECPP_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	cd $(SQLITECPP_HOME)/build; $(CMAKE) \
 	   	 -DSQLITECPP_INTERNAL_SQLITE=OFF \
 	   	 -DSQLITE_USE_LEGACY_STRUCT=ON \
-		 -DCMAKE_INSTALL_PREFIX=$(SQLITECPP_HOME) ..
+		 -DCMAKE_INSTALL_PREFIX=$(SQLITECPP_HOME) \
+		 -DSQLite3_INCLUDE_DIR=$(SQLITE_HOME)/include \
+		 -DSQLite3_LIBRARY=$(SQLITE_HOME)/lib/libsqlite3.so \
+		 -DSQLITE_USE_LEGACY_STRUCT=$(LEGACY_ON_OR_OFF) \
+		 ..
 	date > $@
 
 $(SQLITECPP_HOME)/.make_done: $(SQLITECPP_HOME)/.cmake_done
