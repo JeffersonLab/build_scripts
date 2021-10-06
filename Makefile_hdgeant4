@@ -31,7 +31,7 @@ PYTHON_CONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
 PYTHON_BOOST = $(shell $(BUILD_SCRIPTS)/python_chooser.sh boost)
 PYTHON_LIB_OPTION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh lib)
 
-QTHOME_LOCATION := $(shell if [ -d  "/usr/lib64/qt5" ]; then echo /usr/lib64/qt5; elsif [ -d  "/usr/lib64/qt4" ]; then echo /usr/lib64/qt4; else echo not_found; fi)
+QTHOME_LOCATION := $(shell if [ -d  "/usr/lib64/qt5" ]; then echo /usr/lib64/qt5; elif [ -d  "/usr/lib64/qt4" ]; then echo /usr/lib64/qt4; else echo not_found; fi)
 ifneq(QTHOME_LOCATION, "not_found")
   QTHOME_DEF = "QTHOME=$(QTHOME_LOCATION)"
 endif
