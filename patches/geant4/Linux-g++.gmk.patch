@@ -1,12 +1,7 @@
---- Linux-g++.gmk.original	2021-09-22 14:45:22.608148649 -0400
-+++ Linux-g++.gmk.patched	2021-09-22 16:22:16.414406962 -0400
-@@ -92,19 +92,15 @@
-     QTHOME     := /usr
-   endif
-   ifndef QTMOC
--    QTMOC      := $(QTHOME)/bin/moc
-+#    QTMOC      := $(shell if [ -f  "$(QTHOME)/bin/moc-qt5" ]; then echo $(QTHOME)/bin/moc-qt5; elif [ -f  "$(QTHOME)/bin/moc-qt4" ]; then echo $(QTHOME)/bin/moc-qt4; else echo $(QTHOME)/bin/moc; fi)
-+    QTMOC      := dummy_value
+--- Linux-g++.gmk.original	2021-10-05 14:44:07.583934347 -0400
++++ Linux-g++.gmk.patched	2021-10-05 15:55:50.134129734 -0400
+@@ -95,16 +95,11 @@
+     QTMOC      := $(QTHOME)/bin/moc
    endif
  
 -  QT_VERSION := $(shell $(QTMOC) 2>&1 -v | sed 's/.* .Qt \([0-9]\)\..*/\1/' )
@@ -24,7 +19,7 @@
      endif
    else                          # Qt4
      ifndef QTFLAGS
-@@ -115,18 +111,18 @@
+@@ -115,18 +110,18 @@
      endif
    endif
    ifndef QTLIBPATH
