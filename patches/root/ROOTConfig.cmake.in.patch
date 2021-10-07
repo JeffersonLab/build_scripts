@@ -1,6 +1,6 @@
---- /tmp/ROOTConfig.cmake.original	2021-10-07 19:28:44.436309459 -0400
-+++ /tmp/ROOTConfig.cmake.patched	2021-10-07 19:28:55.269213841 -0400
-@@ -90,7 +90,7 @@
+--- ROOTConfig.cmake.in.original	2021-10-07 19:36:49.697025913 -0400
++++ ROOTConfig.cmake.in.patched	2021-10-07 19:37:21.418745872 -0400
+@@ -67,7 +67,7 @@
  
  #----------------------------------------------------------------------------
  # Include RootMacros.cmake to get ROOT's CMake macros
