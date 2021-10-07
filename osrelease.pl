@@ -22,6 +22,14 @@
 # will never fail.
 #
 
+# respect the over-ride env variable
+if (defined $ENV{'BMS_OSNAME_OVERRIDE'}) {
+    $boo = $ENV{'BMS_OSNAME_OVERRIDE'};
+    chomp $boo;
+    print "$boo\n";
+    exit;
+}
+
 # container tag
 $container_tag = "";
 if (-d "/.singularity.d" || -f "/.dockerenv") {
