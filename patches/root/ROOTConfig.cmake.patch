@@ -1,0 +1,11 @@
+--- /tmp/ROOTConfig.cmake.original	2021-10-07 19:28:44.436309459 -0400
++++ /tmp/ROOTConfig.cmake.patched	2021-10-07 19:28:55.269213841 -0400
+@@ -90,7 +90,7 @@
+ 
+ #----------------------------------------------------------------------------
+ # Include RootMacros.cmake to get ROOT's CMake macros
+-include("${_thisdir}/RootMacros.cmake")
++include("${_thisdir}/modules/RootMacros.cmake")
+ 
+ #----------------------------------------------------------------------------
+ # Include the file listing all the imported targets and options
