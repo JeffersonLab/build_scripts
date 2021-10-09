@@ -1,7 +1,9 @@
-if (! $?BUILD_SCRIPTS) setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
-setenv DIST /group/halld/www/halldweb/html/dist
+if ( "x$1" == "x" ) then
+    setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
+else
+    setenv BUILD_SCRIPTS $1
+endif
 setenv HALLD_VERSIONS /group/halld/www/halldweb/html/halld_versions
-alias gxenv "source $BUILD_SCRIPTS/gluex_env_clean.csh; setenv BUILD_SCRIPTS $BUILD_SCRIPTS; source $BUILD_SCRIPTS/gluex_env_jlab.csh \!*"
-alias gxclean "source $BUILD_SCRIPTS/gluex_env_clean.csh"
-echo $PATH | grep $BUILD_SCRIPTS > /dev/null
-if ($status) setenv PATH ${BUILD_SCRIPTS}:$PATH
+alias gxclean 'source $BUILD_SCRIPTS/gluex_env_clean.csh'
+alias gxclean_all 'source $BUILD_SCRIPTS/gluex_env_clean.csh; unsetenv BUILD_SCRIPTS; unsetenv HALLD_VERSIONS; unalias gxclean gxclean_all gxenv'
+alias gxenv 'gxclean; source $BUILD_SCRIPTS/gluex_env_jlab.csh \!*'
