@@ -13,6 +13,7 @@ function gxclean_all() {
     unset BUILD_SCRIPTS HALLD_VERSIONS gxclean gxclean_all gxenv
 }
 unset gxenv
-function gxenv() { gxclean; \
+function gxenv() {
+    gxclean
     source $BUILD_SCRIPTS/gluex_env_jlab.sh $1
 }
