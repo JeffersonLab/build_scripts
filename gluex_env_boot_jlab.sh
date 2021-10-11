@@ -1,14 +1,21 @@
-if [ -z "$BUILD_SCRIPTS" ]
-    then export BUILD_SCRIPTS=/group/halld/Software/build_scripts
+if [ -z "$1" ]
+then
+    export BUILD_SCRIPTS=/group/halld/Software/build_scripts
+else
+    export BUILD_SCRIPTS=$1 
 fi
-export DIST=/group/halld/www/halldweb/html/dist
 export HALLD_VERSIONS=/group/halld/www/halldweb/html/halld_versions
-function gxenv() { bs_save=$BUILD_SCRIPTS; \
-    source $BUILD_SCRIPTS/gluex_env_clean.sh; \
-    export BUILD_SCRIPTS=$bs_save; \
-    source $BUILD_SCRIPTS/gluex_env_jlab.sh $1; \
-    unset bs_save; }
-function gxclean() { source $BUILD_SCRIPTS/gluex_env_clean.sh; }
-if [ `echo $PATH | grep -c $BUILD_SCRIPTS` -eq 0 ]
-    then export PATH=$BUILD_SCRIPTS:$PATH
-fi
+unset gxclean
+function gxclean {
+    source $BUILD_SCRIPTS/gluex_env_clean.sh
+}
+unset gxclean_all
+function gxclean_all  {
+    source $BUILD_SCRIPTS/gluex_env_clean.sh
+    unset BUILD_SCRIPTS HALLD_VERSIONS gxclean gxclean_all gxenv
+}
+unset gxenv
+function gxenv {
+    gxclean
+    source $BUILD_SCRIPTS/gluex_env_jlab.sh $1
+}
