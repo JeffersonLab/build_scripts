@@ -22,9 +22,9 @@
 \newcommand{\gxenv}{{\tt gxenv}}
 
 \title{\bs{}: A Version Management System for GlueX \\ \medskip \large
-  GlueX-Doc-2793-v24}
+  GlueX-Doc-2793-v25}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{May 5, 2021}
+\date{October 12, 2021}
 
 \begin{document}
 
@@ -67,7 +67,7 @@ There are several sources.
 
 \subsubsection{Pre-Installed at JLab}
 
-At JLab, \bs{} is installed in {\tt /group/halld/Software/build\_scripts}. You can start by defining an enviroment variable:
+At JLab, \bs{} is installed in {\tt /group/halld/Software/build\_scripts}. You can start by defining an environment variable:
 \begin{center}
 {\tt export BUILD\_SCRIPTS=/group/halld/Software/build\_scripts}
 \end{center}
@@ -325,7 +325,7 @@ Optionally, these commands will take an argument naming a version set file to us
             /home/username/my_versions.xml
 \end{verbatim}
 
-\subsubsection{Simple Environment Set Up}
+\subsubsection{Simple Environment Set Up}\label{section:simple-setup}
 
 The simplest (and recommended) form of environment set-up under \bs{}
 is the \gxenv{} command. To define this command, use {\tt
@@ -1132,10 +1132,9 @@ You can also do a git clone of the latest version:
 
 \subsection{Using the Build}
 
-After the build is complete, there are two files in the gluex
-directory, setup.sh and setup.csh, that can be used to set-up the
-complete GlueX environment under Bourne-like shells or C-like shells
-respectively.
+After the build is complete, to set up the environment to use it,
+follow the steps in Section~\ref{section:simple-setup} that are
+designated for gluex\_install builds.
 
 \end{document}
 
