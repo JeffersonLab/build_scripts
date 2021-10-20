@@ -88,6 +88,9 @@ if ($uname eq 'Linux') {
 		    @token = split(/\s+/, $release_string);
 		    @version = split(/\./, $token[3]);
 		    $version_minor = $version[1];
+		    if ($version_minor == 9) {
+			$version_minor = 7;
+		    }
 		    $release = "_CentOS7.$version_minor";
 		} else {
 		    $release = '_CentOS7';
