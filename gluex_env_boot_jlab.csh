@@ -1,7 +1,7 @@
-if ( "x$1" == "x" ) then
+if ( "$1" != "--bs" ) then
     setenv BUILD_SCRIPTS /group/halld/Software/build_scripts
 else
-    setenv BUILD_SCRIPTS $1
+    setenv BUILD_SCRIPTS $2
 endif
 setenv HALLD_VERSIONS /group/halld/www/halldweb/html/halld_versions
 alias gxclean 'source $BUILD_SCRIPTS/gluex_env_clean.csh'

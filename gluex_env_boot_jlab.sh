@@ -1,8 +1,8 @@
-if [ -z "$1" ]
+if [ "$1" != "--bs" ]
 then
     export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 else
-    export BUILD_SCRIPTS=$1 
+    export BUILD_SCRIPTS=$2 
 fi
 export HALLD_VERSIONS=/group/halld/www/halldweb/html/halld_versions
 unset gxclean
