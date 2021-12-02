@@ -1,5 +1,5 @@
 --- Imake.tmpl.original	2021-12-02 13:54:20.474823681 -0500
-+++ Imake.tmpl.patched2	2021-12-02 13:59:48.751269641 -0500
++++ Imake.tmpl.patched	2021-12-02 13:52:37.821622333 -0500
 @@ -485,7 +485,7 @@
  #if HasLargeTmp || SystemV4
  #define ArCmd ArCmdBase cq
@@ -9,12 +9,3 @@
  #endif
  #endif
  #ifndef ArAddCmd
-@@ -632,7 +632,7 @@
- #define DefaultFCOptions /**/
- #endif
- #ifndef FortranDebugFlags	/* flags to turn on debug and/or optimasatio */
--#define FortranDebugFlags OptimisedFortranFlags
-+#define FortranDebugFlags DebuggableFortranDebugFlags
- #endif
- #ifndef FortranLinkCmd
- #define FortranLinkCmd FortranCmd
