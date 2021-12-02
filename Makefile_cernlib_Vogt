@@ -48,6 +48,7 @@ ifeq ($(GCC_GE_10), true)
 	patch 2005/src/pawlib/paw/fmotif/Imakefile < $(BUILD_SCRIPTS)/patches/cernlib/Imakefile_fmotif.patch
 endif
 	patch 2005/src/geant321/miface/gmicap.F < $(BUILD_SCRIPTS)/patches/cernlib/gmicap.F.patch
+	patch 2005/src/config/Imake.tmpl < $(BUILD_SCRIPTS)/patches/cernlib/Imake.tmpl.patch
 	date > $@
 
 .install_lapack_done: .patch_done
