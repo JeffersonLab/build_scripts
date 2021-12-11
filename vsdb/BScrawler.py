@@ -67,6 +67,8 @@ def checkOasisCVMFS(packagename,version,dirtag):
         folder_name="evtgen-"
     elif packagename.replace("\"","") == "hepmc":
         folder_name="HepMC-"
+    elif packagename.replace("\"","") == "diracxx":
+        folder_name="Diracxx-"
     else:
         folder_name=folder_name+"-"
 
