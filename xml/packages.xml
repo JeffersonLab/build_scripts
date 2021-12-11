@@ -48,4 +48,5 @@
 <package name="evtgen" docName="EvtGen" homeVar="EVTGENDIR"
 	 description="handles particle decays in a user-configurable library"/>
 <package name="clhep" docName="CLHEP" homeVar="CLHEP" description="CLHEP"/>
+<package name="diracxx" docName="diracxx" homeVar="DIRACXX" description="DIRACXX"/>
 </packages>
