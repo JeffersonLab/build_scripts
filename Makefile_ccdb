@@ -72,12 +72,12 @@ $(CCDB_DIR)/.scons_done: $(CCDB_DIR)/.untar_local_scons
 $(CCDB_DIR)/.cmake_done: $(GET_SOURCE_TARGET)
 	cd $(CCDB_DIR)/cpp; mkdir -pv build
 	cd $(CCDB_DIR)/cpp/build; \
-		cmake -DSQLite3_INCLUDE_DIR=$(SQLITE_HOME)/include \
+		cmake3 -DSQLite3_INCLUDE_DIR=$(SQLITE_HOME)/include \
 		-DSQLite3_LIBRARY=$(SQLITE_HOME)/lib ..
 	date > $@
 
 $(CCDB_DIR)/.make_done: $(CCDB_DIR)/.cmake_done
-	cd $(CCDB_DIR)/cpp/build; make
+	cd $(CCDB_DIR)/cpp/build; make VERBOSE=1
 	date > $@
 
 $(CCDB_DIR)/.make_install_done: $(CCDB_DIR)/.make_done
