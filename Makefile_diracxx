@@ -30,6 +30,7 @@ DIRACXX_HOME = $(PWD)/$(DIRACXX_DIR)
 PYTHON_CONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
 PYTHON_BOOST = $(shell $(BUILD_SCRIPTS)/python_chooser.sh boost)
 PYTHON_LIB_OPTION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh lib)
+PYTHON_BOOST_CMAKE = $(subst boost_,,$(PYTHON_BOOST))
 
 include $(BUILD_SCRIPTS)/diracxx_version.mk # defines USE_CMAKE
 
@@ -74,7 +75,8 @@ $(DIRACXX_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	cd $(DIRACXX_HOME); \
 	mkdir -p build; \
 	cd build; \
-	cmake3 -DCMAKE_INSTALL_PREFIX=$(DIRACXX_HOME) ..
+	cmake3 -DCMAKE_INSTALL_PREFIX=$(DIRACXX_HOME) \
+	    -DPYTHON_WITH_VERSION=$(PYTHON_BOOST_CMAKE) ..
 	date > $@
 
 $(DIRACXX_HOME)/.cmake_build_done: $(DIRACXX_HOME)/.cmake_done
