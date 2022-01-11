@@ -40,7 +40,7 @@ ifdef FORCE
 endif
 
 $(TARFILE):
-	wget --no-verbose --no-check-certificate -O $@ https://github.com/jeffersonlab/ccdb/archive/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ $(CCDB_URL)/archive/$(TARFILE)
 
 $(CCDB_DIR)/.untar_done: $(TARFILE)
 	rm -rfv $(UNTAR_TEMP_DIR)
