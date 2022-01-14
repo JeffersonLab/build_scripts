@@ -1,3 +1,6 @@
+ifndef CCDB_URL
+  CCDB_URL=https://github.com/JeffersonLab/ccdb
+endif
 ifdef CCDB_VERSION
   TARFILE = v$(CCDB_VERSION).tar.gz
   GET_SOURCE_TARGET = $(CCDB_DIR)/.untar_done
@@ -10,9 +13,6 @@ ifdef CCDB_VERSION
 else
   CCDB_DIR = ccdb
   GET_SOURCE_TARGET = $(CCDB_DIR)/.clone_done
-  ifndef CCDB_URL
-    CCDB_URL=https://github.com/JeffersonLab/ccdb
-  endif
   ifdef CCDB_DIRTAG
     CCDB_DIR = $(notdir $(CCDB_URL))^$(CCDB_DIRTAG)
   else
