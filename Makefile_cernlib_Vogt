@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 include $(BUILD_SCRIPTS)/gcc_version.mk
 include $(BUILD_SCRIPTS)/glibc_version.mk
 
