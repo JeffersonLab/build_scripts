@@ -1,5 +1,6 @@
 # Makefile_diracxx
 
+SHELL=/bin/bash
 PWD = $(shell pwd)
 
 ifdef DIRACXX_VERSION
@@ -40,6 +41,8 @@ else
     BUILD_TARGET = $(DIRACXX_HOME)/.make_done
 endif
 
+CMAKE3 = $(shell $(BUILD_SCRIPTS)/cmake3_chooser.sh)
+
 all: force_rebuild_action $(DIRACXX_HOME)/diracxx_prereqs_version.xml
 
 force_rebuild_action:
@@ -75,13 +78,13 @@ $(DIRACXX_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	cd $(DIRACXX_HOME); \
 	mkdir -p build; \
 	cd build; \
-	cmake3 -DCMAKE_INSTALL_PREFIX=$(DIRACXX_HOME) \
+	$(CMAKE3) -DCMAKE_INSTALL_PREFIX=$(DIRACXX_HOME) \
 	    -DPYTHON_WITH_VERSION=$(PYTHON_BOOST_CMAKE) ..
 	date > $@
 
 $(DIRACXX_HOME)/.cmake_build_done: $(DIRACXX_HOME)/.cmake_done
 	cd $(DIRACXX_HOME)/build; \
-	cmake3 --build .
+	$(CMAKE3) --build .
 	date > $@
 
 # use "make install" rather than "cmake3 --install ." because ifarm does not like the latter
