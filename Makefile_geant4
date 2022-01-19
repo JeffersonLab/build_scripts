@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 ifndef GEANT4_VERSION
     GEANT4_VERSION = 10.02.p02
 endif

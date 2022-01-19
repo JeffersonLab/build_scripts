@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 PWD = $(shell pwd)
 CMAKE3_BIN := $(shell which cmake3)
 ifneq ($(CMAKE3_BIN),)
