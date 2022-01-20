@@ -4,8 +4,8 @@
 # correct python-related command to use
 #
 ## accepts one positional argument
-## argument can have one of four values: command, config, scons, version, or
-##     boost
+## argument can have one of four values: command, config, scons, version,
+##   boost, or boost_cmake
 ### command: python command to use
 ### config: python-config command use
 ### scon: scons command to use
@@ -58,6 +58,7 @@ distribution=$dist_name$dist_version
 #
 declare -A pycommand
 pycommand[lib]=''
+pycommand[boost_cmake]=python3
 if [ $dist_name == Fedora ]
 then
     if [ $dist_version -ge 32 ]
@@ -68,6 +69,7 @@ then
 	get_python_version
 	pycommand[version]=$version_major
 	pycommand[boost]=boost_python$version_major$version_minor
+	pycommand[boost_cmake]=python$version_major$version_minor
     else
 	pycommand[command]=python
 	pycommand[config]=python-config
@@ -120,6 +122,9 @@ fi
 case $arg in
     boost)
 	echo ${pycommand[boost]}
+	;;
+    boost_cmake)
+	echo ${pycommand[boost_cmake]}
 	;;
     command)
 	echo ${pycommand[command]}
