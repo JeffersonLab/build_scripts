@@ -1,5 +1,5 @@
---- sbms.py.original	2020-06-12 17:49:55.468018385 -0400
-+++ sbms.py.patched	2020-06-19 21:28:36.714653683 -0400
+--- sbms.py.original	2022-01-24 12:30:09.871518212 -0500
++++ sbms.py.fixed	2022-01-24 12:17:52.843906279 -0500
 @@ -212,13 +212,14 @@
  ##################################
  # AddCompileFlags
@@ -89,7 +89,36 @@
  				
  	
  	if os.path.exists(ifname): os.unlink(ifname);
-@@ -613,7 +615,7 @@
+@@ -529,6 +531,7 @@
+ 	ccdb_home = os.getenv('CCDB_HOME', 'none')
+ 	if(ccdb_home != 'none'):
+ 		AddMySQL(env)
++		AddSQLite(env)
+ 		CCDB_CPPPATH = "%s/include" % (ccdb_home)
+ 		CCDB_LIBPATH = "%s/lib" % (ccdb_home)
+ 		CCDB_LIBS = "ccdb"
+@@ -536,6 +539,20 @@
+ 		env.AppendUnique(LIBPATH = [CCDB_LIBPATH])
+ 		env.AppendUnique(LIBS    = [CCDB_LIBS])
+ 
++##################################
++# SQLite
++##################################
++def AddSQLite(env):
++	sqlite_home = os.getenv('SQLITE_HOME', 'none')
++	if(sqlite_home != 'none'):
++		SQLITE_CPPPATH = "%s/include" % (sqlite_home)
++		SQLITE_LIBPATH = "%s/lib" % (sqlite_home)
++		SQLITE_LIBS = "sqlite3"
++		env.AppendUnique(CPPPATH = [SQLITE_CPPPATH])
++		env.AppendUnique(LIBPATH = [SQLITE_LIBPATH])
++		env.AppendUnique(LIBS    = [SQLITE_LIBS])
++		env.AppendUnique(LIBS    = ["fmt"])
++
+ 
+ ##################################
+ # Xerces
+@@ -625,7 +642,7 @@
  		elif os.path.exists(rootcintpath):
  			bld = SCons.Script.Builder(action = rootcintaction, suffix='_Dict.cc', src_suffix='.h')
  		else:
@@ -98,7 +127,7 @@
  			return
  
  		env.Append(BUILDERS = {'ROOTDict' : bld})
-@@ -630,13 +632,13 @@
+@@ -642,13 +659,13 @@
  		curpath = os.getcwd()
  		srcpath = env.Dir('.').srcnode().abspath
  		if(int(env['SHOWBUILD'])>1):
