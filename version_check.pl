@@ -43,8 +43,6 @@ foreach $package (@packages) {
 	    #print "for $home_variable = $home_value, url_raw = $url_raw\n";
 	    @t = split(/URL: /, $url_raw);
 	    $url = $t[1];
-	    @token3 = split(/^/, $dirname_home); # split on caret
-	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} elsif (-d $git_hidden_dir) {
 	    $url_raw = `cd $home_value ; git remote -v | grep \"\(fetch\)\"`;
 	    chomp $url_raw;
@@ -56,8 +54,6 @@ foreach $package (@packages) {
 	    #print "for $home_variable = $home_value, branch_raw = $branch_raw\n";
 	    @t = split(/\s+/, $branch_raw);
 	    $branch = $t[3];
-	    @token3 = split(/^/, $dirname_home); # split on caret
-	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} else {
 	    # extract the version
 	    #print "dir_prefix = $dir_prefix{$package}\n";
@@ -75,8 +71,8 @@ foreach $package (@packages) {
 	    #print "version_field = $version_field\n";
 	    @token4 = split(/\^/, $version_field);
 	    if ($#token4 > 0) {
-		$dirtag = $token4[$#token4];
-		$dirtag_string = "\\^" . $dirtag;
+		$dirtag_field = $token4[$#token4];
+		$dirtag_string = "\\^" . $dirtag_field;
 		@token5 = split (/$dirtag_string/, $version_field);
 		$version_field = $token5[0];
 	    }
@@ -87,6 +83,24 @@ foreach $package (@packages) {
 	    $version_hash{$package} = $version_field;
 	    #print "version from home dir name = $version_hash{$package}\n";
 	}
+    }
+    if ($home_value) {
+	@token8 = split(/\//, $home_value);
+	if ($#token8 > 0) {
+	    if ($package ne "jana") {
+		$home_basename = $token8[$#token8];
+	    } else {
+		$home_basename = $token8[$#token8 - 1];
+	    }
+	} else {
+	    $home_basename = $home_value;
+	}
+	#print "home_basename = $home_basename\n";
+	@token7 = split(/\^/, $home_basename);
+	if ($#token7 > 0) {
+	    $dirtag = $token7[1];
+	}
+    } else {
     }
     if ($dirtag) {
 	#print "dirtag found: \"$dirtag\"\n";
@@ -193,6 +207,7 @@ foreach $package (@packages) {
 		    }
 		}
 		# check dirtags
+		#print "d{name} = $d{name}\n";
 		$dirtag_dirname = $dirtag_hash{$d{name}};
 		$dirtag_xmlfile = $d{dirtag};
 		#print "dirtag_dirname = /$dirtag_dirname/, dirtag_xmlfile = /$dirtag_xmlfile/\n";
