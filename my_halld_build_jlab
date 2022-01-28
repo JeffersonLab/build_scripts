@@ -18,6 +18,7 @@ where:
                   halld_sim
                   hdgeant4
                   gluex_root_analysis
+                  amptools
               if no package name supplied all except sim-recon will be built"
 
 mydir=`pwd`
@@ -94,6 +95,11 @@ case $key in
     gluex_root_analysis)
 	cmd="$cmd -a $mydir/gluex_root_analysis"
 	list="$list gluex_root_analysis"
+	shift
+	;;
+    amptools)
+	cmd="$cmd -t $mydir/Amptools"
+	list="$list amptools"
 	shift
 	;;
     *)
@@ -182,4 +188,7 @@ if [[ $list = *hdgeant4* ]]
 fi
 if [[ $list = *gluex_root_analysis* ]]
     then make -f $BUILD_SCRIPTS/Makefile_gluex_root_analysis
+fi
+if [[ $list = *amptools* ]]
+    then make -f $BUILD_SCRIPTS/Makefile_amptools
 fi
