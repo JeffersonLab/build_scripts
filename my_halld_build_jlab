@@ -114,12 +114,13 @@ if [ -z "$xmlfile" ]
 fi
 if [ -z "$list" ]
     then
-    list="hdds halld_recon halld_sim hdgeant4 gluex_root_analysis"
+    list="hdds halld_recon halld_sim hdgeant4 gluex_root_analysis amptools"
     cmd="$cmd -g $mydir/hdds"
     cmd="$cmd -r $mydir/halld_recon"
     cmd="$cmd -m $mydir/halld_sim"
     cmd="$cmd -4 $mydir/hdgeant4"
     cmd="$cmd -a $mydir/gluex_root_analysis"
+    cmd="$cmd -t $mydir/amptools"
 fi
 if [ "$keep_inconsistent_packages" != true ]
     then
@@ -171,6 +172,10 @@ source $BUILD_SCRIPTS/gluex_env_clean.sh
 source $BUILD_SCRIPTS/gluex_env_jlab.sh $mydir/version.xml
 
 set -e
+
+if [[ $list = *amptools* ]]
+    then make -f $BUILD_SCRIPTS/Makefile_amptools
+fi
 if [[ $list = *hdds* ]]
     then make -f $BUILD_SCRIPTS/Makefile_hdds
 fi
@@ -188,7 +193,4 @@ if [[ $list = *hdgeant4* ]]
 fi
 if [[ $list = *gluex_root_analysis* ]]
     then make -f $BUILD_SCRIPTS/Makefile_gluex_root_analysis
-fi
-if [[ $list = *amptools* ]]
-    then make -f $BUILD_SCRIPTS/Makefile_amptools
 fi
