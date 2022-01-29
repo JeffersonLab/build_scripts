@@ -9,8 +9,8 @@ where:
     -x        set name of version set XML file
               (default: /group/halld/www/halldweb/html/halld_versions/version.xml)
     -n        set number of threads to use in builds (default: 1)
-    -k        keep potentially inconsistent packages in environment
-              (default: remove them from the environment)
+    -r        remove inconsistent packages from the environment
+              (default: keep all packages that appear in the input xml file)
     package_n package name, choose from:
                   hdds
                   sim-recon
@@ -28,19 +28,7 @@ if [ -z "$BUILD_SCRIPTS" ]
     then export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 fi
 
-if [ -f version.xml ]
-    then
-    prompt="version.xml already exists, overwrite it? "
-    while true; do
-	read -p "$prompt" yn
-	case $yn in
-            [Yy]* ) break;;
-            [Nn]* ) exit 2;;
-            * ) echo "Please answer yes or no.";;
-	esac
-    done
-    rm -fv version.xml
-fi
+rm -fv version.xml
 
 cmd="$BUILD_SCRIPTS/customize_version.pl -o version.xml"
 list=""
@@ -63,8 +51,8 @@ case $key in
 	shift
 	shift
 	;;
-    -k)
-	keep_inconsistent_packages=true
+    -r)
+	remove_inconsistent_packages=true
 	shift
 	;;
     hdds)
@@ -122,8 +110,19 @@ if [ -z "$list" ]
     cmd="$cmd -a $mydir/gluex_root_analysis"
     cmd="$cmd -t $mydir/amptools"
 fi
-if [ "$keep_inconsistent_packages" != true ]
+if [ "$remove_inconsistent_packages" == true ]
     then
+    if [[ $list = *amptools* ]]
+	then
+	if [[ $list != *halld_sim* ]]
+	    then
+	    cmd="$cmd -m none"
+	fi
+	if [[ $list != *halld_recon* ]]
+	    then
+	    cmd="$cmd -r none"
+	fi
+    fi
     if [[ $list = *halld_recon* ]]
 	then
 	if [[ $list != *halld_sim* ]]
