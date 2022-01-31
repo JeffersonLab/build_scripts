@@ -1,24 +1,26 @@
-ifndef AMPTOOLS_VERSION
-  AMPTOOLS_VERSION = 0.9.2
-endif
-TARFILE = v$(AMPTOOLS_VERSION).tar.gz
-ifdef AMPTOOLS_DIRTAG
-  AMPTOOLS_LOCAL_DIR = AmpTools-$(AMPTOOLS_VERSION)^$(AMPTOOLS_DIRTAG)
+ifdef AMPTOOLS_VERSION
+    SOURCE_TARGET = $(AMPTOOLS_DIR)/.make_prep_done
+    TARFILE = v$(AMPTOOLS_VERSION).tar.gz
+    AMPTOOLS_LOCAL_DIR_BASE = AmpTools-$(AMPTOOLS_VERSION)
 else
-  AMPTOOLS_LOCAL_DIR = AmpTools-$(AMPTOOLS_VERSION)
+    SOURCE_TARGET = $(AMPTOOLS_DIR)/.clone_done
+    AMPTOOLS_LOCAL_DIR_BASE = AmpTools
+endif
+ifdef AMPTOOLS_DIRTAG
+    AMPTOOLS_LOCAL_DIR = $(AMPTOOLS_LOCAL_DIR_BASE)^$(AMPTOOLS_DIRTAG)
+else
+    AMPTOOLS_LOCAL_DIR = $(AMPTOOLS_LOCAL_DIR_BASE)
 endif
 AMPTOOLS_DIR = $(shell pwd)/$(AMPTOOLS_LOCAL_DIR)
-
-all: force_rebuild_action $(AMPTOOLS_DIR)/amptools_prereqs_version.xml
-
-force_rebuild_action:
-ifdef FORCE
-	@echo forcing rebuild
-	$(RM) $(AMPTOOLS_DIR)/.make_done
+ifndef AMPTOOLS_URL
+    AMPTOOLS_URL = https://github.com/mashephe/AmpTools
 endif
 
+all: $(AMPTOOLS_DIR)/amptools_prereqs_version.xml
+
 $(TARFILE):
-	wget --no-verbose --no-check-certificate https://github.com/mashephe/AmpTools/archive/$(TARFILE) -O $(TARFILE)
+	wget --no-verbose --no-check-certificate \
+	    $(AMPTOOLS_URL)/archive/$(TARFILE) -O $(TARFILE)
 
 $(AMPTOOLS_DIR)/.unpack: $(TARFILE)
 	rm -rfv untar_temp
@@ -40,9 +42,13 @@ $(AMPTOOLS_DIR)/.make_prep_done: $(AMPTOOLS_DIR)/.unpack
 endif
 	date > $@
 
-$(AMPTOOLS_DIR)/.make_done: $(AMPTOOLS_DIR)/.make_prep_done
-	cd $(AMPTOOLS_DIR)/AmpTools ; make
-	cd $(AMPTOOLS_DIR)/AmpPlotter ; make
+$(AMPTOOLS_DIR)/.clone_done:
+	git clone $(AMPTOOLS_URL) $(AMPTOOLS_LOCAL_DIR)
+	date > $@
+
+$(AMPTOOLS_DIR)/.make_done: $(SOURCE_TARGET)
+	export AMPTOOLS_HOME=$(AMPTOOLS_DIR); cd $(AMPTOOLS_DIR)/AmpTools ; make
+	export AMPTOOLS_HOME=$(AMPTOOLS_DIR); cd $(AMPTOOLS_DIR)/AmpPlotter ; make
 	date > $@
 
 $(AMPTOOLS_DIR)/amptools_prereqs_version.xml: $(AMPTOOLS_DIR)/.make_done
