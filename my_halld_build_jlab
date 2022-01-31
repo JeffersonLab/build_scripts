@@ -86,7 +86,7 @@ case $key in
 	shift
 	;;
     amptools)
-	cmd="$cmd -t $mydir/Amptools"
+	cmd="$cmd -t $mydir/AmpTools"
 	list="$list amptools"
 	shift
 	;;
@@ -108,7 +108,7 @@ if [ -z "$list" ]
     cmd="$cmd -m $mydir/halld_sim"
     cmd="$cmd -4 $mydir/hdgeant4"
     cmd="$cmd -a $mydir/gluex_root_analysis"
-    cmd="$cmd -t $mydir/amptools"
+    cmd="$cmd -t $mydir/AmpTools"
 fi
 if [ "$remove_inconsistent_packages" == true ]
     then
