@@ -1,7 +1,4 @@
 SHELL=/bin/bash
-ifndef ROOT_VERSION
-    ROOT_VERSION=5.34.26
-endif
 
 include $(BUILD_SCRIPTS)/root_version.mk
 
