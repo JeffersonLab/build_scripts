@@ -1,5 +1,5 @@
 ifdef DEBUG
- CMAKE_VERBOSE_OPTION = -DCMAKE_VERBOSE_MAKEFILE=ON
+   CMAKE_VERBOSE_OPTION = -DCMAKE_VERBOSE_MAKEFILE=ON
 endif
 
 # Note: if directory tags exist in LD_LIBRARY_PATH cmake seems to add
@@ -9,15 +9,22 @@ endif
 # so that removal only occurs when ^ is found in  LD_LIBRARY_PATH.
 DIRTAG_IN_PATH = $(shell if echo $(LD_LIBRARY_PATH) | grep -q '\^'; then echo yes; else echo no; fi)
 ifeq ($(DIRTAG_IN_PATH), yes)
- PREBUILD_TARGET = $(ROOTDIR)/.sed_makefile_done
+    PREBUILD_TARGET = $(ROOTDIR)/.sed_makefile_done
 else
- PREBUILD_TARGET = $(ROOTDIR)/.cmake_done
+    PREBUILD_TARGET = $(ROOTDIR)/.cmake_done
 endif
 
-ifdef ROOT_DIRTAG
- ROOTDIR = root-$(ROOT_VERSION)^$(ROOT_DIRTAG)
+ifdef ROOT_VERSION
+    ROOTDIR_BASE = root-$(ROOT_VERSION)
+    SOURCE_TARGET = $(ROOTDIR)/.patch_done
 else
- ROOTDIR = root-$(ROOT_VERSION)
+    ROOTDIR_BASE = root
+    SOURCE_TARGET = $(ROOTDIR)/.clone_done
+endif
+ifdef ROOT_DIRTAG
+ ROOTDIR = $(ROOTDIR_BASE)^$(ROOT_DIRTAG)
+else
+ ROOTDIR = $(ROOTDIR_BASE)
 endif
 
 BUILD_DIR = $(ROOTDIR)/build_dir
@@ -57,7 +64,11 @@ ifeq ($(ROOT_EQ_6_24), true)
 endif
 	date > $@
 
-$(ROOTDIR)/.cmake_done: $(ROOTDIR)/.patch_done
+$(ROOTDIR)/.clone_done:
+	git clone https://github.com/root-project/root.git
+	date > $@
+
+$(ROOTDIR)/.cmake_done: $(SOURCE_TARGET)
 	mkdir -p $(BUILD_DIR)
 	cd $(BUILD_DIR) ; $(CMAKE) .. -DCMAKE_INSTALL_PREFIX=.. $(CMAKE_VERBOSE_OPTION) -Dgdml=ON -Droofit=ON -Dmysql=OFF -Ddavix=OFF -Dbuiltin_tbb=ON -DCMAKE_CXX_STANDARD=11
 	date > $@
