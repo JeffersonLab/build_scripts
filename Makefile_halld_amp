@@ -1,0 +1,71 @@
+# Makefile_halld_amp
+
+PWD = $(shell pwd)
+ifdef HALLD_AMP_VERSION
+    SOURCE_CODE_TARGET = $(HALLD_AMP_HOME)/.untar_done
+    HALLD_AMP_DIR = halld_amp-$(HALLD_AMP_VERSION)
+    TARFILE = $(HALLD_AMP_VERSION).tar.gz
+else
+    SOURCE_CODE_TARGET = $(HALLD_AMP_HOME)/.clone_done
+    ifndef HALLD_AMP_URL
+        HALLD_AMP_URL=https://github.com/jeffersonlab/halld_amp
+    endif
+    HALLD_AMP_DIR = $(notdir $(HALLD_AMP_URL))
+    ifndef HALLD_AMP_BRANCH
+        HALLD_AMP_BRANCH = main
+    endif
+endif
+ifdef HALLD_AMP_DIRTAG
+    HALLD_AMP_DIR := $(HALLD_AMP_DIR)^$(HALLD_AMP_DIRTAG)
+endif
+ifeq ($(HALLD_AMP_DEBUG_LEVEL), 0)
+    HALLD_AMP_DIR := $(HALLD_AMP_DIR)+opt
+    override HALLD_AMP_SCONS_OPTIONS += DEBUG=0 OPTIMIZATION=3
+else ifeq ($(HALLD_AMP_DEBUG_LEVEL), 2)
+    HALLD_AMP_DIR := $(HALLD_AMP_DIR)+dbg
+    override HALLD_AMP_SCONS_OPTIONS += DEBUG=1 OPTIMIZATION=0
+endif
+export HALLD_AMP_HOME = $(PWD)/$(HALLD_AMP_DIR)
+SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
+PYTHONCONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
+PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
+ 
+all: $(HALLD_AMP_HOME)/halld_amp_prereqs_version.xml
+
+$(TARFILE):
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/JeffersonLab/halld_amp/archive/$(HALLD_AMP_VERSION).tar.gz
+
+$(HALLD_AMP_HOME)/.untar_done: $(TARFILE)
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(HALLD_AMP_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
+	date > $@
+
+$(HALLD_AMP_HOME)/.clone_done:
+	git clone -b $(HALLD_AMP_BRANCH) $(HALLD_AMP_URL) $(HALLD_AMP_DIR)
+ifdef HALLD_AMP_HASH
+	cd $(HALLD_AMP_DIR) ; git checkout $(HALLD_AMP_HASH)
+endif
+	date > $@
+
+$(HALLD_AMP_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
+	cd $(HALLD_AMP_HOME)/src ; $(SCONS) install PYTHONCONFIG=$(PYTHONCONFIG) $(HALLD_AMP_SCONS_OPTIONS)
+	date > $@
+
+$(HALLD_AMP_HOME)/halld_amp_prereqs_version.xml: $(HALLD_AMP_HOME)/.sconstruct_done
+
+env:
+	@echo HALLD_AMP_BRANCH = $(HALLD_AMP_BRANCH)
+	@echo HALLD_AMP_DIR = $(HALLD_AMP_DIR)
+	@echo HALLD_AMP_DIRTAG = $(HALLD_AMP_DIRTAG)
+	@echo HALLD_AMP_HASH = $(HALLD_AMP_HASH)
+	@echo HALLD_AMP_HOME = $(HALLD_AMP_HOME)
+	@echo HALLD_AMP_VERSION = $(HALLD_AMP_VERSION)
+	@echo HALLD_AMP_URL = $(HALLD_AMP_URL)
+	@echo PYTHONCONFIG = $(PYTHONCONFIG)
+	@echo SOURCE_CODE_TARGET = $(SOURCE_CODE_TARGET)
+	@echo TARFILE = $(TARFILE)
+	@echo UNTAR_TEMP_DIR = $(UNTAR_TEMP_DIR)
