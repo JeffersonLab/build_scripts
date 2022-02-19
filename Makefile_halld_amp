@@ -12,7 +12,7 @@ else
     endif
     HALLD_AMP_DIR = $(notdir $(HALLD_AMP_URL))
     ifndef HALLD_AMP_BRANCH
-        HALLD_AMP_BRANCH = master
+        HALLD_AMP_BRANCH = main
     endif
 endif
 ifdef HALLD_AMP_DIRTAG
