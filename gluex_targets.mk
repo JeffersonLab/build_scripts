@@ -1,75 +1,75 @@
 #
 # Pass 1
 #
-ifdef $(XERCESCROOT)
+ifdef XERCESCROOT
     GLUEX_PASS1_TARGETS += xerces_build
 endif
-ifdef $(LAPACK_HOME)
+ifdef LAPACK_HOME
     GLUEX_PASS1_TARGETS += lapack_build
 endif
-ifdef $(CERN_ROOT)
+ifdef CERN_ROOT
     GLUEX_PASS1_TARGETS += cernlib_build
 endif
-ifdef $(ROOTSYS)
+ifdef ROOTSYS
     GLUEX_PASS1_TARGETS += root_build
 endif
-ifdef $(GEANT4_HOME)
+ifdef GEANT4_HOME
     GLUEX_PASS1_TARGETS += geant4_build
 endif
-ifdef $(EVIO_HOME)
+ifdef EVIO_HOME
     GLUEX_PASS1_TARGETS += evio_build
 endif
-ifdef $(SQLITE_HOME)
+ifdef SQLITE_HOME
     GLUEX_PASS1_TARGETS += sqlite_build
 endif
-ifdef $(SQLITECPP_HOME)
+ifdef SQLITECPP_HOME
     GLUEX_PASS1_TARGETS += sqlitecpp_build
 endif
-ifdef $(RCDB_HOME)
+ifdef RCDB_HOME
     GLUEX_PASS1_TARGETS += rcdb_build
 endif
-ifdef $(CCDB_HOME)
+ifdef CCDB_HOME
     GLUEX_PASS1_TARGETS += ccdb_build
 endif
 #
 # Pass 2
 #
-ifdef $(JANA_HOME)
+ifdef JANA_HOME
     GLUEX_PASS2_TARGETS += jana_build
 endif
-ifdef $(HDDS_HOME)
+ifdef HDDS_HOME
     GLUEX_PASS2_TARGETS += hdds_build
 endif
-ifdef $(AMPTOOLS_HOME)
+ifdef AMPTOOLS_HOME
     GLUEX_PASS2_TARGETS += amptools_build
 endif
-ifdef $(HEPMC_HOME)
+ifdef HEPMC_HOME
     GLUEX_PASS2_TARGETS += hepmc_build
 endif
-ifdef $(PHOTOS_HOME)
+ifdef PHOTOS_HOME
     GLUEX_PASS2_TARGETS += photos_build
 endif
-ifdef $(EVTGEN_HOME)
+ifdef EVTGEN_HOME
     GLUEX_PASS2_TARGETS += evtgen_build
 endif
-ifdef $(HALLD_RECON_HOME)
+ifdef HALLD_RECON_HOME
     GLUEX_PASS2_TARGETS += halld_recon_build
 endif
-ifdef $(DIRACXX)
+ifdef DIRACXX
     GLUEX_PASS2_TARGETS += diracxx_build
 endif
-ifdef $(HALLD_SIM_HOME)
+ifdef HALLD_SIM_HOME
     GLUEX_PASS2_TARGETS += halld_sim_build
 endif
-ifdef $(HD_UTILITIES_HOME)
+ifdef HD_UTILITIES_HOME
     GLUEX_PASS2_TARGETS += hd_utilities_build
 endif
-ifdef $(HDGEANT4_HOME)
+ifdef HDGEANT4_HOME
     GLUEX_PASS2_TARGETS += hdgeant4_build
 endif
-ifdef $(ROOT_ANALYSIS_HOME)
+ifdef ROOT_ANALYSIS_HOME
     GLUEX_PASS2_TARGETS += gluex_root_analysis_build
 endif
-ifdef $(MCWRAPPER_CENTRAL)
+ifdef MCWRAPPER_CENTRAL
     GLUEX_PASS2_TARGETS += mcwrapper_build
 endif
