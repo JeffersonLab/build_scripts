@@ -13,10 +13,10 @@ endif
 ifdef ROOTSYS
     GLUEX_PASS1_TARGETS += root_build
 endif
-ifdef GEANT4_HOME
+ifdef G4ROOT
     GLUEX_PASS1_TARGETS += geant4_build
 endif
-ifdef EVIO_HOME
+ifdef EVIOROOT
     GLUEX_PASS1_TARGETS += evio_build
 endif
 ifdef SQLITE_HOME
