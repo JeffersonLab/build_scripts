@@ -282,7 +282,7 @@ halld_amp_dir:
 	test -d ${HALLD_AMP} || mkdir -pv ${HALLD_AMP}
 
 halld_amp_make:
-	$(MAKE) -C${HALLD_AMP} -f${BUILD_SCRIPTS}/Makefile_halld_amp
+	$(MAKE) -C${HALLD_AMP} -f${BUILD_SCRIPTS}/Makefile_halld_amp HALLD_AMP_SCONS_OPTIONS="$(HALLD_AMP_SCONS_OPTIONS)"
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
