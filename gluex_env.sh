@@ -35,37 +35,48 @@ then export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
 fi
 if [ -z "$LD_LIBRARY_PATH" ]; then export LD_LIBRARY_PATH=''; fi
 # xerces-c++
-if [ -z "$XERCESCROOT" ]; then export XERCESCROOT=$GLUEX_TOP/xerces-c/prod; fi
-export XERCES_INCLUDE=$XERCESCROOT/include
-if [ `echo $LD_LIBRARY_PATH | grep -c $XERCESCROOT/lib` -eq 0 ]
+if [ -n "$XERCESCROOT" ]
+then
+    export XERCES_INCLUDE=$XERCESCROOT/include
+    if [ `echo $LD_LIBRARY_PATH | grep -c $XERCESCROOT/lib` -eq 0 ]
     then export LD_LIBRARY_PATH=$XERCESCROOT/lib:$LD_LIBRARY_PATH
+    fi
 fi
 # root
-if [ -z "$ROOTSYS" ]; then export ROOTSYS=$GLUEX_TOP/root/prod; fi
-if [ `echo $PATH | grep -c $ROOTSYS/bin` -eq 0 ]
-    then export PATH=$ROOTSYS/bin:$PATH
-fi
-if [ `echo $LD_LIBRARY_PATH | grep -c $ROOTSYS/lib` -eq 0 ]
-    then export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
-fi
-if [ `echo $PYTHONPATH | grep -c $ROOTSYS/lib` -eq 0 ]
-    then export PYTHONPATH=$ROOTSYS/lib:$PYTHONPATH
+if [ -n "$ROOTSYS" ]
+then
+    if [ `echo $PATH | grep -c $ROOTSYS/bin` -eq 0 ]
+    then
+	export PATH=$ROOTSYS/bin:$PATH
+    fi
+    if [ `echo $LD_LIBRARY_PATH | grep -c $ROOTSYS/lib` -eq 0 ]
+    then
+	export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
+    fi
+    if [ `echo $PYTHONPATH | grep -c $ROOTSYS/lib` -eq 0 ]
+    then
+	export PYTHONPATH=$ROOTSYS/lib:$PYTHONPATH
+    fi
 fi
 # cernlib
-if [ -z "$CERN" ]; then export CERN=$GLUEX_TOP/cernlib; fi
-if [ -z "$CERN_LEVEL" ]; then 					#We don't have CERN_LEVEL
-	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
-		#on 64 bits 2005 cernlib is provided
-		export CERN_LEVEL=2005; 
+if [ -n "$CERN" ]
+then
+    if [ -z "$CERN_LEVEL" ]
+    then 					#We don't have CERN_LEVEL
+	if [ ${MACHINE_TYPE} == 'x86_64' ]
+	then
+	    #on 64 bits 2005 cernlib is provided
+	    export CERN_LEVEL=2005; 
 	else
-		#on 32-bit 2006 cernlib is provided
-		export CERN_LEVEL=2006;
+	    #on 32-bit 2006 cernlib is provided
+	    export CERN_LEVEL=2006;
 	fi
-fi
-
-export CERN_ROOT=$CERN/$CERN_LEVEL
-if [ `echo $PATH | grep -c $CERN_ROOT/bin` -eq 0 ]
-    then export PATH=$CERN_ROOT/bin:$PATH
+    fi
+    export CERN_ROOT=$CERN/$CERN_LEVEL
+    if [ `echo $PATH | grep -c $CERN_ROOT/bin` -eq 0 ]
+    then
+	export PATH=$CERN_ROOT/bin:$PATH
+    fi
 fi
 ## clhep
 #if [ -z "$CLHEP" ]; then export CLHEP=$GLUEX_TOP/clhep/prod; fi
@@ -75,31 +86,50 @@ fi
 #    then export LD_LIBRARY_PATH=${CLHEP_LIB}:${LD_LIBRARY_PATH}
 #fi
 # Geant4
-if [ -z "$G4ROOT" ]; then export G4ROOT=$GLUEX_TOP/geant4/prod; fi
-if [ -e "$G4ROOT" ]
+if [ -n "$G4ROOT" ]
+then
+    if [ -e "$G4ROOT" ]
     then
-    g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.sh`
-    if [ -f "$g4setup" ]; then source $g4setup; fi
-    eval `$BUILD_SCRIPTS/delpath.pl -b -l /usr/lib64`
-    unset g4setup
+	g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.sh`
+	if [ -f "$g4setup" ]
+	then
+	    source $g4setup
+	fi
+	eval `$BUILD_SCRIPTS/delpath.pl -b -l /usr/lib64`
+	unset g4setup
+    fi
 fi
 # amptools
-if [ -n "$AMPTOOLS_HOME" ]; then
+if [ -n "$AMPTOOLS_HOME" ]
+then
     export AMPTOOLS=$AMPTOOLS_HOME/AmpTools
     export AMPPLOTTER=$AMPTOOLS_HOME/AmpPlotter
 fi
 # ccdb
-if [ -z "$CCDB_HOME" ]; then export CCDB_HOME=$GLUEX_TOP/ccdb/prod; fi
-. $BUILD_SCRIPTS/ccdb_env.sh
-if [ -z "$CCDB_USER" ]
+if [ -n "$CCDB_HOME" ]
+then
+    . $BUILD_SCRIPTS/ccdb_env.sh
+    if [ -z "$CCDB_USER" ]
     then
-    if [ -n "${USER:-}" ]; then export CCDB_USER=$USER; fi
+	if [ -n "${USER:-}" ]
+	then
+	    export CCDB_USER=$USER
+	fi
+    fi
+    if [ -z "$CCDB_CONNECTION" ]
+    then
+	export CCDB_CONNECTION=mysql://ccdb_user@hallddb.jlab.org/ccdb
+    fi
 fi
-if [ -z "$CCDB_CONNECTION" ]; then export CCDB_CONNECTION=mysql://ccdb_user@hallddb.jlab.org/ccdb; fi
 # rcdb
-if [ -z "$RCDB_HOME" ]; then export RCDB_HOME=$GLUEX_TOP/rcdb/prod; fi
-. $BUILD_SCRIPTS/rcdb_env.sh
-if [ -z "$RCDB_CONNECTION" ]; then export RCDB_CONNECTION=mysql://rcdb@hallddb.jlab.org/rcdb; fi
+if [ -n "$RCDB_HOME" ]
+then
+    . $BUILD_SCRIPTS/rcdb_env.sh
+    if [ -z "$RCDB_CONNECTION" ]
+    then
+	export RCDB_CONNECTION=mysql://rcdb@hallddb.jlab.org/rcdb
+    fi
+fi
 # jana
 if [ -z "$JANA_HOME" ]; then export JANA_HOME=$GLUEX_TOP/jana/prod/$BMS_OSNAME; fi
 if [ -z "$JANA_CALIB_URL" ]
