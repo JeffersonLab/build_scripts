@@ -46,7 +46,7 @@ endif
 ifdef HEPMCDIR
     GLUEX_PASS2_TARGETS += hepmc_build
 endif
-ifdef PHOTOSDIRE
+ifdef PHOTOSDIR
     GLUEX_PASS2_TARGETS += photos_build
 endif
 ifdef EVTGENDIR
