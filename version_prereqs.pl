@@ -36,11 +36,12 @@ eval $definitions;
 	    geant4 => [],
 	    ccdb => [],
 	    halld_recon => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb', 'rcdb', 'sqlitecpp'],
-	    halld_sim => ['halld_recon'],
+	    halld_sim => ['halld_recon', 'halld_amp'],
 	    amptools => ['root'],
 	    photos => ['hepmc'],
 	    evtgen => ['photos', 'hepmc'],
 	    diracxx => ['root'],
+	    halld_amp => ['amptools'],
     );
 
 # add a prerequisite for sqlitecpp only if SQLITE_HOME is defined
