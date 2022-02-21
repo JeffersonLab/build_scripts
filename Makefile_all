@@ -30,6 +30,7 @@ HEPMC = ${ROOT_OF_ALL}/hepmc
 PHOTOS = ${ROOT_OF_ALL}/photos
 EVTGEN = ${ROOT_OF_ALL}/evtgen
 DIRACXX = ${ROOT_OF_ALL}/diracxx
+HALLD_AMP = ${ROOT_OF_ALL}/halld_amp
 
 ifdef NTHREADS
   ROOT6_BUILD_OPTIONS += -j$(NTHREADS)
@@ -39,6 +40,7 @@ ifdef NTHREADS
   HALLD_SIM_SCONS_OPTIONS += -j$(NTHREADS)
   XERCES_MAKE_OPTIONS += -j$(NTHREADS)
   HDGEANT4_MAKE_OPTIONS += -j$(NTHREADS)
+  HALLD_AMP_SCONS_OPTIONS += -j$(NTHREADS)
 endif
 
 include $(BUILD_SCRIPTS)/gluex_targets.mk
@@ -273,6 +275,14 @@ diracxx_dir:
 
 diracxx_make:
 	$(MAKE) -C${DIRACXX} -f${BUILD_SCRIPTS}/Makefile_diracxx
+
+halld_amp_build: halld_amp_dir halld_amp_make
+
+halld_amp_dir:
+	test -d ${HALLD_AMP} || mkdir -pv ${HALLD_AMP}
+
+halld_amp_make:
+	$(MAKE) -C${HALLD_AMP} -f${BUILD_SCRIPTS}/Makefile_halld_amp
 
 env:
 	@echo BUILD_SCRIPTS = ${BUILD_SCRIPTS}
