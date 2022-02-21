@@ -49,4 +49,6 @@
 	 description="handles particle decays in a user-configurable library"/>
 <package name="diracxx" docName="Diracxx" homeVar="DIRACXX_HOME"
 	 description="general root/c++ toolkit for computing Feynman amplitudes"/>
+<package name="halld_amp" docName="halld_amp" homeVar="HALLD_AMP_HOME"
+	 description="Amplitude analysis for GlueX"/>
 </packages>
