@@ -43,13 +43,13 @@ endif
 ifdef AMPTOOLS_HOME
     GLUEX_PASS2_TARGETS += amptools_build
 endif
-ifdef HEPMC_HOME
+ifdef HEPMCDIR
     GLUEX_PASS2_TARGETS += hepmc_build
 endif
-ifdef PHOTOS_HOME
+ifdef PHOTOSDIRE
     GLUEX_PASS2_TARGETS += photos_build
 endif
-ifdef EVTGEN_HOME
+ifdef EVTGENDIR
     GLUEX_PASS2_TARGETS += evtgen_build
 endif
 ifdef HALLD_RECON_HOME
