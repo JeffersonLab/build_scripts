@@ -43,9 +43,6 @@ endif
 ifdef AMPTOOLS_HOME
     GLUEX_PASS2_TARGETS += amptools_build
 endif
-ifdef HALLD_AMP_HOME
-    GLUEX_PASS2_TARGETS += halld_amp_build
-endif
 ifdef HEPMCDIR
     GLUEX_PASS2_TARGETS += hepmc_build
 endif
@@ -57,6 +54,9 @@ ifdef EVTGENDIR
 endif
 ifdef HALLD_RECON_HOME
     GLUEX_PASS2_TARGETS += halld_recon_build
+endif
+ifdef HALLD_AMP_HOME
+    GLUEX_PASS2_TARGETS += halld_amp_build
 endif
 ifdef DIRACXX
     GLUEX_PASS2_TARGETS += diracxx_build
