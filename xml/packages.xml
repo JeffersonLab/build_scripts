@@ -51,4 +51,6 @@
 	 description="general root/c++ toolkit for computing Feynman amplitudes"/>
 <package name="halld_amp" docName="halld_amp" homeVar="HALLD_AMP_HOME"
 	 description="Amplitude analysis for GlueX"/>
+<package name="clhep" docName="clhep" homeVar="CLHEP_HOME"
+	 description="C++ mathematical library for HEP"/>
 </packages>
