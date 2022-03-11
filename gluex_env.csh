@@ -12,30 +12,33 @@ if (! $?LD_LIBRARY_PATH) setenv LD_LIBRARY_PATH ''
 if (! $?PYTHONPATH) setenv PYTHONPATH ''
 set machine_type=`uname -m`
 # xerces-c++
-if (! $?XERCESCROOT) setenv XERCESCROOT $GLUEX_TOP/xerces-c/prod
-setenv XERCES_INCLUDE $XERCESCROOT/include
-echo $LD_LIBRARY_PATH | grep $XERCESCROOT/lib > /dev/null
-if ($status) setenv LD_LIBRARY_PATH  $XERCESCROOT/lib:$LD_LIBRARY_PATH
-# root
-if (! $?ROOTSYS) setenv ROOTSYS $GLUEX_TOP/root/prod
-echo $PATH | grep $ROOTSYS/bin > /dev/null
-if ($status) setenv PATH $ROOTSYS/bin:$PATH
-echo $LD_LIBRARY_PATH | grep $ROOTSYS/lib > /dev/null
-if ($status) setenv LD_LIBRARY_PATH  $ROOTSYS/lib:$LD_LIBRARY_PATH
-echo $PYTHONPATH | grep $ROOTSYS/lib > /dev/null
-if ($status) setenv PYTHONPATH $ROOTSYS/lib:$PYTHONPATH
-# cernlib
-if (! $?CERN ) setenv CERN $GLUEX_TOP/cernlib
-if (! $?CERN_LEVEL) then
-    if ($machine_type == 'x86_64') then
-        setenv CERN_LEVEL 2005
-    else
-	setenv CERN_LEVEL 2006
-    endif
+if ($?XERCESCROOT) then
+    setenv XERCES_INCLUDE $XERCESCROOT/include
+    echo $LD_LIBRARY_PATH | grep $XERCESCROOT/lib > /dev/null
+    if ($status) setenv LD_LIBRARY_PATH  $XERCESCROOT/lib:$LD_LIBRARY_PATH
 endif
-setenv CERN_ROOT $CERN/$CERN_LEVEL
-echo $PATH | grep $CERN_ROOT/bin > /dev/null
-if ($status) setenv PATH $CERN_ROOT/bin:$PATH
+# root
+if ($?ROOTSYS) then
+    echo $PATH | grep $ROOTSYS/bin > /dev/null
+    if ($status) setenv PATH $ROOTSYS/bin:$PATH
+    echo $LD_LIBRARY_PATH | grep $ROOTSYS/lib > /dev/null
+    if ($status) setenv LD_LIBRARY_PATH  $ROOTSYS/lib:$LD_LIBRARY_PATH
+    echo $PYTHONPATH | grep $ROOTSYS/lib > /dev/null
+    if ($status) setenv PYTHONPATH $ROOTSYS/lib:$PYTHONPATH
+endif
+# cernlib
+if ($?CERN ) then
+    if (! $?CERN_LEVEL) then
+	if ($machine_type == 'x86_64') then
+	    setenv CERN_LEVEL 2005
+	else
+	    setenv CERN_LEVEL 2006
+	endif
+    endif
+    setenv CERN_ROOT $CERN/$CERN_LEVEL
+    echo $PATH | grep $CERN_ROOT/bin > /dev/null
+    if ($status) setenv PATH $CERN_ROOT/bin:$PATH
+endif
 ## clhep
 #if (! $?CLHEP) setenv CLHEP $GLUEX_TOP/clhep/prod
 #setenv CLHEP_INCLUDE $CLHEP/include
@@ -43,46 +46,50 @@ if ($status) setenv PATH $CERN_ROOT/bin:$PATH
 #echo $LD_LIBRARY_PATH | grep $CLHEP_LIB > /dev/null
 #if ($status) setenv LD_LIBRARY_PATH ${CLHEP_LIB}:${LD_LIBRARY_PATH}
 # Geant4
-if (! $?G4ROOT) setenv G4ROOT $GLUEX_TOP/geant4/prod
-if ( -e $G4ROOT) then
-    set g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.csh`
-    if ( -f $g4setup) then
-	set g4dir=`dirname $g4setup`
-	source $g4setup $g4dir
-	eval `$BUILD_SCRIPTS/delpath.pl -l /usr/lib64`
-	unset g4setup g4dir
+if ($?G4ROOT) then
+    if ( -e $G4ROOT) then
+	set g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.csh`
+	if ( -f $g4setup) then
+	    set g4dir=`dirname $g4setup`
+	    source $g4setup $g4dir
+	    eval `$BUILD_SCRIPTS/delpath.pl -l /usr/lib64`
+	    unset g4setup g4dir
+	endif
+	unset g4setup
     endif
-    unset g4setup
 endif
 # amptools
 if ($?AMPTOOLS_HOME) then
-setenv AMPTOOLS $AMPTOOLS_HOME/AmpTools
-setenv AMPPLOTTER $AMPTOOLS_HOME/AmpPlotter
+    setenv AMPTOOLS $AMPTOOLS_HOME/AmpTools
+    setenv AMPPLOTTER $AMPTOOLS_HOME/AmpPlotter
 endif
 # ccdb
-if (! $?CCDB_HOME) setenv CCDB_HOME $GLUEX_TOP/ccdb/prod
-source $BUILD_SCRIPTS/ccdb_env.csh
-if (! $?CCDB_USER) then
-    if ($?USER) then
-	setenv CCDB_USER $USER
+if ($?CCDB_HOME) then
+    source $BUILD_SCRIPTS/ccdb_env.csh
+    if (! $?CCDB_USER) then
+	if ($?USER) then
+	    setenv CCDB_USER $USER
+	endif
     endif
+    if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb.jlab.org/ccdb
 endif
-if (! $?CCDB_CONNECTION) setenv CCDB_CONNECTION mysql://ccdb_user@hallddb.jlab.org/ccdb
 # rcdb
-if (! $?RCDB_HOME) setenv RCDB_HOME $GLUEX_TOP/rcdb/prod
-source $BUILD_SCRIPTS/rcdb_env.csh
-if (! $?RCDB_CONNECTION) setenv RCDB_CONNECTION mysql://rcdb@hallddb.jlab.org/rcdb
+if ($?RCDB_HOME) then
+    source $BUILD_SCRIPTS/rcdb_env.csh
+    if (! $?RCDB_CONNECTION) setenv RCDB_CONNECTION mysql://rcdb@hallddb.jlab.org/rcdb
+endif
 # jana
-if (! $?JANA_HOME) setenv JANA_HOME $GLUEX_TOP/jana/prod/$BMS_OSNAME
-if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL $CCDB_CONNECTION
-echo $PATH | grep $JANA_HOME/bin > /dev/null
-if ($status) setenv PATH $JANA_HOME/bin:$PATH
+if ($?JANA_HOME) then
+    if (! $?JANA_CALIB_URL) setenv JANA_CALIB_URL $CCDB_CONNECTION
+    echo $PATH | grep $JANA_HOME/bin > /dev/null
+    if ($status) setenv PATH $JANA_HOME/bin:$PATH
+endif
 # EVIO
-if (! $?EVIOROOT) setenv EVIOROOT $GLUEX_TOP/evio/prod/`uname -s`-`uname -m`
-echo $LD_LIBRARY_PATH | grep $EVIOROOT/lib > /dev/null
-if ($status) setenv LD_LIBRARY_PATH  $EVIOROOT/lib:$LD_LIBRARY_PATH
+if ($?EVIOROOT) then
+    echo $LD_LIBRARY_PATH | grep $EVIOROOT/lib > /dev/null
+    if ($status) setenv LD_LIBRARY_PATH  $EVIOROOT/lib:$LD_LIBRARY_PATH
+endif
 # hdds
-if (! $?HDDS_HOME) setenv HDDS_HOME $GLUEX_TOP/hdds/prod
 setenv JANA_GEOMETRY_URL ccdb:///GEOMETRY/main_HDDS.xml
 # halld
 if ($?HALLD_HOME) then
@@ -126,14 +133,14 @@ if ($?HDGEANT4_HOME) then
     if ($status) setenv PYTHONPATH $HDGEANT4_HOME/g4py:$PYTHONPATH
 endif
 #
-# hd_utilities
+# hd_utilities: nothing to do for hd_utilities
 #
-if (! $?HD_UTILITIES_HOME) setenv HD_UTILITIES_HOME $GLUEX_TOP/hd_utilities/prod
 #
 # gluex_MCwrapper
 #
-if (! $?MCWRAPPER_CENTRAL) setenv MCWRAPPER_CENTRAL $HD_UTILITIES_HOME/MCwrapper
-setenv PATH ${MCWRAPPER_CENTRAL}:$PATH
+if ($?MCWRAPPER_CENTRAL) then
+    setenv PATH ${MCWRAPPER_CENTRAL}:$PATH
+endif
 #
 # gluex_root_analysis
 #
@@ -141,9 +148,8 @@ if ($?ROOT_ANALYSIS_HOME) then
     if (-e $ROOT_ANALYSIS_HOME) source $ROOT_ANALYSIS_HOME/env_analysis.csh
 endif
 #
-# sqlitecpp
+# sqlitecpp: nothing to do for SQLiteCpp
 #
-if (! $?SQLITECPP_HOME) setenv SQLITECPP_HOME $GLUEX_TOP/sqlitecpp/prod
 #
 # hepmc
 #
@@ -207,7 +213,7 @@ if ($gluex_env_verbose) then
 endif
 # check consistency of environment
 set check_versions="true"
-if($?BUILD_SCRIPTS_CONSISTENCY_CHECK) then
+if ($?BUILD_SCRIPTS_CONSISTENCY_CHECK) then
     if ($BUILD_SCRIPTS_CONSISTENCY_CHECK == "false") then
 	set check_versions="false" 
     endif

@@ -131,42 +131,51 @@ then
     fi
 fi
 # jana
-if [ -z "$JANA_HOME" ]; then export JANA_HOME=$GLUEX_TOP/jana/prod/$BMS_OSNAME; fi
-if [ -z "$JANA_CALIB_URL" ]
-    then export JANA_CALIB_URL=$CCDB_CONNECTION
-fi
-if [ `echo $PATH | grep -c $JANA_HOME/bin` -eq 0 ]
-    then export PATH=$JANA_HOME/bin:$PATH
+if [ -n "$JANA_HOME" ]
+then
+    if [ -z "$JANA_CALIB_URL" ]
+    then
+	export JANA_CALIB_URL=$CCDB_CONNECTION
+    fi
+    if [ `echo $PATH | grep -c $JANA_HOME/bin` -eq 0 ]
+    then
+	export PATH=$JANA_HOME/bin:$PATH
+    fi
 fi
 # EVIO
-if [ -z "$EVIOROOT" ]; then export EVIOROOT=$GLUEX_TOP/evio/prod/`uname -s`-`uname -m`; fi
-if [ `echo $LD_LIBRARY_PATH | grep -c $EVIOROOT/lib` -eq 0 ]
-    then export LD_LIBRARY_PATH=$EVIOROOT/lib:$LD_LIBRARY_PATH
+if [ -n "$EVIOROOT" ]
+then
+    if [ `echo $LD_LIBRARY_PATH | grep -c $EVIOROOT/lib` -eq 0 ]
+    then
+	export LD_LIBRARY_PATH=$EVIOROOT/lib:$LD_LIBRARY_PATH
+    fi
 fi
 # hdds
-if [ -z "$HDDS_HOME" ]; then export HDDS_HOME=$GLUEX_TOP/hdds/prod; fi
 export JANA_GEOMETRY_URL=ccdb:///GEOMETRY/main_HDDS.xml
 # sim-recon
 if [ -n "$HALLD_HOME" ]
-    then
+then
     if [ `echo $PATH | grep -c $HALLD_HOME/$BMS_OSNAME/bin` -eq 0 ]
-        then export PATH=$HALLD_HOME/${BMS_OSNAME}/bin:$PATH
+    then
+	export PATH=$HALLD_HOME/${BMS_OSNAME}/bin:$PATH
     fi
     export PYTHONPATH=$HALLD_HOME/$BMS_OSNAME/python2:$PYTHONPATH
 fi
 # halld_recon
 if [ -n "$HALLD_RECON_HOME" ]
-    then
+then
     if [ `echo $PATH | grep -c $HALLD_RECON_HOME/$BMS_OSNAME/bin` -eq 0 ]
-        then export PATH=$HALLD_RECON_HOME/${BMS_OSNAME}/bin:$PATH
+    then
+	export PATH=$HALLD_RECON_HOME/${BMS_OSNAME}/bin:$PATH
     fi
     export PYTHONPATH=$HALLD_RECON_HOME/$BMS_OSNAME/python2:$PYTHONPATH
 fi
 # halld_sim
 if [ -n "$HALLD_SIM_HOME" ]
-    then
+then
     if [ `echo $PATH | grep -c $HALLD_SIM_HOME/$BMS_OSNAME/bin` -eq 0 ]
-        then export PATH=$HALLD_SIM_HOME/${BMS_OSNAME}/bin:$PATH
+    then
+	export PATH=$HALLD_SIM_HOME/${BMS_OSNAME}/bin:$PATH
     fi
 fi
 # halld_my
@@ -199,14 +208,15 @@ if [ -n "$HDGEANT4_HOME" ]; then
     fi
 fi
 #
-# hd_utilities
+# hd_utilities: nothing to do for hd_utilities
 #
-if [ -z "$HD_UTILITIES_HOME" ]; then export HD_UTILITIES_HOME=$GLUEX_TOP/hd_utilities/prod; fi
 #
 # gluex_MCwrapper
 #
-if [ -z "$MCWRAPPER_CENTRAL" ]; then export MCWRAPPER_CENTRAL=$HD_UTILITIES_HOME/MCwrapper; fi
-export PATH=${MCWRAPPER_CENTRAL}:$PATH
+if [ -n "$MCWRAPPER_CENTRAL" ]
+then
+    export PATH=${MCWRAPPER_CENTRAL}:$PATH
+fi
 #
 # gluex_root_analysis
 #
@@ -214,25 +224,29 @@ if [ -n "$ROOT_ANALYSIS_HOME" ]; then
     if [ -e "$ROOT_ANALYSIS_HOME" ]; then source $ROOT_ANALYSIS_HOME/env_analysis.sh ; fi
 fi
 #
-# SQLiteCpp
+# SQLiteCpp: nothing to do for SQLiteCpp
 #
-if [ -z "$SQLITECPP_HOME" ]; then export SQLITECPP_HOME=$GLUEX_TOP/sqlitecpp/prod; fi
+#
 # hepmc
 if [ -n "$HEPMCDIR" ]; then
     if [ `echo $LD_LIBRARY_PATH | grep -c $HEPMCDIR/lib` -eq 0 ]
-    then export LD_LIBRARY_PATH=$HEPMCDIR/lib:$LD_LIBRARY_PATH
+    then
+	export LD_LIBRARY_PATH=$HEPMCDIR/lib:$LD_LIBRARY_PATH
     fi
 fi
 # photos
 if [ -n "$PHOTOSDIR" ]; then
     if [ `echo $LD_LIBRARY_PATH | grep -c $PHOTOSDIR/lib` -eq 0 ]
-    then export LD_LIBRARY_PATH=$PHOTOSDIR/lib:$LD_LIBRARY_PATH
+    then
+	export LD_LIBRARY_PATH=$PHOTOSDIR/lib:$LD_LIBRARY_PATH
     fi
 fi
 # evtgen
-if [ -n "$EVTGENDIR" ]; then
+if [ -n "$EVTGENDIR" ]
+then
     if [ `echo $LD_LIBRARY_PATH | grep -c $EVTGENDIR/lib` -eq 0 ]
-    then export LD_LIBRARY_PATH=$EVTGENDIR/lib:$LD_LIBRARY_PATH
+    then
+	export LD_LIBRARY_PATH=$EVTGENDIR/lib:$LD_LIBRARY_PATH
     fi
 fi
 #
@@ -283,5 +297,6 @@ if [ $gluex_env_verbose -eq 1 ]
 fi
 # check consistency of environment
 if [ "$BUILD_SCRIPTS_CONSISTENCY_CHECK" != "false" ]
-then $BUILD_SCRIPTS/version_check.pl
+then
+    $BUILD_SCRIPTS/version_check.pl
 fi
