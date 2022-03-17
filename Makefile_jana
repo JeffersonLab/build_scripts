@@ -1,6 +1,8 @@
 SHELL = /bin/bash
 PWD = $(shell pwd)
 
+include $(BUILD_SCRIPTS)/ccdb_version.mk
+
 ifdef JANA_VERSION
  SOURCE_CODE_TARGET = $(JANA_HOME)/.patches_done
  ifdef JANA_DIRTAG
@@ -57,15 +59,16 @@ $(JANA_HOME)/.checkout_done:
 
 $(JANA_HOME)/.patches_done: $(JANA_HOME)/.untar_done
 ifeq ($(PYVERSION), 3)
-	@echo info: applying patches
 	patch $(JANA_HOME)/SBMS/sbms.py \
 	    < $(BUILD_SCRIPTS)/patches/jana/sbms.py.patch
 	patch $(JANA_HOME)/SBMS/sbms_config.py \
 	    < $(BUILD_SCRIPTS)/patches/jana/$(SBMS_CONFIG_PATCH)
 	patch $(JANA_HOME)/SConstruct \
 	    < $(BUILD_SCRIPTS)/patches/jana/SConstruct.patch
-else
-	@echo info: no patches needed
+endif
+ifeq ($(CCDB_MAJOR_VERSION), 2)
+	patch $(JANA_HOME)/SBMS/sbms.py \
+	    < $(BUILD_SCRIPTS)/patches/jana/sbms.py.patch2
 endif
 	date > $@
 

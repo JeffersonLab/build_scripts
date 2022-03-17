@@ -1,0 +1,31 @@
+--- sbms.py.1	2022-03-17 11:16:29.629256234 -0400
++++ sbms.py.2	2022-03-17 11:17:57.659638790 -0400
+@@ -531,6 +531,7 @@
+ 	ccdb_home = os.getenv('CCDB_HOME', 'none')
+ 	if(ccdb_home != 'none'):
+ 		AddMySQL(env)
++		AddSQLite(env)
+ 		CCDB_CPPPATH = "%s/include" % (ccdb_home)
+ 		CCDB_LIBPATH = "%s/lib" % (ccdb_home)
+ 		CCDB_LIBS = "ccdb"
+@@ -538,6 +539,20 @@
+ 		env.AppendUnique(LIBPATH = [CCDB_LIBPATH])
+ 		env.AppendUnique(LIBS    = [CCDB_LIBS])
+ 
++##################################
++# SQLite
++##################################
++def AddSQLite(env):
++	sqlite_home = os.getenv('SQLITE_HOME', 'none')
++	if(sqlite_home != 'none'):
++		SQLITE_CPPPATH = "%s/include" % (sqlite_home)
++		SQLITE_LIBPATH = "%s/lib" % (sqlite_home)
++		SQLITE_LIBS = "sqlite3"
++		env.AppendUnique(CPPPATH = [SQLITE_CPPPATH])
++		env.AppendUnique(LIBPATH = [SQLITE_LIBPATH])
++		env.AppendUnique(LIBS    = [SQLITE_LIBS])
++		env.AppendUnique(LIBS    = ["fmt"])
++
+ 
+ ##################################
+ # Xerces
