@@ -97,10 +97,10 @@ def main(argv):
     pushcmd="mysql --host="+dbhost+" --database="+dbname+" --user="+dbuser#+"<tables.sql"
 
     p = subprocess.Popen(pushcmd.split(" "),stdin=subprocess.PIPE)
-    stdout,stderr = p.communicate(file("/work/halld2/home/tbritton/GlueX_Software/build_scripts/vsdb/tables.sql").read())
+    stdout,stderr = p.communicate(file("/group/halld/Software/build_scripts/vsdb/tables.sql").read())
    
     
-    reconpackcmd="xsltproc /work/halld2/home/tbritton/GlueX_Software/build_scripts/xml/packages_sql.xslt /work/halld2/home/tbritton/GlueX_Software/build_scripts/xml/packages.xml | grep INSERT | "+"mysql -h "+dbhost+" -D "+dbname+" -u "+dbuser
+    reconpackcmd="xsltproc /group/halld/Software/build_scripts/xml/packages_sql.xslt /group/halld/Software/build_scripts/xml/packages.xml | grep INSERT | "+"mysql -h "+dbhost+" -D "+dbname+" -u "+dbuser
     #print reconpackcmd
     
     ps = subprocess.Popen(reconpackcmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
@@ -126,14 +126,15 @@ def main(argv):
 
         directories=os.listdir(loc)
         for afile in directories:
-            #if "_jlab" not in afile:
-            #    continue
+            
             if ".xml" not in afile:
                 continue
             if "~" in afile:
                 continue
             if afile == "version_jlab.xml" or afile == "version_set_correlations.xml" or afile=="version.xml":
                 continue
+            #if "test" in afile:
+            #    continue
             # ADD afile to versionset.  Get that version set id
             check_for_file="SELECT id from versionSet where filename=\""+afile+"\";"
             #print check_for_file
@@ -192,6 +193,7 @@ def main(argv):
                 num = curs.fetchall()
 
                 ID=-1
+                print("Getting ID number")
                 print num
                 #if len(num[0])
                 if num[0]['id']:
