@@ -16,11 +16,17 @@ where target is one of
 }
 
 oldname[1]=Linux_RHEL8-x86_64-gcc8.5.0
-newname[1]=Linux_RHEL8-gcc8.5
-oldname[2]=Linux_RHEL7-x86_64-gcc4.8.5
-newname[2]=Linux_RHEL7-gcc4.8
-oldname[3]=Linux_CentOS7-x86_64-gcc4.8.5-cntr
-newname[3]=Linux_CentOS7-gcc4.8
+newname[1]=Linux_RHEL8-x86_64-gcc8.5
+oldname[2]=Linux_CentOS7.7-x86_64-gcc4.8.5
+newname[2]=Linux_CentOS7-x86_64-gcc4.8
+oldname[3]=Linux_RHEL7-x86_64-gcc4.8.5
+newname[3]=Linux_RHEL7-x86_64-gcc4.8
+oldname[4]=Linux_Fedora35-x86_64-gcc11.2.1
+newname[4]=Linux_Fedora35-x86_64-gcc11.2
+oldname[5]=Linux_CentOS7-x86_64-gcc4.8.5-cntr
+newname[5]=Linux_CentOS7-x86_64-gcc4.8
+oldname[6]=Linux_Ubuntu20.04-x86_64-gcc9.3.0
+newname[6]=Linux_Ubuntu20.04-x86_64-gcc9.3
 
 target=$1
 
