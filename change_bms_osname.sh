@@ -6,12 +6,20 @@ usage: change_bms_osname.sh <target>
     
 where target is one of
 
-  "jlab":      convert the /group/halld/Software/builds tree at JLab (script
-               must be executed from a directory named "builds")
+  "jlab": convert the /group/halld/Software/builds tree at JLab (script must be
+          executed from a directory named "builds")
   "gluex_top": convert a GLUEX_TOP tree (GLUEX_TOP must be defined in the
 	       environment)
-  "halld_my":  convert a HALLD_MY tree (HALLD_MY must be defined
-	       in the environment)
+  "halld_my": convert a HALLD_MY tree (HALLD_MY must be defined in the
+              environment)
+  "jana": convert a jana tree (JANA_HOME must be defined in the environment)
+  "hdds": convert a hdds tree (HDDS_HOME must be defined in the environment)
+  "halld_recon": convert a halld_recon tree (HALLD_RECON_HOME must be defined in
+		 the environment)
+  "halld_sim": convert a halld_sim tree (HALLD_SIM_HOME must be defined in the
+	       environment)
+  "gluex_root_analysis": convert a gluex_root_analysis tree (ROOT_ANALYSIS_HOME
+			 must be defined in the environment)
 +
 }
 
@@ -35,7 +43,10 @@ then
     echo
     print_usage
     exit 1
-elif [[ "$target" != "jlab" && "$target" != "gluex_top" && "$target" != "halld_my" ]]
+elif [[ "$target" != "jlab" && "$target" != "gluex_top" \
+	    && "$target" != "halld_my" && "$target" != "jana" \
+	    && "$target" != "hdds" && "$target" != "halld_recon" \
+	    && "$target" != "halld_sim" && "$target" != "gluex_root_analysis" ]]
 then
     echo
     echo "error: unknown target: $target"
@@ -65,6 +76,61 @@ then
 	exit 4
     fi
 fi
+if [ "$target" == "jana" ]
+then
+    if [ -z "$JANA_HOME" ]
+    then
+	echo
+	echo error: JANA_HOME not set
+	echo
+	print_usage
+	exit 4
+    fi
+fi
+if [ "$target" == "hdds" ]
+then
+    if [ -z "$HDDS_HOME" ]
+    then
+	echo
+	echo error: HDDS_HOME not set
+	echo
+	print_usage
+	exit 4
+    fi
+fi
+if [ "$target" == "halld_recon" ]
+then
+    if [ -z "$HALLD_RECON_HOME" ]
+    then
+	echo
+	echo error: HALLD_RECON_HOME not set
+	echo
+	print_usage
+	exit 4
+    fi
+fi
+if [ "$target" == "halld_sim" ]
+then
+    if [ -z "$HALLD_SIM_HOME" ]
+    then
+	echo
+	echo error: HALLD_SIM_HOME not set
+	echo
+	print_usage
+	exit 4
+    fi
+fi
+if [ "$target" == "gluex_root_analysis" ]
+then
+    if [ -z "$ROOT_ANALYSIS_HOME" ]
+    then
+	echo
+	echo error: ROOT_ANALYSIS_HOME not set
+	echo
+	print_usage
+	exit 4
+    fi
+fi
 if [ "$target" == "jlab" ]
 then
     pwd=`pwd`
@@ -79,7 +145,7 @@ then
     fi
 fi
 
-for i in {1..3}
+for i in {1..5}
 do
 
     if [ "$target" == "jlab" ]
@@ -118,6 +184,32 @@ do
 	cd $HALLD_MY
 	dir="."
 	depth=1
+    elif [ "$target" == "jana" ]
+    then
+	jana_root=`dirname $JANA_HOME`
+	cd $jana_root
+	dir="."
+	depth=1
+    elif [ "$target" == "hdds" ]
+    then
+	cd $HDDS_HOME
+	dir="."
+	depth=1
+    elif [ "$target" == "halld_recon" ]
+    then
+	cd $HALLD_RECON_HOME
+	dir="."
+	depth=1
+    elif [ "$target" == "halld_sim" ]
+    then
+	cd $HALLD_SIM_HOME
+	dir="."
+	depth=1
+    elif [ "$target" == "gluex_root_analysis" ]
+    then
+	cd $ROOT_ANALYSIS_HOME
+	dir="."
+	depth=1
     elif [ "$target" == "jlab" ]
     then
 	dir="${oldname[$i]}"
@@ -134,8 +226,9 @@ do
     elif [ $depth -eq 3 ]
     then
 	find $dir -maxdepth $depth -mindepth $depth -name ${oldname[$i]} \
-	| awk -F/ -v newname="${newname[$i]}" -v oldname="${oldname[$i]}" -v dirname="$dir"\
-	'{print "ln -sv "oldname" "dirname"/"$2"/"$3"/"newname}'
+	    | awk -F/ -v newname="${newname[$i]}" -v oldname="${oldname[$i]}" \
+		  -v dirname="$dir" \
+	'{print "ln -sv "oldname" "dirname"/"$2"/"$3"/"newname}' | bash
     else
 	echo error: this cannot happen
 	exit 7
