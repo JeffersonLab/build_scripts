@@ -25,14 +25,16 @@ where target is one of
 
 oldname[1]=Linux_RHEL8-x86_64-gcc8.5.0
 newname[1]=Linux_RHEL8-x86_64-gcc8.5
-oldname[2]=xLinux_CentOS7.7-x86_64-gcc4.8.5
-newname[2]=xLinux_CentOS7-x86_64-gcc4.8
-oldname[3]=Linux_RHEL7-x86_64-gcc4.8.5
-newname[3]=Linux_RHEL7-x86_64-gcc4.8
-oldname[4]=Linux_Fedora35-x86_64-gcc11.2.1
-newname[4]=Linux_Fedora35-x86_64-gcc11.2
-oldname[5]=Linux_Ubuntu20.04-x86_64-gcc9.3.0
-newname[5]=Linux_Ubuntu20.04-x86_64-gcc9.3
+oldname[2]=Linux_CentOS7-x86_64-gcc4.8.5-cntr
+newname[2]=Linux_CentOS7-x86_64-gcc4.8
+oldname[3]=Linux_CentOS7.7-x86_64-gcc4.8.5
+newname[3]=Linux_CentOS7-x86_64-gcc4.8
+oldname[4]=Linux_RHEL7-x86_64-gcc4.8.5
+newname[4]=Linux_RHEL7-x86_64-gcc4.8
+oldname[5]=Linux_Fedora35-x86_64-gcc11.2.1
+newname[5]=Linux_Fedora35-x86_64-gcc11.2
+oldname[6]=Linux_Ubuntu20.04-x86_64-gcc9.3.0
+newname[6]=Linux_Ubuntu20.04-x86_64-gcc9.3
 
 target=$1
 
@@ -150,29 +152,35 @@ do
 
     if [ "$target" == "jlab" ]
     then
+
+	# if the new gluex_top does not exist
+	if [ ! -d ${newname[$i]} ]
+	then	
     
-	# create gluex_top directories for the new names
-	if [ -d ${oldname[$i]} ]
-	then
-	    mkdir -v ${newname[$i]}
+	    # create a gluex_top directory for the new name
+	    if [ -d ${oldname[$i]} ]
+	    then
+		mkdir -v ${newname[$i]}
+	    fi
+	    
+	    # make top-level package directories in the new gluex_top
+	    find ${oldname[$i]} -maxdepth 1 -mindepth 1 -type d \
+		| awk -v newname="${newname[$i]}" -F${oldname[$i]}/ \
+		      '{ print "mkdir -v ./"newname"/"$2 }' | bash
+    
+	    # create soft links to the built package directories pointing from
+	    # the new name directories to the old name directories
+	    find ${oldname[$i]} -maxdepth 2 -mindepth 2 \
+		| awk -v newname="${newname[$i]}" -F/ \
+		      {'print "ln -sv ../../"$0" "newname"/"$2"/"$3'} | bash
+
 	fi
 
-	# make package directories under gluex_top's for the new names
-	find ${oldname[$i]} -maxdepth 1 -mindepth 1 -type d \
-	    | awk -v newname="${newname[$i]}" -F${oldname[$i]}/ \
-	    '{ print "mkdir -v ./"newname"/"$2 }' | bash
-    
-	# create soft links to the built package directories pointing from
-	# the new name directories to the old name directories
-	find ${oldname[$i]} -maxdepth 2 -mindepth 2 \
-	    | awk -v newname="${newname[$i]}" -F/ \
-	    {'print "ln -sv ../../"$0" "newname"/"$2"/"$3'} | bash
-
     fi
-    
-    # create soft links parallel to BMS_OSNAME'd subdirectories under
-    # the old-named package directorys with new names pointing to the
-    # old names
+
+    # create soft links parallel to BMS_OSNAMEd subdirectories under
+    # the old-named package directories with new names pointing to the
+    # old names in the same directory
 
     if [ "$target" == "gluex_top" ]
     then
