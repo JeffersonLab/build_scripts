@@ -56,6 +56,7 @@ $(HALLD_AMP_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
 	date > $@
 
 $(HALLD_AMP_HOME)/halld_amp_prereqs_version.xml: $(HALLD_AMP_HOME)/.sconstruct_done
+	cd $(HALLD_AMP_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl halld_amp
 
 env:
 	@echo HALLD_AMP_BRANCH = $(HALLD_AMP_BRANCH)
