@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 print_usage() {
     cat <<+
