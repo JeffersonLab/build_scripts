@@ -68,7 +68,7 @@ foreach $href (@b) {
     $year = $d{year};
     $debug_level = $d{debug_level};
     $profiling = $d{profiling};
-    if ($debug_level eq '') {$debug_level = 1} # set a default level
+    if ($debug_level eq '') {$debug_level = 0} # set a default level
     if ($version) {
 	print_command("${name_in_caps}_VERSION", $version);
     }
