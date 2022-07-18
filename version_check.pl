@@ -68,14 +68,17 @@ foreach $package (@packages) {
 	    } else {
 		$version_field = $token0[1];
 	    }
-	    #print "version_field = $version_field\n";
+	    #print "first preliminary version_field = $version_field\n";
 	    @token4 = split(/\^/, $version_field);
 	    if ($#token4 > 0) {
 		$dirtag_field = $token4[$#token4];
 		$dirtag_string = "\\^" . $dirtag_field;
+		$dirtag_string =~ s/\+/\\\+/;
+		#print "dirtag_field = $dirtag_field, dirtag_string = $dirtag_string\n";
 		@token5 = split (/$dirtag_string/, $version_field);
 		$version_field = $token5[0];
 	    }
+	    #print "second preliminary version_field = $version_field\n";
 	    @token6 = split(/\+/, $version_field);
 	    if ($#token6 > 0) {
 		$version_field = $token6[0];
@@ -99,7 +102,12 @@ foreach $package (@packages) {
 	@token7 = split(/\^/, $home_basename);
 	if ($#token7 > 0) {
 	    $dirtag = $token7[1];
+	    @token9 = split(/\+/, $dirtag);
+	    if ($#token9 > 0) {
+		$dirtag = $token9[0];
+	    }
 	}
+	#print "dirtag = $dirtag\n"
     } else {
     }
     if ($dirtag) {
