@@ -92,4 +92,4 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
 	       diracxx => '',
 	       hddm => '',
 	       halld_amp => '');
-@debug_type = ('opt', '', 'dbg');
+@debug_type = ('', 'optdbg', 'dbg');
