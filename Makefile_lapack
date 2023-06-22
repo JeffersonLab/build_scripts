@@ -47,7 +47,7 @@ $(LAPACKROOT)/.untar_done: $(TARFILE)
 	date > $@
 
 $(TARFILE):
-	wget --no-verbose http://www.netlib.org/lapack/$(TARFILE)
+	wget --no-check-certificate --no-verbose http://www.netlib.org/lapack/$(TARFILE)
 
 show_env:
 	@echo MAJOR = $(MAJOR)
