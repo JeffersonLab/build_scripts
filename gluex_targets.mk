@@ -7,9 +7,9 @@ endif
 ifdef LAPACK_HOME
     GLUEX_PASS1_TARGETS += lapack_build
 endif
-ifdef CERN_ROOT
-    GLUEX_PASS1_TARGETS += cernlib_build
-endif
+#ifdef CERN_ROOT
+#    GLUEX_PASS1_TARGETS += cernlib_build
+#endif
 ifdef ROOTSYS
     GLUEX_PASS1_TARGETS += root_build
 endif
