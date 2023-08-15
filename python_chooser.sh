@@ -42,6 +42,9 @@ then
 	elif grep -lq Rocky /etc/redhat-release
 	then
 	    dist_name=CentOS
+	elif grep -lq Alma /etc/redhat-release
+	then
+	    dist_name=CentOS
 	else
 	    dist_name=unknown_redhat_like
 	fi
