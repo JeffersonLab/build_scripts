@@ -55,11 +55,11 @@ $(G4DIR)/.configure_done: $(G4DIR)/.patch_done
 	   -DGEANT4_USE_OPENGL_X11=ON \
 	   -DGEANT4_USE_RAYTRACER_X11=ON \
 	   -DGEANT4_USE_XM=ON \
+	   -DGEANT4_USE_QT=ON \
 	   -DXERCESC_ROOT_DIR=$(XERCESCROOT) \
 	   ..
 	date > $@
 
-#	   -DGEANT4_USE_QT=ON \
 
 
 $(G4DIR)/.make_done: $(G4DIR)/.configure_done
