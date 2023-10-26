@@ -10,7 +10,7 @@ ifdef JANA_VERSION
  else
   JANA_DIR = jana_$(JANA_VERSION)
  endif
- TARFILE = jana_$(JANA_VERSION).tgz
+ TARFILE = $(JANA_VERSION).tar.gz
  VERSION_MAJOR = $(shell echo $(JANA_VERSION) | awk -F. '{print $$1}')
  VERSION_MINOR = $(shell echo $(JANA_VERSION) | awk -F. '{print $$2}')
  VERSION_GE_08 = $(shell if [[ $(VERSION_MAJOR) -eq 0 && $(VERSION_MINOR) -ge 8 ]]; then echo true; else echo false; fi)
@@ -82,7 +82,7 @@ $(JANA_HOME)/.untar_done: $(TARFILE)
 
 $(TARFILE):
 	@echo making $@
-	wget --no-verbose http://www.jlab.org/JANA/releases/$(TARFILE)
+	wget --no-verbose https://github.com/JeffersonLab/JANA/archive/refs/tags/$(TARFILE)
 
 show_env:
 	@echo PYTHON_MAJOR_VERSION = $(PYTHON_MAJOR_VERSION)
