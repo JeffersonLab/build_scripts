@@ -74,7 +74,7 @@ endif
 #	python2 scripts/scons.py
 #	date > $@
 
-$(CCDB_DIR)/.scons_done: $(CCDB_DIR)/.clone_done
+$(CCDB_DIR)/.scons_done: $(GET_SOURCE_TARGET)
 	source $(CCDB_DIR)/environment.bash ; \
 	cd $(CCDB_DIR) ; \
 	$(SCONS) PYTHONCOMMAND=$(PYTHON)
