@@ -21,6 +21,7 @@ else
   ifndef CCDB_BRANCH
     CCDB_BRANCH = master
   endif
+  CCDB_INSTALL_DIR = $(shell pwd)/$(CCDB_DIR)
   MAJOR_VERSION := 2
 endif
 UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
@@ -32,7 +33,7 @@ PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
 ifeq '$(MAJOR_VERSION)' '1'
   BUILD_TARGET = $(CCDB_DIR)/.scons_done
 else
-  BUILD_TARGET = $(CCDB_DIR)/.make_install_done
+  BUILD_TARGET = $(CCDB_DIR)/.make_done
 endif
 
 all: force_rebuild_action $(BUILD_TARGET)
@@ -84,25 +85,12 @@ $(CCDB_DIR)/.cmake_done: $(GET_SOURCE_TARGET)
 	cd $(CCDB_DIR)/cpp; mkdir -pv build
 	cd $(CCDB_DIR)/cpp/build; \
 		cmake3 -DSQLite3_INCLUDE_DIR=$(SQLITE_HOME)/include \
-		-DSQLite3_LIBRARY=$(SQLITE_HOME)/lib ..
+		-DSQLite3_LIBRARY=$(SQLITE_HOME)/lib/libsqlite3.so \
+		-DCMAKE_INSTALL_PREFIX=$(CCDB_INSTALL_DIR) ..
 	date > $@
 
 $(CCDB_DIR)/.make_done: $(CCDB_DIR)/.cmake_done
-	cd $(CCDB_DIR)/cpp/build; make VERBOSE=1
-	date > $@
-
-$(CCDB_DIR)/.make_install_done: $(CCDB_DIR)/.make_done
-	@echo Makefile_ccdb info: install target should be done via cmake, doing it by hand
-	cd $(CCDB_DIR); mkdir -pv lib
-	install $(CCDB_DIR)/cpp/build/src/CCDB/libccdb.a $(CCDB_DIR)/lib/
-	cd $(CCDB_DIR); mkdir -pv include/CCDB
-	install -v $(CCDB_DIR)/cpp/src/CCDB/*.h $(CCDB_DIR)/include/CCDB
-	cd $(CCDB_DIR); mkdir -pv include/CCDB/Providers
-	install -v $(CCDB_DIR)/cpp/src/CCDB/Providers/*.h $(CCDB_DIR)/include/CCDB/Providers
-	cd $(CCDB_DIR); mkdir -pv include/CCDB/Model
-	install -v $(CCDB_DIR)/cpp/src/CCDB/Model/*.h $(CCDB_DIR)/include/CCDB/Model
-	cd $(CCDB_DIR); mkdir -pv include/CCDB/Helpers
-	install -v $(CCDB_DIR)/cpp/src/CCDB/Helpers/*.h $(CCDB_DIR)/include/CCDB/Helpers
+	cd $(CCDB_DIR)/cpp/build; make VERBOSE=1 install
 	date > $@
 
 # end of makefile
