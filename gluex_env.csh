@@ -91,6 +91,12 @@ if ($?EVIOROOT) then
 endif
 # hdds
 setenv JANA_GEOMETRY_URL ccdb:///GEOMETRY/main_HDDS.xml
+# hddm
+if ($?HDDM_HOME) then
+    echo $PATH | grep $HDDM_HOME/bin > /dev/null
+    if ($status) setenv PATH $HDDM_HOME/bin:$PATH
+    setenv HDDM_DIR $HDDM_HOME
+endif
 # halld
 if ($?HALLD_HOME) then
     echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null

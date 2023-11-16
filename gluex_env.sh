@@ -152,6 +152,15 @@ then
 fi
 # hdds
 export JANA_GEOMETRY_URL=ccdb:///GEOMETRY/main_HDDS.xml
+# hddm
+if [ -n "$HDDM_HOME" ]
+then
+    if [ `echo $PATH | grep -c $HDDM_HOME/bin` -eq 0 ]
+    then
+	export PATH=$HDDM_HOME/bin:$PATH
+	export HDDM_DIR=$HDDM_HOME
+    fi
+fi
 # sim-recon
 if [ -n "$HALLD_HOME" ]
 then

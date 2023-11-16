@@ -8,7 +8,7 @@ ifdef HDDM_VERSION
 else
  SOURCE_CODE_TARGET = $(HDDM_HOME)/.clone_done
  ifndef HDDM_URL
-  HDDM_URL=https://github.com/rjones30/HDDM
+  HDDM_URL=https://github.com/jeffersonlab/hddm
  endif
  HDDM_DIR = $(notdir $(HDDM_URL))
  ifndef HDDM_BRANCH

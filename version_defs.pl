@@ -57,7 +57,7 @@
 	       photos => 'Photos-',
 	       evtgen => 'evtgen-',
 	       diracxx => 'Diracxx-',
-	       hddm => 'HDDM-',
+	       hddm => 'hddm-',
 	       halld_amp => 'halld_amp-');
 
 $unames = `uname -s`;
