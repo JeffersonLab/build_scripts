@@ -55,9 +55,11 @@ $(HDDM_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	    -DXercesC_LIBRARY=$(XERCESCROOT)/lib/libxerces-c.so \
 	    -DXercesC_INCLUDE_DIR=$(XERCES_INCLUDE) \
 	    -DXercesC_VERSION=$(XERCES_C_VERSION) -DCMAKE_INSTALL_PREFIX=.. ..
+	date > $@
 
 $(HDDM_HOME)/.make_install_done: $(HDDM_HOME)/.cmake_done
 	cd $(HDDM_HOME)/build; make install
+	date > $@
 
 $(HDDM_HOME)/hddm_prereqs_version.xml: $(HDDM_HOME)/.make_install_done
 	cd $(HDDM_HOME); $(BUILD_SCRIPTS)/version_prereqs.pl hddm
