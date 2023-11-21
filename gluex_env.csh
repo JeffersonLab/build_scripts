@@ -126,6 +126,7 @@ endif
 if ($?DIRACXX_HOME) then
     echo $LD_LIBRARY_PATH | grep $DIRACXX_HOME > /dev/null
     if ($status) setenv LD_LIBRARY_PATH ${DIRACXX_HOME}/lib:${DIRACXX_HOME}:$LD_LIBRARY_PATH # covers both old and new Diracxx lib location
+    setenv DIRACXX_DIR $DIRACXX_HOME
 endif
 #
 # HDGeant4

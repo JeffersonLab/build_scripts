@@ -200,7 +200,9 @@ fi
 #
 if [ -n "$DIRACXX_HOME" ]; then
     if [ `echo $LD_LIBRARY_PATH | grep -c $DIRACXX_HOME` -eq 0 ]
-    then export LD_LIBRARY_PATH=$DIRACXX_HOME/lib:$DIRACXX_HOME:$LD_LIBRARY_PATH # covers both old and new Diracxx lib location
+    then
+	export LD_LIBRARY_PATH=$DIRACXX_HOME/lib:$DIRACXX_HOME:$LD_LIBRARY_PATH # covers both old and new Diracxx lib location
+	export DIRACXX_DIR=$DIRACXX_HOME
     fi
 fi
 #
