@@ -57,7 +57,7 @@
 	       photos => 'Photos-',
 	       evtgen => 'evtgen-',
 	       diracxx => 'Diracxx-',
-	       hddm => 'HDDM-',
+	       hddm => 'hddm-',
 	       halld_amp => 'halld_amp-');
 
 $unames = `uname -s`;
@@ -88,7 +88,7 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
                lapack => '',
                hepmc => '',
                photos => '',
-               evtgen => '',
+               evtgen => '/build',
 	       diracxx => '',
 	       hddm => '',
 	       halld_amp => '');

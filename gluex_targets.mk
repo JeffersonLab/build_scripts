@@ -40,6 +40,9 @@ endif
 ifdef HDDS_HOME
     GLUEX_PASS2_TARGETS += hdds_build
 endif
+ifdef HDDM_HOME
+    GLUEX_PASS2_TARGETS += hddm_build
+endif
 ifdef AMPTOOLS_HOME
     GLUEX_PASS2_TARGETS += amptools_build
 endif

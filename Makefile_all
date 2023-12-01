@@ -8,6 +8,7 @@ CERNLIB = ${ROOT_OF_ALL}/cernlib
 CLHEP_TOP = ${ROOT_OF_ALL}/clhep
 SIM-RECON = ${ROOT_OF_ALL}/sim-recon
 HDDS = ${ROOT_OF_ALL}/hdds
+HDDM = ${ROOT_OF_ALL}/hddm
 JANA = ${ROOT_OF_ALL}/jana
 ROOT = ${ROOT_OF_ALL}/root
 XERCES = ${ROOT_OF_ALL}/xerces-c
@@ -104,6 +105,14 @@ hdds_dir:
 
 hdds_make:
 	$(MAKE) -C${HDDS} -f${BUILD_SCRIPTS}/Makefile_hdds
+
+hddm_build: hddm_dir hddm_make
+
+hddm_dir:
+	test -d ${HDDM} || mkdir -pv ${HDDM}
+
+hddm_make:
+	$(MAKE) -C${HDDM} -f${BUILD_SCRIPTS}/Makefile_hddm
 
 sim-recon_build: sim-recon_dir sim-recon_make
 
