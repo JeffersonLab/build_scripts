@@ -26,5 +26,6 @@ setenv JANA_CALIB_URL `$BUILD_SCRIPTS/calib_url_chooser.sh`
 setenv JANA_RESOURCE_DIR /group/halld/www/halldweb/html/resources
 # cmake on the cue
 if ( $BMS_OSNAME !~ *CentOS7.7* ) then
-    setenv PATH /apps/cmake/cmake-3.5.1/bin:$PATH
+    #setenv PATH /apps/cmake/cmake-3.5.1/bin:$PATH
+    setenv PATH /apps/bin:$PATH
 endif
