@@ -91,6 +91,12 @@ if ($?EVIOROOT) then
 endif
 # hdds
 setenv JANA_GEOMETRY_URL ccdb:///GEOMETRY/main_HDDS.xml
+# hddm
+if ($?HDDM_HOME) then
+    echo $PATH | grep $HDDM_HOME/bin > /dev/null
+    if ($status) setenv PATH $HDDM_HOME/bin:$PATH
+    setenv HDDM_DIR $HDDM_HOME
+endif
 # halld
 if ($?HALLD_HOME) then
     echo $PATH | grep $HALLD_HOME/$BMS_OSNAME/bin > /dev/null
@@ -120,6 +126,7 @@ endif
 if ($?DIRACXX_HOME) then
     echo $LD_LIBRARY_PATH | grep $DIRACXX_HOME > /dev/null
     if ($status) setenv LD_LIBRARY_PATH ${DIRACXX_HOME}/lib:${DIRACXX_HOME}:$LD_LIBRARY_PATH # covers both old and new Diracxx lib location
+    setenv DIRACXX_DIR $DIRACXX_HOME
 endif
 #
 # HDGeant4

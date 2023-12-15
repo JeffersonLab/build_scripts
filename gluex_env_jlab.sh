@@ -30,5 +30,6 @@ export JANA_RESOURCE_DIR=/group/halld/www/halldweb/html/resources
 # cmake on the cue
 if [[ $BMS_OSNAME != *CentOS7.7* ]]
     then
-    export PATH=/apps/cmake/cmake-3.5.1/bin:$PATH
+    #export PATH=/apps/cmake/cmake-3.5.1/bin:$PATH
+    export PATH=/apps/bin:$PATH
 fi

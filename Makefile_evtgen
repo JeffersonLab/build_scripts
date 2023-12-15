@@ -31,13 +31,17 @@ $(EVTGEN_HOME)/.patch_done: $(SOURCE_CODE_TARGET)
 	date > $@
 
 $(EVTGEN_HOME)/.configure: $(EVTGEN_HOME)/.patch_done
-	cd $(EVTGEN_HOME) ; ./configure --hepmcdir=$(HEPMCDIR) \
-	   --photosdir=$(PHOTOSDIR)
+	cd $(EVTGEN_HOME); mkdir -p $(EVTGEN_HOME)/build ; ./configure --prefix=$(EVTGEN_HOME)/build \
+	   --hepmcdir=$(HEPMCDIR) --photosdir=$(PHOTOSDIR)
 	date > $@
 
 $(EVTGEN_HOME)/.make_done: $(EVTGEN_HOME)/.configure
 	make -C $(EVTGEN_HOME)
 	date > $@
 
-$(EVTGEN_HOME)/evtgen_prereqs.xml: $(EVTGEN_HOME)/.make_done
+$(EVTGEN_HOME)/.install_done: $(EVTGEN_HOME)/.make_done
+	make -C $(EVTGEN_HOME) install
+	date > $@
+
+$(EVTGEN_HOME)/evtgen_prereqs.xml: $(EVTGEN_HOME)/.install_done
 	cd $(EVTGEN_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl evtgen

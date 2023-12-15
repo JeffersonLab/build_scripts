@@ -53,4 +53,6 @@
 	 description="Amplitude analysis for GlueX"/>
 <package name="clhep" docName="clhep" homeVar="CLHEP_HOME"
 	 description="C++ mathematical library for HEP"/>
+<package name="hddm" docName="hddm" homeVar="HDDM_HOME"
+         description="efficient i/o library for self-describing structured scientific data"/>
 </packages>

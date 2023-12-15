@@ -35,7 +35,7 @@ eval $definitions;
 	    'xerces-c' => [],
 	    geant4 => [],
 	    ccdb => [],
-	    halld_recon => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'ccdb', 'rcdb', 'sqlitecpp'],
+	    halld_recon => ['evio', 'cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'hddm', 'ccdb', 'rcdb', 'sqlitecpp'],
 	    halld_sim => ['halld_recon'],
 	    amptools => ['root'],
 	    photos => ['hepmc'],

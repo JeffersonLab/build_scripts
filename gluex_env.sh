@@ -152,6 +152,15 @@ then
 fi
 # hdds
 export JANA_GEOMETRY_URL=ccdb:///GEOMETRY/main_HDDS.xml
+# hddm
+if [ -n "$HDDM_HOME" ]
+then
+    if [ `echo $PATH | grep -c $HDDM_HOME/bin` -eq 0 ]
+    then
+	export PATH=$HDDM_HOME/bin:$PATH
+	export HDDM_DIR=$HDDM_HOME
+    fi
+fi
 # sim-recon
 if [ -n "$HALLD_HOME" ]
 then
@@ -191,7 +200,9 @@ fi
 #
 if [ -n "$DIRACXX_HOME" ]; then
     if [ `echo $LD_LIBRARY_PATH | grep -c $DIRACXX_HOME` -eq 0 ]
-    then export LD_LIBRARY_PATH=$DIRACXX_HOME/lib:$DIRACXX_HOME:$LD_LIBRARY_PATH # covers both old and new Diracxx lib location
+    then
+	export LD_LIBRARY_PATH=$DIRACXX_HOME/lib:$DIRACXX_HOME:$LD_LIBRARY_PATH # covers both old and new Diracxx lib location
+	export DIRACXX_DIR=$DIRACXX_HOME
     fi
 fi
 #
