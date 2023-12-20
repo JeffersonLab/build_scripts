@@ -61,7 +61,7 @@ endif
 ifdef HALLD_AMP_HOME
     GLUEX_PASS2_TARGETS += halld_amp_build
 endif
-ifdef DIRACXX
+ifdef DIRACXX_HOME
     GLUEX_PASS2_TARGETS += diracxx_build
 endif
 ifdef HALLD_SIM_HOME
