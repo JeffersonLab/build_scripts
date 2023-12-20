@@ -75,7 +75,12 @@ $(HDGEANT4_HOME)/.link_to_fixes_done: $(SOURCE_CODE_TARGET)
 	cd $(HDGEANT4_HOME)/src ; ln -s G4.$(GEANT4_VERSION)fixes G4fixes 
 	date > $@
 
-$(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.link_to_fixes_done
+$(HDGEANT4_HOME)/.patch_done: $(HDGEANT4_HOME)/.link_to_fixes_done
+	cd $(HDGEANT4_HOME); \
+	patch -p1 < ${BUILD_SCRIPTS}/patches/hdgeant4/hdgeant4_c++11.patch
+	date > $@
+
+$(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.patch_done
 	cd $(HDGEANT4_HOME) ; \
 	if [ -z "$$G4SYSTEM" ] ; \
 	    then echo Geant4 setup not complete, sourcing geant4make.sh ; \
