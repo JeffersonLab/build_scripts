@@ -31,6 +31,14 @@ PYTHON_CONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
 PYTHON_BOOST = $(shell $(BUILD_SCRIPTS)/python_chooser.sh boost)
 PYTHON_LIB_OPTION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh lib)
 
+PYTHON_MAJOR_VERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
+PYTHON_MINOR_VERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh minor)
+ifeq '$(PYTHON_MAJOR_VERSION)' '3'
+     PYTHON_GE_3 = true
+else
+     PYTHON_GE_3 = false
+endif
+
 QTHOME_LOCATION := $(shell if [ -d  "/usr/lib64/qt5" ]; then echo /usr/lib64/qt5; elif [ -d  "/usr/lib64/qt4" ]; then echo /usr/lib64/qt4; else echo not_found; fi)
 ifneq ($(QTHOME_LOCATION), not_found)
   QTHOME_DEF = QTHOME=$(QTHOME_LOCATION)
@@ -73,7 +81,10 @@ $(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.link_to_fixes_done
 	    then echo Geant4 setup not complete, sourcing geant4make.sh ; \
 	    . `find $(G4ROOT)/share/ -name geant4make.sh` ; \
 	fi ; \
-	make PYTHON_CONFIG=$(PYTHON_CONFIG) PYTHON_LIB_OPTION=$(PYTHON_LIB_OPTION) $(QTHOME_DEF) $(HDGEANT4_MAKE_OPTIONS)
+	if [ $PYTHON_GE_3 ] ; \
+	   then make PYTHON_CONFIG=$(PYTHON_CONFIG) PYTHON_LIB_OPTION=$(PYTHON_LIB_OPTION) PYTHON_GE_3=$(PYTHON_GE_3) PYTHON_MAJOR_VERSION=$(PYTHON_MAJOR_VERSION) PYTHON_MINOR_VERSION=$(PYTHON_MINOR_VERSION) $(QTHOME_DEF) $(HDGEANT4_MAKE_OPTIONS) ; \
+	else make PYTHON_CONFIG=$(PYTHON_CONFIG) PYTHON_LIB_OPTION=$(PYTHON_LIB_OPTION) $(QTHOME_DEF) $(HDGEANT4_MAKE_OPTIONS) ; \
+	fi ; \
 	date > $@
 
 $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(HDGEANT4_HOME)/.make_done
