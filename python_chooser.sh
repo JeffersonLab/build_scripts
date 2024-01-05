@@ -4,12 +4,13 @@
 # correct python-related command to use
 #
 ## accepts one positional argument
-## argument can have one of four values: command, config, scons, version,
+## argument can have one of these values: command, config, scons, version, minor,
 ##   boost, or boost_cmake
 ### command: python command to use
 ### config: python-config command use
 ### scon: scons command to use
 ### version: Python major version
+### minor: Python minor version
 ### boost: name of the python-boost library, without the file extension and
 ###    without the initial "lib"
 ## writes output to stdout
@@ -44,7 +45,7 @@ then
 	    dist_name=CentOS
 	elif grep -lq Alma /etc/redhat-release
 	then
-	    dist_name=CentOS
+	    dist_name=Alma
 	else
 	    dist_name=unknown_redhat_like
 	fi
@@ -88,7 +89,7 @@ then
     then
 	pycommand[lib]=-lpython$version_major.$version_minor
     fi
-elif [[ $dist_name == RedHat || $dist_name == CentOS ]]
+elif [[ $dist_name == RedHat || $dist_name == CentOS || $dist_name == Alma ]]
 then
     if [ $dist_version -le 7 ]
     then
@@ -163,6 +164,9 @@ case $arg in
     version)
 	echo ${pycommand[version]}
 	;;	
+    minor)
+	echo $version_minor
+	;;
     *)
 	echo python_chooser.sh error: unknown argument = \"$arg\"
 	exit 1
