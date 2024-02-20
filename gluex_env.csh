@@ -177,6 +177,8 @@ endif
 if ($?EVTGENDIR) then
     echo $LD_LIBRARY_PATH | grep $EVTGENDIR/lib > /dev/null
     if ($status) setenv LD_LIBRARY_PATH $EVTGENDIR/lib:$LD_LIBRARY_PATH
+    setenv EVTGEN_DECAY_FILE $EVTGENDIR/share/DECAY.DEC
+    setenv EVTGEN_PARTICLE_DEFINITIONS $EVTGENDIR/share/evt.pdl
 endif
 #
 if (! $?JANA_PLUGIN_PATH) then
