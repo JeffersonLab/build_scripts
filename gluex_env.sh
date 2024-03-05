@@ -261,6 +261,8 @@ then
     if [ `echo $LD_LIBRARY_PATH | grep -c $EVTGENDIR/lib` -eq 0 ]
     then
 	export LD_LIBRARY_PATH=$EVTGENDIR/lib:$LD_LIBRARY_PATH
+	export EVTGEN_DECAY_FILE=$EVTGENDIR/share/DECAY.DEC
+	export EVTGEN_PARTICLE_DEFINITIONS=$EVTGENDIR/share/evt.pdl
     fi
 fi
 #

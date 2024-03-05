@@ -69,17 +69,12 @@ $(DIRACXX_HOME)/.untar_done: $(TARFILE)
 	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
-$(DIRACXX_HOME)/.patch_done: $(SOURCE_CODE_TARGET)
-	cd $(DIRACXX_HOME); \
-	patch -p1 < ${BUILD_SCRIPTS}/patches/diracxx/diracxx_c++11.patch
-	date > $@
-
 $(DIRACXX_HOME)/.make_done: $(SOURCE_CODE_TARGET)
 	cd $(DIRACXX_HOME) ; \
 	make PYTHON_CONFIG=$(PYTHON_CONFIG) BOOST_PYTHON_LIB=$(PYTHON_BOOST) PYTHON_LIB_OPTION=$(PYTHON_LIB_OPTION) $(DIRACXX_MAKE_OPTIONS)
 	date > $@
 
-$(DIRACXX_HOME)/.cmake_done: $(DIRACXX_HOME)/.patch_done
+$(DIRACXX_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	cd $(DIRACXX_HOME); \
 	mkdir -p build; \
 	cd build; \

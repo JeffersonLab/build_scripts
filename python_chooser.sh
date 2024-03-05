@@ -98,12 +98,22 @@ then
 	pycommand[config]=python-config
 	pycommand[scons]=scons
 	pycommand[boost]=boost_python
-    else
+	pycommand[lib]=-lpython$version_major.$version_minor
+    elif [ $dist_version -eq 8 ]
+    then
 	pycommand[command]=python3
 	get_python_version
 	pycommand[config]=python$version_major-config
 	pycommand[scons]=scons-$version_major
 	pycommand[boost]=boost_python$version_major
+	pycommand[lib]=-lpython$version_major
+    else
+	pycommand[command]=python3
+	get_python_version
+	pycommand[config]=python$version_major-config
+	pycommand[scons]=scons-$version_major
+	pycommand[boost]=boost_python$version_major$version_minor
+	pycommand[lib]=-lpython$version_major.$version_minor
     fi
     pycommand[version]=$version_major
 elif [ $dist_name == Ubuntu ]
@@ -169,6 +179,7 @@ case $arg in
 	;;
     *)
 	echo python_chooser.sh error: unknown argument = \"$arg\"
+	echo accepted arguments: boost, boost_cmake, command, config, info, lib, scons, version, minor
 	exit 1
 	;;
 esac
