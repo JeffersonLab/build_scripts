@@ -25,6 +25,9 @@ popd  > /dev/null
 
 MACHINE_TYPE=`uname -m`
 
+# HACK
+export HALLD_RECON_HOME=$HALLD_RECON_HOME+optdbg
+
 # general stuff
 if [ -z "$GLUEX_TOP" ]; then export GLUEX_TOP=$(readlink -m $SCRIPT_PATH/..); fi
 if [ -z "$BUILD_SCRIPTS" ]
