@@ -21,9 +21,11 @@ else
   ifndef CCDB_BRANCH
     CCDB_BRANCH = master
   endif
-  CCDB_INSTALL_DIR = $(shell pwd)/$(CCDB_DIR)
   MAJOR_VERSION := 2
 endif
+
+CCDB_INSTALL_DIR = $(shell pwd)/$(CCDB_DIR)
+
 UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 PYTHON = $(shell $(BUILD_SCRIPTS)/python_chooser.sh command)
