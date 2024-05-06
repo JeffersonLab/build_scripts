@@ -13,7 +13,7 @@ $bms_osname = $ARGV[2];
 $date = `date +%F`;
 chomp $date;
 
-$filename_in = "/u/scratch/gluex/nightly/$date/$bms_osname/version_$date.xml";
+$filename_in = "/volatile/halld/gluex/nightly/$date/$bms_osname/version_$date.xml";
 $filename_out = "version_${repo}_${branch_to_test}.xml";
 
 # slurp in the xml file
