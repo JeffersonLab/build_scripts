@@ -5,3 +5,4 @@ GCC_SUBMINOR_VERSION := $(shell echo $(GCC_VERSION) | awk -F. '{print $$3}')
 GCC_GE_9 := $(shell if [ $(GCC_MAJOR_VERSION) -ge "9" ]; then echo true; else echo false; fi)
 GCC_GE_9 := $(shell if [ $(GCC_MAJOR_VERSION) -ge "9" ]; then echo true; else echo false; fi)
 GCC_GE_10 := $(shell if [ $(GCC_MAJOR_VERSION) -ge "10" ]; then echo true; else echo false; fi)
+GCC_CXX_STANDARD := "c++11"
