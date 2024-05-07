@@ -14,7 +14,7 @@ PHOTOS_HOME = $(PWD)/$(PHOTOS_DIR)
 all: $(PHOTOS_HOME)/photos_prereqs.xml
 
 $(TARFILE):
-	wget --no-verbose --no-check-certificate -O $@ http://photospp.web.cern.ch/photospp/resources/PHOTOS.$(PHOTOS_VERSION)/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ http://photospp.web.cern.ch/resources/PHOTOS.$(PHOTOS_VERSION)/$(TARFILE)
 
 $(PHOTOS_HOME)/.untar_done: $(TARFILE)
 	rm -rf $(UNTAR_TEMP_DIR)
