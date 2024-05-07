@@ -1,0 +1,21 @@
+--- hdgeant4-2.37.0/GNUmakefile	2023-11-30 12:27:16.000000000 -0500
++++ hdgeant4-2.37.0_patched/GNUmakefile	2023-12-20 12:19:31.476302070 -0500
+@@ -143,16 +143,8 @@ g4fixes: $(G4TMPDIR)/libG4fixes.so
+ CXXFLAGS = -g -O4 -fPIC -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long
+ 
+ GCCVERSION = $(shell gcc --version | awk -F'[. ]*' '/gcc/{print $$3}')
+-ifeq ($(shell test $(GCCVERSION) -ge 8; echo $$?),0)
+-    CPPFLAGS += -std=c++17
+-    CXXFLAGS += -std=c++17
+-else ifeq ($(shell test $(GCCVERSION) -ge 5; echo $$?),0)
+-    CPPFLAGS += -std=c++14
+-    CXXFLAGS += -std=c++14
+-else
+-    CPPFLAGS += -std=c++11
+-    CXXFLAGS += -std=c++11
+-endif
++CPPFLAGS += -std=c++17
++CXXFLAGS += -std=c++17
+ 
+ HDDSDIR := $(G4TMPDIR)/hdds
+ G4FIXESDIR := $(G4TMPDIR)/G4fixes

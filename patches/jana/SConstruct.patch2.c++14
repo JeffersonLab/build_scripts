@@ -1,0 +1,11 @@
+--- ../../../jana/jana_0.8.2^ccdb170+root62606//SConstruct	2024-05-06 18:06:11.122325148 -0400
++++ ../../../jana/jana_0.8.2^ccdb170+root62606//SConstruct.new	2024-05-06 18:07:37.727515559 -0400
+@@ -104,7 +104,7 @@
+ 
+ # Standard flags (optimization level and warnings)
+ env.PrependUnique(      CFLAGS = ['-O%s' % OPTIMIZATION, '-fPIC', '-Wall'])
+-env.PrependUnique(    CXXFLAGS = ['-O%s' % OPTIMIZATION, '-fPIC', '-Wall', '-std=c++11'])
++env.PrependUnique(    CXXFLAGS = ['-O%s' % OPTIMIZATION, '-fPIC', '-Wall', '-std=c++14'])
+ env.PrependUnique(FORTRANFLAGS = ['-O%s' % OPTIMIZATION, '-fPIC', '-Wall'])
+ 
+ # Turn on debug symbols unless user told us not to
