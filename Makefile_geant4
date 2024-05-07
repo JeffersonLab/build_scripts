@@ -18,6 +18,10 @@ endif
 
 include $(BUILD_SCRIPTS)/geant4_version.mk
 
+include $(BUILD_SCRIPTS)/gcc_version.mk
+CXX_STANDARD = $(shell echo $(GCC_CXX_STANDARD) | sed 's/.*\(..\)/\1/')
+
+
 all: $(G4DIR)/.make_install_done
 
 $(TARFILE):
@@ -48,6 +52,7 @@ $(G4DIR)/.configure_done: $(G4DIR)/.patch_done
 	   -DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	   -DCMAKE_INSTALL_DATADIR=../data \
 	   -DCMAKE_INSTALL_PREFIX=.. \
+       -DCMAKE_CXX_STANDARD=$(CXX_STANDARD) \
 	   -DGEANT4_BUILD_MULTITHREADED=ON \
 	   -DGEANT4_INSTALL_DATA=ON \
 	   -DGEANT4_USE_GDML=ON \

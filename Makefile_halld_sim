@@ -1,5 +1,7 @@
 # Makefile_halld_sim
 
+include $(BUILD_SCRIPTS)/gcc_version.mk
+
 PWD = $(shell pwd)
 ifdef HALLD_SIM_VERSION
  SOURCE_CODE_TARGET = $(HALLD_SIM_HOME)/.untar_done
@@ -56,6 +58,14 @@ endif
 	date > $@
 
 $(HALLD_SIM_HOME)/.patches_done: $(SOURCE_CODE_TARGET)
+ifeq ($(GCC_CXX_STANDARD),"c++17")
+	patch $(HALLD_SIM_DIR)/src/SConstruct \ 
+		< ${BUILD_SCRIPTS}/patches/halld_sim/SConstruct.patch.c++17  
+else ifeq ($(GCC_CXX_STANDARD),"c++14")
+	@echo PATCHING
+	patch $(HALLD_SIM_DIR)/src/SConstruct \
+		< ${BUILD_SCRIPTS}/patches/halld_sim/SConstruct.patch.c++14  
+endif
 ifdef APPLY_GETARG_PATCH
 	cp -pv $(BUILD_SCRIPTS)/patches/getarg_fix/* \
 		$(HALLD_SIM_HOME)/src/programs/Simulation/HDGeant

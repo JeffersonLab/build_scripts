@@ -35,6 +35,9 @@ PYTHON_BOOST_CMAKE = $(shell $(BUILD_SCRIPTS)/python_chooser.sh boost_cmake)
 
 include $(BUILD_SCRIPTS)/diracxx_version.mk # defines USE_CMAKE
 
+include $(BUILD_SCRIPTS)/gcc_version.mk
+CXX_STANDARD = $(shell echo $(GCC_CXX_STANDARD) | sed 's/.*\(..\)/\1/')
+
 ifeq ($(USE_CMAKE), true)
     BUILD_TARGET = $(DIRACXX_HOME)/.cmake_install_done
 else
@@ -81,6 +84,7 @@ $(DIRACXX_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	$(CMAKE3) -DCMAKE_INSTALL_PREFIX=$(DIRACXX_HOME) \
 	    -DCMAKE_INSTALL_LIBDIR=$(DIRACXX_HOME)/lib \
 	    -DBoost_NO_BOOST_CMAKE=ON \
+	    -DCMAKE_CXX_STANDARD=$(CXX_STANDARD) \
 	    -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
 	date > $@
 

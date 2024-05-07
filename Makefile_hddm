@@ -27,7 +27,10 @@ else ifeq ($(HDDM_DEBUG_LEVEL), 2)
 endif
 export HDDM_HOME = $(PWD)/$(HDDM_DIR)
 UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
- 
+
+include $(BUILD_SCRIPTS)/gcc_version.mk
+CXX_STANDARD = $(shell echo $(GCC_CXX_STANDARD) | sed 's/.*\(..\)/\1/')
+
 all: $(HDDM_HOME)/hddm_prereqs_version.xml
 
 $(TARFILE):
@@ -54,7 +57,9 @@ $(HDDM_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	cmake3 \
 	    -DXercesC_LIBRARY=$(XERCESCROOT)/lib/libxerces-c.so \
 	    -DXercesC_INCLUDE_DIR=$(XERCES_INCLUDE) \
-	    -DXercesC_VERSION=$(XERCES_C_VERSION) -DCMAKE_INSTALL_PREFIX=.. ..
+	    -DXercesC_VERSION=$(XERCES_C_VERSION) \
+   	    -DCMAKE_CXX_STANDARD=$(CXX_STANDARD) \
+		-DCMAKE_INSTALL_PREFIX=.. ..
 	date > $@
 
 $(HDDM_HOME)/.make_install_done: $(HDDM_HOME)/.cmake_done

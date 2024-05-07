@@ -31,6 +31,8 @@ PYTHON_CONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
 PYTHON_BOOST = $(shell $(BUILD_SCRIPTS)/python_chooser.sh boost)
 PYTHON_LIB_OPTION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh lib)
 
+include $(BUILD_SCRIPTS)/gcc_version.mk
+
 PYTHON_MAJOR_VERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
 PYTHON_MINOR_VERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh minor)
 ifeq '$(PYTHON_MAJOR_VERSION)' '3'
@@ -76,8 +78,16 @@ $(HDGEANT4_HOME)/.link_to_fixes_done: $(SOURCE_CODE_TARGET)
 	date > $@
 
 $(HDGEANT4_HOME)/.patch_done: $(HDGEANT4_HOME)/.link_to_fixes_done
-	cd $(HDGEANT4_HOME); \
+ifeq ($(GCC_CXX_STANDARD),"c++17")
+	cd $(HDGEANT4_DIR); \
+	patch -p1 < ${BUILD_SCRIPTS}/patches/hdgeant4/hdgeant4_c++17.patch
+else ifeq ($(GCC_CXX_STANDARD),"c++14")
+	cd $(HDGEANT4_DIR); \
+	patch -p1 < ${BUILD_SCRIPTS}/patches/hdgeant4/hdgeant4_c++14.patch
+else
+	cd $(HDGEANT4_DIR); \
 	patch -p1 < ${BUILD_SCRIPTS}/patches/hdgeant4/hdgeant4_c++11.patch
+endif
 	date > $@
 
 $(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.patch_done

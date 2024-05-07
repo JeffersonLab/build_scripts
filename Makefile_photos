@@ -7,6 +7,7 @@ else
  PHOTOS_DIR = Photos-$(PHOTOS_VERSION)
 endif
 TARFILE = PHOTOS.$(PHOTOS_VERSION).tar.gz
+#TARFILE = photospp-v$(PHOTOS_VERSION).tar.gz
 UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 PHOTOS_HOME = $(PWD)/$(PHOTOS_DIR)
@@ -14,7 +15,10 @@ PHOTOS_HOME = $(PWD)/$(PHOTOS_DIR)
 all: $(PHOTOS_HOME)/photos_prereqs.xml
 
 $(TARFILE):
-	wget --no-verbose --no-check-certificate -O $@ http://photospp.web.cern.ch/photospp/resources/PHOTOS.$(PHOTOS_VERSION)/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ http://photospp.web.cern.ch/resources/PHOTOS.$(PHOTOS_VERSION)/$(TARFILE)
+	#wget --no-verbose --no-check-certificate -O $@ https://gitlab.cern.ch/photospp/photospp/-/archive/$(PHOTOS_VERSION)/$(TARFILE)
+
+#https://gitlab.cern.ch/photospp/photospp/-/archive/v3.62/photospp-v3.62.tar.gz
 
 $(PHOTOS_HOME)/.untar_done: $(TARFILE)
 	rm -rf $(UNTAR_TEMP_DIR)

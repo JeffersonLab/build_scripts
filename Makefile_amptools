@@ -1,3 +1,7 @@
+# Makefile_amptools
+
+include $(BUILD_SCRIPTS)/gcc_version.mk
+
 ifdef AMPTOOLS_VERSION
     SOURCE_TARGET = $(AMPTOOLS_DIR)/.make_prep_done
     TARFILE = v$(AMPTOOLS_VERSION).tar.gz
@@ -31,8 +35,16 @@ $(AMPTOOLS_DIR)/.unpack: $(TARFILE)
 	date > $@
 
 $(AMPTOOLS_DIR)/.patch: $(AMPTOOLS_DIR)/.unpack
-	cd $(AMPTOOLS_DIR); \
-	patch -p1 < ${BUILD_SCRIPTS}/patches/amptools/amptools_c++11.patch
+	ifeq (GCC_CXX_STANDARD,c++17)
+		cd $(AMPTOOLS_DIR); \
+		patch -p1 < ${BUILD_SCRIPTS}/patches/amptools/amptools_c++17.patch
+	else ifeq (GCC_CXX_STANDARD,c++14)
+		cd $(AMPTOOLS_DIR); \
+		patch -p1 < ${BUILD_SCRIPTS}/patches/amptools/amptools_c++14.patch
+	else
+		cd $(AMPTOOLS_DIR); \
+		patch -p1 < ${BUILD_SCRIPTS}/patches/amptools/amptools_c++11.patch
+	endif
 	date > $@
 
 ifeq ($(AMPTOOLS_VERSION),0.9.1)
