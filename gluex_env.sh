@@ -177,7 +177,12 @@ then
     then
 	export PATH=$HALLD_RECON_HOME/${BMS_OSNAME}/bin:$PATH
     fi
-    export PYTHONPATH=$HALLD_RECON_HOME/$BMS_OSNAME/python2:$PYTHONPATH
+    if [ `$BUILD_SCRIPTS/python_chooser.sh version` -eq 3 ]
+    then
+        export PYTHONPATH=$HALLD_RECON_HOME/$BMS_OSNAME/python3:$PYTHONPATH
+    else
+        export PYTHONPATH=$HALLD_RECON_HOME/$BMS_OSNAME/python2:$PYTHONPATH
+    fi
 fi
 # halld_sim
 if [ -n "$HALLD_SIM_HOME" ]
