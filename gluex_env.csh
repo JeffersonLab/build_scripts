@@ -107,7 +107,11 @@ endif
 if ($?HALLD_RECON_HOME) then
     echo $PATH | grep $HALLD_RECON_HOME/$BMS_OSNAME/bin > /dev/null
     if ($status) setenv PATH $HALLD_RECON_HOME/${BMS_OSNAME}/bin:$PATH
-    setenv PYTHONPATH $HALLD_RECON_HOME/$BMS_OSNAME/python2:$PYTHONPATH
+    if (`$BUILD_SCRIPTS/python_chooser.sh version` == '3') then
+        setenv PYTHONPATH $HALLD_RECON_HOME/$BMS_OSNAME/python3:$PYTHONPATH
+    else
+        setenv PYTHONPATH $HALLD_RECON_HOME/$BMS_OSNAME/python2:$PYTHONPATH
+    endif
 endif
 # halld_sim
 if ($?HALLD_SIM_HOME) then

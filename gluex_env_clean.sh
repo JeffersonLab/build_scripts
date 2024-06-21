@@ -52,7 +52,11 @@ if [ -n "$BUILD_SCRIPTS" ]; then
     if [ -n "$RCDB_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $RCDB_HOME/python`; fi
     if [ -n "$ROOTSYS" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $ROOTSYS/lib`; fi
     if [ -n "$HALLD_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $HALLD_HOME/$BMS_OSNAME/python2`; fi
-    if [ -n "$HALLD_RECON_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $HALLD_RECON_HOME/$BMS_OSNAME/python2`; fi
+    if [ -n "$HALLD_RECON_HOME" ]
+    then
+        eval `$BUILD_SCRIPTS/delpath.pl -b -p $HALLD_RECON_HOME/$BMS_OSNAME/python2`
+        eval `$BUILD_SCRIPTS/delpath.pl -b -p $HALLD_RECON_HOME/$BMS_OSNAME/python3`
+    fi
     if [ -n "$HDGEANT4_HOME" ]; then eval `$BUILD_SCRIPTS/delpath.pl -b -p $HDGEANT4_HOME/g4py`; fi
     eval `$BUILD_SCRIPTS/delpath.pl -b -p`
 fi

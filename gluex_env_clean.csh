@@ -48,7 +48,10 @@ if ($?BUILD_SCRIPTS) then
     if ($?RCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $RCDB_HOME/python`
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl -p $ROOTSYS/lib`
     if ($?HALLD_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_HOME/$BMS_OSNAME/python2`
-    if ($?HALLD_RECON_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_RECON_HOME/$BMS_OSNAME/python2`
+    if ($?HALLD_RECON_HOME) then
+        eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_RECON_HOME/$BMS_OSNAME/python2`
+        eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_RECON_HOME/$BMS_OSNAME/python3`
+    endif
     if ($?HDGEANT4_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HDGEANT4_HOME/g4py`
     eval `$BUILD_SCRIPTS/delpath.pl -p`
 endif
