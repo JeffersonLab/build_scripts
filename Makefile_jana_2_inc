@@ -1,0 +1,104 @@
+ifdef JANA_VERSION
+ SOURCE_CODE_TARGET = $(JANA_HOME)/.untar_done
+ ifdef JANA_DIRTAG
+  JANA_DIR = jana_$(JANA_VERSION)^$(JANA_DIRTAG)
+ else
+  JANA_DIR = jana_$(JANA_VERSION)
+ endif
+ TARFILE = v$(JANA_VERSION).tar.gz
+ VERSION_MAJOR = $(shell echo $(JANA_VERSION) | awk -F. '{print $$1}')
+ VERSION_MINOR = $(shell echo $(JANA_VERSION) | awk -F. '{print $$2}')
+ VERSION_GE_08 = $(shell if [[ $(VERSION_MAJOR) -eq 0 && $(VERSION_MINOR) -ge 8 ]]; then echo true; else echo false; fi)
+else
+ SOURCE_CODE_TARGET = $(JANA_HOME)/.checkout_done
+ ifndef JANA_URL
+  JANA_URL=https://phys12svn.jlab.org/repos/JANA
+ endif
+ ifdef JANA_DIRTAG
+  JANA_DIR = $(notdir $(JANA_URL))^$(JANA_DIRTAG)
+ else
+  JANA_DIR = $(notdir $(JANA_URL))
+ endif
+endif
+SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
+PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
+ifeq ($(VERSION_GE_08), true)
+ SBMS_CONFIG_PATCH = sbms_config.py.082.patch
+else
+ SBMS_CONFIG_PATCH = sbms_config.py.patch
+endif
+ifeq ($(HALLD_RECON_PROFILING), true)
+ override JANA_SCONS_OPTIONS += PROFILE=1
+endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
+
+export JANA_HOME = $(PWD)/$(JANA_DIR)
+
+BUILD_DIR = $(JANA_DIR)/build
+
+which_cmake3 := $(shell which cmake3)
+find_cmake3 := $(findstring cmake3, $(which_cmake3))
+ifeq (,$(find_cmake3))
+    CMAKE = cmake
+else
+    CMAKE = cmake3
+endif
+
+
+all: $(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml
+
+$(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: $(JANA_HOME)/.install_done
+	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(BUILD_SCRIPTS)/version_prereqs.pl jana
+
+$(JANA_HOME)/.install_done: $(JANA_HOME)/.cmake_done
+	cd $(JANA_HOME)/$(BMS_OSNAME) ; make -j8 install
+	date > $@
+
+$(JANA_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
+	@echo Makefile_jana info: cmake3 = $(SCONS)
+	mkdir -p $(JANA_HOME)/$(BMS_OSNAME)
+	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(CMAKE) $(JANA_HOME) -DUSE_XERCES=1 -DCMAKE_INSTALL_PREFIX=$(JANA_HOME)/$(BMS_OSNAME)
+	date > $@
+
+$(JANA_HOME)/.checkout_done:
+	rm -rf checkout_temp_dir
+	mkdir checkout_temp_dir
+	cd checkout_temp_dir ; svn co $(JANA_URL)
+	mv -v checkout_temp_dir/* $(JANA_DIR)
+	rmdir -v checkout_temp_dir
+	date > $@
+
+$(JANA_HOME)/.patches_done: $(JANA_HOME)/.untar_done
+ifeq ($(PYVERSION), 3)
+	patch $(JANA_HOME)/SBMS/sbms.py \
+	    < $(BUILD_SCRIPTS)/patches/jana/sbms.py.patch
+	patch $(JANA_HOME)/SBMS/sbms_config.py \
+	    < $(BUILD_SCRIPTS)/patches/jana/$(SBMS_CONFIG_PATCH)
+	patch $(JANA_HOME)/SConstruct \
+	    < $(BUILD_SCRIPTS)/patches/jana/SConstruct.patch
+endif
+ifeq ($(CCDB_MAJOR_VERSION), 2)
+	patch $(JANA_HOME)/SBMS/sbms.py \
+	    < $(BUILD_SCRIPTS)/patches/jana/sbms.py.patch2
+endif
+	date > $@
+
+$(JANA_HOME)/.untar_done: $(TARFILE)
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(JANA_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
+	date > $@
+
+$(TARFILE):
+	@echo making $@
+	wget --no-verbose https://github.com/JeffersonLab/JANA2/archive/refs/tags/$(TARFILE)
+
+show_env:
+	@echo PYTHON_MAJOR_VERSION = $(PYTHON_MAJOR_VERSION)
+	@echo PYTHON_GE_3 = $(PYTHON_GE_3)
+	@echo VERSION_MAJOR = $(VERSION_MAJOR)
+	@echo VERSION_MINOR = $(VERSION_MINOR)
+	@echo VERSION_GE_08 = $(VERSION_GE_08)
+	@echo SBMS_CONFIG_PATCH = $(SBMS_CONFIG_PATCH)
