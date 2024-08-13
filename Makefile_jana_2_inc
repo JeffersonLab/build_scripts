@@ -8,16 +8,15 @@ ifdef JANA_VERSION
  TARFILE = v$(JANA_VERSION).tar.gz
  VERSION_MAJOR = $(shell echo $(JANA_VERSION) | awk -F. '{print $$1}')
  VERSION_MINOR = $(shell echo $(JANA_VERSION) | awk -F. '{print $$2}')
- VERSION_GE_08 = $(shell if [[ $(VERSION_MAJOR) -eq 0 && $(VERSION_MINOR) -ge 8 ]]; then echo true; else echo false; fi)
 else
  SOURCE_CODE_TARGET = $(JANA_HOME)/.checkout_done
  ifndef JANA_URL
   JANA_URL=https://github.com/JeffersonLab/JANA2.git
  endif
  ifdef JANA_DIRTAG
-  JANA_DIR = $(shell basename $(JANA_URL) .git)^$(JANA_DIRTAG)
+  JANA_DIR = jana^$(JANA_DIRTAG)
  else
-  JANA_DIR = $(shell basename $(JANA_URL) .git)
+  JANA_DIR = jana
  endif
 endif
 SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
