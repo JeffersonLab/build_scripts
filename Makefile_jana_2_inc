@@ -13,6 +13,9 @@ else
  ifndef JANA_URL
   JANA_URL=https://github.com/JeffersonLab/JANA2.git
  endif
+ ifndef JANA_BRANCH
+  JANA_BRANCH = master
+ endif
  ifdef JANA_DIRTAG
   JANA_DIR = jana^$(JANA_DIRTAG)
  else
@@ -57,7 +60,7 @@ $(JANA_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 $(JANA_HOME)/.checkout_done:
 	rm -rf checkout_temp_dir
 	mkdir checkout_temp_dir
-	cd checkout_temp_dir ; git clone $(JANA_URL)
+	cd checkout_temp_dir ; git clone -b $(JANA_BRANCH) $(JANA_URL)
 	mv -v checkout_temp_dir/* $(JANA_DIR)
 	rmdir -v checkout_temp_dir
 	date > $@
