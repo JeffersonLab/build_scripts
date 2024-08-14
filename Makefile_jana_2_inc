@@ -24,9 +24,6 @@ else
 endif
 SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
 PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
-ifeq ($(HALLD_RECON_PROFILING), true)
- override JANA_SCONS_OPTIONS += PROFILE=1
-endif
 UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 export JANA_HOME = $(PWD)/$(JANA_DIR)
@@ -48,7 +45,7 @@ $(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: $(JANA_HOME)/.install_done
 	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(BUILD_SCRIPTS)/version_prereqs.pl jana
 
 $(JANA_HOME)/.install_done: $(JANA_HOME)/.cmake_done
-	cd $(JANA_HOME)/$(BMS_OSNAME) ; make -j8 install
+	cd $(JANA_HOME)/$(BMS_OSNAME) ; make $(JANA_MAKE_OPTIONS) install
 	date > $@
 
 $(JANA_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
