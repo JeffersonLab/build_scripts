@@ -16,7 +16,7 @@ $package_in = $ARGV[0];
 if (! $package_in) {die "must name a package";}
 
 my $output = IO::File->new(">${package_in}_prereqs_version.xml");
-my $writer = XML::Writer->new(OUTPUT => $output, NEWLINES => 1);
+my $writer = XML::Writer->new(OUTPUT => $output, DATA_MODE => 1,);
 $writer->startTag("gversion", "version" => "1.0");
 
 $this_file_with_full_path = abs_path(__FILE__);
@@ -75,9 +75,18 @@ foreach $prepackage (@prepackages) {
 	$home_var = $home_variable{$prepackage};
 	$home_var_value = $ENV{$home_var};
 	$svn_hidden_dir = $home_var_value . "/.svn";
-	$git_hidden_dir = $home_var_value . "/.git";
+	if ($prepackage eq 'jana') {
+	    $git_hidden_dir = $home_var_value . "/../.git";
+	} else {
+	    $git_hidden_dir = $home_var_value . "/.git";
+	}
 	@token2 = split(/\//, $home_var_value); # split on slash
-	$dirname_home = $token2[$#token2]; # last token is directory name
+	if ($prepackage ne "jana") {
+	    $dirname_home = $token2[$#token2]; # last token is directory name
+	}
+	else {
+	    $dirname_home = $token2[$#token2 - 1]; # second to last token is directory name
+	}
 	if (-d $svn_hidden_dir) {
 	    $url_raw = `svn info $home_var_value | grep URL: | grep https`;
 	    chomp $url_raw;
@@ -92,11 +101,11 @@ foreach $prepackage (@prepackages) {
 	    #print "for $home_var = $home_var_value, url_raw = $url_raw\n";
 	    @t = split(/\s+/, $url_raw);
 	    $url = $t[1];
-	    $branch_raw = `cd $home_var_value ; git status | grep \" On branch \"`;
+	    $branch_raw = `cd $home_var_value ; git status | grep \"On branch \"`;
 	    chomp $branch_raw;
 	    #print "for $home_var = $home_var_value, branch_raw = $branch_raw\n";
 	    @t = split(/\s+/, $branch_raw);
-	    $branch = $t[3];
+	    $branch = $t[2];
 	    @token3 = split(/\^/, $dirname_home); # split on caret
 	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} else {
