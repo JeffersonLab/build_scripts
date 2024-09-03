@@ -34,7 +34,11 @@ foreach $package (@packages) {
 	$version_hash{$package} = $ENV{CERN_LEVEL}
     } else {
 	$svn_hidden_dir = $home_value . "/.svn";
-	$git_hidden_dir = $home_value . "/.git";
+	if ($package eq 'jana') {
+	    $git_hidden_dir = $home_value . "/../.git";
+	} else {
+	    $git_hidden_dir = $home_value . "/.git";
+	}
 	@token2 = split(/\//, $home_value); # split on slash
 	$dirname_home = $token2[$#token2]; # last token is directory name
 	if (-d $svn_hidden_dir) {
@@ -49,7 +53,7 @@ foreach $package (@packages) {
 	    #print "for $home_variable = $home_value, url_raw = $url_raw\n";
 	    @t = split(/\s+/, $url_raw);
 	    $url = $t[1];
-	    $branch_raw = `cd $home_value ; git status | grep \" On branch \"`;
+	    $branch_raw = `cd $home_value ; git status | grep \"On branch \"`;
 	    chomp $branch_raw;
 	    #print "for $home_variable = $home_value, branch_raw = $branch_raw\n";
 	    @t = split(/\s+/, $branch_raw);

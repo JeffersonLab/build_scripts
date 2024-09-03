@@ -35,6 +35,7 @@ HALLD_AMP = ${ROOT_OF_ALL}/halld_amp
 
 ifdef NTHREADS
   ROOT6_BUILD_OPTIONS += -j$(NTHREADS)
+  JANA_MAKE_OPTIONS += -j$(NTHREADS)
   GEANT4_MAKE_OPTIONS += -j$(NTHREADS)
   SIM_RECON_SCONS_OPTIONS += -j$(NTHREADS)
   HALLD_RECON_SCONS_OPTIONS += -j$(NTHREADS)
@@ -96,7 +97,7 @@ jana_dir:
 	test -d ${JANA} || mkdir -pv ${JANA}
 
 jana_make:
-	$(MAKE) -C${JANA} -f${BUILD_SCRIPTS}/Makefile_jana
+	$(MAKE) -C${JANA} -f${BUILD_SCRIPTS}/Makefile_jana JANA_MAKE_OPTIONS="$(JANA_MAKE_OPTIONS)"
 
 hdds_build: hdds_dir hdds_make
 
