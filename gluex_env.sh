@@ -127,7 +127,12 @@ then
     . $BUILD_SCRIPTS/rcdb_env.sh
     if [ -z "$RCDB_CONNECTION" ]
     then
-	export RCDB_CONNECTION=mysql://rcdb@hallddb.jlab.org/rcdb
+	if [ $RCDB_SCHEMA_2 == "true" ]
+	then
+	    export RCDB_CONNECTION=mysql://rcdb@hallddb.jlab.org/rcdb2
+	else
+	    export RCDB_CONNECTION=mysql://rcdb@hallddb.jlab.org/rcdb
+	fi
     fi
 fi
 # jana
