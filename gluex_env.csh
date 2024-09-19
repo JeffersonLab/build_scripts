@@ -76,7 +76,13 @@ endif
 # rcdb
 if ($?RCDB_HOME) then
     source $BUILD_SCRIPTS/rcdb_env.csh
-    if (! $?RCDB_CONNECTION) setenv RCDB_CONNECTION mysql://rcdb@hallddb.jlab.org/rcdb
+    if (! $?RCDB_CONNECTION) then
+	if ("$RCDB_SCHEMA_2" == "true") then
+	    setenv RCDB_CONNECTION mysql://rcdb@hallddb.jlab.org/rcdb2
+	else
+	    setenv RCDB_CONNECTION mysql://rcdb@hallddb.jlab.org/rcdb
+	endif
+    endif
 endif
 # jana
 if ($?JANA_HOME) then
