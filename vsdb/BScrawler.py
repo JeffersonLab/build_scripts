@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-import pymysql
-pymysql.install_as_MySQLdb()
 import MySQLdb
 import sys
 import datetime
@@ -21,7 +19,7 @@ try:
     conn=MySQLdb.connect(host=dbhost, user=dbuser, db=dbname)
     curs=conn.cursor(MySQLdb.cursors.DictCursor)
 except:
-    print "CAN'T CONNECT"
+    print("CAN'T CONNECT")
 
 def checkOasisCVMFS(packagename,version,dirtag):
     rootdir="/group/halld/Software/builds/Linux_CentOS7-x86_64-gcc4.8.5-cntr/"
@@ -99,8 +97,9 @@ def main(argv):
     pushcmd="mysql --host="+dbhost+" --database="+dbname+" --user="+dbuser#+"<tables.sql"
 
     p = subprocess.Popen(pushcmd.split(" "),stdin=subprocess.PIPE)
-    stdout,stderr = p.communicate(file("/group/halld/Software/build_scripts/vsdb/tables.sql").read())
-   
+    #stdout,stderr = p.communicate(file("/group/halld/Software/build_scripts/vsdb/tables.sql").read())
+    #this runs, but produce some SQL error:
+    stdout,stderr = p.communicate(b'/home/aaustreg/work/Analysis/sw/build_scripts/vsdb/tables.sql')
     
     reconpackcmd="xsltproc /group/halld/Software/build_scripts/xml/packages_sql.xslt /group/halld/Software/build_scripts/xml/packages.xml | grep INSERT | "+"mysql -h "+dbhost+" -D "+dbname+" -u "+dbuser
     #print reconpackcmd
@@ -144,7 +143,7 @@ def main(argv):
             row = curs.fetchall()
 
             if len(row) > 0:
-                print "SKIP"
+                print("SKIP")
                 continue
 
 
@@ -153,7 +152,7 @@ def main(argv):
             #onOasis=checkOasis(loc,afile)
             insert_versionset="INSERT INTO versionSet (directoryId, filename, fileExists) VALUES ("+str(locid)+", \""+afile.replace(" ","_")+"\", 1 );"
             #insert_versionset="INSERT INTO versionSet (directoryId, filename, fileExists) VALUES ("+str(locid)+", \""+afile.replace(" ","_")+"\", 1"+");"
-            print insert_versionset
+            print(insert_versionset)
             curs.execute(insert_versionset)
             conn.commit()
 
@@ -190,13 +189,13 @@ def main(argv):
                 #if 'name' not in child.attrib:
                 #    continue
                 check_package_num="SELECT id from package where name=\""+child.attrib['name']+"\";"
-                print check_package_num
+                print(check_package_num)
                 curs.execute(check_package_num)
                 num = curs.fetchall()
 
                 ID=-1
                 print("Getting ID number")
-                print num
+                print(num)
                 #if len(num[0])
                 if num[0]['id']:
                     ID=num[0]['id']
@@ -286,7 +285,7 @@ def main(argv):
                 
                 recon_stub_name=""
                 ana_launch_name=""
-                for verset in child.getchildren():
+                for verset in list(child):
                     if ( verset.tag == "recon_launch" and "version_set" in verset.attrib ):
                         recon_stub_name=str(verset.attrib["version_set"])
                 #    #    id_sel="select id from versionSet where filename=\""+str(verset.attrib["version_set"])+"\" && directoryID="+str(locid)
