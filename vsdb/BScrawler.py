@@ -303,7 +303,7 @@ def main(argv):
                 #        id_sel="select id from versionSet where filename=\""+str(verset.attrib["version_set"])+"\" && directoryID="+str(locid)
                 #        print(id_sel)
                 #        curs.execute(id_sel)
-                #        results= curs.fetchall()CC BY-NC-ND 4.0
+                #        results= curs.fetchall()
                 #        if (len(results) == 1 ):
                 #            analysis_launch=results[0]['id']
                 print(recon_stub_name)
