@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8e89da9..74be628 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,7 +10,7 @@ if(FORCE_PYTHON2)
+   find_package(Python2 REQUIRED COMPONENTS Interpreter Development)
+   set(Python_INCLUDE_DIRS ${Python2_INCLUDE_DIRS})
+ else(FORCE_PYTHON2)
+-  find_package(Python REQUIRED COMPONENTS Interpreter Development)
++  find_package(Python 3.9 EXACT COMPONENTS Interpreter Development)
+ endif(FORCE_PYTHON2)
+ 
+ # build libDirac from sources
