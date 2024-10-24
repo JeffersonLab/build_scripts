@@ -72,7 +72,7 @@ $(DIRACXX_HOME)/.untar_done: $(TARFILE)
 
 $(DIRACXX_HOME)/.patch_done: $(SOURCE_CODE_TARGET)
 	cd $(DIRACXX_HOME); \
-	patch -p1 < ${BUILD_SCRIPTS}/patches/diracxx/diracxx_python_3_9.patch
+	patch -p1 < ${BUILD_SCRIPTS}/patches/diracxx/diracxx_python3_9.patch
 	date > $@
 
 $(DIRACXX_HOME)/.make_done: $(SOURCE_CODE_TARGET)
