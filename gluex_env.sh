@@ -90,7 +90,7 @@ if [ -n "$G4ROOT" ]
 then
     if [ -e "$G4ROOT" ]
     then
-	g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.sh`
+	g4setup=`find -L $G4ROOT/share/ -maxdepth 3 -name geant4make.sh`
 	if [ -f "$g4setup" ]
 	then
 	    source $g4setup
