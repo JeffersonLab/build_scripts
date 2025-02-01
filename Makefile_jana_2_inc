@@ -51,7 +51,7 @@ $(JANA_HOME)/.install_done: $(JANA_HOME)/.cmake_done
 $(JANA_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	@echo Makefile_jana info: cmake3 = $(SCONS)
 	mkdir -p $(JANA_HOME)/$(BMS_OSNAME)
-	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(CMAKE) $(JANA_HOME) -DUSE_XERCES=1 -DCMAKE_INSTALL_PREFIX=$(JANA_HOME)/$(BMS_OSNAME)
+	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(CMAKE) $(JANA_HOME) -DUSE_XERCES=1 -DCMAKE_INSTALL_PREFIX=$(JANA_HOME)/$(BMS_OSNAME) -DCMAKE_CXX_STANDARD=20
 	date > $@
 
 $(JANA_HOME)/.checkout_done:
