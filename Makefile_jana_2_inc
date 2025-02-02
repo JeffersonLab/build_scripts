@@ -1,3 +1,11 @@
+
+# GLOBAL_CXX_STANDARD is defined in Makefile_all but this is a fallback
+# if building from here directly.
+CXX_STANDARD = 11
+ifdef GLOBAL_CXX_STANDARD
+  CXX_STANDARD = $(GLOBAL_CXX_STANDARD)
+endif
+
 ifdef JANA_VERSION
  SOURCE_CODE_TARGET = $(JANA_HOME)/.untar_done
  ifdef JANA_DIRTAG
@@ -51,7 +59,7 @@ $(JANA_HOME)/.install_done: $(JANA_HOME)/.cmake_done
 $(JANA_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	@echo Makefile_jana info: cmake3 = $(SCONS)
 	mkdir -p $(JANA_HOME)/$(BMS_OSNAME)
-	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(CMAKE) $(JANA_HOME) -DUSE_XERCES=1 -DCMAKE_INSTALL_PREFIX=$(JANA_HOME)/$(BMS_OSNAME) -DCMAKE_CXX_STANDARD=20
+	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(CMAKE) $(JANA_HOME) -DUSE_XERCES=1 -DCMAKE_INSTALL_PREFIX=$(JANA_HOME)/$(BMS_OSNAME) $(JANA2_CMAKE_CONFIGURE_OPTIONS) -DCMAKE_CXX_STANDARD=$(CXX_STANDARD)
 	date > $@
 
 $(JANA_HOME)/.checkout_done:
