@@ -95,7 +95,7 @@ xerces_make:
 	$(MAKE) -C${XERCES} -f${BUILD_SCRIPTS}/Makefile_xercesc_3  XERCES_MAKE_OPTIONS="$(XERCES_MAKE_OPTIONS)"
 
 root_build: root_dir
-	    $(MAKE) -C${ROOT} -f${BUILD_SCRIPTS}/Makefile_root ROOT6_BUILD_OPTIONS="$(ROOT6_BUILD_OPTIONS)"
+	    $(MAKE) -C${ROOT} -f${BUILD_SCRIPTS}/Makefile_root ROOT6_CMAKE_CONFIGURE_OPTIONS="${ROOT6_CMAKE_CONFIGURE_OPTIONS}" ROOT6_BUILD_OPTIONS="$(ROOT6_BUILD_OPTIONS)" GLOBAL_CXX_STANDARD="${GLOBAL_CXX_STANDARD}"
 
 root_dir:
 	test -d ${ROOT} || mkdir -pv ${ROOT}
@@ -106,7 +106,7 @@ jana_dir:
 	test -d ${JANA} || mkdir -pv ${JANA}
 
 jana_make:
-	$(MAKE) -C${JANA} -f${BUILD_SCRIPTS}/Makefile_jana JANA_MAKE_OPTIONS="$(JANA_MAKE_OPTIONS)"
+	$(MAKE) -C${JANA} -f${BUILD_SCRIPTS}/Makefile_jana JANA_MAKE_OPTIONS="$(JANA_MAKE_OPTIONS)" JANA2_CMAKE_CONFIGURE_OPTIONS="${JANA2_CMAKE_CONFIGURE_OPTIONS}" GLOBAL_CXX_STANDARD="${GLOBAL_CXX_STANDARD}"
 
 hdds_build: hdds_dir hdds_make
 
@@ -146,7 +146,7 @@ halld_recon_dir:
 	test -d ${HALLD_RECON} || mkdir -pv ${HALLD_RECON}
 
 halld_recon_make:
-	$(MAKE) -C${HALLD_RECON} -f${BUILD_SCRIPTS}/Makefile_halld_recon HALLD_RECON_SCONS_OPTIONS="$(HALLD_RECON_SCONS_OPTIONS)"
+	$(MAKE) -C${HALLD_RECON} -f${BUILD_SCRIPTS}/Makefile_halld_recon HALLD_RECON_SCONS_OPTIONS="$(HALLD_RECON_SCONS_OPTIONS)" HALLD_RECON_DEBUG_LEVEL="$(HALLD_RECON_DEBUG_LEVEL)"
 
 clhep_build: clhep_dir clhep_make
 
