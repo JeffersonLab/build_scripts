@@ -54,7 +54,9 @@ $(HDDM_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	cmake3 \
 	    -DXercesC_LIBRARY=$(XERCESCROOT)/lib/libxerces-c.so \
 	    -DXercesC_INCLUDE_DIR=$(XERCES_INCLUDE) \
-	    -DXercesC_VERSION=$(XERCES_C_VERSION) -DCMAKE_INSTALL_PREFIX=.. ..
+	    -DXercesC_VERSION=$(XERCES_C_VERSION) -DCMAKE_INSTALL_PREFIX=.. .. \
+	    -DENABLE_ISTREAM_OVER_HTTP=OFF \
+	    -DENABLE_ISTREAM_OVER_XROOTD=OFF
 	date > $@
 
 $(HDDM_HOME)/.make_install_done: $(HDDM_HOME)/.cmake_done
