@@ -77,7 +77,7 @@ $(HDGEANT4_HOME)/.link_to_fixes_done: $(SOURCE_CODE_TARGET)
 
 $(HDGEANT4_HOME)/.patch_done: $(HDGEANT4_HOME)/.link_to_fixes_done
 	cd $(HDGEANT4_HOME); \
-	patch -p1 < ${BUILD_SCRIPTS}/patches/hdgeant4/hdgeant4_c++11.patch
+	patch -p1 < ${BUILD_SCRIPTS}/patches/hdgeant4/hdgeant4_c++20.patch
 	date > $@
 
 $(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.patch_done
