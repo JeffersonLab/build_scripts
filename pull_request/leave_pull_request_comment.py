@@ -1,8 +1,4 @@
-#!/apps/python/3.3.1/bin/python3
-
-# note that this is in python 3, since the version of python 2.7 on the CUE is not
-# new enough to properly support the libraries that handle our SSL connection to GitHub
-# python 3 has many tricky difference between python2 - be warned!
+#!/usr/bin/python
 
 import requests
 import sys

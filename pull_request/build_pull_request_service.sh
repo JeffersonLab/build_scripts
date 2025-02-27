@@ -14,7 +14,7 @@ test_dir=/work/halld/pull_request_test
 cd $test_dir
 version_file="version_${repo}_${branch}.xml"
 rm -f $version_file
-/apps/perl/bin/perl $BUILD_SCRIPTS/pull_request/pull_request_test_version.pl $repo $branch $bms_osname
+perl $BUILD_SCRIPTS/pull_request/pull_request_test_version.pl $repo $branch $bms_osname
 source $BUILD_SCRIPTS/gluex_env_boot_jlab.sh
 gxenv $version_file
 #
