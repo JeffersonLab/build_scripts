@@ -48,7 +48,7 @@ endif
 # Geant4
 if ($?G4ROOT) then
     if ( -e $G4ROOT) then
-	set g4setup=`find $G4ROOT/share/ -maxdepth 3 -name geant4make.csh`
+	set g4setup=`find -L $G4ROOT/share/ -maxdepth 3 -name geant4make.csh`
 	if ( -f $g4setup) then
 	    set g4dir=`dirname $g4setup`
 	    source $g4setup $g4dir

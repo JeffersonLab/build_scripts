@@ -23,6 +23,7 @@ setenv PATH /apps/perl/bin:$PATH
 source $BUILD_SCRIPTS/gluex_env_version.csh $VERSION_XML
 if ($status) exit $status
 setenv JANA_CALIB_URL `$BUILD_SCRIPTS/calib_url_chooser.sh`
+setenv CCDB_CONNECTION $JANA_CALIB_URL
 setenv JANA_RESOURCE_DIR /group/halld/www/halldweb/html/resources
 # cmake on the cue
 if ( $BMS_OSNAME !~ *CentOS7.7* ) then

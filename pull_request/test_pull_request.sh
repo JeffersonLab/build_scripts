@@ -34,7 +34,7 @@ echo LD_LIBRARY_PATH = $LD_LIBRARY_PATH
 echo "Test summary" > summary.txt
 for plugin in $(cat plugins.txt); do
     echo -e "\nTesting $plugin ..." >> summary.txt
-    timeout $TLIMIT hd_root -PNTHREADS=$THREADS -PEVENTS_TO_KEEP=$EVENTS $EVIO -PPLUGINS=$plugin >& $LOG/$plugin.txt
+    timeout $TLIMIT hd_root -PNTHREADS=$THREADS -Pjana:nevents=$EVENTS $EVIO -PPLUGINS=$plugin >& $LOG/$plugin.txt
     code=$?
     if [ $code -eq 124 ]; then
         echo "$plugin plugin failed with $TLIMIT seconds timeout (status=124)."
@@ -47,7 +47,7 @@ done
 function join { local IFS="$1"; shift; echo "$*"; }
 plugins=$(join , $(cat plugins.txt))
 echo -e "\nTesting all listed plugins at the same time ..." >> summary.txt
-timeout $TLIMIT hd_root -PNTHREADS=$THREADS -PEVENTS_TO_KEEP=$EVENTS $EVIO -PPLUGINS=$plugins >& $LOG/multiple_plugins.txt
+timeout $TLIMIT hd_root -PNTHREADS=$THREADS -Pjana:nevents=$EVENTS $EVIO -PPLUGINS=$plugins >& $LOG/multiple_plugins.txt
 code=$?
 if [ $code -eq 124 ]; then
     echo "Multiple-plugins test failed with $TLIMIT seconds timeout (status=124)."

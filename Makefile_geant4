@@ -68,6 +68,9 @@ $(G4DIR)/.make_done: $(G4DIR)/.configure_done
 
 $(G4DIR)/.make_install_done: $(G4DIR)/.make_done
 	cd $(G4DIR)/build ; make install
+	if [[ $(MAJOR_VERSION) -eq 10 && $(MINOR_VERSION) -gt 4 ]]; \
+	   then cd $(G4DIR); ln -s data share ; \
+	fi
 	date > $@
 
 help:
