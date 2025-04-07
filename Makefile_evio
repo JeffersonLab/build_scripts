@@ -18,13 +18,18 @@ MAJOR_MINOR = $(shell perl -e '$$v = "$(EVIO_VERSION)"; @t = split(/\./, $$v); p
 DIR_NAME = evio-$(EVIO_VERSION)
 TARFILE = evio-$(EVIO_VERSION).tgz
 EVIO_HOME = $(PWD)/$(DIR_NAME)
-EVIO_DOWNLOAD_URL_BASE = https://coda.jlab.org/drupal/system/files/coda/evio
 SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
 
 all: $(EVIO_HOME)/.scons_done
 
+# Version evio-4.3: retrieve from coda website
+# Version evio-4.4 and later: retrieve from github
 $(TARFILE):
-	wget --no-verbose --no-check-certificate $(EVIO_DOWNLOAD_URL_BASE)/evio-$(MAJOR_MINOR)/$(TARFILE)
+ifeq ($(MAJOR_MINOR),4.3)
+	wget --no-verbose --no-check-certificate https://coda.jlab.org/drupal/system/files/coda/evio/evio-$(MAJOR_MINOR)/$(TARFILE)
+else
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/JeffersonLab/evio/archive/v$(EVIO_VERSION).tar.gz
+endif
 
 $(EVIO_HOME)/.untar_done: $(TARFILE)
 	mkdir -p temp
@@ -36,9 +41,9 @@ $(EVIO_HOME)/.untar_done: $(TARFILE)
 $(EVIO_HOME)/.patch_done: $(EVIO_HOME)/.untar_done
 ifeq ($(MAJOR_MINOR),4.3)
 	cd $(EVIO_HOME) ; patch -p1 < $(BUILD_SCRIPTS)/patches/evio/evio-4.3.patch
-endif
 	cd $(EVIO_HOME) ; patch SConstruct < $(BUILD_SCRIPTS)/patches/evio/SConstruct.patch
 	cd $(EVIO_HOME) ; patch coda.py < $(BUILD_SCRIPTS)/patches/evio/coda.py.patch
+endif
 	date > $@
 
 $(EVIO_HOME)/.scons_done: $(EVIO_HOME)/.patch_done
