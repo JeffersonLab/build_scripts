@@ -221,7 +221,7 @@ hdgeant4_dir:
 	test -d ${HDGEANT4} || mkdir -pv ${HDGEANT4}
 
 hdgeant4_make:
-	$(MAKE) -C${HDGEANT4} -f${BUILD_SCRIPTS}/Makefile_hdgeant4 HDGEANT4_MAKE_OPTIONS="$(HDGEANT4_MAKE_OPTIONS)"
+	$(MAKE) -C${HDGEANT4} -f${BUILD_SCRIPTS}/Makefile_hdgeant4 GLOBAL_CXX_STANDARD="$(GLOBAL_CXX_STANDARD)" HDGEANT4_MAKE_OPTIONS="$(HDGEANT4_MAKE_OPTIONS)"
 
 gluex_root_analysis_build: gluex_root_analysis_dir gluex_root_analysis_make
 
