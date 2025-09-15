@@ -10,7 +10,7 @@ ifdef GLOBAL_CXX_STANDARD
 endif
 
 # Note: if directory tags exist in LD_LIBRARY_PATH cmake seems to add
-# extraneous double quotes in the build.make for hsimple, probably
+# extraneous double quotes in the build.make for hsimple and idx, probably
 # keying off the ^ character in the directory name. Those double
 # quotes have to be removed. This is done by setting PREBUILD_TARGET
 # so that removal only occurs when ^ is found in  LD_LIBRARY_PATH.
@@ -45,6 +45,7 @@ else
 endif
 UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 buildmake = $(BUILD_DIR)/CMakeFiles/hsimple.dir/build.make
+buildmake2 = $(BUILD_DIR)/CMakeFiles/modules_idx.dir/build.make
 
 all: $(ROOTDIR)/.install_done
 
@@ -86,6 +87,9 @@ $(ROOTDIR)/.sed_makefile_done: $(ROOTDIR)/.cmake_done
 	@echo buildmake = $(buildmake)
 	mv -v $(buildmake) $(buildmake).orginal
 	sed -e /LD_LIBRARY_PATH/s/\ \"/\ /g < $(buildmake).orginal | sed -e /LD_LIBRARY_PATH/s/\"\ /\ /g > $(buildmake)
+	@echo buildmake2 = $(buildmake2)
+	mv -v $(buildmake2) $(buildmake2).orginal
+	sed -e /LD_LIBRARY_PATH/s/\ \"/\ /g < $(buildmake2).orginal | sed -e /LD_LIBRARY_PATH/s/\"\ /\ /g > $(buildmake2)
 	date > $@
 
 $(ROOTDIR)/.build_done: $(PREBUILD_TARGET)
