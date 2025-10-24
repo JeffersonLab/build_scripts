@@ -38,13 +38,20 @@ if ($?BUILD_SCRIPTS) then
     if ($?HEPMCDIR) eval `$BUILD_SCRIPTS/delpath.pl -l $HEPMCDIR/lib`
     if ($?PHOTOSDIR) eval `$BUILD_SCRIPTS/delpath.pl -l $PHOTOSDIR/lib`
     if ($?EVTGENDIR) eval `$BUILD_SCRIPTS/delpath.pl -l $EVTGENDIR/lib`
+    if ($?DIRACXX_HOME) then
+	eval `$BUILD_SCRIPTS/delpath.pl -l $DIRACXX_HOME/lib`
+	eval `$BUILD_SCRIPTS/delpath.pl -l $DIRACXX_HOME`
+    endif
     eval `$BUILD_SCRIPTS/delpath.pl -l`
     # clean PYTHONPATH
     if ($?CCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $CCDB_HOME/python $CCDB_HOME/python/ccdb/ccdb_pyllapi`
     if ($?RCDB_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $RCDB_HOME/python`
     if ($?ROOTSYS) eval `$BUILD_SCRIPTS/delpath.pl -p $ROOTSYS/lib`
     if ($?HALLD_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_HOME/$BMS_OSNAME/python2`
-    if ($?HALLD_RECON_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_RECON_HOME/$BMS_OSNAME/python2`
+    if ($?HALLD_RECON_HOME) then
+        eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_RECON_HOME/$BMS_OSNAME/python2`
+        eval `$BUILD_SCRIPTS/delpath.pl -p $HALLD_RECON_HOME/$BMS_OSNAME/python3`
+    endif
     if ($?HDGEANT4_HOME) eval `$BUILD_SCRIPTS/delpath.pl -p $HDGEANT4_HOME/g4py`
     eval `$BUILD_SCRIPTS/delpath.pl -p`
 endif
@@ -123,12 +130,14 @@ unsetenv LAPACK_HOME
 unsetenv HEPMCDIR
 unsetenv PHOTOSDIR
 unsetenv EVTGENDIR
+unsetenv DIRACXX_HOME
 # versions
 unsetenv SIM_RECON_VERSION
 unsetenv HALLD_RECON_VERSION
 unsetenv HALLD_SIM_VERSION
 unsetenv JANA_VERSION
 unsetenv HDDS_VERSION
+unsetenv HDDM_VERSION
 unsetenv CERNLIB_VERSION
 unsetenv XERCES_C_VERSION
 unsetenv CLHEP_VERSION
@@ -148,6 +157,7 @@ unsetenv LAPACK_VERSION
 unsetenv HEPMC_VERSION
 unsetenv PHOTOS_VERSION
 unsetenv EVTGEN_VERSION
+unsetenv DIRACXX_VERSION
 # urls for checkout
 unsetenv SIM_RECON_URL
 unsetenv HALLD_RECON_URL
@@ -167,6 +177,7 @@ unsetenv SQLITECPP_URL
 unsetenv HEPMC_URL
 unsetenv PHOTOS_URL
 unsetenv EVTGEN_URL
+unsetenv DIRACXX_URL
 # directory tags
 unsetenv SIM_RECON_DIRTAG
 unsetenv HALLD_RECON_DIRTAG
@@ -191,6 +202,7 @@ unsetenv GLUEX_MCWRAPPER_DIRTAG
 unsetenv HEPMC_DIRTAG
 unsetenv PHOTOS_DIRTAG
 unsetenv EVTGEN_DIRTAG
+unsetenv DIRACXX_DIRTAG
 # git branches
 unsetenv SIM_RECON_BRANCH
 unsetenv HALLD_RECON_BRANCH
@@ -212,6 +224,7 @@ unsetenv GLUEX_MCWRAPPER_BRANCH
 unsetenv HEPMC_BRANCH
 unsetenv PHOTOS_BRANCH
 unsetenv EVTGEN_BRANCH
+unsetenv DIRACXX_BRANCH
 # git hashes
 unsetenv SIM_RECON_HASH
 unsetenv HALLD_RECON_HASH
@@ -233,7 +246,9 @@ unsetenv GLUEX_MCWRAPPER_HASH
 unsetenv HEPMC_HASH
 unsetenv PHOTOS_HASH
 unsetenv EVTGEN_HASH
+unsetenv DIRACXX_HASH
 # misc
 unsetenv SQLITE_YEAR
 unsetenv HALLD_RECON_DEBUG_LEVEL
 unsetenv HALLD_SIM_DEBUG_LEVEL
+#unsetenv HALLD_VERSIONS

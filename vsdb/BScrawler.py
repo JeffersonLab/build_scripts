@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import pymysql
+pymysql.install_as_MySQLdb()
 import MySQLdb
 import sys
 import datetime
@@ -19,7 +21,7 @@ try:
     conn=MySQLdb.connect(host=dbhost, user=dbuser, db=dbname)
     curs=conn.cursor(MySQLdb.cursors.DictCursor)
 except:
-    print "CAN'T CONNECT"
+    print("CAN'T CONNECT")
 
 def checkOasisCVMFS(packagename,version,dirtag):
     rootdir="/group/halld/Software/builds/Linux_CentOS7-x86_64-gcc4.8.5-cntr/"
@@ -30,22 +32,25 @@ def checkOasisCVMFS(packagename,version,dirtag):
 	    #   jana => 'jana_',
 	    #   'sim-recon' => 'sim-recon-',
 	    #   hdds => 'hdds-',
-	    #   cernlib => 'special case', <<-------------
+	    #   cernlib => 'special case',
 	    #   'xerces-c' => 'xerces-c-',
 	    #   geant4 => 'geant4.',
 	    #   ccdb => 'ccdb_',
 	    #   evio => 'evio-',
 	    #   rcdb => 'rcdb_',
-        #   hdgeant4 => 'hdgeant4-',
-        #   hd_utilities => 'hd_utilities-',
-        #   gluex_root_analysis => 'gluex_root_analysis-',
-        #   amptools => 'AmpTools-',
-        #   sqlitecpp => 'SQLiteCpp-',
-        #   sqlite => 'sqlite-',
-        #   gluex_MCwrapper => 'gluex_MCwrapper-',
-        #   halld_sim => 'halld_sim-',
-        #   halld_recon => 'halld_recon-',
-	    #   lapack => 'lapack-');
+        #       hdgeant4 => 'hdgeant4-',
+        #       hd_utilities => 'hd_utilities-',
+        #       gluex_root_analysis => 'gluex_root_analysis-',
+        #       amptools => 'AmpTools-',
+        #       sqlitecpp => 'SQLiteCpp-',
+        #       sqlite => 'sqlite-',
+        #       gluex_MCwrapper => 'gluex_MCwrapper-',
+        #       halld_sim => 'halld_sim-',
+        #       halld_recon => 'halld_recon-',
+	    #   lapack => 'lapack-',
+	    #   hepmc => 'HepMC-',
+	    #   photos => 'Photos-',
+	    #   evtgen => 'evtgen-'
     if packagename.replace("\"","") == "clhep":
         folder_name=folder_name+""
     elif packagename.replace("\"","") == "cernlib":
@@ -58,6 +63,14 @@ def checkOasisCVMFS(packagename,version,dirtag):
         folder_name="AmpTools-"
     elif packagename.replace("\"","") == "sqlitecpp":
         folder_name="SQLiteCpp-"
+    elif packagename.replace("\"","") == "photos":
+        folder_name="Photos-"
+    elif packagename.replace("\"","") == "evtgen":
+        folder_name="evtgen-"
+    elif packagename.replace("\"","") == "hepmc":
+        folder_name="HepMC-"
+    elif packagename.replace("\"","") == "diracxx":
+        folder_name="Diracxx-"
     else:
         folder_name=folder_name+"-"
 
@@ -86,10 +99,12 @@ def main(argv):
     pushcmd="mysql --host="+dbhost+" --database="+dbname+" --user="+dbuser#+"<tables.sql"
 
     p = subprocess.Popen(pushcmd.split(" "),stdin=subprocess.PIPE)
-    stdout,stderr = p.communicate(file("/work/halld2/home/tbritton/GlueX_Software/build_scripts/vsdb/tables.sql").read())
+    with open("/group/halld/Software/build_scripts/vsdb/tables.sql", "r") as f:
+        stdout, stderr = p.communicate(f.read().encode())
+    #stdout,stderr = p.communicate(file("/group/halld/Software/build_scripts/vsdb/tables.sql").read())
    
     
-    reconpackcmd="xsltproc /work/halld2/home/tbritton/GlueX_Software/build_scripts/xml/packages_sql.xslt /work/halld2/home/tbritton/GlueX_Software/build_scripts/xml/packages.xml | grep INSERT | "+"mysql -h "+dbhost+" -D "+dbname+" -u "+dbuser
+    reconpackcmd="xsltproc /group/halld/Software/build_scripts/xml/packages_sql.xslt /group/halld/Software/build_scripts/xml/packages.xml | grep INSERT | "+"mysql -h "+dbhost+" -D "+dbname+" -u "+dbuser
     #print reconpackcmd
     
     ps = subprocess.Popen(reconpackcmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
@@ -115,14 +130,15 @@ def main(argv):
 
         directories=os.listdir(loc)
         for afile in directories:
-            #if "_jlab" not in afile:
-            #    continue
+            
             if ".xml" not in afile:
                 continue
             if "~" in afile:
                 continue
-            if afile == "version_jlab.xml" or afile == "version_set_correlations.xml" :
+            if afile == "version_jlab.xml" or afile == "version_set_correlations.xml" or afile=="version.xml":
                 continue
+            #if "test" in afile:
+            #    continue
             # ADD afile to versionset.  Get that version set id
             check_for_file="SELECT id from versionSet where filename=\""+afile+"\";"
             #print check_for_file
@@ -130,7 +146,7 @@ def main(argv):
             row = curs.fetchall()
 
             if len(row) > 0:
-                print "SKIP"
+                print("SKIP")
                 continue
 
 
@@ -139,7 +155,7 @@ def main(argv):
             #onOasis=checkOasis(loc,afile)
             insert_versionset="INSERT INTO versionSet (directoryId, filename, fileExists) VALUES ("+str(locid)+", \""+afile.replace(" ","_")+"\", 1 );"
             #insert_versionset="INSERT INTO versionSet (directoryId, filename, fileExists) VALUES ("+str(locid)+", \""+afile.replace(" ","_")+"\", 1"+");"
-            print insert_versionset
+            print(insert_versionset)
             curs.execute(insert_versionset)
             conn.commit()
 
@@ -176,12 +192,13 @@ def main(argv):
                 #if 'name' not in child.attrib:
                 #    continue
                 check_package_num="SELECT id from package where name=\""+child.attrib['name']+"\";"
-                #print check_package_num
+                print(check_package_num)
                 curs.execute(check_package_num)
                 num = curs.fetchall()
 
                 ID=-1
-                #print num
+                print("Getting ID number")
+                print(num)
                 #if len(num[0])
                 if num[0]['id']:
                     ID=num[0]['id']
@@ -271,7 +288,7 @@ def main(argv):
                 
                 recon_stub_name=""
                 ana_launch_name=""
-                for verset in child.getchildren():
+                for verset in child:
                     if ( verset.tag == "recon_launch" and "version_set" in verset.attrib ):
                         recon_stub_name=str(verset.attrib["version_set"])
                 #    #    id_sel="select id from versionSet where filename=\""+str(verset.attrib["version_set"])+"\" && directoryID="+str(locid)

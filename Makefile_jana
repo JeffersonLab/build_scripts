@@ -1,52 +1,21 @@
-PWD = $(shell pwd)
+SHELL=/bin/bash
 
-ifdef JANA_VERSION
- SOURCE_CODE_TARGET = $(JANA_HOME)/.untar_done
- ifdef JANA_DIRTAG
-  JANA_DIR = jana_$(JANA_VERSION)^$(JANA_DIRTAG)
- else
-  JANA_DIR = jana_$(JANA_VERSION)
- endif
- TARFILE = jana_$(JANA_VERSION).tgz
+include $(BUILD_SCRIPTS)/jana_version.mk
+
+include $(BUILD_SCRIPTS)/ccdb_version.mk
+
+TARFILE=root_v$(JANA_VERSION).tar.gz
+PWD := $(shell pwd)
+
+ifeq ($(JANA_MAJOR_VERSION), 2)
+include $(BUILD_SCRIPTS)/Makefile_jana_2_inc
 else
- SOURCE_CODE_TARGET = $(JANA_HOME)/.checkout_done
- ifndef JANA_URL
-  JANA_URL=https://phys12svn.jlab.org/repos/JANA
- endif
- ifdef JANA_DIRTAG
-  JANA_DIR = $(notdir $(JANA_URL))^$(JANA_DIRTAG)
- else
-  JANA_DIR = $(notdir $(JANA_URL))
- endif
+include $(BUILD_SCRIPTS)/Makefile_jana_1_inc
 endif
 
-export JANA_HOME = $(PWD)/$(JANA_DIR)
-
-all: $(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml
-
-$(JANA_HOME)/$(BMS_OSNAME)/jana_prereqs_version.xml: $(JANA_HOME)/.sconstruct_done
-	cd $(JANA_HOME)/$(BMS_OSNAME) ; $(BUILD_SCRIPTS)/version_prereqs.pl jana
-
-$(JANA_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
-	cd $(JANA_HOME); scons
-	date > $@
-
-$(JANA_HOME)/.checkout_done:
-	rm -rf checkout_temp_dir
-	mkdir checkout_temp_dir
-	cd checkout_temp_dir ; svn co $(JANA_URL)
-	mv -v checkout_temp_dir/* $(JANA_DIR)
-	rmdir -v checkout_temp_dir
-	date > $@
-
-$(JANA_HOME)/.untar_done: $(TARFILE)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(JANA_DIR)
-	rmdir -v untar_temp_dir
-	date > $@
-
-$(TARFILE):
-	@echo making $@
-	wget --no-verbose http://www.jlab.org/JANA/releases/$(TARFILE)
+test:
+	@echo which_cmake3 = $(which_cmake3)
+	@echo find_cmake3 = $(find_cmake3)
+	@echo CMAKE = $(CMAKE)
+	@echo JANA_MAJOR_VERSION = $(JANA_MAJOR_VERSION)
+	@echo JANA_MINOR_VERSION = $(JANA_MINOR_VERSION)

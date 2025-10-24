@@ -1,13 +1,14 @@
-\documentclass[12pt]{article}
+\documentclass[12pt, letterpaper]{article}
 
+%\usepackage[margin=0.5in]{geometry}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{html}
 
 % global parameters
-\textwidth=6.5in
-\oddsidemargin=0in % use built-in offset of 1 inch for left margin
-\evensidemargin=0in % ditto for even pages
+\textwidth=7.375in
+\oddsidemargin=-.375in % use built-in offset of 1 inch for left margin
+\evensidemargin=-.375in % ditto for even pages
 \textheight=9in
 \topmargin=0in
 \headheight=0in % no headers in this document
@@ -21,9 +22,9 @@
 \newcommand{\gxenv}{{\tt gxenv}}
 
 \title{\bs{}: A Version Management System for GlueX \\ \medskip \large
-  GlueX-Doc-2793-v17}
+  GlueX-Doc-2793-v25}
 \author{Mark M.\ Ito \\ Jefferson Lab}
-\date{September 16, 2019}
+\date{October 12, 2021}
 
 \begin{document}
 
@@ -66,7 +67,7 @@ There are several sources.
 
 \subsubsection{Pre-Installed at JLab}
 
-At JLab, \bs{} is installed in {\tt /group/halld/Software/build\_scripts}. You can start by defining an enviroment variable:
+At JLab, \bs{} is installed in {\tt /group/halld/Software/build\_scripts}. You can start by defining an environment variable:
 \begin{center}
 {\tt export BUILD\_SCRIPTS=/group/halld/Software/build\_scripts}
 \end{center}
@@ -80,13 +81,16 @@ for tcsh.
 
 Outside JLab, when the gluex\_install procedure has been followed (see section \ref{gluex-install}), \bs{} will be installed under \$GLUEX\_TOP/build\_scripts. You will have to contact your local expert to find the location of \$GLUEX\_TOP. Once that is known the BUILD\_SCRIPTS environment variable to point to \$GLUEX\_TOP/build\_scripts.
 
-\subsubsection{Install via tar file}
+\subsubsection{Install via zip or tar file}
 
-The latest version of \bs{} is available from GitHub at
+All of the releases of \bs{} are available from GitHub at
 \bcenter
-\htmladdnormallink{\tt https://github.com/JeffersonLab/build\_scripts/archive/latest.tar.gz}{https://github.com/JeffersonLab/build\_scripts/archive/latest.tar.gz}
+\htmladdnormallink{\tt https://github.com/JeffersonLab/build\_scripts/releases}{https://github.com/JeffersonLab/build\_scripts/releases}
 \ecenter
-Set your BUILD\_SCRIPTS environment variable to the full path of the build\_scripts-latest directory that results from untar'ing the file.
+The latest release will be listed first. You will see links for downloading
+the files in zip and tar format. After unpacking the files, set your
+BUILD\_SCRIPTS environment variable to the full path of the resulting
+top-level directory.
 
 \subsubsection{Clone from GitHub}
 
@@ -304,7 +308,8 @@ user's home area. An example version set file is shown in Fig.~\ref{figure:versi
 
 At JLab there is script that packages the steps shown in
 Fig.~\ref{figure:version-script}, with the appropriate values of {\tt
-  GLUEX\_TOP} and {\tt BUILD\_SCRIPTS}. It uses the latest version of
+  GLUEX\_TOP} and {\tt BUILD\_SCRIPTS}. It uses the current default version
+set file,
 {\tt version.xml}. It can also be used as an example for using a
 custom version of {\tt version.xml}. To use it, for bash:
 \begin{verbatim}
@@ -314,28 +319,30 @@ and for tcsh:
 \begin{verbatim}
         source /group/halld/Software/build_scripts/gluex_env_jlab.csh
 \end{verbatim}
+Optionally, these commands will take an argument naming a version set file to use rather than the current default. For example, for bash:
+\begin{verbatim}
+        source /group/halld/Software/build_scripts/gluex_env_jlab.sh \
+            /home/username/my_versions.xml
+\end{verbatim}
 
-\subsubsection{Simple Environment Set Up}
+\subsubsection{Simple Environment Set Up}\label{section:simple-setup}
 
 The simplest (and recommended) form of environment set-up under \bs{}
-is the \gxenv{} command.  {\tt gluex\_env\_boot\_jlab.(c)sh} (at JLab)
-and {\tt gluex\_env\_boot.(c)sh} (for gluex\_install builds) are short
-scripts that provide two commands (aliases for tcsh, functions for
-bash) that facilitate setting up and tearing down the GlueX software
-environment. The commands provided are: {\tt gxenv} and {\tt
-  gxclean}. By defining these commands, the scripts ``boot-up''
-environment setting.
-
-The scripts also provide an environment variable, DIST, that points to
-the directory containing all of the official version set files (the
-{\tt version\_*.xml} files).
+is the \gxenv{} command. To define this command, use {\tt
+  gluex\_env\_boot\_jlab.(c)sh} (at JLab) and {\tt
+  gluex\_env\_boot.(c)sh} (for gluex\_install builds). These scripts
+also define the {\tt gxclean} command. {\tt gxenv} is used to set up
+the GlueX environment and {\tt gxclean} is used to reverse the set
+up. The scripts also provide an environment variable, {\tt
+  HALLD\_VERSIONS}, that points to the directory containing all of the
+official version set files (the {\tt version\_*.xml} files).
 
 \begin{description}
 \item{\bf How to use the scripts to define the commands.}
 
 For tcsh, include the following line in your {\tt .cshrc}, {\tt .login}, or {\tt .tcshrc}:
 \begin{verbatim}
-  source /group/halld/Software/build\_scripts/gluex_env_boot_jlab.csh
+  source /group/halld/Software/build_scripts/gluex_env_boot_jlab.csh
 \end{verbatim}
 at JLab and
 \begin{verbatim}
@@ -345,13 +352,15 @@ for gluex\_install builds.
 
 For bash, include the following line in your {\tt .bashrc}, {\tt .profile}, or {\tt .bash\_profile}:
 \begin{verbatim}
-  source /group/halld/Software/build\_scripts/gluex\_env\_boot\_jlab.sh
+  source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 \end{verbatim}
 at JLab and
 \begin{verbatim}
-  source /path/to/gluex_top/build\_scripts/gluex\_env\_boot.sh
+  source /path/to/gluex_top/build_scripts/gluex_env_boot.sh
 \end{verbatim}
 for gluex\_install builds.
+
+Note that these ``boot'' scripts {\it do not} set up the GlueX environment. They merely define the command that will do the set up.
 
 \item{\bf How to use the commands.}
 
@@ -365,13 +374,13 @@ Usage is the same for both tcsh and bash, JLab and gluex\_install.
 \begin{verbatim}
   gxenv
 \end{verbatim}
-\item To get the environment for a particular official version set, say {\tt version\_3.5\_jlab.xml}, use the {DIST} environment variable:
+\item To get the environment for a particular official version set, say {\tt version\_3.5\_jlab.xml}, use the {\tt HALLD\_VERSIONS} environment variable:
 \begin{verbatim}
-  gxenv $DIST/version_3.5_jlab.xml
+  gxenv $HALLD_VERSIONS/version_3.5_jlab.xml
 \end{verbatim}
 \item To get the environment for an arbitrary xml file, use its path:
 \begin{verbatim}
-  gxenv /path/to/my\_version.xml
+  gxenv /path/to/my_version.xml
 \end{verbatim}
 \end{itemize}
 
@@ -558,17 +567,22 @@ variables for CCDB, RCDB, and HDDS.
 
 \begin{description}
 
-\item{\bf SCons Options for {\tt Makefile\_sim-recon}}
+\item{\bf SCons options for halld\_recon, halld\_sim, and sim-recon}
 
-For the sim-recon package, there is a variable, {\tt
-  SIM\_RECON\_SCONS\_OPTIONS} that can be defined, either in the shell
+For the halld\_recon, halld\_sim, and sim-recon packages, there are variables, one per packages, that can be defined, either in the shell
 environment on on the make command line, that will supply optional
-arguments to the {\tt scons} command invoked by make. For example,
+arguments to the native {\tt scons} command invoked by make. They are
 \begin{verbatim}
-        make -f $BUILD_SCRIPTS/Makefile_sim-recon \
-            SIM_RECON_SCONS_OPTIONS='SHOWBUILDS=1'
+    HALLD_RECON_SCONS_OPTIONS
+    HALLD_SIM_SCONS_OPTIONS
+    SIM_RECON_SCONS_OPTIONS
 \end{verbatim}
-will cause SCons to show the compiler commands explicitly.
+respectively. For example,
+\begin{verbatim}
+        make -f $BUILD_SCRIPTS/Makefile_halld_recon \
+            HALLD_RECON_SCONS_OPTIONS='SHOWBUILD=1 -j4'
+\end{verbatim}
+will cause SCons to show the compiler commands explicitly and build halld\_recon with four threads.
 
 \item{\bf Building LAPACK/BLAS}
 
@@ -577,6 +591,10 @@ are downloaded and build automatically, but rather than being
 installed in their own home directory, The ``install'' target of {\tt
   Makefile\_lapack} adds them to the lib directory of your CERNLIB
 build.
+
+\item{\bf Forcing use of Python 2 for HDGeant4}
+
+For systems that do not have Python 2 as the default, setting the make variable {\tt PYTHON2\_EXPLICIT} will force the use of Python-2-specific versions of the boost-python library and the python-config command in {\tt Makefile\_hdgeant4}.
 
 \end{description}
 
@@ -616,6 +634,115 @@ note that doing the build in the sim-recon container directory is not
 necessary for the build to succeed; any directory will work. In this
 example however we are adding to an existing standard directory
 structure so we {\tt cd} to the standard directory.
+
+\subsection{Building Custom Versions of Packages}
+
+\subsubsection{my\_halld\_build\_jlab}
+
+Script location at JLab:
+
+{\tt /group/halld/Software/build\_scripts/my\_halld\_build\_jlab}
+
+Usage message:
+
+\begin{verbatim}
+my_halld_build_jlab [-h] [-x filename] [-n nthreads] [package_1] [package_2] ...
+
+where:
+    -h        show this help text
+    -x        set name of version set XML file
+              (default: /group/halld/www/halldweb/html/dist/version_jlab.xml)
+    -n        set number of threads to use in builds (default: 1)
+    -k        keep potentially inconsistent packages in environment
+              (default: remove them from the environment)
+    package_n package name, choose from:
+                  hdds
+                  sim-recon
+                  halld_recon
+                  halld_sim
+                  hdgeant4
+                  gluex_root_analysis
+              if no package name supplied all except sim-recon will be built
+\end{verbatim}
+
+Examples:
+
+\begin{enumerate}
+
+\item Build all GlueX packages (hdds, halld\_recon, halld\_sim, hdgeant4, and gluex\_root\_analysis):
+
+\begin{verbatim}
+my_halld_build_jlab
+\end{verbatim}
+  
+\item Build halld\_recon only, using hdds from the default global build:
+
+\begin{verbatim}
+my_halld_build_jlab halld_recon
+\end{verbatim}
+
+\item Build halld\_recon, halld\_sim, and hdgeant4, use hdds from the global build defined in version\_3.1\_jlab.xml:
+
+\begin{verbatim}
+DIST=group/halld/www/halldweb/html/dist
+my_halld_build_jlab -x $DIST/version_3.1_jlab.xml \
+  halld_recon halld_sim hdgeant4
+\end{verbatim}
+  
+\item Build halld\_sim, using halld\_recon from the default global build, using 4 threads:
+
+\begin{verbatim}
+my_halld_build_jlab -n 4 halld_sim
+\end{verbatim}
+
+\item Build halld\_recon, using hdds from the default global build, and retaining environment set-up of halld\_sim, hdgeant4, and gluex\_root\_analysis from the default global build even though the latter three were built against a different version of halld\_recon
+
+\begin{verbatim}
+my_halld_build_jlab -k halld_recon
+\end{verbatim}
+
+\end{enumerate}
+
+\subsubsection{my\_halld\_update.py}
+
+Usage message:
+
+\begin{verbatim}
+usage: my_halld_update.py [-h] [-x XML] [-n NTHREADS]
+                          [inputPackages [inputPackages ...]]
+
+positional arguments:
+  inputPackages         list of packages to update
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -x XML, --xml XML     version set xml file name (default: version.xml)
+  -n NTHREADS, --nthreads NTHREADS
+                        number of threads to use in rebuild (default: 1)
+\end{verbatim}
+
+Examples:
+
+\begin{enumerate}
+\item Update all private packages as identified by version.xml in the current working directory. Private packages contain a "home" attribute:
+
+\begin{verbatim}
+my_halld_update.py
+\end{verbatim}
+
+\item Update halld\_sim only:
+
+\begin{verbatim}
+my_halld_update.py halld_sim
+\end{verbatim}
+
+\item Update all private packages as identified by {\tt /home/user/project/version\_special.xml}:
+
+\begin{verbatim}
+my_halld_update.py -x /home/user/project/version_special.xml
+\end{verbatim}
+
+\end{enumerate}
 
 \section{The Versioning System}\label{section:versioning}
 
@@ -904,7 +1031,11 @@ two ways depending on how the package was built:
   implemented.
 
 \end{enumerate}
-If a version mismatch is found, a warning is written to the screen.
+If a version mismatch is found, a warning is written to the screen. To stop the version check from being performed, set the environment variable
+\begin{center} \tt
+BUILD\_SCRIPTS\_CONSISTENCY\_CHECK
+\end{center}
+to the value {\tt "false"}. 
 
 There are cases where the home directory does not contain any
 information about the source of its source code. For example, the code
@@ -964,10 +1095,10 @@ Root access is required for steps (1) and (3).
   software. For RedHat-like distributions you do a ``yum update''. For
   Debian-like systems you do a ``apt-get update''.
 
-\item {\bf Get the Scripts}. A tar file with the scripts described
-  here is available at
+\item {\bf Get the Scripts}. A zip file and a tar file with the
+  scripts described here are available at
   \begin{center}
-    \htmladdnormallink{\tt https://github.com/JeffersonLab/gluex\_install/archive/latest.tar.gz}{https://github.com/JeffersonLab/gluex_install/archive/latest.tar.gz}
+    \htmladdnormallink{\tt https://github.com/JeffersonLab/gluex\_install/releases/latest}{https://github.com/JeffersonLab/gluex_install/releases/latest}
   \end{center}
 You can also do a git clone of the latest version:
 \begin{center}\tt
@@ -1001,10 +1132,9 @@ You can also do a git clone of the latest version:
 
 \subsection{Using the Build}
 
-After the build is complete, there are two files in the gluex
-directory, setup.sh and setup.csh, that can be used to set-up the
-complete GlueX environment under Bourne-like shells or C-like shells
-respectively.
+After the build is complete, to set up the environment to use it,
+follow the steps in Section~\ref{section:simple-setup} that are
+designated for gluex\_install builds.
 
 \end{document}
 

@@ -1,12 +1,39 @@
 ifdef DEBUG
- CMAKE_VERBOSE_OPTION = -DCMAKE_VERBOSE_MAKEFILE=ON
+   CMAKE_VERBOSE_OPTION = -DCMAKE_VERBOSE_MAKEFILE=ON
 endif
 
-ifdef ROOT_DIRTAG
- ROOTDIR = root-$(ROOT_VERSION)^$(ROOT_DIRTAG)
-else
- ROOTDIR = root-$(ROOT_VERSION)
+# GLOBAL_CXX_STANDARD is defined in Makefile_all but this is a fallback
+# if building from here directly.
+CXX_STANDARD = 11
+ifdef GLOBAL_CXX_STANDARD
+  CXX_STANDARD = $(GLOBAL_CXX_STANDARD)
 endif
+
+# Note: if directory tags exist in LD_LIBRARY_PATH cmake seems to add
+# extraneous double quotes in the build.make for hsimple and idx, probably
+# keying off the ^ character in the directory name. Those double
+# quotes have to be removed. This is done by setting PREBUILD_TARGET
+# so that removal only occurs when ^ is found in  LD_LIBRARY_PATH.
+DIRTAG_IN_PATH = $(shell if echo $(LD_LIBRARY_PATH) | grep -q '\^'; then echo yes; else echo no; fi)
+ifeq ($(DIRTAG_IN_PATH), yes)
+    PREBUILD_TARGET = $(ROOTDIR)/.sed_makefile_done
+else
+    PREBUILD_TARGET = $(ROOTDIR)/.cmake_done
+endif
+
+ifdef ROOT_VERSION
+    ROOTDIR_BASE = root-$(ROOT_VERSION)
+    SOURCE_TARGET = $(ROOTDIR)/.patch_done
+else
+    ROOTDIR_BASE = root
+    SOURCE_TARGET = $(ROOTDIR)/.clone_done
+endif
+ifdef ROOT_DIRTAG
+ ROOTDIR = $(ROOTDIR_BASE)^$(ROOT_DIRTAG)
+else
+ ROOTDIR = $(ROOTDIR_BASE)
+endif
+
 BUILD_DIR = $(ROOTDIR)/build_dir
 
 which_cmake3 := $(shell which cmake3)
@@ -16,6 +43,9 @@ ifeq (,$(find_cmake3))
 else
     CMAKE = cmake3
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
+buildmake = $(BUILD_DIR)/CMakeFiles/hsimple.dir/build.make
+buildmake2 = $(BUILD_DIR)/CMakeFiles/modules_idx.dir/build.make
 
 all: $(ROOTDIR)/.install_done
 
@@ -24,27 +54,48 @@ $(TARFILE):
 
 $(ROOTDIR)/.untar_done: $(TARFILE)
 	$(RM) -r $(ROOTDIR)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(ROOTDIR)
-	rmdir -v untar_temp_dir
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(ROOTDIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
-$(ROOTDIR)/.cmake_done: $(ROOTDIR)/.untar_done
+$(ROOTDIR)/.patch_done: $(ROOTDIR)/.untar_done
+	@echo Makefile_root_6_inc: applying patches, if any
+ifeq ($(ROOT_LE_6_08), true)
+	cd $(ROOTDIR)/cmake/modules; \
+	patch SearchInstalledSoftware.cmake < $(BUILD_SCRIPTS)/patches/root/SearchInstalledSoftware.cmake.patch
+endif
+ifeq ($(ROOT_EQ_6_24), true)
+	patch $(ROOTDIR)/cmake/scripts/ROOTConfig.cmake.in < $(BUILD_SCRIPTS)/patches/root/ROOTConfig.cmake.in.patch
+else ifeq ($(ROOT_EQ_6_32), true)
+	patch $(ROOTDIR)/cmake/scripts/ROOTConfig.cmake.in < $(BUILD_SCRIPTS)/patches/root/ROOTConfig.cmake.in.patch
+endif
+	date > $@
+
+$(ROOTDIR)/.clone_done:
+	git clone https://github.com/root-project/root.git
+	date > $@
+
+$(ROOTDIR)/.cmake_done: $(SOURCE_TARGET)
 	mkdir -p $(BUILD_DIR)
-	cd $(BUILD_DIR) ; $(CMAKE) .. -DCMAKE_INSTALL_PREFIX=.. $(CMAKE_VERBOSE_OPTION) -Dgdml=ON -Droofit=ON
+	cd $(BUILD_DIR) ; $(CMAKE) .. -DCMAKE_INSTALL_PREFIX=.. $(CMAKE_VERBOSE_OPTION) $(ROOT6_CMAKE_CONFIGURE_OPTIONS) -Dgdml=ON -Droofit=ON -Dmysql=OFF -Ddavix=OFF -Dbuiltin_tbb=ON -Dmathmore=ON -Dproof=ON -DCMAKE_CXX_STANDARD=$(CXX_STANDARD) -DPython3_EXECUTABLE=/usr/bin/python
 	date > $@
 
-$(ROOTDIR)/.build_done: $(ROOTDIR)/.cmake_done
+$(ROOTDIR)/.sed_makefile_done: $(ROOTDIR)/.cmake_done
+	@echo buildmake = $(buildmake)
+	mv -v $(buildmake) $(buildmake).orginal
+	sed -e /LD_LIBRARY_PATH/s/\ \"/\ /g < $(buildmake).orginal | sed -e /LD_LIBRARY_PATH/s/\"\ /\ /g > $(buildmake)
+	@echo buildmake2 = $(buildmake2)
+	mv -v $(buildmake2) $(buildmake2).orginal
+	sed -e /LD_LIBRARY_PATH/s/\ \"/\ /g < $(buildmake2).orginal | sed -e /LD_LIBRARY_PATH/s/\"\ /\ /g > $(buildmake2)
+	date > $@
+
+$(ROOTDIR)/.build_done: $(PREBUILD_TARGET)
 	cd $(BUILD_DIR) ; $(CMAKE) --build . $(ROOT6_CMAKE_BUILD_OPTIONS) -- $(ROOT6_BUILD_OPTIONS)
 	date > $@
 
 $(ROOTDIR)/.install_done: $(ROOTDIR)/.build_done
 	cd $(BUILD_DIR) ; $(CMAKE) --build . --target install
 	date > $@
-
-test:
-	@echo which_cmake3 = $(which_cmake3)
-	@echo find_cmake3 = $(find_cmake3)
-	@echo CMAKE = $(CMAKE)

@@ -22,6 +22,20 @@
 # will never fail.
 #
 
+# respect the over-ride env variable
+if (defined $ENV{'BMS_OSNAME_OVERRIDE'}) {
+    $boo = $ENV{'BMS_OSNAME_OVERRIDE'};
+    chomp $boo;
+    print "$boo\n";
+    exit;
+}
+
+# container tag
+$container_tag = "";
+if (-d "/.singularity.d" || -f "/.dockerenv") {
+    $container_tag = "-cntr";
+}
+
 # This first section sets the uname and release variables
 # which hold the "OS" and "_flavor##" parts of the string.
 $uname = `uname`;
@@ -56,6 +70,10 @@ if ($uname eq 'Linux') {
 	    $release = '_RHEL7';
 	} elsif ($release_string =~ /^Red Hat Enterprise Linux Server release 7.*/) {
 	    $release = '_RHEL7';
+	} elsif ($release_string =~ /^Red Hat Enterprise Linux release 8.*/) {
+	    $release = '_RHEL8';
+	} elsif ($release_string =~ /^Red Hat Enterprise Linux release 9.*/) {
+	    $release = '_RHEL9';
 	} elsif ($release_string =~ /^CentOS release 5.*/) {
 	    $release = '_CentOS5';
 	} elsif ($release_string =~ /^CentOS release 6.*/) {
@@ -64,12 +82,17 @@ if ($uname eq 'Linux') {
 	    if ($release_string !~ /^CentOS Linux release 7\.2/) {
 		$nodename = `uname -n`;
 		if ($nodename =~ /.jlab.org$/
+		    && $container_tag eq ""
 		    && ($nodename =~ /^farm/
 			|| $nodename =~ /^ifarm/
-			|| $nodename =~ /^qcd/)) {
+			|| $nodename =~ /^qcd/
+			|| $nodename =~ /^sciml/)) {
 		    @token = split(/\s+/, $release_string);
 		    @version = split(/\./, $token[3]);
 		    $version_minor = $version[1];
+		    if ($version_minor == 9) {
+			$version_minor = 7;
+		    }
 		    $release = "_CentOS7.$version_minor";
 		} else {
 		    $release = '_CentOS7';
@@ -77,10 +100,18 @@ if ($uname eq 'Linux') {
 	    } else {
 		    $release = '_CentOS7';
 	    }
+	} elsif ($release_string =~ /^CentOS Linux release 8\.*/) {
+	    $release = '_CentOS8';
+	} elsif ($release_string =~ /^CentOS Stream release 8\.*/) {
+	    $release = '_CentOS8';	    
 	} elsif ($release_string =~ /^Scientific Linux SL release 5.*/ ) {
 	    $release = '_SL5';
 	} elsif ($release_string =~ /^Scientific Linux release 6.*/ ) {
 	    $release = '_SL6';
+	} elsif ($release_string =~ /^Rocky Linux release 8.*/ ) {
+	    $release = '_Rocky8';
+	} elsif ($release_string =~ /^AlmaLinux release 9.*/ ) {
+	    $release = '_Alma9';
 	} else {
 	    print STDERR "unrecognized Red Hat release\n";
 	    $release = '_RH';
@@ -212,12 +243,6 @@ if ($processor eq 'unknown') {
 	$processor = `uname -m`;
 	chomp $processor;
 }
-
-# container tag
-$container_tag = "";
-	if (-d "/.singularity.d" || -f "/.dockerenv") {
-	    $container_tag = "-cntr";
-	}
 
 # Finally, form and print the complete string to stdout
 print "${uname}${release}-${processor}-${compiler_version}${container_tag}\n";

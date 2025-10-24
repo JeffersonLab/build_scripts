@@ -2,7 +2,7 @@
 	     'xerces-c', ccdb, geant4, evio, rcdb, hdgeant4,
 	     hd_utilities, gluex_root_analysis, amptools, sqlitecpp, sqlite,
 	     gluex_MCwrapper, halld_sim, halld_recon, lapack, hepmc, photos,
-	     evtgen);
+	     evtgen, diracxx, hddm, halld_amp);
 
 %home_variable = (root => 'ROOTSYS',
 		  clhep => 'CLHEP',
@@ -27,7 +27,10 @@
 		  lapack => 'LAPACK_HOME',
 		  hepmc => 'HEPMCDIR',
 		  photos => 'PHOTOSDIR',
-		  evtgen => 'EVTGENDIR');
+		  evtgen => 'EVTGENDIR',
+		  diracxx => 'DIRACXX_HOME',
+		  hddm => 'HDDM_HOME',
+		  halld_amp => 'HALLD_AMP_HOME');
 
 %dir_prefix = (root => 'root[_-]',
 	       clhep => '',
@@ -52,7 +55,10 @@
 	       lapack => 'lapack-',
 	       hepmc => 'HepMC-',
 	       photos => 'Photos-',
-	       evtgen => 'evtgen-');
+	       evtgen => 'evtgen-',
+	       diracxx => 'Diracxx-',
+	       hddm => 'hddm-',
+	       halld_amp => 'halld_amp-');
 
 $unames = `uname -s`;
 chomp $unames;
@@ -82,5 +88,8 @@ $evio_suffix = '/' . $unames . '-' . $unamem;
                lapack => '',
                hepmc => '',
                photos => '',
-               evtgen => '');
-@debug_type = ('opt', '', 'dbg');
+               evtgen => '/build',
+	       diracxx => '',
+	       hddm => '',
+	       halld_amp => '');
+@debug_type = ('', 'optdbg', 'dbg');

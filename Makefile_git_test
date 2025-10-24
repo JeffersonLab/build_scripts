@@ -1,0 +1,56 @@
+# Makefile_git_test
+
+PWD = $(shell pwd)
+ifdef GIT_TEST_VERSION
+ SOURCE_CODE_TARGET = $(GIT_TEST_HOME)/.untar_done
+ GIT_TEST_DIR = git_test-$(GIT_TEST_VERSION)
+ TARFILE = $(GIT_TEST_VERSION).tar.gz
+else
+ SOURCE_CODE_TARGET = $(GIT_TEST_HOME)/.clone_done
+ ifndef GIT_TEST_URL
+  GIT_TEST_URL=https://github.com/jeffersonlab/git_test
+ endif
+ GIT_TEST_DIR = $(notdir $(GIT_TEST_URL))
+ ifndef GIT_TEST_BRANCH
+  GIT_TEST_BRANCH = master
+ endif
+endif
+ifdef GIT_TEST_DIRTAG
+ GIT_TEST_DIR := $(GIT_TEST_DIR)^$(GIT_TEST_DIRTAG)
+endif
+ifeq ($(GIT_TEST_DEBUG_LEVEL), 0)
+ GIT_TEST_DIR := $(GIT_TEST_DIR)+opt
+ override GIT_TEST_SCONS_OPTIONS += DEBUG=0 OPTIMIZATION=3
+else ifeq ($(GIT_TEST_DEBUG_LEVEL), 2)
+ GIT_TEST_DIR := $(GIT_TEST_DIR)+dbg
+ override GIT_TEST_SCONS_OPTIONS += DEBUG=1 OPTIMIZATION=0
+endif
+export GIT_TEST_HOME = $(PWD)/$(GIT_TEST_DIR)
+SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
+PYTHONCONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
+PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
+ifeq ($(GIT_TEST_PROFILING), true)
+ override GIT_TEST_SCONS_OPTIONS += PROFILE=1
+endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
+ 
+all: $(SOURCE_CODE_TARGET)
+
+$(TARFILE):
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/JeffersonLab/git_test/archive/$(GIT_TEST_VERSION).tar.gz
+
+$(GIT_TEST_HOME)/.untar_done: $(TARFILE)
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(GIT_TEST_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
+	date > $@
+
+$(GIT_TEST_HOME)/.clone_done:
+	git clone -b $(GIT_TEST_BRANCH) $(GIT_TEST_URL) $(GIT_TEST_DIR)
+ifdef GIT_TEST_HASH
+	cd $(GIT_TEST_DIR) ; git checkout $(GIT_TEST_HASH)
+endif
+	date > $@
+

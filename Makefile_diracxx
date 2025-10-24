@@ -1,0 +1,107 @@
+# Makefile_diracxx
+
+SHELL=/bin/bash
+PWD = $(shell pwd)
+
+ifdef DIRACXX_VERSION
+ SOURCE_CODE_TARGET = $(DIRACXX_HOME)/.untar_done
+ ifdef DIRACXX_DIRTAG
+  DIRACXX_DIR = Diracxx-$(DIRACXX_VERSION)^$(DIRACXX_DIRTAG)
+ else
+  DIRACXX_DIR = Diracxx-$(DIRACXX_VERSION)
+ endif
+ TARFILE = $(DIRACXX_VERSION).tar.gz
+else
+ SOURCE_CODE_TARGET = $(DIRACXX_HOME)/.clone_done
+ ifndef DIRACXX_URL
+  DIRACXX_URL=https://github.com/jeffersonlab/Diracxx
+ endif
+ ifdef DIRACXX_DIRTAG
+  DIRACXX_DIR = $(notdir $(DIRACXX_URL))^$(DIRACXX_DIRTAG)
+ else
+  DIRACXX_DIR = $(notdir $(DIRACXX_URL))
+ endif
+ ifndef DIRACXX_BRANCH
+  DIRACXX_BRANCH = master
+ endif
+endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
+
+DIRACXX_HOME = $(PWD)/$(DIRACXX_DIR)
+PYTHON_CONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
+PYTHON_BOOST = $(shell $(BUILD_SCRIPTS)/python_chooser.sh boost)
+PYTHON_LIB_OPTION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh lib)
+PYTHON_BOOST_CMAKE = $(shell $(BUILD_SCRIPTS)/python_chooser.sh boost_cmake)
+
+include $(BUILD_SCRIPTS)/diracxx_version.mk # defines USE_CMAKE
+
+ifeq ($(USE_CMAKE), true)
+    BUILD_TARGET = $(DIRACXX_HOME)/.cmake_install_done
+else
+    BUILD_TARGET = $(DIRACXX_HOME)/.make_done
+endif
+
+CMAKE3 = $(shell $(BUILD_SCRIPTS)/cmake3_chooser.sh)
+
+all: force_rebuild_action $(DIRACXX_HOME)/diracxx_prereqs_version.xml
+
+force_rebuild_action:
+ifdef FORCE
+	@echo forcing rebuild
+	$(RM) $(DIRACXX_HOME)/.make_done
+endif
+
+$(TARFILE):
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/jeffersonlab/diracxx/archive/$(TARFILE)
+
+$(DIRACXX_HOME)/.clone_done:
+	git clone -b $(DIRACXX_BRANCH) $(DIRACXX_URL) $(DIRACXX_DIR)
+ifdef DIRACXX_HASH
+	cd $(DIRACXX_DIR) ; git checkout $(DIRACXX_HASH)
+endif
+	date > $@
+
+$(DIRACXX_HOME)/.untar_done: $(TARFILE)
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(DIRACXX_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
+	date > $@
+
+$(DIRACXX_HOME)/.make_done: $(SOURCE_CODE_TARGET)
+	cd $(DIRACXX_HOME) ; \
+	make PYTHON_CONFIG=$(PYTHON_CONFIG) BOOST_PYTHON_LIB=$(PYTHON_BOOST) PYTHON_LIB_OPTION=$(PYTHON_LIB_OPTION) $(DIRACXX_MAKE_OPTIONS)
+	date > $@
+
+$(DIRACXX_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
+	cd $(DIRACXX_HOME); \
+	mkdir -p build; \
+	cd build; \
+	$(CMAKE3) -DCMAKE_INSTALL_PREFIX=$(DIRACXX_HOME) \
+	    -DCMAKE_INSTALL_LIBDIR=$(DIRACXX_HOME)/lib \
+	    -DBoost_NO_BOOST_CMAKE=ON \
+	    -DPython_EXECUTABLE=/usr/bin/python \
+	    -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
+	date > $@
+
+$(DIRACXX_HOME)/.cmake_build_done: $(DIRACXX_HOME)/.cmake_done
+	cd $(DIRACXX_HOME)/build; \
+	$(CMAKE3) --build .
+	date > $@
+
+# use "make install" rather than "cmake3 --install ." because ifarm does not like the latter
+$(DIRACXX_HOME)/.cmake_install_done: $(DIRACXX_HOME)/.cmake_build_done
+	cd $(DIRACXX_HOME)/build; \
+	make install
+	date > $@
+
+$(DIRACXX_HOME)/diracxx_prereqs_version.xml: $(BUILD_TARGET)
+	cd $(DIRACXX_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl diracxx
+
+show_env:
+	@echo DIRACXX_VERSION_DEFINED = $(DIRACXX_VERSION_DEFINED)
+	@echo DIRACXX_MAJOR_VERSION = $(DIRACXX_MAJOR_VERSION)
+	@echo DIRACXX_MINOR_VERSION = $(DIRACXX_MINOR_VERSION)
+	@echo DIRACXX_SUBMINOR_VERSION = $(DIRACXX_SUBMINOR_VERSION)
+	@echo USE_CMAKE = $(USE_CMAKE)

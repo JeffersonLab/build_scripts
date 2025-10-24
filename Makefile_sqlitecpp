@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 PWD = $(shell pwd)
 CMAKE3_BIN := $(shell which cmake3)
 ifneq ($(CMAKE3_BIN),)
@@ -29,8 +30,16 @@ else
   SQLITECPP_BRANCH = master
  endif
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 SQLITECPP_HOME = $(PWD)/$(SQLITECPP_DIR)
+
+include $(BUILD_SCRIPTS)/sqlite_version.mk
+ifeq ($(SQLITE_LT_3_19), true)
+    LEGACY_ON_OR_OFF = ON
+else
+    LEGACY_ON_OR_OFF = OFF
+endif
 
 all: $(SQLITECPP_HOME)/sqlitecpp_prereqs.xml
 
@@ -45,11 +54,11 @@ endif
 	date > $@
 
 $(SQLITECPP_HOME)/.untar_done: $(TARFILE)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(SQLITECPP_DIR)
-	rmdir -v untar_temp_dir
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(SQLITECPP_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(SQLITECPP_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
@@ -57,7 +66,11 @@ $(SQLITECPP_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	cd $(SQLITECPP_HOME)/build; $(CMAKE) \
 	   	 -DSQLITECPP_INTERNAL_SQLITE=OFF \
 	   	 -DSQLITE_USE_LEGACY_STRUCT=ON \
-		 -DCMAKE_INSTALL_PREFIX=$(SQLITECPP_HOME) ..
+		 -DCMAKE_INSTALL_PREFIX=$(SQLITECPP_HOME) \
+		 -DSQLite3_INCLUDE_DIR=$(SQLITE_HOME)/include \
+		 -DSQLite3_LIBRARY=$(SQLITE_HOME)/lib/libsqlite3.so \
+		 -DSQLITE_USE_LEGACY_STRUCT=$(LEGACY_ON_OR_OFF) \
+		 ..
 	date > $@
 
 $(SQLITECPP_HOME)/.make_done: $(SQLITECPP_HOME)/.cmake_done

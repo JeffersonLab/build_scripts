@@ -7,6 +7,8 @@ else
 endif
 TARFILE_VERSION_TAG =  $(shell $(BUILD_SCRIPTS)/sqlite_version.sh $(SQLITE_VERSION))
 TARFILE = sqlite-autoconf-$(TARFILE_VERSION_TAG).tar.gz
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
+
 SQLITE_HOME = $(PWD)/$(SQLITE_DIR)
 
 all: $(SQLITE_HOME)/.install_done
@@ -15,11 +17,11 @@ $(TARFILE):
 	wget --no-verbose --no-check-certificate https://www.sqlite.org/$(SQLITE_YEAR)/$(TARFILE)
 
 $(SQLITE_HOME)/.untar_done: $(TARFILE)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(SQLITE_DIR)
-	rmdir -v untar_temp_dir
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(SQLITE_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(SQLITE_HOME)/.patch_done: $(SQLITE_HOME)/.untar_done

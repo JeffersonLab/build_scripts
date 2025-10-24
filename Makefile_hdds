@@ -9,6 +9,10 @@
 # directory of the repository. If left undefined, the latest version
 # will be checked out from the repos/trunk.
 
+SHELL = /bin/bash
+
+include $(BUILD_SCRIPTS)/gcc_version.mk
+
 PWD = $(shell pwd)
 
 ifdef HDDS_VERSION
@@ -33,8 +37,11 @@ else
   HDDS_BRANCH = master
  endif
 endif
+SCONS = $(shell $(BUILD_SCRIPTS)/python_chooser.sh scons)
+PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
 
 HDDS_HOME = $(PWD)/$(HDDS_DIR)
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 all: force_rebuild_action $(HDDS_HOME)/hdds_prereqs_version.xml
 
@@ -55,15 +62,15 @@ endif
 	date > $@
 
 $(HDDS_HOME)/.untar_done: $(TARFILE)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(HDDS_DIR)
-	rmdir -v untar_temp_dir
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(HDDS_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(HDDS_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
-	cd $(HDDS_HOME) ; scons install $(HDDS_SCONS_OPTIONS)
+	cd $(HDDS_HOME) ; $(SCONS) install $(HDDS_SCONS_OPTIONS)
 	date > $@
 
 ifndef GVMS_TEST

@@ -1,0 +1,70 @@
+# Makefile_hddm
+
+PWD = $(shell pwd)
+ifdef HDDM_VERSION
+ SOURCE_CODE_TARGET = $(HDDM_HOME)/.untar_done
+ HDDM_DIR = hddm-$(HDDM_VERSION)
+ TARFILE = $(HDDM_VERSION).tar.gz
+else
+ SOURCE_CODE_TARGET = $(HDDM_HOME)/.clone_done
+ ifndef HDDM_URL
+  HDDM_URL=https://github.com/jeffersonlab/hddm
+ endif
+ HDDM_DIR = $(notdir $(HDDM_URL))
+ ifndef HDDM_BRANCH
+  HDDM_BRANCH = main
+ endif
+endif
+ifdef HDDM_DIRTAG
+ HDDM_DIR := $(HDDM_DIR)^$(HDDM_DIRTAG)
+endif
+ifeq ($(HDDM_DEBUG_LEVEL), 0)
+ HDDM_DIR := $(HDDM_DIR)+opt
+ override HDDM_SCONS_OPTIONS += DEBUG=0 OPTIMIZATION=3
+else ifeq ($(HDDM_DEBUG_LEVEL), 2)
+ HDDM_DIR := $(HDDM_DIR)+dbg
+ override HDDM_SCONS_OPTIONS += DEBUG=1 OPTIMIZATION=0
+endif
+export HDDM_HOME = $(PWD)/$(HDDM_DIR)
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
+ 
+all: $(HDDM_HOME)/hddm_prereqs_version.xml
+
+$(TARFILE):
+	wget --no-verbose --no-check-certificate -O $@ https://github.com/JeffersonLab/hddm/archive/$(HDDM_VERSION).tar.gz
+
+$(HDDM_HOME)/.untar_done: $(TARFILE)
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(HDDM_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
+	date > $@
+
+$(HDDM_HOME)/.clone_done:
+	git clone -b $(HDDM_BRANCH) $(HDDM_URL) $(HDDM_DIR)
+ifdef HDDM_HASH
+	cd $(HDDM_DIR) ; git checkout $(HDDM_HASH)
+endif
+	date > $@
+
+$(HDDM_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
+	cd $(HDDM_HOME); mkdir -pv build 
+	cd $(HDDM_HOME)/build; \
+	cmake3 \
+	    -DXercesC_LIBRARY=$(XERCESCROOT)/lib/libxerces-c.so \
+	    -DXercesC_INCLUDE_DIR=$(XERCES_INCLUDE) \
+	    -DXercesC_VERSION=$(XERCES_C_VERSION) -DCMAKE_INSTALL_PREFIX=.. .. \
+	    -DENABLE_ISTREAM_OVER_HTTP=OFF \
+	    -DENABLE_ISTREAM_OVER_XROOTD=OFF
+	date > $@
+
+$(HDDM_HOME)/.make_install_done: $(HDDM_HOME)/.cmake_done
+	cd $(HDDM_HOME)/build; make install
+	date > $@
+
+$(HDDM_HOME)/hddm_prereqs_version.xml: $(HDDM_HOME)/.make_install_done
+	cd $(HDDM_HOME); $(BUILD_SCRIPTS)/version_prereqs.pl hddm
+
+env:
+	@echo HDDM_DIR = $(HDDM_DIR)

@@ -7,20 +7,21 @@ else
  PHOTOS_DIR = Photos-$(PHOTOS_VERSION)
 endif
 TARFILE = PHOTOS.$(PHOTOS_VERSION).tar.gz
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 PHOTOS_HOME = $(PWD)/$(PHOTOS_DIR)
 
 all: $(PHOTOS_HOME)/photos_prereqs.xml
 
 $(TARFILE):
-	wget --no-verbose --no-check-certificate -O $@ http://photospp.web.cern.ch/photospp/resources/PHOTOS.$(PHOTOS_VERSION)/$(TARFILE)
+	wget --no-verbose --no-check-certificate -O $@ http://photospp.web.cern.ch/resources/PHOTOS.$(PHOTOS_VERSION)/$(TARFILE)
 
 $(PHOTOS_HOME)/.untar_done: $(TARFILE)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(PHOTOS_DIR)
-	rm -rv untar_temp_dir
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(PHOTOS_DIR)
+	rm -rv $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(PHOTOS_HOME)/.configure_done: $(SOURCE_CODE_TARGET)

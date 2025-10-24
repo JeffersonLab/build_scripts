@@ -6,7 +6,7 @@ import subprocess
 import sys
 import xml.dom.minidom
 
-print "type", "\"" + os.path.basename(__file__), "-h\" for usage message"
+print("type", "\"" + os.path.basename(__file__), "-h\" for usage message")
 
 packageList = ["hdds", "sim-recon", "halld_recon", "halld_sim", "hdgeant4", "gluex_root_analysis"]
 
@@ -21,7 +21,7 @@ inputfile = args.xml
 if not os.path.isfile(inputfile):
     message = "error: version set file \"" + inputfile + "\" does not exist"
     sys.exit(message)
-nthreads = args.nthreads
+nthreads = int(args.nthreads)
 nthreadsStr = str(nthreads)
 buildOptions = {}
 buildOptions["hdds"] = "FORCE=1"
@@ -38,7 +38,7 @@ inputPackages = args.inputPackages
 if len(inputPackages) == 0:
     inputPackages = packageList
     defaultToAllPackages = True
-#print "packages to update:", inputPackages
+#print("packages to update:", inputPackages)
 
 # get a value for BUILD_SCRIPTS
 
@@ -54,18 +54,18 @@ else:
         build_scripts = groupDir
 
 if build_scripts:
-    print "info: using build_scripts from", build_scripts
+    print("info: using build_scripts from", build_scripts)
 else:
     message = "error: BUILD_SCRIPTS directory not found, please set it"
     sys.exit(message)
 
 def updateCode(package, home):
-    print "info: updating", package, "in", home, "with git pull"
+    print("info: updating", package, "in", home, "with git pull")
     p=subprocess.Popen(['git', 'pull'], cwd=home)
     p.wait()
 
 def rebuild(package, home):
-    print "info: rebuilding", package, "in", home, "with $BUILD_SCRIPTS/Makefile_" + package
+    print("info: rebuilding", package, "in", home, "with $BUILD_SCRIPTS/Makefile_" + package)
     aboveHome = home + "/.."
     cmd = "export BUILD_SCRIPTS=" + build_scripts + "; source $BUILD_SCRIPTS/gluex_env_clean.sh; export BUILD_SCRIPTS=" + build_scripts + "; source $BUILD_SCRIPTS/gluex_env_jlab.sh " + inputfile + "; make -f $BUILD_SCRIPTS/Makefile_" + package + " " + buildOptions[package]
     p=subprocess.Popen(cmd, cwd=aboveHome, shell=True)
@@ -79,18 +79,18 @@ homeDir = {}
 for package in packages:
     name = str(package.getAttribute("name"))
     home = str(package.getAttribute("home"))
-    #print str(package), name, home
+    #print(str(package), name, home)
     if name in inputPackages:
         if home:
             homeDir[name] = home
-            #print homeDir[name]
+            #print(homeDir[name])
         else:
             if not defaultToAllPackages:
                 message = "error: requested package " + name + " does not have the home attribute defined in " + inputfile
                 sys.exit(message)
-#print homeDir
+#print(homeDir)
 for package in packageList:
-    #print package
+    #print(package)
     if package in homeDir:
         home = homeDir[package]
         updateCode(package, home)

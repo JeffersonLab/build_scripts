@@ -9,20 +9,6 @@ if [ -z "$BUILD_SCRIPTS" ]
     then export BUILD_SCRIPTS=/group/halld/Software/build_scripts
 fi
 export BMS_OSNAME=`$BUILD_SCRIPTS/osrelease.pl`
-if [[ $BMS_OSNAME != *CentOS7.7* ]]
-    then
-    if [ `echo $PATH | grep -c /apps/bin` -eq 0 ]
-        then
-	export PATH=/apps/bin:$PATH
-    fi
-fi
-# farm-specific set-up
-nodename=`uname -n`
-if [[ $nodename =~ ^farm* || $nodename =~ ^ifarm* || $nodename =~ ^qcd* || $nodename =~ ^gluon* ]]
-    then
-    export http_proxy=http://jprox.jlab.org:8081
-    export https_proxy=https://jprox.jlab.org:8081
-fi
 if [[ $BMS_OSNAME == *CentOS6* || $BMS_OSNAME == *RHEL6* ]]
     then
     GCC_HOME=/apps/gcc/4.9.2
@@ -40,9 +26,11 @@ export PATH=/apps/perl/bin:$PATH
 # finish the rest of the environment
 . $BUILD_SCRIPTS/gluex_env_version.sh $VERSION_XML
 export JANA_CALIB_URL=`$BUILD_SCRIPTS/calib_url_chooser.sh`
+export CCDB_CONNECTION=$JANA_CALIB_URL
 export JANA_RESOURCE_DIR=/group/halld/www/halldweb/html/resources
 # cmake on the cue
 if [[ $BMS_OSNAME != *CentOS7.7* ]]
     then
-    export PATH=/apps/cmake/cmake-3.5.1/bin:$PATH
+    #export PATH=/apps/cmake/cmake-3.5.1/bin:$PATH
+    export PATH=/apps/bin:$PATH
 fi

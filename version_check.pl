@@ -36,7 +36,11 @@ foreach $package (@packages) {
 	$version_hash{$package} = $ENV{CERN_LEVEL}
     } else {
 	$svn_hidden_dir = $home_value . "/.svn";
-	$git_hidden_dir = $home_value . "/.git";
+	if ($package eq 'jana') {
+	    $git_hidden_dir = $home_value . "/../.git";
+	} else {
+	    $git_hidden_dir = $home_value . "/.git";
+	}
 	@token2 = split(/\//, $home_value); # split on slash
 	$dirname_home = $token2[$#token2]; # last token is directory name
 	if (-d $svn_hidden_dir) {
@@ -45,21 +49,17 @@ foreach $package (@packages) {
 	    #print "for $home_variable = $home_value, url_raw = $url_raw\n";
 	    @t = split(/URL: /, $url_raw);
 	    $url = $t[1];
-	    @token3 = split(/^/, $dirname_home); # split on caret
-	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} elsif (-d $git_hidden_dir) {
 	    $url_raw = `cd $home_value ; git remote -v | grep \"\(fetch\)\"`;
 	    chomp $url_raw;
 	    #print "for $home_variable = $home_value, url_raw = $url_raw\n";
 	    @t = split(/\s+/, $url_raw);
 	    $url = $t[1];
-	    $branch_raw = `cd $home_value ; git status | grep \" On branch \"`;
+	    $branch_raw = `cd $home_value ; git status | grep \"On branch \"`;
 	    chomp $branch_raw;
 	    #print "for $home_variable = $home_value, branch_raw = $branch_raw\n";
 	    @t = split(/\s+/, $branch_raw);
 	    $branch = $t[3];
-	    @token3 = split(/^/, $dirname_home); # split on caret
-	    if ($#token3 > 0) {$dirtag = $token3[$#token3];}
 	} else {
 	    # extract the version
 	    #print "dir_prefix = $dir_prefix{$package}\n";
@@ -74,14 +74,17 @@ foreach $package (@packages) {
 	    } else {
 		$version_field = $token0[1];
 	    }
-	    #print "version_field = $version_field\n";
+	    #print "first preliminary version_field = $version_field\n";
 	    @token4 = split(/\^/, $version_field);
 	    if ($#token4 > 0) {
-		$dirtag = $token4[$#token4];
-		$dirtag_string = "\\^" . $dirtag;
+		$dirtag_field = $token4[$#token4];
+		$dirtag_string = "\\^" . $dirtag_field;
+		$dirtag_string =~ s/\+/\\\+/;
+		#print "dirtag_field = $dirtag_field, dirtag_string = $dirtag_string\n";
 		@token5 = split (/$dirtag_string/, $version_field);
 		$version_field = $token5[0];
 	    }
+	    #print "second preliminary version_field = $version_field\n";
 	    @token6 = split(/\+/, $version_field);
 	    if ($#token6 > 0) {
 		$version_field = $token6[0];
@@ -89,6 +92,29 @@ foreach $package (@packages) {
 	    $version_hash{$package} = $version_field;
 	    #print "version from home dir name = $version_hash{$package}\n";
 	}
+    }
+    if ($home_value) {
+	@token8 = split(/\//, $home_value);
+	if ($#token8 > 0) {
+	    if ($package ne "jana") {
+		$home_basename = $token8[$#token8];
+	    } else {
+		$home_basename = $token8[$#token8 - 1];
+	    }
+	} else {
+	    $home_basename = $home_value;
+	}
+	#print "home_basename = $home_basename\n";
+	@token7 = split(/\^/, $home_basename);
+	if ($#token7 > 0) {
+	    $dirtag = $token7[1];
+	    @token9 = split(/\+/, $dirtag);
+	    if ($#token9 > 0) {
+		$dirtag = $token9[0];
+	    }
+	}
+	#print "dirtag = $dirtag\n"
+    } else {
     }
     if ($dirtag) {
 	#print "dirtag found: \"$dirtag\"\n";
@@ -103,6 +129,8 @@ foreach $package (@packages) {
 	$branch_hash{$package} = $branch;
     }
 }
+
+$problem_found = 0;
 
 foreach $package (@packages) {
     if (-e $home_value_hash{$package}) {
@@ -139,6 +167,7 @@ foreach $package (@packages) {
 			$message .= "== ${package}'s prerequisite xml file = $filename\n";
 			$message .= "== $d{name} version recorded in prerequisite xml file = $d{version}\n";
 			print $message;
+			$problem_found = 1;
 		    }
 		} elsif ($d{url}) {
 		    #print "url from prereq xml = $d{url}\n";
@@ -155,6 +184,7 @@ foreach $package (@packages) {
 			$message .= "== ${package}'s prerequisite xml file = $filename\n";
 			$message .= "== $d{name} url recorded in prerequisite xml file = $d{url}\n";
 			print $message;
+			$problem_found = 1;
 		    }
 		} else {
 		    print "info: no version and no url for prereq $d{name} of $package\n";
@@ -173,6 +203,7 @@ foreach $package (@packages) {
 			    $message .= "== ${package}'s prerequisite xml file = $filename\n";
 			    $message .= "== branch in prerequisite xml file for $d{name} = $d{branch}\n";
 			    print $message;
+			    $problem_found = 1;
 			}
 		    } else { # no branch in prereq spec
 			if ($branch_repo ne "master") {
@@ -185,10 +216,12 @@ foreach $package (@packages) {
 			    $message .= "== ${package}'s prerequisite xml file = $filename\n";
 			    $message .= "== no branch specified in prerequisite xml file for $d{name}\n";
 			    print $message;
+			    $problem_found = 1;
 			}
 		    }
 		}
 		# check dirtags
+		#print "d{name} = $d{name}\n";
 		$dirtag_dirname = $dirtag_hash{$d{name}};
 		$dirtag_xmlfile = $d{dirtag};
 		#print "dirtag_dirname = /$dirtag_dirname/, dirtag_xmlfile = /$dirtag_xmlfile/\n";
@@ -204,6 +237,7 @@ foreach $package (@packages) {
 		    $message .= "== ${package}'s prerequisite xml file = $filename\n";
 		    $message .= "== no directory tag in prerequisite xml file for $d{name}\n";
 		    print $message;
+		    $problem_found = 1;
 		} elsif (! $dirtag_dirname && $dirtag_xmlfile) {
 		    $consistent = 0;
 		    $message = "======= directory tag mismatch found =======\n";
@@ -214,6 +248,7 @@ foreach $package (@packages) {
 		    $message .= "== ${package}'s prerequisite xml file = $filename\n";
 		    $message .= "== directory tag for $d{name} in prerequisite xml file = $dirtag_xmlfile\n";
 		    print $message;
+		    $problem_found = 1;
 		} elsif ($dirtag_dirname && $dirtag_xmlfile) {
 		    if ($dirtag_dirname eq $dirtag_xmlfile) {
 			#print "dirtags agree\n";
@@ -227,6 +262,7 @@ foreach $package (@packages) {
 			$message .= "== ${package}'s prerequisite xml file = $filename\n";
 			$message .= "== directory tag for $d{name} in prerequisite xml file = $dirtag_xmlfile\n";
 			print $message;
+			$problem_found = 1;
 		    }
 		} else {
 		    print "major error, this cannot happen\n";
@@ -239,6 +275,10 @@ foreach $package (@packages) {
 	    #print "warning: no prerequisite version file found for $package\n";
 	}
     }
+}
+
+if ($problem_found) {
+    print "info: to turn off version warnings, set BUILD_SCRIPTS_CONSISTENCY_CHECK equal to \"false\" in the environment\n";
 }
 
 exit;

@@ -1,14 +1,5 @@
 # Makefile_hdgeant4
 
-# Builds HDGEANT4 under a new directory rooted in the current working
-# directory. The new directory (DIR_NAME) has a name that depends on
-# the version being built.
-
-# HDGEANT4_VERSION defines which tagged version to build. It should
-# correspond to the name of the desired directory in the repos/tags
-# directory of the repository. If left undefined, the latest version
-# will be checked out from the repos/trunk.
-
 PWD = $(shell pwd)
 
 ifdef HDGEANT4_VERSION
@@ -33,8 +24,32 @@ else
   HDGEANT4_BRANCH = master
  endif
 endif
+UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
 HDGEANT4_HOME = $(PWD)/$(HDGEANT4_DIR)
+PYTHON_CONFIG = $(shell $(BUILD_SCRIPTS)/python_chooser.sh config)
+PYTHON_BOOST = $(shell $(BUILD_SCRIPTS)/python_chooser.sh boost)
+PYTHON_LIB_OPTION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh lib)
+
+PYTHON_MAJOR_VERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
+PYTHON_MINOR_VERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh minor)
+ifeq '$(PYTHON_MAJOR_VERSION)' '3'
+     PYTHON_GE_3 = true
+else
+     PYTHON_GE_3 = false
+endif
+
+QTHOME_LOCATION := $(shell if [ -d  "/usr/lib64/qt5" ]; then echo /usr/lib64/qt5; elif [ -d  "/usr/lib64/qt4" ]; then echo /usr/lib64/qt4; else echo not_found; fi)
+ifneq ($(QTHOME_LOCATION), not_found)
+  QTHOME_DEF = QTHOME=$(QTHOME_LOCATION)
+endif
+
+# GLOBAL_CXX_STANDARD is defined in Makefile_all but this is a fallback
+# if building from here directly.
+CXX_STANDARD = 11
+ifdef GLOBAL_CXX_STANDARD
+  CXX_STANDARD = $(GLOBAL_CXX_STANDARD)
+endif
 
 all: force_rebuild_action $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml
 
@@ -55,26 +70,30 @@ endif
 	date > $@
 
 $(HDGEANT4_HOME)/.untar_done: $(TARFILE)
-	rm -rf untar_temp_dir
-	mkdir untar_temp_dir
-	cd untar_temp_dir ; tar zxf ../$(TARFILE)
-	mv -v untar_temp_dir/* $(HDGEANT4_DIR)
-	rmdir -v untar_temp_dir
+	rm -rf $(UNTAR_TEMP_DIR)
+	mkdir $(UNTAR_TEMP_DIR)
+	cd $(UNTAR_TEMP_DIR) ; tar zxf ../$(TARFILE)
+	mv -v $(UNTAR_TEMP_DIR)/* $(HDGEANT4_DIR)
+	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
 $(HDGEANT4_HOME)/.link_to_fixes_done: $(SOURCE_CODE_TARGET)
-	test -d $(HDGEANT4_HOME)/src/G4.$(GEANT4_VERSION)fixes || (echo G4fixes directory does not exist. GEANT4_VERSION must be defined. GEANT4_VERSION = $(GEANT4_VERSION) ; exit 1)
+	@test -d $(HDGEANT4_HOME)/src/G4.$(GEANT4_VERSION)fixes || (echo G4fixes directory does not exist. GEANT4_VERSION must be defined. GEANT4_VERSION = $(GEANT4_VERSION) ; exit 1)
 	cd $(HDGEANT4_HOME)/src ; ln -s G4.$(GEANT4_VERSION)fixes G4fixes 
 	date > $@
 
-$(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.link_to_fixes_done
-	@cd $(HDGEANT4_HOME) ; \
+$(HDGEANT4_HOME)/.patch_done: $(HDGEANT4_HOME)/.link_to_fixes_done
+	cd $(HDGEANT4_HOME); \
+	patch -p1 < ${BUILD_SCRIPTS}/patches/hdgeant4/hdgeant4_c++$(CXX_STANDARD).patch
+	date > $@
+
+$(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.patch_done
+	cd $(HDGEANT4_HOME) ; \
 	if [ -z "$$G4SYSTEM" ] ; \
 	    then echo Geant4 setup not complete, sourcing geant4make.sh ; \
 	    . `find $(G4ROOT)/share/ -name geant4make.sh` ; \
 	fi ; \
-	echo executing make ; \
-	make
+	make PYTHON_CONFIG=$(PYTHON_CONFIG) PYTHON_LIB_OPTION=$(PYTHON_LIB_OPTION) BOOST_PYTHON_LIB=-l$(PYTHON_BOOST) $(QTHOME_DEF) $(HDGEANT4_MAKE_OPTIONS) && \
 	date > $@
 
 $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(HDGEANT4_HOME)/.make_done

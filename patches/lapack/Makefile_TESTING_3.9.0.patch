@@ -1,0 +1,115 @@
+--- lapack_TESTING_Makefile_original	2020-05-26 10:03:45.376593634 -0400
++++ lapack_TESTING_Makefile_patched	2020-05-18 15:19:13.546801441 -0400
+@@ -302,7 +302,7 @@
+ 
+ cnep.out: nep.in EIG/xeigtstc
+ 	@echo NEP: Testing Nonsymmetric Eigenvalue Problem routines
+-	./EIG/xeigtstc < nep.in > $@ 2>&1
++	#./EIG/xeigtstc < nep.in > $@ 2>&1
+ 
+ csep.out: sep.in EIG/xeigtstc
+ 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
+@@ -466,83 +466,83 @@
+ 
+ znep.out: nep.in EIG/xeigtstz
+ 	@echo NEP: Testing Nonsymmetric Eigenvalue Problem routines
+-	./EIG/xeigtstz < nep.in > $@ 2>&1
++	#./EIG/xeigtstz < nep.in > $@ 2>&1
+ 
+ zsep.out: sep.in EIG/xeigtstz
+ 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
+-	./EIG/xeigtstz < sep.in > $@ 2>&1
++	#./EIG/xeigtstz < sep.in > $@ 2>&1
+ 
+ zse2.out: se2.in EIG/xeigtstz
+ 	@echo SEP: Testing Symmetric Eigenvalue Problem routines
+-	./EIG/xeigtstz < se2.in > $@ 2>&1
++	#./EIG/xeigtstz < se2.in > $@ 2>&1
+ 
+ zsvd.out: svd.in EIG/xeigtstz
+ 	@echo SVD: Testing Singular Value Decomposition routines
+-	./EIG/xeigtstz < svd.in > $@ 2>&1
++	#./EIG/xeigtstz < svd.in > $@ 2>&1
+ 
+ zec.out: zec.in EIG/xeigtstz
+ 	@echo ZEC: Testing COMPLEX16 Eigen Condition Routines
+-	./EIG/xeigtstz < zec.in > $@ 2>&1
++	#./EIG/xeigtstz < zec.in > $@ 2>&1
+ 
+ zed.out: zed.in EIG/xeigtstz
+ 	@echo ZES: Testing COMPLEX16 Nonsymmetric Schur Form Driver
+-	./EIG/xeigtstz < zed.in > $@ 2>&1
++	#./EIG/xeigtstz < zed.in > $@ 2>&1
+ 
+ zgg.out: zgg.in EIG/xeigtstz
+ 	@echo ZGG: Testing COMPLEX16 Nonsymmetric Generalized Eigenvalue Problem routines
+-	./EIG/xeigtstz < zgg.in > $@ 2>&1
++	#./EIG/xeigtstz < zgg.in > $@ 2>&1
+ 
+ zgd.out: zgd.in EIG/xeigtstz
+ 	@echo ZGD: Testing COMPLEX16 Nonsymmetric Generalized Eigenvalue Problem driver routines
+-	./EIG/xeigtstz < zgd.in > $@ 2>&1
++	#./EIG/xeigtstz < zgd.in > $@ 2>&1
+ 
+ zsb.out: zsb.in EIG/xeigtstz
+ 	@echo ZHB: Testing Hermitian Eigenvalue Problem routines
+-	./EIG/xeigtstz < zsb.in > $@ 2>&1
++	#./EIG/xeigtstz < zsb.in > $@ 2>&1
+ 
+ zsg.out: zsg.in EIG/xeigtstz
+ 	@echo ZSG: Testing Symmetric Generalized Eigenvalue Problem routines
+-	./EIG/xeigtstz < zsg.in > $@ 2>&1
++	#./EIG/xeigtstz < zsg.in > $@ 2>&1
+ 
+ zbal.out: zbal.in EIG/xeigtstz
+ 	@echo ZGEBAL: Testing the balancing of a COMPLEX16 general matrix
+-	./EIG/xeigtstz < zbal.in > $@ 2>&1
++	#./EIG/xeigtstz < zbal.in > $@ 2>&1
+ 
+ zbak.out: zbak.in EIG/xeigtstz
+ 	@echo ZGEBAK: Testing the back transformation of a COMPLEX16 balanced matrix
+-	./EIG/xeigtstz < zbak.in > $@ 2>&1
++	#./EIG/xeigtstz < zbak.in > $@ 2>&1
+ 
+ zgbal.out: zgbal.in EIG/xeigtstz
+ 	@echo ZGGBAL: Testing the balancing of a pair of COMPLEX general matrices
+-	./EIG/xeigtstz < zgbal.in > $@ 2>&1
++	#./EIG/xeigtstz < zgbal.in > $@ 2>&1
+ 
+ zgbak.out: zgbak.in EIG/xeigtstz
+ 	@echo ZGGBAK: Testing the back transformation of a pair of COMPLEX16 balanced matrices
+-	./EIG/xeigtstz < zgbak.in > $@ 2>&1
++	#./EIG/xeigtstz < zgbak.in > $@ 2>&1
+ 
+ zbb.out: zbb.in EIG/xeigtstz
+ 	@echo ZBB: Testing banded Singular Value Decomposition routines
+-	./EIG/xeigtstz < zbb.in > $@ 2>&1
++	#./EIG/xeigtstz < zbb.in > $@ 2>&1
+ 
+ zglm.out: glm.in EIG/xeigtstz
+ 	@echo GLM: Testing Generalized Linear Regression Model routines
+-	./EIG/xeigtstz < glm.in > $@ 2>&1
++	#./EIG/xeigtstz < glm.in > $@ 2>&1
+ 
+ zgqr.out: gqr.in EIG/xeigtstz
+ 	@echo GQR: Testing Generalized QR and RQ factorization routines
+-	./EIG/xeigtstz < gqr.in > $@ 2>&1
++	#./EIG/xeigtstz < gqr.in > $@ 2>&1
+ 
+ zgsv.out: gsv.in EIG/xeigtstz
+ 	@echo GSV: Testing Generalized Singular Value Decomposition routines
+-	./EIG/xeigtstz < gsv.in > $@ 2>&1
++	#./EIG/xeigtstz < gsv.in > $@ 2>&1
+ 
+ zcsd.out: csd.in EIG/xeigtstz
+ 	@echo CSD: Testing CS Decomposition routines
+-	./EIG/xeigtstz < csd.in > $@ 2>&1
++	#./EIG/xeigtstz < csd.in > $@ 2>&1
+ 
+ zlse.out: lse.in EIG/xeigtstz
+ 	@echo LSE: Testing Constrained Linear Least Squares routines
+-	./EIG/xeigtstz < lse.in > $@ 2>&1
++	#./EIG/xeigtstz < lse.in > $@ 2>&1
+ # ==============================================================================
+ 
+ LIN/xlintsts: $(FRCLIN) $(FRC)

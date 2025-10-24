@@ -1,0 +1,21 @@
+--- SConstruct.original	2020-06-19 21:10:36.085634300 -0400
++++ SConstruct.patched	2020-06-19 21:19:10.020911200 -0400
+@@ -87,7 +87,8 @@
+ 
+ # Get compiler name
+ compiler = 'unknown'
+-compiler_string = subprocess.Popen([env['CC'],"-v"], stderr=subprocess.PIPE).communicate()[1]
++compiler_string_out = subprocess.Popen([env['CC'],"-v"], stderr=subprocess.PIPE).communicate()[1]
++compiler_string = str(compiler_string_out, 'utf-8')
+ if 'clang' in compiler_string:
+ 	compiler = 'clang'
+ if 'gcc' in compiler_string and 'clang' not in compiler_string:
+@@ -138,7 +139,7 @@
+ env.Alias('install', installdir)
+ 
+ # Create setenv and make link to src if user explicitly specified "install" target
+-build_targets = map(str,BUILD_TARGETS)
++build_targets = list(map(str,BUILD_TARGETS))
+ if len(build_targets)>0:
+ 	if 'install' in build_targets:
+ 		import sbms_setenv

@@ -1,8 +1,12 @@
-ifndef G4_VERSION
-    G4_VERSION = 10.02.p02
+SHELL=/bin/bash
+ifndef GEANT4_VERSION
+    GEANT4_VERSION = 10.02.p02
 endif
-TARFILE = geant4.$(G4_VERSION).tar.gz
-G4DIR = geant4.$(G4_VERSION)
+MAJOR_VERSION = $(shell echo $(GEANT4_VERSION) | awk -F. '{print $$1}')
+MINOR_VERSION = $(shell echo $(GEANT4_VERSION) | awk -F. '{print $$2}' | sed 's/^0*//')
+SUBMINOR_VERSION = $(shell echo $(GEANT4_VERSION) | awk -F. '{print $$3}' | sed 's/p//' | sed 's/^0*//')
+TARFILE = geant4.$(GEANT4_VERSION).tar.gz
+G4DIR = geant4.$(GEANT4_VERSION)
 
 which_cmake3 := $(shell which cmake3)
 find_cmake3 := $(findstring cmake3, $(which_cmake3))
@@ -12,16 +16,12 @@ else
     CMAKE = cmake3
 endif
 
+include $(BUILD_SCRIPTS)/geant4_version.mk
+
 all: $(G4DIR)/.make_install_done
 
 $(TARFILE):
-# The following is a kludge prompted by
-# a) we need to have version 10.02.p02 presently.
-# b) G4 folks have changed the distribution system so that a working tar file
-#    for this version does not exist.
-# So for now we will get an old version of the tar file from JLab
-#	wget --no-verbose http://geant4.web.cern.ch/geant4/support/source/$(TARFILE)
-	wget --no-verbose https://halldweb.jlab.org/dist/$(TARFILE)
+	wget --no-verbose http://cern.ch/geant4-data/releases/$(TARFILE)
 
 $(G4DIR)/.untar_done: $(TARFILE)
 	tar zxf $(TARFILE)
@@ -32,8 +32,14 @@ $(G4DIR)/.patch_done: $(G4DIR)/.untar_done
 	patch geant4make-skeleton.in \
 	    < $(BUILD_SCRIPTS)/patches/geant4/geant4make-skeleton.in.patch
 	cd $(G4DIR)/cmake/Modules ; \
-	patch Geant4ToolchainBackwardCompatibility.cmake \
-	    < $(BUILD_SCRIPTS)/patches/geant4/Geant4ToolchainBackwardCompatibility.cmake.patch
+	if [[ $(MAJOR_VERSION) -le 9 || $(MAJOR_VERSION) -eq 10 && $(MINOR_VERSION) -lt 4 ]]; \
+	    then patch Geant4ToolchainBackwardCompatibility.cmake \
+	        < $(BUILD_SCRIPTS)/patches/geant4/Geant4ToolchainBackwardCompatibility.cmake.patch; \
+	fi
+ifeq ($(GEANT4_EQ_10_04), true)
+	patch $(G4DIR)/config/sys/Linux-g++.gmk \
+	    < $(BUILD_SCRIPTS)/patches/geant4/Linux-g++.gmk.patch
+endif	
 	date > $@
 
 $(G4DIR)/.configure_done: $(G4DIR)/.patch_done
@@ -47,12 +53,14 @@ $(G4DIR)/.configure_done: $(G4DIR)/.patch_done
 	   -DGEANT4_USE_GDML=ON \
 	   -DGEANT4_USE_NETWORKDAWN=ON \
 	   -DGEANT4_USE_OPENGL_X11=ON \
-	   -DGEANT4_USE_QT=ON \
 	   -DGEANT4_USE_RAYTRACER_X11=ON \
 	   -DGEANT4_USE_XM=ON \
+	   -DGEANT4_USE_QT=ON \
 	   -DXERCESC_ROOT_DIR=$(XERCESCROOT) \
 	   ..
 	date > $@
+
+
 
 $(G4DIR)/.make_done: $(G4DIR)/.configure_done
 	cd $(G4DIR)/build ; make $(GEANT4_MAKE_OPTIONS)
@@ -60,9 +68,15 @@ $(G4DIR)/.make_done: $(G4DIR)/.configure_done
 
 $(G4DIR)/.make_install_done: $(G4DIR)/.make_done
 	cd $(G4DIR)/build ; make install
+	if [[ $(MAJOR_VERSION) -eq 10 && $(MINOR_VERSION) -gt 4 ]]; \
+	   then cd $(G4DIR); ln -s data share ; \
+	fi
 	date > $@
 
 help:
 	@echo CMAKE = $(CMAKE)
 	@echo G4DIR = $(G4DIR)
 	@echo TARFILE = $(TARFILE)
+	@echo MAJOR_VERSION = /$(MAJOR_VERSION)/
+	@echo MINOR_VERSION = /$(MINOR_VERSION)/
+	@echo SUBMINOR_VERSION = /$(SUBMINOR_VERSION)/
