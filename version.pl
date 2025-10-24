@@ -3,7 +3,13 @@
 use XML::Simple;
 use Data::Dumper;
 use Getopt::Std;
-use File::Slurp;
+$vortex = index($ENV{HOSTNAME},"vx");
+$vortex_head = index($ENV{HOSTNAME},"vortex");
+if ($vortex == 0 || $vortex_head == 0) {
+    eval "use File::Slurp::Tiny 'read_file'";
+} else {
+    eval "use File::Slurp";
+}
 use File::Basename;
 use Cwd 'abs_path';
 use File::Basename;

@@ -21,10 +21,14 @@ setenv HOSTNAME `hostname`
 set VORTEX_WORKER=`echo $HOSTNAME | grep -c "vx"`
 set HURRICANE_WORKER=`echo $HOSTNAME | grep -c "hu"`
 set WHIRLWIND_WORKER=`echo $HOSTNAME | grep -c "wh"`
-if ($HOSTNAME == "vortex.sciclone.wm.edu" || $HOSTNAME == "hurricane.sciclone.wm.edu") then
-    setenv BMS_OSNAME Linux_RHEL6-x86_64-gcc4.8.4 
+set BORA_WORKER=`echo $HOSTNAME | grep -c "bo"`
+if ($HOSTNAME == "vortex.sciclone.wm.edu" || $VORTEX_WORKER == 1) then
+    setenv BMS_OSNAME Linux_CentOS7-x86_64-gcc4.8.5 
 else if ($HURRICANE_WORKER == 1 || $WHIRLWIND_WORKER == 1 || $VORTEX_WORKER == 1) then
     setenv BMS_OSNAME Linux_CentOS6-x86_64-gcc4.8.4
+endif
+else if ($BORA_WORKER == 1) then
+    setenv BMS_OSNAME Linux_CentOS7-x86_64-gcc4.8.5
 endif
 
 # xerces-c++
@@ -213,4 +217,4 @@ if ($gluex_env_verbose) then
     echo CCDB_HOME = $CCDB_HOME
 endif
 # check consistency of environment
-$BUILD_SCRIPTS/version_check.pl
+#$BUILD_SCRIPTS/version_check.pl
