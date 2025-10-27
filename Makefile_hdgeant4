@@ -46,7 +46,7 @@ endif
 
 # GLOBAL_CXX_STANDARD is defined in Makefile_all but this is a fallback
 # if building from here directly.
-CXX_STANDARD = 11
+CXX_STANDARD = 20
 ifdef GLOBAL_CXX_STANDARD
   CXX_STANDARD = $(GLOBAL_CXX_STANDARD)
 endif
