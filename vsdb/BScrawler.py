@@ -23,8 +23,14 @@ try:
 except:
     print("CAN'T CONNECT")
 
-def checkOasisCVMFS(packagename,version,dirtag):
-    rootdir="/group/halld/Software/builds/Linux_CentOS7-x86_64-gcc4.8.5-cntr/"
+def checkOasisCVMFS(packagename,version,dirtag,osversions):
+    """
+    Loop over all 'OSVersions' and check if the provided package is available.
+    Return an integer where the bit corresponding to the OSVersion's 'ID' is
+    set to 1 if the software is available on that version.
+    """
+    rootdir = "/group/halld/Software/builds/"
+    
     folder_name=packagename.replace("\"","")
         #because of course it isn't the same!
         #%dir_prefix = (root => 'root[_-]',
@@ -81,28 +87,26 @@ def checkOasisCVMFS(packagename,version,dirtag):
 
     if(dirtag.replace("\"","") != "NULL"):
         folder_name=folder_name+"^"+dirtag.replace("\"","")
-    locat=rootdir+packagename.replace("\"","")+"/"+folder_name+"/"
-
-   
-    if os.path.isdir(locat) or packagename.replace("\"","")=="root":
-        #print("!!!!!!!!!!!!!!!!!!!!!!!!!YAY!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        return 1
-    else:
-        if(packagename.replace("\"","") == "cernlib" and version.replace("\"","")=="2005"):
-            print(locat)
-            print("~~~~~~~~~~~~~~~~~~~~~~~~~BOO~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        return 0
+    
+    bitmask = 0
+    for osver in osversions:
+        locat = rootdir + osver['OSName'] + "/" + packagename.replace("\"","") + "/" + folder_name + "/"
+        if os.path.isdir(locat) or packagename.replace("\"","")=="root":
+            #print("!!!!!!!!!!!!!!!!!!!!!!!!!YAY!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            bitmask |= osver['ID']
+    
+    return bitmask
 
 def main(argv):
 #main loc="/group/halld/www/halldweb/html/dist/"
-
+    
     pushcmd="mysql --host="+dbhost+" --database="+dbname+" --user="+dbuser#+"<tables.sql"
 
     p = subprocess.Popen(pushcmd.split(" "),stdin=subprocess.PIPE)
     with open("/group/halld/Software/build_scripts/vsdb/tables.sql", "r") as f:
         stdout, stderr = p.communicate(f.read().encode())
     #stdout,stderr = p.communicate(file("/group/halld/Software/build_scripts/vsdb/tables.sql").read())
-   
+    
     
     reconpackcmd="xsltproc /group/halld/Software/build_scripts/xml/packages_sql.xslt /group/halld/Software/build_scripts/xml/packages.xml | grep INSERT | "+"mysql -h "+dbhost+" -D "+dbname+" -u "+dbuser
     #print reconpackcmd
@@ -110,7 +114,13 @@ def main(argv):
     ps = subprocess.Popen(reconpackcmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
     output = ps.communicate()[0]
     
-
+    # Get list of available OSVersions to check for software availability:
+    curs.execute("select * from OSVersions order by ID desc")
+    osversions = curs.fetchall()
+    if(len(osversions)<0):
+        print("No OSVersions found")
+        sys.exit(1)
+    
     for loc in argv:
         locid=-1
         #print loc
@@ -182,23 +192,22 @@ def main(argv):
                     text=text.replace("\"","\\\"")
                     print(text)
                     update_description="UPDATE versionSet SET description=\""+text+"\""+" WHERE id="+str(versionsetID)
-                    #print update_description
+                    #print(update_description)
                     curs.execute(update_description)
                     conn.commit()
-
                     continue
                 #print "~~~~~~~~~~~~~~~~~~~~~~~"
                 #print child.attrib
                 #if 'name' not in child.attrib:
                 #    continue
                 check_package_num="SELECT id from package where name=\""+child.attrib['name']+"\";"
-                print(check_package_num)
+                #print(check_package_num)
                 curs.execute(check_package_num)
                 num = curs.fetchall()
 
                 ID=-1
-                print("Getting ID number")
-                print(num)
+                #print("Getting ID number")
+                #print(num)
                 #if len(num[0])
                 if num[0]['id']:
                     ID=num[0]['id']
@@ -237,7 +246,7 @@ def main(argv):
                     debug_level="\""+child.attrib['debug_level']+"\""
 
 
-                verOnOasis=checkOasisCVMFS(child.attrib['name'],version,dirtag)
+                verOnOasis=checkOasisCVMFS(child.attrib['name'],version,dirtag,osversions)
                 insert_version="INSERT INTO version (versionSetId, packageId, version,dirtag, branch, hash, year, home, word_length, debug_level,onOasis) VALUES ("+str(versionsetID)+","+str(num[0]['id'])+","+version+","+dirtag+","+branch+","+hashname+","+year+","+home+","+word_length+","+debug_level+","+str(verOnOasis)+");"
                 #print insert_version
                 curs.execute(insert_version)
@@ -256,19 +265,104 @@ def main(argv):
                 continue
             
             print(afile)
-            onOasisCheck_q="SELECT * from version where onOasis=0 and versionSetId in (SELECT id from versionSet where filename=\""+str(afile)+"\");"
-            curs.execute(onOasisCheck_q)
-            results= curs.fetchall()
-            #print(results)
-            setOnOasis=0
-            if(len(results)==0 or afile == "version_cntr_Mon.xml"  or afile == "version_cntr_Thu.xml" or afile == "version_cntr_Wed.xml" or afile == "version_cntr_Fri.xml"):
-                setOnOasis=1
-                update_onOasis="UPDATE versionSet SET onOasis=1 WHERE filename=\""+str(afile)+"\""
+            
+            """
+            Now we want to check if we should update the 'onOasis' column of the versionSet table.
+            
+            To do so, we will go through all available OSVersions (ordered in descending order by their 'ID').
+            We check to see if there are any entries into the 'versions' table with this versionSetId
+            whose 'onOasis' value doesn't have the bit corresponding to this OSVersion's 'ID' set to 1. 
+            
+            If there are no such entries, it means all included packages withiin this versionSet exist within that 
+            OSVersions' build directory. If that is the case, we set the 'onOasis' value for this row of the 'versionSet' table to 1,
+            and we update the 'OS_ID' value, setting it equal to the 'ID' of the corresponding OSVersion. 
+            Then, we break the loop over all OSVersions. This means if all software packages of a given version set are available on 
+            multiple OS's, the 'OS_ID' value for that version set will always get set to the OSVersion with the largest 'ID' 
+            (presumably, it will always be the most recent one).
+            
+            This feature of using the most recent OSVersion available for a given versionSet should not be applied for version sets
+            whose names start with "analysis-" or "recon-". For those, we hard code some exceptions.
+            """
+            
+            if afile.startswith("analysis-") or afile.startswith("recon-") or afile.startswith("version_recon"):
+                # The exceptions to the above algorithm.
+                
+                # Start by assuming a version set corresponds to Alma9. Update as necessary:
+                locOSID = 2
+                
+                #-----------------------------------------#
+                
+                if afile.startswith("analysis-"):
+                    # The following assumes these files are named like: 'analysis-<run_period>-ver<ver_no>.xml'. Is it a safe assumption?
+                    run_period = afile.split('-')[1]
+                    ver_no     = int(afile.split('-')[2].split('.')[0][3:])
+                    
+                    # The following variable represents the highest numbered version where CentOS7 was used.
+                    # Hard-code some cutoffs for each run period:
+                    max_ver_centos7 = 0
+                    if run_period == "2017_01":
+                        max_ver_centos7 = 70
+                    elif run_period == "2018_01":
+                        max_ver_centos7 = 24
+                    elif run_period == "2018_08":
+                        max_ver_centos7 = 23
+                    elif run_period == "2019_11":
+                        max_ver_centos7 = 10
+                    
+                    if ver_no <= max_ver_centos7:
+                        locOSID = 1
+                
+                elif afile.startswith("recon-"):
+                    
+                    # The following assumes these files are named like: 'recon-<run_period>-ver<ver_no>.xml'. Is it a safe assumption?
+                    run_period = afile.split('-')[1]
+                    ver_str    = afile.split('-')[2][3:].split('.')[0]
+                    ver_major  = int(ver_str.split('_')[0])
+                    
+                    # The following variable represents the highest 'major' version where CentOS7 was used.
+                    # I am assuming if new recon launches are made of past data sets, they will have a new 'major' version.
+                    
+                    max_ver_centos7 = 0
+                    if run_period == "2017_01":
+                        max_ver_centos7 = 4
+                    elif run_period == "2018_01":
+                        max_ver_centos7 = 2
+                    elif run_period == "2018_08":
+                        max_ver_centos7 = 2
+                    elif run_period == "2019_11":
+                        max_ver_centos7 = 1
+                    elif run_period == "2021_11":
+                        max_ver_centos7 = 1
+                    
+                    if ver_no <= max_ver_centos7:
+                        locOSID = 1
+                
+                onOasisCheck_q = "SELECT * from version where (onOasis & "+str(locOSID)+")=0 and versionSetId in (SELECT id from versionSet where filename=\""+str(afile)+"\");"
+                curs.execute(onOasisCheck_q)
+                results = curs.fetchall()
+                if(len(results)==0):
+                    update_onOasis="UPDATE versionSet SET onOasis=1, OS_ID="+str(locOSID)+" WHERE filename=\""+str(afile)+"\""
+                    print(update_onOasis)
+                    curs.execute(update_onOasis)
+                    conn.commit()
+            elif afile=="version_cntr_Mon.xml" or afile=="version_cntr_Fri.xml":
+                # 'recent' builds available on Alma9 container
+                update_onOasis="UPDATE versionSet SET onOasis=1, OS_ID=2 WHERE filename=\""+str(afile)+"\""
                 print(update_onOasis)
                 curs.execute(update_onOasis)
                 conn.commit()
-                print("OASIS!!!!!!!")
-
+            else:
+                for osver in osversions:
+                    onOasisCheck_q = "SELECT * from version where (onOasis & "+str(osver['ID'])+")=0 and versionSetId in (SELECT id from versionSet where filename=\""+str(afile)+"\");"
+                    curs.execute(onOasisCheck_q)
+                    results = curs.fetchall()
+                    if(len(results)==0):
+                        update_onOasis="UPDATE versionSet SET onOasis=1, OS_ID="+str(osver['ID'])+" WHERE filename=\""+str(afile)+"\""
+                        print(update_onOasis)
+                        curs.execute(update_onOasis)
+                        conn.commit()
+                        break
+        
         print("BUILDING CORRELATION TABLE")
         path=loc+"version_set_correlations.xml"
         print(path)
@@ -331,7 +425,7 @@ def main(argv):
                         print(insert_set_correlation)
                         curs.execute(insert_set_correlation)
                         conn.commit()
-
+        
         conn.close()
 
 
