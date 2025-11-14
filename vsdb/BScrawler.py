@@ -90,11 +90,7 @@ def checkOasisCVMFS(packagename,version,dirtag,osversions):
     
     bitmask = 0
     for osver in osversions:
-        locOSName = osver['OSName']
-        if locOSName == "Linux_Alma9-x86_64-gcc11.4.1-cntr":
-            locOSName = "Linux_Alma9-x86_64-gcc11.5.0-cntr"
-        
-        locat = rootdir + locOSName + "/" + packagename.replace("\"","") + "/" + folder_name + "/"
+        locat = rootdir + osver['OSName'] + "/" + packagename.replace("\"","") + "/" + folder_name + "/"
         if os.path.isdir(locat) or packagename.replace("\"","")=="root":
             #print("!!!!!!!!!!!!!!!!!!!!!!!!!YAY!!!!!!!!!!!!!!!!!!!!!!!!!!")
             bitmask |= osver['ID']
