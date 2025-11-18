@@ -334,7 +334,7 @@ def main(argv):
                     elif run_period == "2021_11":
                         max_ver_centos7 = 1
                     
-                    if ver_no <= max_ver_centos7:
+                    if ver_major <= max_ver_centos7:
                         locOSID = 1
                 
                 onOasisCheck_q = "SELECT * from version where (onOasis & "+str(locOSID)+")=0 and versionSetId in (SELECT id from versionSet where filename=\""+str(afile)+"\");"
