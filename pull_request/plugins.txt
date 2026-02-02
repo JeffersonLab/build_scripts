@@ -2,9 +2,7 @@ BCAL_Eff
 BCAL_inv_mass
 BCAL_online
 CDC_drift
-CDC_expert
 CDC_online
-DAQ_online
 FCAL_online
 FDC_online
 PSC_online
@@ -12,7 +10,6 @@ PSPair_online
 PS_online
 RF_online
 ST_online_lowlevel
-ST_online_tracking
 TAGH_online
 TAGM_online
 TOF_TDC_shift

@@ -98,5 +98,5 @@ Location of build: $build_dir\n
 EOM
 fi
 # leave comment on github
-export PYTHONPATH=/home/gluex/lib/python2.7/site-packages
+echo $BUILD_SCRIPTS/pull_request/leave_pull_request_comment.py $HOME/.build_scripts/comment_login $comment_url "$comment"
 $BUILD_SCRIPTS/pull_request/leave_pull_request_comment.py $HOME/.build_scripts/comment_login $comment_url "$comment"
