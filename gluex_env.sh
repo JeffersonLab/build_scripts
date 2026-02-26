@@ -221,11 +221,13 @@ fi
 if [ -n "$HDGEANT4_HOME" ]; then
     if [ -n "$G4SYSTEM" ]; then
         if [ `echo $PATH | grep -c $HDGEANT4_HOME/bin/$G4SYSTEM` -eq 0 ]; then
-            export PATH=$HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
+            export PATH=$HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH # pre-cmake era
+	    export PATH=$HDGEANT4_HOME/${BMS_OSNAME}/bin:$PATH
         fi
     fi
     if [ `echo $PYTHONPATH | grep -c $HDGEANT4_HOME/g4py` -eq 0 ]; then
-	export PYTHONPATH=$HDGEANT4_HOME/g4py:$PYTHONPATH
+	export PYTHONPATH=$HDGEANT4_HOME/g4py:$PYTHONPATH # pre-cmake era
+	export PYTHONPATH=$HDGEANT4_HOME/${BMS_OSNAME}/g4py:$PYTHONPATH
     fi
 fi
 #
