@@ -8,7 +8,7 @@ logfile=make_${branch}.log
 mkdir -p -v $target_dir
 pushd $target_dir
 
-export REPO_URL=https://github.com/JeffersonLab/$repo
+#export REPO_URL=https://github.com/JeffersonLab/$repo
 if [ -f "$repo^$branch" ]; then
     rm "$repo^$branch"
 fi
@@ -21,8 +21,10 @@ if [ "$repo" == "sim-recon" ]; then
     export SIM_RECON_SCONS_OPTIONS="-j8 SHOWBUILD=1"
 elif [ "$repo" == "halld_recon" ]; then
     export HALLD_RECON_SCONS_OPTIONS="-j8 SHOWBUILD=1"
+    export HALLD_RECON_URL=$REPO_URL
 elif [ "$repo" == "halld_sim" ]; then
     export HALLD_SIM_SCONS_OPTIONS="-j8 SHOWBUILD=1"
+    export HALLD_SIM_URL=$REPO_URL
 fi
 
 # save environment

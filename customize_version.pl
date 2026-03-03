@@ -8,13 +8,14 @@ use XML::Writer;
 use IO::File;
 
 # get the file name
-$status=getopts("i:o:s:g:4:a:t:r:m:h");
+$status=getopts("i:o:s:g:d:4:a:t:r:m:h");
 $filename_in = $opt_i;
 $filename_out = $opt_o;
 $halld_home = $opt_s;
 $halld_recon_home = $opt_r;
 $halld_sim_home = $opt_m;
 $hdds_home = $opt_g;
+$hddm_home = $opt_d;
 $hdgeant4_home = $opt_4;
 $gluex_root_analysis_home = $opt_a;
 $amptools_home = $opt_t;
@@ -28,7 +29,7 @@ if (!$filename_in || !$filename_out ) {
     print_usage();
     exit 1;
 }
-if (!($halld_home || $halld_recon_home || $halld_sim_home || $hdds_home || $hdgeant4_home || $gluex_root_analysis_home || $amptools_home)) {
+if (!($halld_home || $halld_recon_home || $halld_sim_home || $hdds_home || $hddm_home || $hdgeant4_home || $gluex_root_analysis_home || $amptools_home)) {
     print "\nError: no custom home directories specified, no action taken\n\n";
     print_usage();
     exit 2;
@@ -81,6 +82,10 @@ foreach $href (@b) {
     } elsif ($name eq "hdds" && $hdds_home) {
 	if (uc($hdds_home) ne "NONE") {
 	    $writer->emptyTag("package", "name" => "$name", "home" => "$hdds_home");
+	}
+    } elsif ($name eq "hddm" && $hddm_home) {
+	if (uc($hddm_home) ne "NONE") {
+	    $writer->emptyTag("package", "name" => "$name", "home" => "$hddm_home");
 	}
     } elsif ($name eq "hdgeant4" && $hdgeant4_home) {
 	if (uc($hdgeant4_home) ne "NONE") {
@@ -142,6 +147,7 @@ Options:
     -r <custom halld_recon home directory> (optional, r for recon)
     -m <custom halld_sim home directory> (optional, m for Monte Carlo)
     -g <custom HDDS home directory> (optional, g for geometry)
+    -d <custom HDDM home directory> (optional, d for data model)
     -4 <custom HDGeant4 home directory> (optional, 4 for 4)
     -a <custom gluex_root_analysis home directory> (optional, a for analysis)
     -t <custom amptools home directory> (optional, t for tools)

@@ -13,6 +13,7 @@ where:
               (default: keep all packages that appear in the input xml file)
     package_n package name, choose from:
                   hdds
+                  hddm
                   sim-recon
                   halld_recon
                   halld_sim
@@ -60,6 +61,11 @@ case $key in
 	list="$list hdds"
 	shift
 	;;
+    hddm)
+	cmd="$cmd -d $mydir/hddm"
+	list="$list hddm"
+	shift
+	;;
     sim-recon)
 	cmd="$cmd -s $mydir/sim-recon"
 	list="$list sim-recon"
@@ -102,8 +108,9 @@ if [ -z "$xmlfile" ]
 fi
 if [ -z "$list" ]
     then
-    list="hdds halld_recon halld_sim hdgeant4 gluex_root_analysis amptools"
+    list="hdds hddm halld_recon halld_sim hdgeant4 gluex_root_analysis amptools"
     cmd="$cmd -g $mydir/hdds"
+    cmd="$cmd -d $mydir/hddm"
     cmd="$cmd -r $mydir/halld_recon"
     cmd="$cmd -m $mydir/halld_sim"
     cmd="$cmd -4 $mydir/hdgeant4"
@@ -177,6 +184,9 @@ if [[ $list = *amptools* ]]
 fi
 if [[ $list = *hdds* ]]
     then make -f $BUILD_SCRIPTS/Makefile_hdds
+fi
+if [[ $list = *hddm* ]]
+    then make -f $BUILD_SCRIPTS/Makefile_hddm
 fi
 if [[ $list = *sim-recon* ]]
     then make -f $BUILD_SCRIPTS/Makefile_sim-recon SIM_RECON_SCONS_OPTIONS="$threads_option"

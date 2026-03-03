@@ -51,6 +51,8 @@ ifdef GLOBAL_CXX_STANDARD
   CXX_STANDARD = $(GLOBAL_CXX_STANDARD)
 endif
 
+CMAKE3 = $(shell $(BUILD_SCRIPTS)/cmake3_chooser.sh)
+
 all: force_rebuild_action $(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml
 
 force_rebuild_action:
@@ -91,5 +93,27 @@ $(HDGEANT4_HOME)/.make_done: $(HDGEANT4_HOME)/.link_to_fixes_done
 	make PYTHON_CONFIG=$(PYTHON_CONFIG) PYTHON_LIB_OPTION=$(PYTHON_LIB_OPTION) BOOST_PYTHON_LIB=-l$(PYTHON_BOOST) $(QTHOME_DEF) $(HDGEANT4_MAKE_OPTIONS) && \
 	date > $@
 
-$(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(HDGEANT4_HOME)/.make_done
+$(HDGEANT4_HOME)/.cmake_done: $(HDGEANT4_HOME)/.link_to_fixes_done
+	cd $(HDGEANT4_HOME); \
+	mkdir -p build; \
+	cd build; \
+	$(CMAKE3) -DCMAKE_INSTALL_PREFIX=$(HDGEANT4_HOME)/$(BMS_OSNAME)/ \
+	    -DDiracxx_DIR=$(DIRACXX_HOME)/lib/cmake/Diracxx \
+	    -DPython3_EXECUTABLE=/usr/bin/python \
+	    -DBoost_PYTHON_LIBRARY_RELEASE:FILEPATH=/lib64/lib$(PYTHON_BOOST).so \
+	    -DJANA_DIR=$(JANA_HOME)/lib/JANA/cmake ..
+	date > $@
+
+$(HDGEANT4_HOME)/.cmake_build_done: $(HDGEANT4_HOME)/.cmake_done
+	cd $(HDGEANT4_HOME)/build; \
+	$(CMAKE3) --build . $(HDGEANT4_MAKE_OPTIONS)
+	date > $@
+
+# use "make install" rather than "cmake3 --install ." because ifarm does not like the latter
+$(HDGEANT4_HOME)/.cmake_install_done: $(HDGEANT4_HOME)/.cmake_build_done
+	cd $(HDGEANT4_HOME)/build; \
+	make install $(HDGEANT4_MAKE_OPTIONS)
+	date > $@
+
+$(HDGEANT4_HOME)/hdgeant4_prereqs_version.xml: $(HDGEANT4_HOME)/.cmake_install_done
 	cd $(HDGEANT4_HOME) ; $(BUILD_SCRIPTS)/version_prereqs.pl hdgeant4

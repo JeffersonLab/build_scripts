@@ -71,6 +71,7 @@ ifeq ($(ROOT_EQ_6_24), true)
 	patch $(ROOTDIR)/cmake/scripts/ROOTConfig.cmake.in < $(BUILD_SCRIPTS)/patches/root/ROOTConfig.cmake.in.patch
 else ifeq ($(ROOT_EQ_6_32), true)
 	patch $(ROOTDIR)/cmake/scripts/ROOTConfig.cmake.in < $(BUILD_SCRIPTS)/patches/root/ROOTConfig.cmake.in.patch
+	patch $(ROOTDIR)/cmake/scripts/RootUseFile.cmake.in < $(BUILD_SCRIPTS)/patches/root/RootUseFile.cmake.in.patch
 endif
 	date > $@
 

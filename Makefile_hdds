@@ -43,12 +43,14 @@ PYVERSION = $(shell $(BUILD_SCRIPTS)/python_chooser.sh version)
 HDDS_HOME = $(PWD)/$(HDDS_DIR)
 UNTAR_TEMP_DIR := untar_temp_dir_$(shell echo $$RANDOM)
 
+CMAKE3 = $(shell $(BUILD_SCRIPTS)/cmake3_chooser.sh)
+
 all: force_rebuild_action $(HDDS_HOME)/hdds_prereqs_version.xml
 
 force_rebuild_action:
 ifdef FORCE
 	@echo forcing rebuild
-	$(RM) $(HDDS_HOME)/.sconstruct_done
+	$(RM) $(HDDS_HOME)/.cmake_install_done
 endif
 
 $(TARFILE):
@@ -69,12 +71,30 @@ $(HDDS_HOME)/.untar_done: $(TARFILE)
 	rmdir -v $(UNTAR_TEMP_DIR)
 	date > $@
 
-$(HDDS_HOME)/.sconstruct_done: $(SOURCE_CODE_TARGET)
-	cd $(HDDS_HOME) ; $(SCONS) install $(HDDS_SCONS_OPTIONS)
+$(HDDS_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
+	cd $(HDDS_HOME); \
+	mkdir -p build; \
+	cd build; \
+	$(CMAKE3) \
+	    -DXercesC_LIBRARY=$(XERCESCROOT)/lib/libxerces-c.so \
+	    -DXercesC_INCLUDE_DIR=$(XERCES_INCLUDE) \
+	    -DXercesC_VERSION=$(XERCES_C_VERSION) \
+	    -DCMAKE_INSTALL_PREFIX=$(HDDS_HOME)/$(BMS_OSNAME) .. ; \
+	date > $@
+
+$(HDDS_HOME)/.cmake_build_done: $(HDDS_HOME)/.cmake_done
+	cd $(HDDS_HOME)/build; \
+	$(CMAKE3) --build . ; \
+	date > $@
+
+# use "make install" rather than "cmake3 --install ." because ifarm does not like the latter
+$(HDDS_HOME)/.cmake_install_done: $(HDDS_HOME)/.cmake_build_done
+	cd $(HDDS_HOME)/build; \
+	make install $(HDDS_SCONS_OPTIONS)
 	date > $@
 
 ifndef GVMS_TEST
-$(HDDS_HOME)/hdds_prereqs_version.xml: $(HDDS_HOME)/.sconstruct_done
+$(HDDS_HOME)/hdds_prereqs_version.xml: $(HDDS_HOME)/.cmake_install_done
 else
 $(HDDS_HOME)/hdds_prereqs_version.xml: $(SOURCE_CODE_TARGET)
 endif
