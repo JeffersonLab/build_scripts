@@ -1,0 +1,11 @@
+--- RootUseFile.cmake.in	2025-11-25 09:45:15.000000000 -0500
++++ RootUseFile.cmake.in.patched	2026-03-03 13:01:10.280437508 -0500
+@@ -1,7 +1,7 @@
+ cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ 
+ #---Define the Standard macros for ROOT-----------------------------------------------------------
+-include(${CMAKE_CURRENT_LIST_DIR}/RootMacros.cmake)
++include(${CMAKE_CURRENT_LIST_DIR}/modules/RootMacros.cmake)
+ 
+ #---Set Link and include directories--------------------------------------------------------------
+ include_directories(${ROOT_INCLUDE_DIRS})
