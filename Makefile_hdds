@@ -75,12 +75,16 @@ $(HDDS_HOME)/.cmake_done: $(SOURCE_CODE_TARGET)
 	cd $(HDDS_HOME); \
 	mkdir -p build; \
 	cd build; \
-	$(CMAKE3) -DCMAKE_INSTALL_PREFIX=$(HDDS_HOME)/$(BMS_OSNAME) ..
+	$(CMAKE3) \
+	    -DXercesC_LIBRARY=$(XERCESCROOT)/lib/libxerces-c.so \
+	    -DXercesC_INCLUDE_DIR=$(XERCES_INCLUDE) \
+	    -DXercesC_VERSION=$(XERCES_C_VERSION) \
+	    -DCMAKE_INSTALL_PREFIX=$(HDDS_HOME)/$(BMS_OSNAME) .. ; \
 	date > $@
 
 $(HDDS_HOME)/.cmake_build_done: $(HDDS_HOME)/.cmake_done
 	cd $(HDDS_HOME)/build; \
-	$(CMAKE3) --build . $(HDDS_SCONS_OPTIONS)
+	$(CMAKE3) --build . ; \
 	date > $@
 
 # use "make install" rather than "cmake3 --install ." because ifarm does not like the latter
