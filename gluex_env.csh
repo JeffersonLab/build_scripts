@@ -144,12 +144,10 @@ endif
 if ($?HDGEANT4_HOME) then
     if ($?G4SYSTEM) then
         echo $PATH | grep $HDGEANT4_HOME/bin/$G4SYSTEM > /dev/null
-        if ($status) setenv PATH $HDGEANT4_HOME/bin/${G4SYSTEM}:$PATH
-        if ($status) setenv PATH $HDGEANT4_HOME/${BMS_OSNAME}/bin:$PATH
+        if ($status) setenv PATH $HDGEANT4_HOME/bin/${G4SYSTEM}:$HDGEANT4_HOME/${BMS_OSNAME}/bin:$PATH
     endif
     echo $PYTHONPATH | grep $HDGEANT4_HOME/g4py > /dev/null
-    if ($status) setenv PYTHONPATH $HDGEANT4_HOME/g4py:$PYTHONPATH
-    if ($status) setenv PYTHONPATH $HDGEANT4_HOME/${BMS_OSNAME}/g4py:$PYTHONPATH
+    if ($status) setenv PYTHONPATH $HDGEANT4_HOME/g4py:$HDGEANT4_HOME/${BMS_OSNAME}/g4py:$PYTHONPATH
 endif
 #
 # hd_utilities: nothing to do for hd_utilities
