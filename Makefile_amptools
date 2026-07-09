@@ -47,8 +47,7 @@ $(AMPTOOLS_DIR)/.clone_done:
 	date > $@
 
 $(AMPTOOLS_DIR)/.make_done: $(SOURCE_TARGET)
-	export AMPTOOLS_HOME=$(AMPTOOLS_DIR); cd $(AMPTOOLS_DIR)/AmpTools ; make
-	export AMPTOOLS_HOME=$(AMPTOOLS_DIR); cd $(AMPTOOLS_DIR)/AmpPlotter ; make
+	export AMPTOOLS_HOME=$(AMPTOOLS_DIR); cd $(AMPTOOLS_DIR) ; make
 	date > $@
 
 $(AMPTOOLS_DIR)/amptools_prereqs_version.xml: $(AMPTOOLS_DIR)/.make_done
