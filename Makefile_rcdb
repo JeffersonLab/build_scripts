@@ -56,7 +56,7 @@ endif
 # and link sqlite3 and/or the mysql client). This CMake project builds the unit tests and examples.
 $(RCDB_DIR)/.cmake_done: $(GET_SOURCE_TARGET)
 	cd $(RCDB_DIR)/cpp; \
-	$(CMAKE3) -S . -B build -DWITH_SQLITE=ON -DWITH_MYSQL=ON -DSQLiteCpp_ROOT=$(SQLITECPP_HOME)
+	$(CMAKE3) -S . -B build -DWITH_SQLITE=ON -DWITH_MYSQL=ON -DSQLite3_ROOT=$(SQLITE_HOME) -DSQLiteCpp_ROOT=$(SQLITECPP_HOME)
 	date > $@
 
 $(RCDB_DIR)/.cmake_install_done: $(RCDB_DIR)/.cmake_done
