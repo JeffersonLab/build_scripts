@@ -36,7 +36,7 @@ eval $definitions;
 	    geant4 => [],
 	    ccdb => [],
 	    halld_recon => ['cernlib', 'xerces-c', 'root', 'jana', 'hdds', 'hddm', 'ccdb', 'rcdb', 'sqlitecpp'],
-	    halld_sim => ['halld_recon'],
+	    halld_sim => ['halld_recon', 'amptools'],
 	    amptools => ['root'],
 	    photos => ['hepmc'],
 	    evtgen => ['photos', 'hepmc'],
